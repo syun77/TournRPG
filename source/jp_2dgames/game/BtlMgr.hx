@@ -29,6 +29,10 @@ class BtlMgr {
     _player = Actor.add();
     _enemy = Actor.add();
 
+    // TODO:
+    _player.setName("プレイヤー");
+    _enemy.setName("敵");
+
     btlUI.setPlayerID(_player.ID);
     btlUI.setEnemyID(_enemy.ID);
 

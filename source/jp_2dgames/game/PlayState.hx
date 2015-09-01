@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.lib.CsvLoader;
 import flixel.group.FlxTypedGroup;
 import flixel.FlxG;
 import flixel.FlxState;
@@ -30,6 +31,11 @@ class PlayState extends FlxState {
     _btlUI = new BtlUI();
     this.add(_btlUI);
 
+    // メッセージウィンドウ登録
+    var csv = new CsvLoader("assets/data/message.csv");
+    Message.instance = new Message(csv);
+    this.add(Message.instance);
+
     // バトル管理生成
     _btlMgr = new BtlMgr(_btlUI);
 
@@ -41,6 +47,7 @@ class PlayState extends FlxState {
    */
   override public function destroy():Void {
     Actor.parent = null;
+    Message.instance = null;
 
     super.destroy();
   }

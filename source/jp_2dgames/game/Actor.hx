@@ -32,6 +32,11 @@ class Actor extends FlxSprite {
     return ret;
   }
 
+  var _name:String;
+  public var name(get, never):String;
+  private function get_name() {
+    return _name;
+  }
   var _param:Params;
   public var hp(get, never):Int;
   private function get_hp() {
@@ -85,6 +90,9 @@ class Actor extends FlxSprite {
   public function init(params:Params):Void {
     _param.copy(params);
   }
+  public function setName(str:String):Void {
+    _name = str;
+  }
 
   /**
    * ダメージを与える
@@ -92,6 +100,8 @@ class Actor extends FlxSprite {
   public function damage(v:Int):Bool {
     _param.hp -= v;
     _clampHp();
+
+    Message.push2(1, [_name, v]);
 
     return isDead();
   }
