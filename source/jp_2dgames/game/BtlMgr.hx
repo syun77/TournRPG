@@ -1,14 +1,16 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.PartyGroupUtil;
+import haxe.ds.ArraySort;
+import jp_2dgames.lib.MyKey;
+import flixel.FlxG;
+
 /**
  * 状態
  **/
-import jp_2dgames.lib.MyKey;
-import flixel.FlxG;
 private enum State {
   KeyInput;
-  PlayerAct;
-  EnemyAct;
+  ActBegin;
   TurnEnd;
 }
 
@@ -22,12 +24,17 @@ class BtlMgr {
 
   var _state:State;
 
+  var _actorList:Array<Actor> = null;
+
   /**
    * コンストラクタ
    **/
   public function new(btlUI:BtlUI) {
-    _player = Actor.add();
-    _enemy = Actor.add();
+    var p = new Params();
+    p.agi = 5;
+    _player = ActorMgr.recycleActor(PartyGroup.Player, p);
+    p.agi = 10;
+    _enemy = ActorMgr.recycleActor(PartyGroup.Enemy, p);
 
     // TODO:
     _player.setName("プレイヤー");
@@ -48,13 +55,16 @@ class BtlMgr {
     switch(_state) {
       case State.KeyInput:
         if(MyKey.press.A) {
-          _state = State.PlayerAct;
+          _state = State.ActBegin;
+          _actorList = ActorMgr.getAlive();
+          ArraySort.sort(_actorList, function(a:Actor, b:Actor) {
+            return b.agi - a.agi;
+          });
         }
-      case State.PlayerAct:
-        _enemy.damage(10);
-        _state = State.EnemyAct;
-      case State.EnemyAct:
-        _player.damage(5);
+      case State.ActBegin:
+        for(actor in _actorList) {
+          actor.exec();
+        }
         _state = State.TurnEnd;
       case State.TurnEnd:
         _state = State.KeyInput;

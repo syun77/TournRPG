@@ -28,7 +28,7 @@ class BtlUI extends FlxSpriteGroup {
     var py = FlxG.height-64;
     var btn = new MyButton(px, py, "ATTACK3", function() {
       trace("ATTACK");
-      var player = Actor.get(_playerID);
+      var player = ActorMgr.search(_playerID);
       player.damage(10);
     });
     this.add(btn);
@@ -62,7 +62,7 @@ class BtlUI extends FlxSpriteGroup {
   override public function update():Void {
     super.update();
 
-    var player = Actor.get(_playerID);
+    var player = ActorMgr.search(_playerID);
     if(player != null) {
       var hp = player.hp;
       var hpmax = player.hpmax;
@@ -70,7 +70,7 @@ class BtlUI extends FlxSpriteGroup {
       _barPlayerHp.setPercent(100 * player.hpratio);
     }
 
-    var enemy = Actor.get(_enemyID);
+    var enemy = ActorMgr.search(_enemyID);
     if(enemy != null) {
       var hp = enemy.hp;
       var hpmax = enemy.hpmax;

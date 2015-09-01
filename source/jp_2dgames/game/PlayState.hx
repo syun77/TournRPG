@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import flixel.FlxSprite;
+import flixel.util.FlxColor;
 import jp_2dgames.lib.CsvLoader;
 import flixel.group.FlxTypedGroup;
 import flixel.FlxG;
@@ -21,11 +23,8 @@ class PlayState extends FlxState {
   override public function create():Void {
     super.create();
 
-    Actor.parent = new FlxTypedGroup<Actor>(16);
-    for(i in 0...Actor.parent.maxSize) {
-      Actor.parent.add(new Actor(i));
-    }
-    this.add(Actor.parent);
+    // キャラクター管理生成
+    ActorMgr.create(this);
 
     // UI登録
     _btlUI = new BtlUI();
@@ -46,7 +45,8 @@ class PlayState extends FlxState {
    * 破棄
    */
   override public function destroy():Void {
-    Actor.parent = null;
+
+    ActorMgr.terminate();
     Message.instance = null;
 
     super.destroy();

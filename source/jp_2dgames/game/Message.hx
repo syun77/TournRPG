@@ -14,6 +14,8 @@ import flixel.text.FlxText;
  **/
 private class MessageText extends FlxText {
 
+  private static inline var BG_OFS_Y = 2;
+
   private var _ofsY:Float = 0;
   public function setOfsY(ofsY:Float) {
     _ofsY = ofsY;
@@ -30,7 +32,7 @@ private class MessageText extends FlxText {
     super(X, Y, Width);
     setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     // アウトラインをつける
-    setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.BLACK, 2);
+    setBorderStyle(FlxText.BORDER_OUTLINE, FlxColor.BLACK, 1);
     color = FlxColor.WHITE;
     // じわじわ表示
     alpha = 0;
@@ -49,9 +51,13 @@ private class MessageText extends FlxText {
     });
 
     // 背景作成
-    _bg = new FlxSprite(X-8, Y+4, "assets/images/ui/messagetext.png");
+    _bg = new FlxSprite(X-8, Y+BG_OFS_Y, "assets/images/ui/messagetext.png");
     _bg.alpha = 0;
     _bg.color = MyColor.MESSAGE_WINDOW;
+  }
+  override public function kill():Void {
+    super.kill();
+    _bg.kill();
   }
 
   /**
@@ -61,7 +67,7 @@ private class MessageText extends FlxText {
     super.update();
 
     y = _baseY + _ofsY;
-    _bg.y = y + 4;
+    _bg.y = y + BG_OFS_Y;
     _bg.alpha = alpha*0.5;
   }
 }
@@ -82,7 +88,7 @@ class Message extends FlxGroup {
   private static inline var MSG_POS_X = 8;
   private static inline var MSG_POS_Y = 8;
   // メッセージ表示間隔
-  private static inline var DY = 12;
+  private static inline var DY = 14;
 
   // ウィンドウが消えるまでの時間 (5sec)
   private static inline var TIMER_DISAPPEAR:Float = 5;
@@ -198,13 +204,14 @@ class Message extends FlxGroup {
 	 * メッセージを末尾に追加
 	 **/
   private function _push(msg:String, color:Int) {
-    var text = new MessageText(POS_X + MSG_POS_X, 0, WIDTH);
-    text.text = msg;
-    text.color = color;
     if(_msgList.length >= MESSAGE_MAX) {
       // 最大を超えたので先頭のメッセージを削除
       pop();
     }
+
+    var text = new MessageText(POS_X + MSG_POS_X, 0, WIDTH);
+    text.text = msg;
+    text.color = color;
     _msgList.add(text);
 
     // 座標を更新
