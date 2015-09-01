@@ -32,6 +32,8 @@ class PlayState extends FlxState {
 
     // バトル管理生成
     _btlMgr = new BtlMgr(_btlUI);
+
+    FlxG.debugger.toggleKeys = ["ALT"];
   }
 
   /**
