@@ -11,6 +11,8 @@ class PlayState extends FlxState {
 
   // バトル管理
   var _btlMgr:BtlMgr;
+  // バトルUI
+  var _btlUI:BtlUI;
 
   /**
    * 生成
@@ -25,10 +27,11 @@ class PlayState extends FlxState {
     this.add(Actor.parent);
 
     // UI登録
-    this.add(new BtlUI());
+    _btlUI = new BtlUI();
+    this.add(_btlUI);
 
     // バトル管理生成
-    _btlMgr = new BtlMgr();
+    _btlMgr = new BtlMgr(_btlUI);
   }
 
   /**

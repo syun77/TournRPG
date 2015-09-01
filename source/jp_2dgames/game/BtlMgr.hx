@@ -11,9 +11,12 @@ class BtlMgr {
   /**
    * コンストラクタ
    **/
-  public function new() {
+  public function new(btlUI:BtlUI) {
     _player = Actor.add();
     _enemy = Actor.add();
+
+    btlUI.setPlayerID(_player.ID);
+    btlUI.setEnemyID(_enemy.ID);
   }
 
   /**
