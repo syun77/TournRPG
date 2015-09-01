@@ -33,9 +33,36 @@ class Actor extends FlxSprite {
   }
 
   var _param:Params;
-  public var param(get, never):Params;
-  private function get_param() {
-    return _param;
+  public var hp(get, never):Int;
+  private function get_hp() {
+    return _param.hp;
+  }
+  public var hpmax(get, never):Int;
+  private function get_hpmax() {
+    return _param.hpmax;
+  }
+  public var hpratio(get, never):Float;
+  private function get_hpratio() {
+    return _param.hp / _param.hpmax;
+  }
+
+  /**
+   * HPが最大値・最小値を超えないように丸める
+   **/
+  private function _clampHp():Void {
+    if(hp < 0) {
+      _param.hp = 0;
+    }
+    if(hp > hpmax) {
+      _param.hp = hpmax;
+    }
+  }
+
+  /**
+   * 死亡したかどうか
+   **/
+  public function isDead():Bool {
+    return hp <= 0;
   }
 
   /**
@@ -57,5 +84,15 @@ class Actor extends FlxSprite {
    **/
   public function init(params:Params):Void {
     _param.copy(params);
+  }
+
+  /**
+   * ダメージを与える
+   **/
+  public function damage(v:Int):Bool {
+    _param.hp -= v;
+    _clampHp();
+
+    return isDead();
   }
 }

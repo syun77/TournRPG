@@ -29,7 +29,7 @@ class BtlUI extends FlxSpriteGroup {
     var btn = new MyButton(px, py, "ATTACK3", function() {
       trace("ATTACK");
       var player = Actor.get(_playerID);
-      player.param.hp -= 10;
+      player.damage(10);
     });
     this.add(btn);
     px += 80;
@@ -65,18 +65,18 @@ class BtlUI extends FlxSpriteGroup {
 
     var player = Actor.get(_playerID);
     if(player != null) {
-      var hp = player.param.hp;
-      var hpmax = player.param.hpmax;
+      var hp = player.hp;
+      var hpmax = player.hpmax;
       _txtPlayerHp.text = 'Player HP: ${hp}/${hpmax}';
-      _barPlayerHp.setPercent(100 * hp / hpmax);
+      _barPlayerHp.setPercent(100 * player.hpratio);
     }
 
     var enemy = Actor.get(_enemyID);
     if(enemy != null) {
-      var hp = enemy.param.hp;
-      var hpmax = enemy.param.hpmax;
+      var hp = enemy.hp;
+      var hpmax = enemy.hpmax;
       _txtEnemyHp.text = 'Enemy HP: ${hp}/${hpmax}';
-      _barEnemyHp.percent = 100 * hp / hpmax;
+      _barEnemyHp.setPercent(100 * enemy.hpratio);
     }
   }
 }
