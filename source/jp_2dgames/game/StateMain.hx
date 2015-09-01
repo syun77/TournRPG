@@ -47,7 +47,7 @@ class StateMain extends FlxState {
     _spr.angle += diff * 0.1;
 
     if(MyKey.press.A) {
-      trace("hoge");
+      trace("piyo");
     }
 
     if(FlxG.keys.justPressed.ESCAPE) {
