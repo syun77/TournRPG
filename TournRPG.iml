@@ -52,5 +52,17 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="OpenFL" level="application" />
+    <orderEntry type="library" name="OpenFL" level="application" />
+    <orderEntry type="module-library">
+      <library name="haxelib|/usr/lib/haxe/lib/flixel-addons/1,1,0">
+        <CLASSES>
+          <root url="file:///usr/lib/haxe/lib/flixel-addons/1,1,0" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="file:///usr/lib/haxe/lib/flixel-addons/1,1,0" />
+        </SOURCES>
+      </library>
+    </orderEntry>
   </component>
 </module>

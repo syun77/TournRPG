@@ -4,17 +4,15 @@ import flixel.FlxG;
 import flixel.FlxState;
 
 /**
- * メインゲーム
- */
-class PlayState extends FlxState {
+ * 起動開始シーン
+ **/
+class BootState extends FlxState {
 
   /**
    * 生成
    **/
   override public function create():Void {
     super.create();
-
-    this.add(new BtlUI());
   }
 
   /**
@@ -30,8 +28,6 @@ class PlayState extends FlxState {
   override public function update():Void {
     super.update();
 
-    if(FlxG.keys.justPressed.ESCAPE) {
-      throw "Terminate.";
-    }
+    FlxG.switchState(new PlayState());
   }
 }
