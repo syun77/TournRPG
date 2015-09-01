@@ -5,9 +5,21 @@ package jp_2dgames.game;
  **/
 class BtlMgr {
 
-  var _player:Player;
+  var _player:Actor;
+  var _enemy:Actor;
 
+  /**
+   * コンストラクタ
+   **/
   public function new() {
-    _player = new Player();
+    _player = Actor.add();
+    _enemy = Actor.add();
+  }
+
+  /**
+   * 更新
+   **/
+  public function proc():Void {
+
   }
 }
