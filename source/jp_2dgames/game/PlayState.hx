@@ -11,7 +11,7 @@ import flixel.FlxState;
 /**
  * メインゲーム
  */
-class StateMain extends FlxState {
+class PlayState extends FlxState {
 
   var _spr:FlxSprite;
 
@@ -47,7 +47,7 @@ class StateMain extends FlxState {
     _spr.angle += diff * 0.1;
 
     if(MyKey.press.A) {
-      trace("piyo");
+      trace("hoge");
     }
 
     if(FlxG.keys.justPressed.ESCAPE) {

@@ -1,6 +1,6 @@
 package;
 
-import jp_2dgames.game.StateMain;
+import jp_2dgames.game.PlayState;
 import flash.display.Sprite;
 import flash.events.Event;
 import flash.Lib;
@@ -10,7 +10,7 @@ import flixel.FlxState;
 class Main extends Sprite {
   var gameWidth:Int = 426; // 画面の幅
   var gameHeight:Int = 240; // 画面の高さ
-  var initialState:Class<FlxState> = StateMain; // The FlxState the game starts with.
+  var initialState:Class<FlxState> = PlayState; // The FlxState the game starts with.
   var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
   var framerate:Int = 60; // How many frames per second the game should run at.
   var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
