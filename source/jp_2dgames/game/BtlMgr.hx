@@ -60,6 +60,29 @@ class BtlMgr {
   }
 
   /**
+   * コマンド入力更新
+   **/
+  private function _procInputCommand():Void {
+    var btnID = -1;
+    if(MyKey.press.A) {
+      btnID = BtlCmdUI.CMD_ATK1;
+    }
+    else if(MyKey.press.B) {
+      btnID = BtlCmdUI.CMD_ATK2;
+    }
+    else if(MyKey.press.X) {
+      btnID = BtlCmdUI.CMD_ATK3;
+    }
+    else if(MyKey.press.Y) {
+      btnID = BtlCmdUI.CMD_ITEM;
+    }
+
+    if(btnID != -1) {
+      _cbCommand(btnID);
+    }
+  }
+
+  /**
    * コマンド入力結果受け取り
    **/
   private function _cbCommand(btnID:Int):Void {
@@ -95,6 +118,7 @@ class BtlMgr {
 
       case State.InputCommand:
         // コマンド入力待ち
+        _procInputCommand();
 
       case State.ActBegin:
         // 行動実行

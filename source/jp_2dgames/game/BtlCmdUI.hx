@@ -1,4 +1,7 @@
 package jp_2dgames.game;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.ui.FlxButton;
 import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
 
@@ -21,7 +24,7 @@ class BtlCmdUI extends FlxSpriteGroup {
   private static inline var BTN_X = 0;
   private static inline var BTN_Y = 0;
   private static inline var BTN_DX = 80;
-  private static inline var BTN_DY = 48;
+  private static inline var BTN_DY = 24;
 
   // ■メンバ変数
 
@@ -38,28 +41,38 @@ class BtlCmdUI extends FlxSpriteGroup {
     }
 
     // コマンドボタンの配置
+    var btnList = new List<MyButton>();
     var px = BTN_X;
     var py = BTN_Y;
-    var btn = new MyButton(px, py, "ATTACK1", function() {
+    btnList.add(new MyButton(px, py, "ATTACK1", function() {
       _cbFunc(CMD_ATK1);
-    });
-    this.add(btn);
+    }));
     px += BTN_DX;
-    this.add(new MyButton(px, py, "ATTACK2", function() {
+    btnList.add(new MyButton(px, py, "ATTACK2", function() {
       _cbFunc(CMD_ATK2);
     }));
     px += BTN_DX;
-    this.add(new MyButton(px, py, "ATTACK3", function() {
+    btnList.add(new MyButton(px, py, "ATTACK3", function() {
       _cbFunc(CMD_ATK3);
     }));
     px += BTN_DX;
-    this.add(new MyButton(px, py, "ATTACK3", function() {
+    btnList.add(new MyButton(px, py, "ATTACK3", function() {
       _cbFunc(CMD_ATK3);
     }));
     px = BTN_X;
     py += BTN_DY;
-    this.add(new MyButton(px, py, "ITEM", function() {
+    btnList.add(new MyButton(px, py, "ITEM", function() {
       _cbFunc(CMD_ITEM);
     }));
+
+    for(btn in btnList) {
+      this.add(btn);
+    }
+
+    {
+      var py2 = y;
+      y = FlxG.height;
+      FlxTween.tween(this, {y:py2}, 1, {ease:FlxEase.expoOut});
+    }
   }
 }
