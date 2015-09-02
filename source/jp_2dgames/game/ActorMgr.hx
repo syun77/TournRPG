@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxRandom;
 import jp_2dgames.game.PartyGroupUtil;
 import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
@@ -58,6 +59,26 @@ class ActorMgr extends FlxTypedGroup<Actor> {
       ret.push(actor);
     });
     return ret;
+  }
+
+  /**
+   * 指定のグループからランダムに取得する
+   **/
+  public static function random(group:PartyGroup):Actor {
+    var list = new Array<Actor>();
+    _instance.forEachAlive(function(actor:Actor) {
+      if(PartyGroupUtil.isSame(actor.ID, group)) {
+        // グループが一致
+        list.push(actor);
+      }
+    });
+
+    if(list.length == 0) {
+      return null;
+    }
+
+    var idx = FlxRandom.intRanged(0, list.length - 1);
+    return list[idx];
   }
 
   /**

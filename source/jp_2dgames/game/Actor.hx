@@ -1,7 +1,6 @@
 package jp_2dgames.game;
 
 import jp_2dgames.game.PartyGroupUtil;
-import flixel.group.FlxTypedGroup;
 import flixel.FlxSprite;
 
 private enum State {
@@ -101,7 +100,16 @@ class Actor extends FlxSprite {
    * 行動実行
    **/
   public function exec():Void {
-    damage(5);
+
+    // 対抗グループを取得する
+    var grp = PartyGroupUtil.getAgaint(_group);
+
+    // 攻撃対象を取得する
+    var actor = ActorMgr.random(grp);
+    if(actor != null) {
+      actor.damage(5);
+    }
+
   }
 
   /**
