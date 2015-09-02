@@ -9,9 +9,11 @@ import flixel.FlxG;
  * 状態
  **/
 private enum State {
-  KeyInput;
-  ActBegin;
-  TurnEnd;
+  None;         // なし
+  TurnStart;    // ターン開始
+  InputCommand; // コマンド入力待ち
+  ActBegin;     // 行動実行
+  TurnEnd;      // ターン終了
 }
 
 /**
@@ -22,9 +24,11 @@ class BtlMgr {
   var _player:Actor;
   var _enemy:Actor;
 
-  var _state:State;
+  var _state:State = State.None;
+  var _statePrev:State = State.None;
 
   var _actorList:Array<Actor> = null;
+  var _btlCmdUI:BtlCmdUI = null;
 
   /**
    * コンストラクタ
@@ -43,9 +47,36 @@ class BtlMgr {
     btlUI.setPlayerID(_player.ID);
     btlUI.setEnemyID(_enemy.ID);
 
-    _state = State.KeyInput;
+    // ターン開始
+    _change(State.TurnStart);
 
     FlxG.watch.add(this, "_state");
+    FlxG.watch.add(this, "_statePrev");
+  }
+
+  private function _change(s:State):Void {
+    _statePrev = _state;
+    _state = s;
+  }
+
+  /**
+   * コマンド入力結果受け取り
+   **/
+  private function _cbCommand(btnID:Int):Void {
+
+    // バトルUI消去
+    FlxG.state.remove(_btlCmdUI);
+    _btlCmdUI.kill();
+    _btlCmdUI = null;
+
+    // 行動順の決定
+    _actorList = ActorMgr.getAlive();
+    ArraySort.sort(_actorList, function(a:Actor, b:Actor) {
+      return b.agi - a.agi;
+    });
+
+    // 行動開始
+    _change(State.ActBegin);
   }
 
   /**
@@ -53,21 +84,28 @@ class BtlMgr {
    **/
   public function proc():Void {
     switch(_state) {
-      case State.KeyInput:
-        if(MyKey.press.A) {
-          _state = State.ActBegin;
-          _actorList = ActorMgr.getAlive();
-          ArraySort.sort(_actorList, function(a:Actor, b:Actor) {
-            return b.agi - a.agi;
-          });
-        }
+      case State.None:
+        // 何もしない
+
+      case State.TurnStart:
+        // ターン開始
+        _btlCmdUI = new BtlCmdUI(_cbCommand);
+        FlxG.state.add(_btlCmdUI);
+        _change(State.InputCommand);
+
+      case State.InputCommand:
+        // コマンド入力待ち
+
       case State.ActBegin:
+        // 行動実行
         for(actor in _actorList) {
           actor.exec();
         }
-        _state = State.TurnEnd;
+        _change(State.TurnEnd);
+
       case State.TurnEnd:
-        _state = State.KeyInput;
+        // ターン終了
+        _change(State.TurnStart);
     }
   }
 }

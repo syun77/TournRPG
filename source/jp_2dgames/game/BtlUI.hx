@@ -23,24 +23,6 @@ class BtlUI extends FlxSpriteGroup {
   public function new() {
     super();
 
-    // テスト用にボタン配置
-    var px = 0;
-    var py = FlxG.height-64;
-    var btn = new MyButton(px, py, "ATTACK3", function() {
-      trace("ATTACK");
-      var player = ActorMgr.search(_playerID);
-      player.damage(10);
-    });
-    this.add(btn);
-    px += 80;
-    this.add(new MyButton(px, py, "ATTACK1", function() {
-      btn.enabled = true;
-    }));
-    px += 80;
-    this.add(new MyButton(px, py, "ATTACK2", function() {
-      btn.enabled = false;
-    }));
-
     _txtPlayerHp = new FlxText(0, 0);
     _barPlayerHp = new StatusBar(0, 24);
     _txtEnemyHp = new FlxText(0, 48);
