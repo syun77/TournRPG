@@ -19,6 +19,8 @@ class PlayState extends FlxState {
 
   // 背景
   var _bg:Bg;
+  // デバッグ機能
+  var _debugActor:DebugActor;
 
   /**
    * 生成
@@ -43,6 +45,10 @@ class PlayState extends FlxState {
 
     // バトル管理生成
     _btlMgr = new BtlMgr(_btlUI);
+
+    // デバッグ機能
+    _debugActor = new DebugActor();
+    this.add(_debugActor);
 
     FlxG.debugger.toggleKeys = ["ALT"];
   }
@@ -80,6 +86,9 @@ class PlayState extends FlxState {
     #if debug
     if(FlxG.keys.justPressed.R) {
       FlxG.resetState();
+    }
+    if(FlxG.keys.justPressed.Q) {
+      _debugActor.toggle();
     }
     #end
   }

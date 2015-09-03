@@ -114,7 +114,7 @@ class BtlMgr {
     // 行動順の決定
     _actorList = ActorMgr.getAlive();
     ArraySort.sort(_actorList, function(a:Actor, b:Actor) {
-      return b.agi - a.agi;
+      return a.agi - b.agi;
     });
 
     // 行動開始
