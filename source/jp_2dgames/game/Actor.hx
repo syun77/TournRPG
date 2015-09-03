@@ -69,6 +69,16 @@ class Actor extends FlxSprite {
   private function get_hpratio() {
     return _param.hp / _param.hpmax;
   }
+  // 力
+  public var str(get, never):Int;
+  private function get_str() {
+    return _param.str;
+  }
+  // 体力
+  public var vit(get, never):Int;
+  private function get_vit() {
+    return _param.vit;
+  }
   // 素早さ
   public var agi(get, never):Int;
   private function get_agi() {
@@ -154,13 +164,11 @@ class Actor extends FlxSprite {
     var grp = PartyGroupUtil.getAgaint(_group);
 
     // 攻撃対象を取得する
-    var actor = ActorMgr.random(grp);
-    if(actor != null) {
-      var val = 10;
-      if(grp == PartyGroup.Enemy) {
-        val *= 50;
-      }
-      actor.damage(val);
+    var target = ActorMgr.random(grp);
+    if(target != null) {
+      // ダメージ計算
+      var val = Calc.damage(this, target);
+      target.damage(val);
     }
   }
 
