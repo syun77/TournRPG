@@ -8,7 +8,7 @@ cd `dirname $0`
 #python xls2csv.py enemy.xlsx ../assets/levels  header_enemy.txt,header_item.txt
 python xls2csv.py enemy.xlsx ../assets/data/csv header_enemy.txt
 # プレイヤーデータ
-#python xls2csv.py player.xlsx ../assets/levels
+python xls2csv.py player.xlsx ../assets/data/csv
 # メッセージデータ
 python xls2csv.py message.xlsx ../assets/data/csv
 # アイテム

@@ -21,6 +21,7 @@ class Reg {
 
   // CSV
   public static inline var PATH_CSV_MESSAGE = "assets/data/csv/message.csv";
+  public static inline var PATH_CSV_PLAYER  = "assets/data/csv/player.csv";
   public static inline var PATH_CSV_ENEMY   = "assets/data/csv/enemy.csv";
 
   /**

@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.actor;
 
 /**
  * キャラクターパラメータ
@@ -6,6 +6,7 @@ package jp_2dgames.game;
 class Params {
 
   public var id:Int    = 1;   // ID
+  public var lv:Int    = 1;   // レベル
   public var hp:Int    = 100; // HP
   public var hpmax:Int = 100; // 最大HP
   public var str:Int   = 5;   // 力
@@ -17,6 +18,7 @@ class Params {
 
   public function copy(p:Params):Void {
     id    = p.id;
+    lv    = p.lv;
     hp    = p.hp;
     hpmax = p.hpmax;
     str   = p.str;

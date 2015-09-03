@@ -137,7 +137,9 @@ class Actor extends FlxSprite {
   public function init(group:PartyGroup, params:Params):Void {
     ID = _idx + PartyGroupUtil.getOffsetID(group);
     _group = group;
-    _param.copy(params);
+    if(params != null) {
+      _param.copy(params);
+    }
 
     if(_group == PartyGroup.Enemy) {
       // 敵の場合の処理
@@ -159,11 +161,7 @@ class Actor extends FlxSprite {
     loadGraphic(path);
 
     // パラメータ設定
-    _param.hpmax = EnemyInfo.get(id, "hp");
-    _param.hp    = _param.hpmax;
-    _param.str   = EnemyInfo.get(id, "str");
-    _param.vit   = EnemyInfo.get(id, "vit");
-    _param.agi   = EnemyInfo.get(id, "agi");
+    EnemyInfo.setParam(_param, id);
 
     // 名前を設定
     _name = EnemyInfo.getString(id, "name");

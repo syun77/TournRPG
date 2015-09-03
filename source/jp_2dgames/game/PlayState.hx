@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.actor.PlayerInfo;
 import jp_2dgames.game.actor.EnemyInfo;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.DebugActor;
@@ -31,11 +32,10 @@ class PlayState extends FlxState {
   override public function create():Void {
     super.create();
 
+    Global.init();
+
     // 背景の表示
     this.add(new Bg());
-
-    // 敵パラメータロード
-    EnemyInfo.load();
 
     // キャラクター管理生成
     ActorMgr.create(this);

@@ -115,7 +115,7 @@ class DebugActor extends FlxSpriteGroup {
     _txtGroup.text = 'Grp: ${act.group}';
     _txtHp.text    = 'HP: ${act.hp}/${act.hpmax}';
     _txtStr.text   = 'STR: ${act.str}';
-    _txtVit.text   = 'VIT: ${act.str}';
+    _txtVit.text   = 'VIT: ${act.vit}';
     _txtAgi.text   = 'AGI: ${act.agi}';
   }
 

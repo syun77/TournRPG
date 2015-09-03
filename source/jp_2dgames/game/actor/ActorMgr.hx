@@ -42,7 +42,7 @@ class ActorMgr  {
   /**
    * インスタンスを新規に取得
    **/
-  public static function recycle(group:PartyGroup, param:Params):Actor {
+  public static function recycle(group:PartyGroup, param:Params=null):Actor {
     var actor:Actor = _instance.recycle();
     actor.init(group, param);
     return actor;

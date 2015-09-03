@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.PartyGroupUtil;
@@ -49,10 +50,9 @@ class BtlMgr {
    * コンストラクタ
    **/
   public function new(btlUI:BtlUI) {
-    var p = new Params();
-    p.agi = 5;
-    _player = ActorMgr.recycle(PartyGroup.Player, p);
-    _enemy = ActorMgr.recycle(PartyGroup.Enemy, p);
+
+    _player = ActorMgr.recycle(PartyGroup.Player, Global.getPlayerParam());
+    _enemy = ActorMgr.recycle(PartyGroup.Enemy);
 
     // TODO:
     _player.setName("プレイヤー");
