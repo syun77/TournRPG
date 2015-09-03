@@ -1,8 +1,6 @@
 package jp_2dgames.game;
 
 import flixel.FlxG;
-import flixel.tile.FlxTile;
-import flixel.util.FlxTimer;
 import jp_2dgames.game.PartyGroupUtil;
 import flixel.FlxSprite;
 
@@ -24,12 +22,24 @@ private enum State {
  **/
 class Actor extends FlxSprite {
 
+  static inline var TIMER_SHAKE:Int = 120;
+
   // 状態
   var _state:State     = State.None;
   var _statePrev:State = State.None;
 
   // 要素番号
   var _idx:Int = 0;
+
+  // 開始座標
+  var _xstart:Float = 0;
+  var _ystart:Float = 0;
+
+  // ダメージ時の揺れ
+  var _tShake:Float = 0;
+
+  // アニメーションタイマー
+  var _tAnime:Int = 0;
 
   // グループ
   var _group:PartyGroup;
@@ -129,6 +139,16 @@ class Actor extends FlxSprite {
     _name = str;
   }
 
+  /**
+   * 座標を設定する
+   **/
+  public function setDrawPosition(xstart:Float, ystart:Float):Void {
+    _xstart = xstart;
+    _ystart = ystart;
+    x = xstart;
+    y = ystart;
+  }
+
   private function _attackRandom():Void {
     // 対抗グループを取得する
     var grp = PartyGroupUtil.getAgaint(_group);
@@ -171,7 +191,17 @@ class Actor extends FlxSprite {
     _param.hp -= v;
     _clampHp();
 
-    Message.push2(1, [_name, v]);
+    // ダメージメッセージ表示
+    if(_group == PartyGroup.Player) {
+      // プレイヤーにダメージ
+      Message.push2(Msg.DAMAGE_PLAYER, [_name, v]);
+    }
+    else {
+      // 敵にダメージ
+      Message.push2(Msg.DAMAGE_ENEMY, [_name, v]);
+      // 揺らす
+      _tShake = TIMER_SHAKE;
+    }
 
     return isDead();
   }
@@ -179,7 +209,7 @@ class Actor extends FlxSprite {
   public function actBegin() {
     _change(State.ActBegin);
     // 行動開始
-    Message.push2(3, [_name]);
+    Message.push2(Msg.ATTACK_BEGIN, [_name]);
     _change(State.Act);
   }
   public function isActEnd():Bool {
@@ -193,5 +223,29 @@ class Actor extends FlxSprite {
   }
   public function turnEnd() {
     _state = State.Standby;
+  }
+
+  /**
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
+
+    _tAnime++;
+
+    _updateShake();
+  }
+
+  private function _updateShake():Void {
+    if(_group != PartyGroup.Enemy) {
+      return;
+    }
+
+    x = _xstart;
+    if(_tShake > 0) {
+      _tShake *= 0.9;
+      var xsign = if(_tAnime%4 < 2) 1 else -1;
+      x = _xstart + (_tShake * xsign * 0.2);
+    }
   }
 }

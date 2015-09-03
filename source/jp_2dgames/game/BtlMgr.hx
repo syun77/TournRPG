@@ -57,8 +57,11 @@ class BtlMgr {
     // TODO:
     _player.setName("プレイヤー");
     _enemy.setName("敵");
-    _enemy.x = FlxG.width/2 - _enemy.width/2;
-    _enemy.y = FlxG.height/2 - _enemy.height/2;
+    {
+      var px = FlxG.width/2 - _enemy.width/2;
+      var py = FlxG.height/2 - _enemy.height/2;
+      _enemy.setDrawPosition(px, py);
+    }
 
     btlUI.setPlayerID(_player.ID);
     btlUI.setEnemyID(_enemy.ID);
@@ -194,13 +197,13 @@ class BtlMgr {
       ActorMgr.moveDeadPool(actor);
       if(ActorMgr.countGroup(PartyGroup.Enemy) == 0) {
         // 敵が全滅
-        Message.push2(5);
+        Message.push2(Msg.BATTLE_WIN);
         _change(State.BtlWin);
         return;
       }
       if(ActorMgr.countGroup(PartyGroup.Player) == 0) {
         // 味方が全滅
-        Message.push2(6);
+        Message.push2(Msg.BATTLE_LOSE);
         _change(State.BtlLose);
         return;
       }

@@ -58,7 +58,11 @@ class PlayState extends FlxState {
   override public function update():Void {
     super.update();
 
+    // バトル更新
     _btlMgr.proc();
+
+    // デバッグ機能
+    _updateDebug();
   }
 
   private function _updateDebug():Void {
