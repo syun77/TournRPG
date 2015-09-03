@@ -27,9 +27,8 @@ class Reg {
   /**
    * 敵画像のパスを取得する
    **/
-  public static function getEnemyImagePath(id:Int):String {
-    var str = TextUtil.fillZero(id, 3);
-    return 'assets/images/monster/${str}.png';
+  public static function getEnemyImagePath(name:String):String {
+    return 'assets/images/monster/${name}';
   }
 
   /**

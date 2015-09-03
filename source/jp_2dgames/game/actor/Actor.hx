@@ -156,8 +156,8 @@ class Actor extends FlxSprite {
     var id = _param.id;
 
     // 画像読み込み
-    var imageID = EnemyInfo.get(id, "image");
-    var path = Reg.getEnemyImagePath(imageID);
+    var image = EnemyInfo.getString(id, "image");
+    var path = Reg.getEnemyImagePath(image);
     loadGraphic(path);
 
     // パラメータ設定

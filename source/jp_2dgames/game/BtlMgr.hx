@@ -55,7 +55,9 @@ class BtlMgr {
   public function new(btlUI:BtlUI) {
 
     _player = ActorMgr.recycle(PartyGroup.Player, Global.getPlayerParam());
-    _enemy = ActorMgr.recycle(PartyGroup.Enemy);
+    var param = new Params();
+    param.id = Global.getStage();
+    _enemy = ActorMgr.recycle(PartyGroup.Enemy, param);
 
     // TODO:
     _player.setName("プレイヤー");

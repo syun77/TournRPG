@@ -73,6 +73,8 @@ class PlayState extends FlxState {
     _btlMgr.proc();
 
     if(_btlMgr.isEnd()) {
+      // 次のステージへ
+      Global.nextStage();
       FlxG.switchState(new PlayState());
     }
 
