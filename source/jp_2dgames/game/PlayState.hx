@@ -46,7 +46,7 @@ class PlayState extends FlxState {
    */
   override public function destroy():Void {
 
-    ActorMgr.terminate();
+    ActorMgr.destroy();
     Message.instance = null;
 
     super.destroy();

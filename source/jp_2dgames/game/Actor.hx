@@ -1,10 +1,21 @@
 package jp_2dgames.game;
 
+import flixel.FlxG;
+import flixel.tile.FlxTile;
+import flixel.util.FlxTimer;
 import jp_2dgames.game.PartyGroupUtil;
 import flixel.FlxSprite;
 
 private enum State {
-  Standby;
+  None;     // なし
+  Standby;  // 待機
+
+  // 行動
+  ActBegin; // 開始
+  Act;      // 実行中
+  ActEnd;   // 終了
+
+  // ターン終了
   TurnEnd;
 }
 
@@ -13,14 +24,19 @@ private enum State {
  **/
 class Actor extends FlxSprite {
 
-  // グループ
-  var _group:PartyGroup;
-
   // 状態
-  var _state:State;
+  var _state:State     = State.None;
+  var _statePrev:State = State.None;
 
   // 要素番号
   var _idx:Int = 0;
+
+  // グループ
+  var _group:PartyGroup;
+  public var group(get, never):PartyGroup;
+  private function get_group() {
+    return _group;
+  }
 
   // 名前
   var _name:String;
@@ -69,6 +85,13 @@ class Actor extends FlxSprite {
   }
 
   /**
+   * 状態遷移
+   **/
+  private function _change(s:State):Void {
+    _state = s;
+  }
+
+  /**
    * コンストラクタ
    **/
   public function new(id:Int) {
@@ -81,7 +104,11 @@ class Actor extends FlxSprite {
     kill();
     visible = false;
 
-    _state = State.Standby;
+    _change(State.Standby);
+
+    if(id < 2) {
+      FlxG.watch.add(this, "_state");
+    }
   }
 
   /**
@@ -96,18 +123,37 @@ class Actor extends FlxSprite {
     _name = str;
   }
 
-  /**
-   * 行動実行
-   **/
-  public function exec():Void {
-
+  private function _attackRandom():Void {
     // 対抗グループを取得する
     var grp = PartyGroupUtil.getAgaint(_group);
 
     // 攻撃対象を取得する
     var actor = ActorMgr.random(grp);
     if(actor != null) {
-      actor.damage(5);
+      var val = 10;
+      if(grp == PartyGroup.Enemy) {
+        val *= 50;
+      }
+      actor.damage(val);
+    }
+  }
+
+  /**
+   * 行動実行
+   **/
+  public function exec():Void {
+
+    switch(_state) {
+      case State.None:
+      case State.Standby:
+      case State.ActBegin:
+
+      case State.Act:
+        _attackRandom();
+        _change(State.ActEnd);
+
+      case State.ActEnd:
+      case State.TurnEnd:
     }
 
   }
@@ -124,8 +170,17 @@ class Actor extends FlxSprite {
     return isDead();
   }
 
+  public function actBegin() {
+    _change(State.ActBegin);
+    // 行動開始
+    Message.push2(3, [_name]);
+    _change(State.Act);
+  }
+  public function isActEnd():Bool {
+    return _state == State.ActEnd;
+  }
   public function actEnd() {
-    _state = State.TurnEnd;
+    _change(State.TurnEnd);
   }
   public function isTurnEnd():Bool {
     return _state == State.TurnEnd;

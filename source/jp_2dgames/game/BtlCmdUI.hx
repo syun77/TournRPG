@@ -55,10 +55,6 @@ class BtlCmdUI extends FlxSpriteGroup {
     btnList.add(new MyButton(px, py, "ATTACK3", function() {
       _cbFunc(CMD_ATK3);
     }));
-    px += BTN_DX;
-    btnList.add(new MyButton(px, py, "ATTACK3", function() {
-      _cbFunc(CMD_ATK3);
-    }));
     px = BTN_X;
     py += BTN_DY;
     btnList.add(new MyButton(px, py, "ITEM", function() {

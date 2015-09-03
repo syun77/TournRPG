@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import openfl._internal.aglsl.assembler.Part;
 import jp_2dgames.game.PartyGroupUtil;
 import haxe.ds.ArraySort;
 import jp_2dgames.lib.MyKey;
@@ -12,8 +13,18 @@ private enum State {
   None;         // なし
   TurnStart;    // ターン開始
   InputCommand; // コマンド入力待ち
-  ActBegin;     // 行動実行
+
+  // 行動
+  ActBegin;     // 開始
+  Act;          // 実行中
+  ActEnd;       // 終了
+
+  DeadCheck;    // 死亡チェック
+
   TurnEnd;      // ターン終了
+
+  BtlWin;       // 勝利
+  BtlLose;      // 敗北
 }
 
 /**
@@ -30,15 +41,18 @@ class BtlMgr {
   var _actorList:Array<Actor> = null;
   var _btlCmdUI:BtlCmdUI = null;
 
+  // 行動主体者
+  var _actor:Actor = null;
+
   /**
    * コンストラクタ
    **/
   public function new(btlUI:BtlUI) {
     var p = new Params();
     p.agi = 5;
-    _player = ActorMgr.recycleActor(PartyGroup.Player, p);
+    _player = ActorMgr.recycle(PartyGroup.Player, p);
     p.agi = 10;
-    _enemy = ActorMgr.recycleActor(PartyGroup.Enemy, p);
+    _enemy = ActorMgr.recycle(PartyGroup.Enemy, p);
 
     // TODO:
     _player.setName("プレイヤー");
@@ -102,10 +116,12 @@ class BtlMgr {
     _change(State.ActBegin);
   }
 
+  private var _elapsed:Float = 0;
   /**
    * 更新
    **/
   public function proc():Void {
+
     switch(_state) {
       case State.None:
         // 何もしない
@@ -122,14 +138,72 @@ class BtlMgr {
 
       case State.ActBegin:
         // 行動実行
+        var bAllDone = true;
         for(actor in _actorList) {
-          actor.exec();
+          if(actor.isTurnEnd() == false) {
+            _actor = actor;
+            bAllDone = false;
+          }
         }
-        _change(State.TurnEnd);
+
+        if(bAllDone) {
+          // 全員行動完了
+          _change(State.TurnEnd);
+        }
+        else {
+          // 行動開始
+          _actor.actBegin();
+          _change(State.Act);
+        }
+
+      case State.Act:
+        if(MyKey.press.A) {
+          _actor.exec();
+          _change(State.ActEnd);
+        }
+
+      case State.ActEnd:
+        if(MyKey.press.A) {
+          if(_actor.isActEnd()) {
+            // 行動完了
+            _actor.actEnd();
+            // 死亡チェック
+            _change(State.DeadCheck);
+          }
+        }
+
+      case State.DeadCheck:
+        // 死亡チェック
+        _procDeadCheck();
 
       case State.TurnEnd:
         // ターン終了
+        ActorMgr.turnEnd();
         _change(State.TurnStart);
+
+      case State.BtlWin:
+      case State.BtlLose:
     }
+  }
+
+  private function _procDeadCheck():Void {
+    var actor = ActorMgr.searchDead();
+    if(actor != null) {
+      ActorMgr.moveDeadPool(actor);
+      if(ActorMgr.countGroup(PartyGroup.Enemy) == 0) {
+        // 敵が全滅
+        Message.push2(5);
+        _change(State.BtlWin);
+        return;
+      }
+      if(ActorMgr.countGroup(PartyGroup.Player) == 0) {
+        // 味方が全滅
+        Message.push2(6);
+        _change(State.BtlLose);
+        return;
+      }
+    }
+    _actor = null;
+    _change(State.ActBegin);
   }
 }
