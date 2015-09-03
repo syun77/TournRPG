@@ -1,13 +1,8 @@
-package jp_2dgames.game;
+package jp_2dgames.game.state;
 
-import jp_2dgames.game.actor.PlayerInfo;
-import jp_2dgames.game.actor.EnemyInfo;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.DebugActor;
-import flixel.FlxSprite;
-import flixel.util.FlxColor;
 import jp_2dgames.lib.CsvLoader;
-import flixel.group.FlxTypedGroup;
 import flixel.FlxG;
 import flixel.FlxState;
 
@@ -22,7 +17,7 @@ class PlayState extends FlxState {
   var _btlUI:BtlUI;
 
   // 背景
-  var _bg:Bg;
+  var _bg:BtlBg;
   // デバッグ機能
   var _debugActor:DebugActor;
 
@@ -32,10 +27,8 @@ class PlayState extends FlxState {
   override public function create():Void {
     super.create();
 
-    Global.init();
-
     // 背景の表示
-    this.add(new Bg());
+    this.add(new BtlBg());
 
     // キャラクター管理生成
     ActorMgr.create(this);
@@ -78,6 +71,10 @@ class PlayState extends FlxState {
 
     // バトル更新
     _btlMgr.proc();
+
+    if(_btlMgr.isEnd()) {
+      FlxG.switchState(new PlayState());
+    }
 
     // デバッグ機能
     _updateDebug();

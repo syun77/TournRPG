@@ -27,6 +27,9 @@ private enum State {
 
   BtlWin;       // 勝利
   BtlLose;      // 敗北
+
+  Result;       // リザルト
+  End;          // おしまい
 }
 
 /**
@@ -186,7 +189,20 @@ class BtlMgr {
         _change(State.TurnStart);
 
       case State.BtlWin:
+        if(MyKey.press.A) {
+          _change(State.Result);
+        }
       case State.BtlLose:
+        if(MyKey.press.A) {
+          _change(State.Result);
+        }
+
+      case State.Result:
+        // プレイヤーパラメータをグローバルに戻しておく
+        Global.setPlayerHp(_player.hp);
+        _change(State.End);
+
+      case State.End:
     }
   }
 
@@ -209,5 +225,12 @@ class BtlMgr {
     }
     _actor = null;
     _change(State.ActBegin);
+  }
+
+  /**
+   * 戦闘が終了したかどうか
+   **/
+  public function isEnd():Bool {
+    return _state == State.End;
   }
 }

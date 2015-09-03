@@ -3,9 +3,9 @@ import flixel.FlxG;
 import flixel.FlxSprite;
 
 /**
- * 背景
+ * バトル背景
  **/
-class Bg extends FlxSprite {
+class BtlBg extends FlxSprite {
   public function new() {
     super(0, 0, Reg.getBackImagePath(1));
 
