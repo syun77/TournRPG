@@ -1,4 +1,5 @@
 package jp_2dgames.game;
+import jp_2dgames.game.actor.ActorMgr;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import jp_2dgames.lib.StatusBar;

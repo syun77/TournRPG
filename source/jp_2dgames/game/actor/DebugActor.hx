@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.actor;
 import jp_2dgames.lib.MyKey;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;

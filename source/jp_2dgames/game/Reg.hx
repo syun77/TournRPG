@@ -20,7 +20,8 @@ class Reg {
   public static inline var PATH_MSG_TEXT = "assets/images/ui/messagetext.png";
 
   // CSV
-  public static inline var PATH_CSV_MESSAGE = "assets/data/message.csv";
+  public static inline var PATH_CSV_MESSAGE = "assets/data/csv/message.csv";
+  public static inline var PATH_CSV_ENEMY   = "assets/data/csv/enemy.csv";
 
   /**
    * 敵画像のパスを取得する

@@ -1,0 +1,3 @@
+id,name,image,hp,xp,str,vit,agi,atk,def
+int,str,int,int,int,int,int,int,int,int
+1,スライム,1,25,3,10,10,10,1,1

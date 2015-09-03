@@ -1,6 +1,7 @@
 package jp_2dgames.game;
 
-import openfl._internal.aglsl.assembler.Part;
+import jp_2dgames.game.actor.ActorMgr;
+import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.PartyGroupUtil;
 import haxe.ds.ArraySort;
 import jp_2dgames.lib.MyKey;
@@ -51,12 +52,10 @@ class BtlMgr {
     var p = new Params();
     p.agi = 5;
     _player = ActorMgr.recycle(PartyGroup.Player, p);
-    p.agi = 10;
     _enemy = ActorMgr.recycle(PartyGroup.Enemy, p);
 
     // TODO:
     _player.setName("プレイヤー");
-    _enemy.setName("敵");
     {
       var px = FlxG.width/2 - _enemy.width/2;
       var py = FlxG.height/2 - _enemy.height/2;

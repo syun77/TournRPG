@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.actor;
 
 import flixel.util.FlxRandom;
 import jp_2dgames.game.PartyGroupUtil;

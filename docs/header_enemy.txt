@@ -1,0 +1,5 @@
+header:
+  class: "EnemyConst"
+  package: "jp_2dgames.game.actor"
+data:
+  SLIME: 1

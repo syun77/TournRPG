@@ -3,6 +3,7 @@ package jp_2dgames.game;
 /**
  * 計算式
  **/
+import jp_2dgames.game.actor.Actor;
 import flixel.util.FlxRandom;
 class Calc {
 

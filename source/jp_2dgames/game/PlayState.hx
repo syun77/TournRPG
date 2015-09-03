@@ -1,5 +1,8 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.actor.EnemyInfo;
+import jp_2dgames.game.actor.ActorMgr;
+import jp_2dgames.game.actor.DebugActor;
 import flixel.FlxSprite;
 import flixel.util.FlxColor;
 import jp_2dgames.lib.CsvLoader;
@@ -30,6 +33,9 @@ class PlayState extends FlxState {
 
     // 背景の表示
     this.add(new Bg());
+
+    // 敵パラメータロード
+    EnemyInfo.load();
 
     // キャラクター管理生成
     ActorMgr.create(this);

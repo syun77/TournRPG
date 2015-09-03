@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.actor;
 
 import flixel.FlxG;
 import jp_2dgames.game.PartyGroupUtil;
@@ -140,11 +140,38 @@ class Actor extends FlxSprite {
     _param.copy(params);
 
     if(_group == PartyGroup.Enemy) {
-      var path = Reg.getEnemyImagePath(_param.id);
-      loadGraphic(path);
-      visible = true;
+      // 敵の場合の処理
+      _initEnemy();
     }
   }
+
+  /**
+   * 敵の初期化処理
+   **/
+  private function _initEnemy():Void {
+
+    // ID取得
+    var id = _param.id;
+
+    // 画像読み込み
+    var imageID = EnemyInfo.get(id, "image");
+    var path = Reg.getEnemyImagePath(imageID);
+    loadGraphic(path);
+
+    // パラメータ設定
+    _param.hpmax = EnemyInfo.get(id, "hp");
+    _param.hp    = _param.hpmax;
+    _param.str   = EnemyInfo.get(id, "str");
+    _param.vit   = EnemyInfo.get(id, "vit");
+    _param.agi   = EnemyInfo.get(id, "agi");
+
+    // 名前を設定
+    _name = EnemyInfo.getString(id, "name");
+
+    // 表示する
+    visible = true;
+  }
+
   public function setName(str:String):Void {
     _name = str;
   }
