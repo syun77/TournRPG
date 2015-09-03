@@ -118,6 +118,12 @@ class Actor extends FlxSprite {
     ID = _idx + PartyGroupUtil.getOffsetID(group);
     _group = group;
     _param.copy(params);
+
+    if(_group == PartyGroup.Enemy) {
+      var path = Reg.getEnemyImagePath(_param.id);
+      loadGraphic(path);
+      visible = true;
+    }
   }
   public function setName(str:String):Void {
     _name = str;

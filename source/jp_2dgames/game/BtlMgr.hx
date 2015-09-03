@@ -57,6 +57,8 @@ class BtlMgr {
     // TODO:
     _player.setName("プレイヤー");
     _enemy.setName("敵");
+    _enemy.x = FlxG.width/2 - _enemy.width/2;
+    _enemy.y = FlxG.height/2 - _enemy.height/2;
 
     btlUI.setPlayerID(_player.ID);
     btlUI.setEnemyID(_enemy.ID);

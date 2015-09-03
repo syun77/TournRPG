@@ -5,7 +5,7 @@ package jp_2dgames.game;
  **/
 class Params {
 
-  public var id:Int    = 0;   // ID
+  public var id:Int    = 1;   // ID
   public var hp:Int    = 100; // HP
   public var hpmax:Int = 100; // 最大HP
   public var str:Int   = 5;   // 力

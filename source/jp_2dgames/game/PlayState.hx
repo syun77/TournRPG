@@ -59,9 +59,18 @@ class PlayState extends FlxState {
     super.update();
 
     _btlMgr.proc();
+  }
 
+  private function _updateDebug():Void {
+    #if neko
     if(FlxG.keys.justPressed.ESCAPE) {
       throw "Terminate.";
     }
+    #end
+    #if debug
+    if(FlxG.keys.justPressed.R) {
+      FlxG.resetState();
+    }
+    #end
   }
 }
