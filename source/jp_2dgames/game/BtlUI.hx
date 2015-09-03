@@ -1,4 +1,6 @@
 package jp_2dgames.game;
+import flixel.util.FlxColor;
+import flixel.FlxSprite;
 import jp_2dgames.lib.StatusBar;
 import flixel.FlxG;
 import flixel.text.FlxText;
@@ -22,6 +24,10 @@ class BtlUI extends FlxSpriteGroup {
    **/
   public function new() {
     super();
+
+    var bg = new FlxSprite().makeGraphic(FlxG.width, 104, FlxColor.BLACK);
+    bg.alpha = 0.6;
+    this.add(bg);
 
     _txtPlayerHp = new FlxText(0, 0);
     _barPlayerHp = new StatusBar(0, 24);

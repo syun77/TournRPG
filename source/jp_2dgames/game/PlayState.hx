@@ -17,11 +17,17 @@ class PlayState extends FlxState {
   // バトルUI
   var _btlUI:BtlUI;
 
+  // 背景
+  var _bg:Bg;
+
   /**
    * 生成
    **/
   override public function create():Void {
     super.create();
+
+    // 背景の表示
+    this.add(new Bg());
 
     // キャラクター管理生成
     ActorMgr.create(this);
@@ -31,7 +37,7 @@ class PlayState extends FlxState {
     this.add(_btlUI);
 
     // メッセージウィンドウ登録
-    var csv = new CsvLoader("assets/data/message.csv");
+    var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
     Message.instance = new Message(csv);
     this.add(Message.instance);
 

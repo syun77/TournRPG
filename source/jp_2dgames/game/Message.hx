@@ -51,7 +51,7 @@ private class MessageText extends FlxText {
     });
 
     // 背景作成
-    _bg = new FlxSprite(X-8, Y+BG_OFS_Y, "assets/images/ui/messagetext.png");
+    _bg = new FlxSprite(X-8, Y+BG_OFS_Y, Reg.PATH_MSG_TEXT);
     _bg.alpha = 0;
     _bg.color = MyColor.MESSAGE_WINDOW;
   }
@@ -148,7 +148,7 @@ class Message extends FlxGroup {
   public function new(csv:CsvLoader) {
     super();
     // 背景枠
-    _window = new FlxSprite(POS_X, POS_Y, "assets/images/ui/message.png");
+    _window = new FlxSprite(POS_X, POS_Y, Reg.PATH_MSG);
     _window.color = MyColor.MESSAGE_WINDOW;
     //    this.add(_window);
     _msgList = new List<MessageText>();

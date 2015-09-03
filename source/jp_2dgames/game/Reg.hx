@@ -14,13 +14,27 @@ class Reg {
   public static inline var FONT_SIZE = 20;
   public static inline var FONT_SIZE_S = 10;
 
+  // メッセージウィンドウ
+  public static inline var PATH_MSG = "assets/images/ui/message.png";
+  // メッセージテキスト背景
+  public static inline var PATH_MSG_TEXT = "assets/images/ui/messagetext.png";
+
+  // CSV
+  public static inline var PATH_CSV_MESSAGE = "assets/data/message.csv";
+
   /**
    * 敵画像のパスを取得する
    **/
   public static function getEnemyImagePath(id:Int):String {
     var str = TextUtil.fillZero(id, 3);
-    var path = 'assets/images/monster/${str}.png';
+    return 'assets/images/monster/${str}.png';
+  }
 
-    return path;
+  /**
+   * 背景画像のパスを取得
+   **/
+  public static function getBackImagePath(id:Int):String {
+    var str = TextUtil.fillZero(id, 3);
+    return 'assets/images/bg/${str}.jpg';
   }
 }
