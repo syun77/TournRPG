@@ -1,7 +1,7 @@
 id,name,image,hp,xp,str,vit,agi,atk,def
 int,str,str,int,int,int,int,int,int,int
 1,コウモリ,e001.png,25,3,5,4,3,1,1
-2,レッドスライム,e001a.png,30,5,6,5,4,2,2
+2,レッドコウモリ,e001a.png,30,5,6,5,4,2,2
 3,ゴールデンコウモリ,e001b.png,35,6,5,4,3,2,1
 4,オオカミ,e002.png,35,6,5,4,3,2,1
 5,ウルフ,e002a.png,35,6,5,4,3,2,1

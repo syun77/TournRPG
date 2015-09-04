@@ -228,6 +228,10 @@ class Actor extends FlxSprite {
     if(_group == PartyGroup.Player) {
       // プレイヤーにダメージ
       Message.push2(Msg.DAMAGE_PLAYER, [_name, v]);
+      // 画面を揺らす
+      var intensity = 0.1 * v / hpmax;
+      var duration  = 0.3;
+      FlxG.camera.shake(intensity, duration);
     }
     else {
       // 敵にダメージ
