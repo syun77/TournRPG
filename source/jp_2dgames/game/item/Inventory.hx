@@ -17,9 +17,7 @@ class Inventory {
    * 生成
    **/
   public static function create(itemList:Array<ItemData>) {
-    if(_instance == null) {
-      _instance = new Inventory(itemList);
-    }
+    _instance = new Inventory(itemList);
   }
 
   /**
@@ -47,6 +45,13 @@ class Inventory {
    **/
   public static function resolveDirty():Void {
     _instance._dirty = false;
+  }
+
+  /**
+   * アイテムリストを取得する
+   **/
+  public static function getItemList():Array<ItemData> {
+    return _instance.itemList;
   }
 
   // ================================================
@@ -96,6 +101,7 @@ class Inventory {
 
   /**
    * アイテムを追加
+   * ※複製コピーする
    **/
   private function _push(itemData:ItemData):Void {
     if(isFull()) {
@@ -103,7 +109,8 @@ class Inventory {
       return;
     }
 
-    _itemList.push(itemData);
+    // 複製して追加する
+    _itemList.push(itemData.clone());
     _dirty = true;
   }
 }

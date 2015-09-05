@@ -19,7 +19,11 @@ def main(inFile, out):
 	txt = "package %s;\n"%(header["package"])
 	txt += "\n"
 	txt += "class %s {\n"%(header["class"])
-	for k, v in data.items():
+	keys = data.keys()
+	# 名前でソートして出力する
+	keys.sort()
+	for k in keys:
+		v = data[k]
 		txt += "  public static inline var %s:Int = %d;\n"%(k, v)
 	txt += "}\n"
 

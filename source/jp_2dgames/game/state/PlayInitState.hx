@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.item.ItemUtil;
 import flixel.FlxG;
 import jp_2dgames.game.actor.EnemyInfo;
 import jp_2dgames.game.actor.PlayerInfo;
@@ -14,6 +15,8 @@ class PlayInitState extends FlxState{
   override public function create():Void {
     super.create();
 
+    // アイテムパラメータロード
+    ItemUtil.load();
     // プレイヤーパラメータロード
     PlayerInfo.load();
     // 敵パラメータロード

@@ -1,5 +1,9 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.item.Inventory;
+import jp_2dgames.game.item.ItemConst;
+import jp_2dgames.game.item.Inventory;
+import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.PlayerInfo;
 
@@ -9,13 +13,18 @@ import jp_2dgames.game.actor.PlayerInfo;
 class Global {
   static inline var STAGE_FIRST:Int = 1;
 
-  static var _playerParam:Params;
+  // ■スタティック変数
+  static var _playerParam:Params = null;
   static var _stage:Int = 0;
+  static var _itemList:Array<ItemData> = null;
 
   public static function init():Void {
 
     // プレイヤー情報の初期化
     _initPlayer();
+
+    // インベントリの初期化
+    _initInventory();
 
     // ステージ初期化
     _stage = STAGE_FIRST;
@@ -41,5 +50,16 @@ class Global {
   }
   public static function nextStage():Void {
     _stage++;
+  }
+
+  // インベントリの初期化
+  private static function _initInventory():Void {
+    _itemList = new Array<ItemData>();
+
+    Inventory.create(_itemList);
+
+    Inventory.push(new ItemData(ItemConst.POTION01));
+    Inventory.push(new ItemData(ItemConst.POTION02));
+
   }
 }

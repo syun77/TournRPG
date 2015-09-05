@@ -18,7 +18,7 @@ enum IType {
  **/
 class ItemUtil {
   // 無効なアイテム番号
-  public static inline var NONE = -1;
+  public static inline var NONE:Int = -1;
   private static inline var ID_OFFSET:Int = 1000;
 
   // アイテムデータを定義しているCSV
@@ -92,6 +92,13 @@ class ItemUtil {
   public static function getParamString(itemID:Int, key:String):String {
     var csv = getCsv(itemID);
     return csv.searchItem("id", '${itemID}', key);
+  }
+
+  /**
+   * アイテム名を取得する
+   **/
+  public static function getName(item:ItemData):String {
+    return getParamString(item.id, "name");
   }
 
   /**

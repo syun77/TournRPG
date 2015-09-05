@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.gui;
 import jp_2dgames.game.BtlCmdUtil.BtlCmd;
 import jp_2dgames.game.actor.Actor;
 import flixel.tweens.FlxEase;
@@ -12,13 +12,6 @@ import flixel.group.FlxSpriteGroup;
 class BtlCmdUI extends FlxSpriteGroup {
 
   // ■定数
-  // 選択したコマンド
-  public static inline var CMD_ATK1:Int   = 0; // 攻撃1
-  public static inline var CMD_ATK2:Int   = 1; // 攻撃2
-  public static inline var CMD_ATK3:Int   = 2; // 攻撃3
-  public static inline var CMD_ITEM:Int   = 3; // アイテム
-  public static inline var CMD_ESCAPE:Int = 4; // 逃げる
-
   // 座標
   private static inline var BASE_X = 0;
   private static inline var BASE_OFS_Y = -64;
@@ -30,6 +23,8 @@ class BtlCmdUI extends FlxSpriteGroup {
   private static inline var BTN_DY = 24;
 
   // ■メンバ変数
+  private var _inventoryUI:InventroyUI = null;
+  private var _cbItem:Int->Void = null;
 
   /**
    * コンストラクタ
@@ -38,11 +33,15 @@ class BtlCmdUI extends FlxSpriteGroup {
    **/
   public function new(actor:Actor, cbFunc:Actor->BtlCmd->Void) {
 
+    // アイテム選択のコール関数を登録しておく
+    _cbItem = function(btnID) {
+      cbFunc(actor, BtlCmd.Item(btnID));
+    };
+
     // 基準座標を設定
     {
       var px = BASE_X;
-      var py = FlxG.height + BASE_OFS_Y;
-      super(px, py);
+      super(px, 0);
     }
 
     // コマンドボタンの配置
@@ -65,7 +64,8 @@ class BtlCmdUI extends FlxSpriteGroup {
     px = BTN_X;
     py += BTN_DY;
     btnList.add(new MyButton(px, py, "ITEM", function() {
-      cbFunc(actor, BtlCmd.Item(0));
+      // インベントリ表示
+      _displayInventoryUI();
     }));
     px += BTN_DX;
     btnList.add(new MyButton(px, py, "ESCAPE", function() {
@@ -76,10 +76,46 @@ class BtlCmdUI extends FlxSpriteGroup {
       this.add(btn);
     }
 
-    {
-      var py2 = y;
-      y = FlxG.height;
-      FlxTween.tween(this, {y:py2}, 1, {ease:FlxEase.expoOut});
+    // 表示
+    _display();
+  }
+
+  /**
+   * 表示開始
+   **/
+  private function _display():Void {
+    visible = true;
+    var py = FlxG.height + BASE_OFS_Y;
+    y = FlxG.height;
+    FlxTween.tween(this, {y:py}, 1, {ease:FlxEase.expoOut});
+  }
+
+  /**
+   * インベントリUIを表示する
+   **/
+  private function _displayInventoryUI():Void {
+    _inventoryUI = new InventroyUI(_cbItemSelect);
+    FlxG.state.add(_inventoryUI);
+    // 自身は非表示
+    visible = false;
+  }
+
+  /**
+   * アイテム選択のコールバック関数
+   **/
+  private function _cbItemSelect(btnID:Int):Void {
+
+    // アイテム選択UIを非表示
+    FlxG.state.remove(_inventoryUI);
+    _inventoryUI.kill();
+
+    if(btnID == InventroyUI.CMD_CANCEL) {
+      // キャンセルしたのでコマンドUIを再び表示
+      _display();
+      return;
     }
+
+    // アイテムを選んだ
+    _cbItem(btnID);
   }
 }

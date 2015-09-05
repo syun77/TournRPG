@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.gui;
 import jp_2dgames.game.actor.ActorMgr;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;

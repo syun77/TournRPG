@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.gui.BtlUI;
+import jp_2dgames.game.gui.BtlCmdUI;
 import jp_2dgames.game.BtlCmdUtil.BtlCmd;
 import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.ActorMgr;
