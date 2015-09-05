@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.DebugActor;
 import jp_2dgames.lib.CsvLoader;
@@ -20,6 +21,8 @@ class PlayState extends FlxState {
   var _bg:BtlBg;
   // デバッグ機能
   var _debugActor:DebugActor;
+
+  var _item:IType;
 
   /**
    * 生成
