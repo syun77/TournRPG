@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.PartyGroupUtil.PartyGroup;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.PartyGroupUtil;
 import flixel.FlxState;
@@ -76,14 +77,25 @@ class ActorMgr  {
   /**
    * 生存しているActorをすべて実行
   **/
-  public static function forEachAlive(func:Actor -> Void):Void {
+  public static function forEachAlive(func:Actor->Void):Void {
     _instance.forEachAlive(func);
+  }
+
+  /**
+   * 生存している指定のグループをすべて実行
+   **/
+  public static function forEachAliveGroup(group:PartyGroup, func:Actor->Void):Void {
+    forEachAlive(function(actor:Actor) {
+      if(actor.group == group) {
+        func(actor);
+      }
+    });
   }
 
   /**
    * 生存しているActorから条件に一致した最初のActorを取得する
    **/
-  public static function forEachAliveFirstIf(func:Actor -> Bool):Actor {
+  public static function forEachAliveFirstIf(func:Actor->Bool):Actor {
     for(actor in _instance.members) {
       if(func(actor)) {
         return actor;
@@ -149,12 +161,19 @@ class ActorMgr  {
    **/
   public static function countGroup(group:PartyGroup):Int {
     var ret:Int = 0;
-    forEachAlive(function(actor:Actor) {
-      if(actor.group == group) {
-        ret++;
-      }
+    forEachAliveGroup(group, function(actor:Actor) {
+      ret++;
     });
 
     return ret;
+  }
+
+  /**
+   * 敵のAIを設定する
+   **/
+  public static function requestEnemyAI():Void {
+    forEachAliveGroup(PartyGroup.Enemy, function(actor:Actor) {
+      actor.requestAI();
+    });
   }
 }

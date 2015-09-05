@@ -1,7 +1,8 @@
 package jp_2dgames.game;
+import jp_2dgames.game.BtlCmdUtil.BtlCmd;
+import jp_2dgames.game.actor.Actor;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import flixel.ui.FlxButton;
 import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
 
@@ -11,10 +12,12 @@ import flixel.group.FlxSpriteGroup;
 class BtlCmdUI extends FlxSpriteGroup {
 
   // ■定数
-  public static inline var CMD_ATK1:Int = 0; // 攻撃1を選択
-  public static inline var CMD_ATK2:Int = 1; // 攻撃2を選択
-  public static inline var CMD_ATK3:Int = 2; // 攻撃3を選択
-  public static inline var CMD_ITEM:Int = 3; // アイテムを選択
+  // 選択したコマンド
+  public static inline var CMD_ATK1:Int   = 0; // 攻撃1
+  public static inline var CMD_ATK2:Int   = 1; // 攻撃2
+  public static inline var CMD_ATK3:Int   = 2; // 攻撃3
+  public static inline var CMD_ITEM:Int   = 3; // アイテム
+  public static inline var CMD_ESCAPE:Int = 4; // 逃げる
 
   // 座標
   private static inline var BASE_X = 0;
@@ -30,8 +33,10 @@ class BtlCmdUI extends FlxSpriteGroup {
 
   /**
    * コンストラクタ
+   * @param actor 行動主体者
+   * @param cbFunc コマンド実行コールバック関数
    **/
-  public function new(_cbFunc:Int->Void) {
+  public function new(actor:Actor, cbFunc:Actor->BtlCmd->Void) {
 
     // 基準座標を設定
     {
@@ -45,20 +50,26 @@ class BtlCmdUI extends FlxSpriteGroup {
     var px = BTN_X;
     var py = BTN_Y;
     btnList.add(new MyButton(px, py, "ATTACK1", function() {
-      _cbFunc(CMD_ATK1);
+      cbFunc(actor, BtlCmd.Attack(0));
     }));
     px += BTN_DX;
     btnList.add(new MyButton(px, py, "ATTACK2", function() {
-      _cbFunc(CMD_ATK2);
+      cbFunc(actor, BtlCmd.Attack(1));
     }));
     px += BTN_DX;
     btnList.add(new MyButton(px, py, "ATTACK3", function() {
-      _cbFunc(CMD_ATK3);
+      cbFunc(actor, BtlCmd.Attack(2));
     }));
+
+    // 2列目
     px = BTN_X;
     py += BTN_DY;
     btnList.add(new MyButton(px, py, "ITEM", function() {
-      _cbFunc(CMD_ITEM);
+      cbFunc(actor, BtlCmd.Item(0));
+    }));
+    px += BTN_DX;
+    btnList.add(new MyButton(px, py, "ESCAPE", function() {
+      cbFunc(actor, BtlCmd.Escape);
     }));
 
     for(btn in btnList) {

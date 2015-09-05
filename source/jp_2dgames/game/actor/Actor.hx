@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.BtlCmdUtil.BtlCmd;
 import flixel.FlxG;
 import jp_2dgames.game.PartyGroupUtil;
 import flixel.FlxSprite;
@@ -30,6 +31,9 @@ class Actor extends FlxSprite {
 
   // 要素番号
   var _idx:Int = 0;
+
+  // 実行コマンド
+  var _cmd:BtlCmd = BtlCmd.None;
 
   // 開始座標
   var _xstart:Float = 0;
@@ -145,6 +149,9 @@ class Actor extends FlxSprite {
       // 敵の場合の処理
       _initEnemy();
     }
+    else {
+      FlxG.watch.add(this, "_cmd");
+    }
   }
 
   /**
@@ -184,6 +191,19 @@ class Actor extends FlxSprite {
     y = ystart;
   }
 
+  /**
+   * コマンドを設定する
+   **/
+  public function setCommand(cmd:BtlCmd):Void {
+    _cmd = cmd;
+  }
+  public function resetCommand():Void {
+    _cmd = BtlCmd.None;
+  }
+
+  /**
+   * 攻撃対象をランダムで選ぶ
+   **/
   private function _attackRandom():Void {
     // 対抗グループを取得する
     var grp = PartyGroupUtil.getAgaint(_group);
@@ -200,21 +220,24 @@ class Actor extends FlxSprite {
   /**
    * 行動実行
    **/
-  public function exec():Void {
+  public function exec():BtlCmd {
 
-    switch(_state) {
-      case State.None:
-      case State.Standby:
-      case State.ActBegin:
+    switch(_cmd) {
+      case BtlCmd.None:
+        // 通常ここにくることはない
 
-      case State.Act:
+      case BtlCmd.Attack(id):
         _attackRandom();
-        _change(State.ActEnd);
 
-      case State.ActEnd:
-      case State.TurnEnd:
+      case BtlCmd.Skill(id):
+      case BtlCmd.Item(id):
+      case BtlCmd.Escape:
     }
 
+    // 行動完了
+    _change(State.ActEnd);
+
+    return _cmd;
   }
 
   /**
@@ -273,6 +296,9 @@ class Actor extends FlxSprite {
     _updateShake();
   }
 
+  /**
+   * 揺らす
+   **/
   private function _updateShake():Void {
     if(_group != PartyGroup.Enemy) {
       return;
@@ -284,5 +310,12 @@ class Actor extends FlxSprite {
       var xsign = if(_tAnime%4 < 2) 1 else -1;
       x = _xstart + (_tShake * xsign * 0.2);
     }
+  }
+
+  /**
+   * AIで行動を決定する
+   **/
+  public function requestAI():Void {
+    _cmd = BtlCmd.Attack(0);
   }
 }

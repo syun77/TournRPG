@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.BtlCmdUtil.BtlCmd;
 import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.Actor;
@@ -49,6 +50,9 @@ class BtlMgr {
   // 行動主体者
   var _actor:Actor = null;
 
+  // 入力待ちとなるかどうか
+  var _bKeyWait:Bool = false;
+
   /**
    * コンストラクタ
    **/
@@ -80,35 +84,56 @@ class BtlMgr {
   private function _change(s:State):Void {
     _statePrev = _state;
     _state = s;
+
+    // キー入力待ちのチェック
+    switch(_state) {
+      case State.Act, State.ActEnd:
+        _bKeyWait = true;
+      case State.BtlWin, State.BtlLose:
+        _bKeyWait = true;
+      default:
+    }
   }
 
   /**
    * コマンド入力更新
    **/
   private function _procInputCommand():Void {
-    var btnID = -1;
+    var cmd:BtlCmd = BtlCmd.None;
     if(MyKey.press.A) {
-      btnID = BtlCmdUI.CMD_ATK1;
+      cmd = BtlCmd.Attack(0);
     }
     else if(MyKey.press.B) {
-      btnID = BtlCmdUI.CMD_ATK2;
+      cmd = BtlCmd.Attack(1);
     }
     else if(MyKey.press.X) {
-      btnID = BtlCmdUI.CMD_ATK3;
+      cmd = BtlCmd.Attack(2);
     }
     else if(MyKey.press.Y) {
-      btnID = BtlCmdUI.CMD_ITEM;
+      cmd = BtlCmd.Item(0);
+    }
+    else if(FlxG.keys.justPressed.B) {
+      cmd = BtlCmd.Escape;
     }
 
-    if(btnID != -1) {
-      _cbCommand(btnID);
+    if(cmd != BtlCmd.None) {
+      // コマンド実行
+      _cbCommand(_player, cmd);
     }
   }
 
   /**
    * コマンド入力結果受け取り
+   * @param actor 実行主体者
+   * @param cmd   コマンド
    **/
-  private function _cbCommand(btnID:Int):Void {
+  private function _cbCommand(actor:Actor, cmd:BtlCmd):Void {
+
+    // コマンド設定
+    actor.setCommand(cmd);
+
+    // 敵のAIを設定
+    ActorMgr.requestEnemyAI();
 
     // バトルUI消去
     FlxG.state.remove(_btlCmdUI);
@@ -131,13 +156,22 @@ class BtlMgr {
    **/
   public function proc():Void {
 
+    if(_bKeyWait) {
+      // キー入力待ち
+      if(MyKey.press.A == false) {
+        return;
+      }
+      // キーを入力した
+      _bKeyWait = false;
+    }
+
     switch(_state) {
       case State.None:
         // 何もしない
 
       case State.TurnStart:
         // ターン開始
-        _btlCmdUI = new BtlCmdUI(_cbCommand);
+        _btlCmdUI = new BtlCmdUI(_player, _cbCommand);
         FlxG.state.add(_btlCmdUI);
         _change(State.InputCommand);
 
@@ -166,19 +200,21 @@ class BtlMgr {
         }
 
       case State.Act:
-        if(MyKey.press.A) {
-          _actor.exec();
+        var cmd = _actor.exec();
+        if(cmd == BtlCmd.Escape) {
+          // TODO: 逃走成功
+          _change(State.Result);
+        }
+        else {
           _change(State.ActEnd);
         }
 
       case State.ActEnd:
-        if(MyKey.press.A) {
-          if(_actor.isActEnd()) {
-            // 行動完了
-            _actor.actEnd();
-            // 死亡チェック
-            _change(State.DeadCheck);
-          }
+        if(_actor.isActEnd()) {
+          // 行動完了
+          _actor.actEnd();
+          // 死亡チェック
+          _change(State.DeadCheck);
         }
 
       case State.DeadCheck:
@@ -191,13 +227,9 @@ class BtlMgr {
         _change(State.TurnStart);
 
       case State.BtlWin:
-        if(MyKey.press.A) {
-          _change(State.Result);
-        }
+        _change(State.Result);
       case State.BtlLose:
-        if(MyKey.press.A) {
-          _change(State.Result);
-        }
+        _change(State.Result);
 
       case State.Result:
         // プレイヤーパラメータをグローバルに戻しておく
