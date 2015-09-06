@@ -337,6 +337,9 @@ class Actor extends FlxSprite {
     x = _xstart;
     if(_tShake > 0) {
       _tShake *= 0.9;
+      if(_tShake < 1) {
+        _tShake = 0;
+      }
       var xsign = if(_tAnime%4 < 2) 1 else -1;
       x = _xstart + (_tShake * xsign * 0.2);
     }

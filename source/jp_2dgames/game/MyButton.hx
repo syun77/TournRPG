@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.MyColor;
+import jp_2dgames.game.MyColor;
 import flixel.util.FlxColor;
 import flixel.text.FlxText;
 import flixel.ui.FlxTypedButton;
@@ -32,15 +34,22 @@ class MyButton extends FlxTypedButton<FlxText> {
     _enabled = b;
     if(b) {
       // 有効
-      color = FlxColor.WHITE;
-      label.color = FlxColor.BLACK;
+      setDefaultColor();
     }
     else {
       // 無効
-      color = FlxColor.GRAY;
-      label.color = FlxColor.BLACK;
+      color       = MyColor.BTN_DISABLE;
+      label.color = MyColor.BTN_DISABLE_LABEL;
     }
     return b;
+  }
+
+  /**
+   * 初期の色に戻す
+   **/
+  public function setDefaultColor():Void {
+    color       = MyColor.BTN_DEFAULT;
+    label.color = MyColor.BTN_DEFAULT_LABEL;
   }
 
   /**

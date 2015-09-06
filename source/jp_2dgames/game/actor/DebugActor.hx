@@ -1,5 +1,5 @@
 package jp_2dgames.game.actor;
-import jp_2dgames.lib.MyKey;
+import jp_2dgames.lib.Input;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
@@ -126,14 +126,14 @@ class DebugActor extends FlxSpriteGroup {
     super.update();
 
     // ページ切り替え
-    if(MyKey.press.LEFT) {
+    if(Input.press.LEFT) {
       _nPage--;
       if(_nPage < 0) {
         _nPage = _nPageMax-1;
       }
       _setText(_nPage);
     }
-    if(MyKey.press.RIGHT) {
+    if(Input.press.RIGHT) {
       _nPage++;
       if(_nPage >= _nPageMax) {
         _nPage = 0;

@@ -57,6 +57,13 @@ class Inventory {
   }
 
   /**
+   * 所持しているアイテムの数を取得する
+   **/
+  public static function lengthItemList():Int {
+    return _instance.itemList.length;
+  }
+
+  /**
    * アイテムを取得する
    **/
   public static function getItem(idx:Int):ItemData {

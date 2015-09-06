@@ -54,7 +54,7 @@ class KeyOn {
   public var A(get, never):Bool;
 
   inline function get_A() {
-    if(MyKey.checkA(FlxG.keys.pressed)) {
+    if(Input.checkA(FlxG.keys.pressed)) {
       return true;
     }
     if(Pad.on(Pad.A)) {
@@ -65,7 +65,7 @@ class KeyOn {
   public var B(get, never):Bool;
 
   inline function get_B() {
-    if(MyKey.checkB(FlxG.keys.pressed)) {
+    if(Input.checkB(FlxG.keys.pressed)) {
       return true;
     }
     if(Pad.on(Pad.B)) {
@@ -76,7 +76,7 @@ class KeyOn {
   public var X(get, never):Bool;
 
   inline function get_X() {
-    if(MyKey.checkX(FlxG.keys.pressed)) {
+    if(Input.checkX(FlxG.keys.pressed)) {
       return true;
     }
     if(Pad.on(Pad.X)) {
@@ -87,7 +87,7 @@ class KeyOn {
   public var Y(get, never):Bool;
 
   inline function get_Y() {
-    if(MyKey.checkY(FlxG.keys.pressed)) {
+    if(Input.checkY(FlxG.keys.pressed)) {
       return true;
     }
     if(Pad.on(Pad.Y)) {
@@ -147,7 +147,7 @@ class KeyPress {
   public var A(get, never):Bool;
 
   inline function get_A() {
-    if(MyKey.checkA(FlxG.keys.justPressed)) {
+    if(Input.checkA(FlxG.keys.justPressed)) {
       return true;
     }
     if(Pad.press(Pad.A)) {
@@ -158,7 +158,7 @@ class KeyPress {
   public var B(get, never):Bool;
 
   inline function get_B() {
-    if(MyKey.checkB(FlxG.keys.justPressed)) {
+    if(Input.checkB(FlxG.keys.justPressed)) {
       return true;
     }
     if(Pad.press(Pad.B)) {
@@ -169,7 +169,7 @@ class KeyPress {
   public var X(get, never):Bool;
 
   inline function get_X() {
-    if(MyKey.checkX(FlxG.keys.justPressed)) {
+    if(Input.checkX(FlxG.keys.justPressed)) {
       return true;
     }
     if(Pad.press(Pad.X)) {
@@ -180,7 +180,7 @@ class KeyPress {
   public var Y(get, never):Bool;
 
   inline function get_Y() {
-    if(MyKey.checkY(FlxG.keys.justPressed)) {
+    if(Input.checkY(FlxG.keys.justPressed)) {
       return true;
     }
     if(Pad.press(Pad.Y)) {
@@ -193,7 +193,7 @@ class KeyPress {
 /**
  * キー入力管理
  **/
-class MyKey {
+class Input {
   public static var on:KeyOn = new KeyOn();
   public static var press:KeyPress = new KeyPress();
 
@@ -202,6 +202,9 @@ class MyKey {
       return true;
     }
     if(k.check(FlxKey.Z)) {
+      return true;
+    }
+    if(FlxG.mouse.justPressed) {
       return true;
     }
     return false;

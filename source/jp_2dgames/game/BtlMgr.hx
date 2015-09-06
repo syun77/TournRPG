@@ -8,7 +8,7 @@ import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.PartyGroupUtil;
 import haxe.ds.ArraySort;
-import jp_2dgames.lib.MyKey;
+import jp_2dgames.lib.Input;
 import flixel.FlxG;
 
 /**
@@ -102,16 +102,16 @@ class BtlMgr {
    **/
   private function _procInputCommand():Void {
     var cmd:BtlCmd = BtlCmd.None;
-    if(MyKey.press.A) {
+    if(Input.press.A && FlxG.mouse.justPressed == false) {
       cmd = BtlCmd.Attack(0);
     }
-    else if(MyKey.press.B) {
+    else if(Input.press.B) {
       cmd = BtlCmd.Attack(1);
     }
-    else if(MyKey.press.X) {
+    else if(Input.press.X) {
       cmd = BtlCmd.Attack(2);
     }
-    else if(MyKey.press.Y) {
+    else if(Input.press.Y) {
       cmd = BtlCmd.Item(0);
     }
     else if(FlxG.keys.justPressed.B) {
@@ -160,7 +160,7 @@ class BtlMgr {
 
     if(_bKeyWait) {
       // キー入力待ち
-      if(MyKey.press.A == false) {
+      if(Input.press.A == false) {
         return;
       }
       // キーを入力した

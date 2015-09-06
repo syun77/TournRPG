@@ -1,9 +1,10 @@
 package jp_2dgames.game;
 
-/**
- * staticフィールドとメソッドを持つグローバルクラス
- */
 import jp_2dgames.lib.TextUtil;
+
+/**
+ * リソースのパスや共通の定数
+ */
 class Reg {
   // フォントのパス
   public static inline var PATH_FONT = "assets/font/PixelMplus10-Regular.ttf";
