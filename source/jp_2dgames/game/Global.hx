@@ -58,8 +58,11 @@ class Global {
 
     Inventory.create(_itemList);
 
+    // 初期アイテム
     Inventory.push(new ItemData(ItemConst.POTION01));
     Inventory.push(new ItemData(ItemConst.POTION02));
+    Inventory.push(new ItemData(ItemConst.WEAPON01));
+    Inventory.push(new ItemData(ItemConst.WEAPON02));
 
   }
 }

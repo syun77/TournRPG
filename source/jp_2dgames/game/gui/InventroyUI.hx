@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.Inventory;
 import flixel.tweens.FlxEase;
@@ -29,8 +30,9 @@ class InventroyUI extends FlxSpriteGroup {
   /**
    * コンストラクタ
    * @param cbFunc アイテム選択コールバック
+   * @param actor  行動主体者
    **/
-  public function new(cbFunc:Int->Void) {
+  public function new(cbFunc:Int->Void, actor:Actor) {
 
     // 基準座標を設定
     {
@@ -39,6 +41,14 @@ class InventroyUI extends FlxSpriteGroup {
       super(px, py);
     }
 
+    // ボタンの表示
+    _displayButton(cbFunc, actor);
+  }
+
+  /**
+   * ボタンの表示
+   **/
+  private function _displayButton(cbFunc:Int->Void, actor:Actor):Void {
     // コマンドボタンの配置
     var btnList = new List<MyButton>();
     var idx = 0;
@@ -48,7 +58,14 @@ class InventroyUI extends FlxSpriteGroup {
       var name = ItemUtil.getName(item);
       var btnID = idx;
       btnList.add(new MyButton(px, py, name, function() {
-        cbFunc(btnID);
+        if(ItemUtil.isEquip(item.id)) {
+          // 装備品
+          _toggleEquip(btnID, actor);
+        }
+        else {
+          // 消耗品
+          cbFunc(btnID);
+        }
       }));
       idx++;
     }
@@ -64,10 +81,18 @@ class InventroyUI extends FlxSpriteGroup {
       this.add(btn);
     }
 
+    // 出現アニメーション
     {
       var py2 = y;
       y = FlxG.height;
       FlxTween.tween(this, {y:py2}, 0.5, {ease:FlxEase.expoOut});
     }
+  }
+
+  /**
+   * アイテム装備の切り替え
+   **/
+  private function _toggleEquip(idx:Int, actor):Void {
+    Inventory.equip(idx);
   }
 }

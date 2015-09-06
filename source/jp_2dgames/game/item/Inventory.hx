@@ -3,6 +3,7 @@ package jp_2dgames.game.item;
 /**
  * インベントリ
  **/
+import jp_2dgames.game.item.ItemUtil.IType;
 import jp_2dgames.game.actor.Actor;
 class Inventory {
 
@@ -90,6 +91,39 @@ class Inventory {
     return _instance._isFull();
   }
 
+  /**
+   * 装備している武器を取得する
+   **/
+  public static function getWeapon():ItemData {
+    return _instance.weapon;
+  }
+  /**
+   * 装備している防具を取得する
+   **/
+  public static function getArmor():ItemData {
+    return _instance.armor;
+  }
+  /**
+   * 装備している指輪を取得する
+   **/
+  public static function getRing():ItemData {
+    return _instance.ring;
+  }
+
+  /**
+   * 指定のアイテムを装備する
+   **/
+  public static function equip(idx:Int):Void {
+    _instance._equip(idx);
+  }
+
+  /**
+   * アイテム情報をデバッグ出力する
+   **/
+  public static function dumpItemList():Void {
+    _instance._dumpItemList();
+  }
+
   // ================================================
   // ■以下インスタンス変数
   // ================================================
@@ -107,11 +141,32 @@ class Inventory {
   // アイテム所持内容に何か変化があったかどうか
   var _dirty:Bool = false;
 
+  // ■装備アイテム
+  var _equipNull:ItemData = null;
+  // 武器
+  public var weapon(get, never):ItemData;
+  private function get_weapon() {
+    return _getEquipFromType(IType.Weapon);
+  }
+  // 防具
+  public var armor(get, never):ItemData;
+  private function get_armor() {
+    return _getEquipFromType(IType.Armor);
+  }
+  // 指輪
+  public var ring(get, never):ItemData;
+  private function get_ring() {
+    return _getEquipFromType(IType.Ring);
+  }
+
   /**
    * コンストラクタ
    **/
   public function new(itemList:Array<ItemData>) {
     _itemList = itemList;
+
+    // 何も装備していないときに返却するNULLオブジェクト
+    _equipNull = new ItemData();
   }
 
   /**
@@ -172,5 +227,59 @@ class Inventory {
     itemList.splice(idx, 1);
 
     _dirty = true;
+  }
+
+  /**
+   * アイテムを装備する
+   **/
+  private function _equip(idx:Int):Void {
+
+    var item = getItem(idx);
+    if(item.isEquip) {
+      // すでに装備済みであれば何もしない
+      return;
+    }
+
+    // 指定のカテゴリの装備を外す
+    _unequip(item.type);
+
+    // 指定のアイテムを装備する
+    item.isEquip = true;
+  }
+
+  /**
+   * 指定のタイプの装備品を取得する
+   **/
+  private function _getEquipFromType(type:IType):ItemData {
+    for(item in itemList) {
+      if(item.type == type) {
+        if(item.isEquip) {
+          return item;
+        }
+      }
+    }
+
+    // 装備品なし
+    return _equipNull;
+  }
+
+  /**
+   * 装備品を外す
+   **/
+  private function _unequip(type:IType):Void {
+    var item = _getEquipFromType(type);
+    item.isEquip = false;
+  }
+
+  /**
+   * アイテム情報をデバッグ出力する
+   **/
+  private function _dumpItemList():Void {
+    trace("## Iventory.ItemList Dump.");
+    var idx = 0;
+    for(item in itemList) {
+      trace(idx, item);
+      idx++;
+    }
   }
 }

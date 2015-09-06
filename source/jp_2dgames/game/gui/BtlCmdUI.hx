@@ -66,7 +66,7 @@ class BtlCmdUI extends FlxSpriteGroup {
     py += BTN_DY;
     var btnItem = new MyButton(px, py, "ITEM", function() {
       // インベントリ表示
-      _displayInventoryUI();
+      _displayInventoryUI(actor);
     });
     if(Inventory.isEmpty()) {
       // アイテムがないので選べない
@@ -100,8 +100,8 @@ class BtlCmdUI extends FlxSpriteGroup {
   /**
    * インベントリUIを表示する
    **/
-  private function _displayInventoryUI():Void {
-    _inventoryUI = new InventroyUI(_cbItemSelect);
+  private function _displayInventoryUI(actor:Actor):Void {
+    _inventoryUI = new InventroyUI(_cbItemSelect, actor);
     FlxG.state.add(_inventoryUI);
     // 自身は非表示
     visible = false;
@@ -122,7 +122,6 @@ class BtlCmdUI extends FlxSpriteGroup {
       return;
     }
 
-    trace("btnID", btnID);
     // アイテムを選んだ
     _cbItem(btnID);
   }

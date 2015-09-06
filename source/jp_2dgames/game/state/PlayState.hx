@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.DebugActor;
@@ -94,7 +95,12 @@ class PlayState extends FlxState {
       FlxG.resetState();
     }
     if(FlxG.keys.justPressed.Q) {
+      // キャラクターパラメータ閲覧
       _debugActor.toggle();
+    }
+    if(FlxG.keys.justPressed.W) {
+      // アイテムデバッグ出力
+      Inventory.dumpItemList();
     }
     #end
   }
