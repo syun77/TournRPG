@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.item.Inventory;
+import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.BtlCmdUtil.BtlCmd;
 import flixel.FlxG;
 import jp_2dgames.game.PartyGroupUtil;
@@ -99,6 +101,15 @@ class Actor extends FlxSprite {
     if(hp > hpmax) {
       _param.hp = hpmax;
     }
+  }
+
+  /**
+   * HP回復
+   * @param val 回復する値
+   **/
+  public function addHp(val:Int):Void {
+    _param.hp += val;
+    _clampHp();
   }
 
   /**
@@ -227,10 +238,16 @@ class Actor extends FlxSprite {
         // 通常ここにくることはない
 
       case BtlCmd.Attack(id):
+        // 通常攻撃
         _attackRandom();
 
       case BtlCmd.Skill(id):
+        // スキルを使う
+
       case BtlCmd.Item(id):
+        // アイテムを使う
+        Inventory.useItem(this, id);
+
       case BtlCmd.Escape:
     }
 

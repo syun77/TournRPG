@@ -1,5 +1,6 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.game.actor.Actor;
 import jp_2dgames.lib.CsvLoader;
 
 /**
@@ -123,5 +124,26 @@ class ItemUtil {
     }
 
     return fromString(str);
+  }
+
+  /**
+   * アイテムを使う
+   * @param actor 主体者
+   * @param item  アイテム情報
+   * @param bMsg  使用メッセージを表示するかどうか
+   **/
+  public static function use(actor:Actor, item:ItemData, bMsg:Bool=true):Void {
+    switch(item.type) {
+      case IType.Potion:
+        // 薬
+        var val = ItemUtil.getParam(item.id, "hp");
+        if(val > 0) {
+          actor.addHp(val);
+          Message.push2(Msg.RECOVER_HP, [actor.name, val]);
+        }
+
+      default:
+        // 何も起きない
+    }
   }
 }

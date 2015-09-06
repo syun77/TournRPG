@@ -3,6 +3,7 @@ package jp_2dgames.game.item;
 /**
  * インベントリ
  **/
+import jp_2dgames.game.actor.Actor;
 class Inventory {
 
   // アイテム所持最大数
@@ -52,6 +53,27 @@ class Inventory {
    **/
   public static function getItemList():Array<ItemData> {
     return _instance.itemList;
+  }
+
+  /**
+   * アイテムを取得する
+   **/
+  public static function getItem(idx:Int):ItemData {
+    return getItemList()[idx];
+  }
+
+  /**
+   * アイテムを使う
+   **/
+  public static function useItem(actor:Actor, idx:Int):Void {
+    _instance._useItem(actor, idx);
+  }
+
+  /**
+   * アイテムを削除する
+   **/
+  public static function delItem(idx:Int):Void {
+    _instance._delItem(idx);
   }
 
   // ================================================
@@ -111,6 +133,30 @@ class Inventory {
 
     // 複製して追加する
     _itemList.push(itemData.clone());
+    _dirty = true;
+  }
+
+  /**
+   * アイテムを使う
+   **/
+  private function _useItem(actor:Actor, idx:Int):Void {
+
+    // アイテムを使う
+    var item = getItem(idx);
+    ItemUtil.use(actor, item);
+
+    // アイテムを削除する
+    _delItem(idx);
+  }
+
+  /**
+   * アイテムを削除する
+   **/
+  private function _delItem(idx:Int):Void {
+
+    // アイテムリストから削除
+    itemList.splice(idx, 1);
+
     _dirty = true;
   }
 }

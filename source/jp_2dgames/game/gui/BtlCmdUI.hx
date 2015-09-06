@@ -34,7 +34,7 @@ class BtlCmdUI extends FlxSpriteGroup {
   public function new(actor:Actor, cbFunc:Actor->BtlCmd->Void) {
 
     // アイテム選択のコール関数を登録しておく
-    _cbItem = function(btnID) {
+    _cbItem = function(btnID:Int) {
       cbFunc(actor, BtlCmd.Item(btnID));
     };
 
@@ -115,6 +115,7 @@ class BtlCmdUI extends FlxSpriteGroup {
       return;
     }
 
+    trace("btnID", btnID);
     // アイテムを選んだ
     _cbItem(btnID);
   }

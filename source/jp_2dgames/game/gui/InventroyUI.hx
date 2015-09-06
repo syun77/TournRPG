@@ -46,8 +46,9 @@ class InventroyUI extends FlxSpriteGroup {
       var px = BTN_X + BTN_DX * (idx%3);
       var py = BTN_Y + BTN_DY * Math.floor(idx/3);
       var name = ItemUtil.getName(item);
+      var btnID = idx;
       btnList.add(new MyButton(px, py, name, function() {
-        cbFunc(idx);
+        cbFunc(btnID);
       }));
       idx++;
     }
