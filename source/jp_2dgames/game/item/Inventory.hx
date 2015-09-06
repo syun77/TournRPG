@@ -76,6 +76,20 @@ class Inventory {
     _instance._delItem(idx);
   }
 
+  /**
+   * アイテムを何も所持していないかどうか
+   **/
+  public static function isEmpty():Bool {
+    return _instance._isEmpty();
+  }
+
+  /**
+   * アイテムが一杯かどうか
+   **/
+  public static function isFull():Bool {
+    return _instance._isFull();
+  }
+
   // ================================================
   // ■以下インスタンス変数
   // ================================================
@@ -110,14 +124,14 @@ class Inventory {
   /**
    * アイテム所持数が最大に達しているかどうか
    **/
-  public function isFull():Bool {
+  private function _isFull():Bool {
     return countItem() >= _limit;
   }
 
   /**
    * アイテムを何も所持していないかどうか
    **/
-  public function isEmpty():Bool {
+  private function _isEmpty():Bool {
     return countItem() == 0;
   }
 
@@ -126,7 +140,7 @@ class Inventory {
    * ※複製コピーする
    **/
   private function _push(itemData:ItemData):Void {
-    if(isFull()) {
+    if(_isFull()) {
       // アイテムが最大なので追加できない
       return;
     }

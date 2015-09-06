@@ -27,8 +27,8 @@ class MyButton extends FlxTypedButton<FlxText> {
   public var text(get, set):String;
 
   private var _enabled:Bool = true;
-  public var enabled(never, set):Bool;
-  private function set_enabled(b:Bool):Bool {
+  public var enable(never, set):Bool;
+  private function set_enable(b:Bool):Bool {
     _enabled = b;
     if(b) {
       // 有効
@@ -64,7 +64,7 @@ class MyButton extends FlxTypedButton<FlxText> {
     initLabel(Text);
 
     // 有効にしておく
-    enabled = true;
+    enable = true;
   }
 
   /**

@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.BtlCmdUtil.BtlCmd;
 import jp_2dgames.game.actor.Actor;
 import flixel.tweens.FlxEase;
@@ -63,10 +64,16 @@ class BtlCmdUI extends FlxSpriteGroup {
     // 2列目
     px = BTN_X;
     py += BTN_DY;
-    btnList.add(new MyButton(px, py, "ITEM", function() {
+    var btnItem = new MyButton(px, py, "ITEM", function() {
       // インベントリ表示
       _displayInventoryUI();
-    }));
+    });
+    if(Inventory.isEmpty()) {
+      // アイテムがないので選べない
+      btnItem.enable = false;
+    }
+    btnList.add(btnItem);
+
     px += BTN_DX;
     btnList.add(new MyButton(px, py, "ESCAPE", function() {
       cbFunc(actor, BtlCmd.Escape);
