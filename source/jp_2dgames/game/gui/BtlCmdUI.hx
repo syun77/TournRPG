@@ -14,7 +14,7 @@ class BtlCmdUI extends FlxSpriteGroup {
   // ■定数
   // 座標
   private static inline var BASE_X = 0;
-  private static inline var BASE_OFS_Y = -64;
+  private static inline var BASE_OFS_Y = -80;
 
   // ボタン
   private static inline var BTN_X = 0;
@@ -87,7 +87,7 @@ class BtlCmdUI extends FlxSpriteGroup {
     visible = true;
     var py = FlxG.height + BASE_OFS_Y;
     y = FlxG.height;
-    FlxTween.tween(this, {y:py}, 1, {ease:FlxEase.expoOut});
+    FlxTween.tween(this, {y:py}, 0.5, {ease:FlxEase.expoOut});
   }
 
   /**

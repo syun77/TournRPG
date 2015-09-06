@@ -286,7 +286,20 @@ class Actor extends FlxSprite {
   public function actBegin() {
     _change(State.ActBegin);
     // 行動開始
-    Message.push2(Msg.ATTACK_BEGIN, [_name]);
+    switch(_cmd) {
+      case BtlCmd.None:
+        // 通常あり得ない
+      case BtlCmd.Attack:
+        Message.push2(Msg.ATTACK_BEGIN, [_name]);
+      case BtlCmd.Skill:
+        // TODO:
+      case BtlCmd.Item(id):
+        var item = Inventory.getItem(id);
+        var name = ItemUtil.getName(item);
+        Message.push2(Msg.ITEM_USE, [name]);
+      case BtlCmd.Escape:
+        Message.push2(Msg.ESCAPE, [_name]);
+    }
     _change(State.Act);
   }
   public function isActEnd():Bool {

@@ -16,7 +16,7 @@ class InventroyUI extends FlxSpriteGroup {
 
   // 座標
   private static inline var BASE_X = 0;
-  private static inline var BASE_OFS_Y = -64;
+  private static inline var BASE_OFS_Y = -80;
 
   // ボタン
   private static inline var BTN_X = 0;
@@ -67,7 +67,7 @@ class InventroyUI extends FlxSpriteGroup {
     {
       var py2 = y;
       y = FlxG.height;
-      FlxTween.tween(this, {y:py2}, 1, {ease:FlxEase.expoOut});
+      FlxTween.tween(this, {y:py2}, 0.5, {ease:FlxEase.expoOut});
     }
   }
 }

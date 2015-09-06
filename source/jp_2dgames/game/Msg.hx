@@ -8,4 +8,5 @@ class Msg {
   public static inline var BATTLE_LOSE:Int   = 6; // 戦闘に負けた
   public static inline var ITEM_USE:Int      = 7; // アイテムを使った
   public static inline var RECOVER_HP:Int    = 8; // HP回復
+  public static inline var ESCAPE:Int        = 9; // 逃走開始
 }
