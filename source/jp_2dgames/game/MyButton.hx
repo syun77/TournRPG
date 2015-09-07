@@ -11,6 +11,16 @@ import flixel.ui.FlxTypedButton;
 @:bitmap("assets/images/ui/button2.png")
 private class GraphicButton extends BitmapData {}
 class MyButton extends FlxTypedButton<FlxText> {
+
+  // 幅
+  public static inline var WIDTH = 80;
+  // 高さ
+  public static inline var HEIGHT = 30;
+
+  // ラベルオフセット
+  private static inline var LABEL_OFS_X:Int = -1;
+  private static inline var LABEL_OFS_Y:Int = 3 + 5;
+
   /**
 	 * Used with public variable status, means not highlighted or pressed.
 	 */
@@ -65,11 +75,12 @@ class MyButton extends FlxTypedButton<FlxText> {
   public function new(X:Float = 0, Y:Float = 0, ?Text:String, ?OnClick:Void->Void)
   {
     super(X, Y, OnClick);
-    loadGraphic(GraphicButton, true, 80, 30);
+    loadGraphic(GraphicButton, true, WIDTH, HEIGHT);
 
+    // ラベルのオフセット座標を設定
     for (point in labelOffsets)
     {
-      point.set(point.x - 1, point.y + 3);
+      point.set(point.x + LABEL_OFS_X, point.y + LABEL_OFS_Y);
     }
 
     initLabel(Text);
@@ -94,7 +105,7 @@ class MyButton extends FlxTypedButton<FlxText> {
 
   private inline function initLabel(Text:String):Void
   {
-    label = new FlxText(x + labelOffsets[NORMAL].x, y + labelOffsets[NORMAL].y, 80, Text);
+    label = new FlxText(x + labelOffsets[NORMAL].x, y + labelOffsets[NORMAL].y, WIDTH, Text);
     // ここでフォントを設定
     label.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S, 0x333333, "center");
     label.alpha = labelAlphas[status];
@@ -113,7 +124,6 @@ class MyButton extends FlxTypedButton<FlxText> {
   override private function updateButton():Void {
     if(_enabled) {
       super.updateButton();
-      label.y += 5;
     }
   }
 }

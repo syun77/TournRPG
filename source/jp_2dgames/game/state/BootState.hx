@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.UIMsg;
 import flixel.FlxG;
 import flixel.FlxState;
 
@@ -13,6 +14,9 @@ class BootState extends FlxState {
    **/
   override public function create():Void {
     super.create();
+
+    // UIテキスト読み込み
+    UIMsg.load();
   }
 
   /**

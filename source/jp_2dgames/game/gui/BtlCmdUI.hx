@@ -20,8 +20,8 @@ class BtlCmdUI extends FlxSpriteGroup {
   // ボタン
   private static inline var BTN_X = 0;
   private static inline var BTN_Y = 0;
-  private static inline var BTN_DX = 80;
-  private static inline var BTN_DY = 32;
+  private static inline var BTN_DX = MyButton.WIDTH;
+  private static inline var BTN_DY = MyButton.HEIGHT + 2;
 
   // ■メンバ変数
   private var _inventoryUI:InventroyUI = null;

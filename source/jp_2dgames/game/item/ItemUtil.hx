@@ -101,6 +101,14 @@ class ItemUtil {
   public static function getName(item:ItemData):String {
     return getParamString(item.id, "name");
   }
+  // 攻撃力
+  public static function getAtk(item:ItemData):Int {
+    return getParam(item.id, "atk");
+  }
+  // 守備力
+  public static function getDef(item:ItemData):Int {
+    return getParam(item.id, "def");
+  }
 
   /**
    * アイテム種別変換

@@ -26,6 +26,7 @@ class Reg {
   public static inline var PATH_CSV_ENEMY   = "assets/data/csv/enemy.csv";
   public static inline var PATH_CSV_ITEM_CONSUMABLE = "assets/data/csv/item_consumable.csv";
   public static inline var PATH_CSV_ITEM_EQUIPMENT  = "assets/data/csv/item_equipment.csv";
+  public static inline var PATH_CSV_UI_MSG  = "assets/data/csv/ui.csv";
 
   /**
    * 敵画像のパスを取得する

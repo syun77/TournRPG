@@ -23,12 +23,12 @@ class InventroyUI extends FlxSpriteGroup {
   // ボタン
   private static inline var BTN_X = 0;
   private static inline var BTN_Y = 48;
-  private static inline var BTN_DX = 80;
-  private static inline var BTN_DY = 32;
+  private static inline var BTN_DX = MyButton.WIDTH;
+  private static inline var BTN_DY = MyButton.HEIGHT + 2;
 
   // ページ切り替えボタン
   private static inline var BTN_PREV_X = 0;
-  private static inline var BTN_NEXT_X = 80;
+  private static inline var BTN_NEXT_X = MyButton.WIDTH;
   private static inline var BTN_PAGE_Y = 0;
 
   // ページ情報
@@ -38,6 +38,9 @@ class InventroyUI extends FlxSpriteGroup {
   private var _btnList:Array<MyButton>;
   // ページ番号
   private var _nPage:Int = 0;
+
+  // 装備品UI
+  private var _equipUI:EquipUI;
 
   /**
    * コンストラクタ
@@ -55,7 +58,20 @@ class InventroyUI extends FlxSpriteGroup {
 
     // ボタンの表示
     _displayButton(cbFunc, actor);
+
+    _equipUI = new EquipUI();
+    FlxG.state.add(_equipUI);
   }
+
+  /**
+   * 消滅
+   **/
+  override public function kill():Void {
+
+    FlxG.state.remove(_equipUI);
+    super.kill();
+  }
+
 
   /**
    * ボタンの表示
@@ -137,6 +153,9 @@ class InventroyUI extends FlxSpriteGroup {
 
     // ボタン色を更新
     _updateButtonColor();
+
+    // 装備UIを更新
+    _equipUI.setText();
   }
 
   /**
