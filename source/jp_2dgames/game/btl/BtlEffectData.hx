@@ -19,7 +19,7 @@ class BtlEffectData {
   public var actorID:Int      = 0;                 // 行動主体者
   public var group:BtlGroup = BtlGroup.Player; // 所属グループ
   public var cmd:BtlCmd       = BtlCmd.None;       // コマンド種別
-  public var target:BtlTarget = BtlTarget.One;     // 対象種別
+  public var target:BtlRange = BtlRange.One;     // 対象種別
   public var targetID:Int     = 0;                 // 対象者
   public var val:BtlEffectVal = BtlEffectVal.HpDamage(1); // 効果値
 
@@ -38,7 +38,7 @@ class BtlEffectData {
   /**
    * 対象者を設定
    **/
-  public function setTarget(target:BtlTarget, targetID:Int):Void {
+  public function setTarget(target:BtlRange, targetID:Int):Void {
     this.target   = target;
     this.targetID = targetID;
   }

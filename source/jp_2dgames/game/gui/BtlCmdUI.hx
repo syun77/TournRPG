@@ -1,5 +1,5 @@
 package jp_2dgames.game.gui;
-import jp_2dgames.game.btl.BtlTarget;
+import jp_2dgames.game.btl.BtlRange;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.btl.BtlCmdUtil;
 import jp_2dgames.game.actor.Actor;
@@ -54,15 +54,15 @@ class BtlCmdUI extends FlxSpriteGroup {
     var px = BTN_X;
     var py = BTN_Y;
     btnList.add(new MyButton(px, py, "ATTACK1", function() {
-      cbFunc(actor, BtlCmd.Attack(BtlTarget.One, 0));
+      cbFunc(actor, BtlCmd.Attack(BtlRange.One, 0));
     }));
     px += BTN_DX;
     btnList.add(new MyButton(px, py, "ATTACK2", function() {
-      cbFunc(actor, BtlCmd.Attack(BtlTarget.One, 0));
+      cbFunc(actor, BtlCmd.Attack(BtlRange.One, 0));
     }));
     px += BTN_DX;
     btnList.add(new MyButton(px, py, "ATTACK3", function() {
-      cbFunc(actor, BtlCmd.Attack(BtlTarget.One, 0));
+      cbFunc(actor, BtlCmd.Attack(BtlRange.One, 0));
     }));
 
     // 2列目

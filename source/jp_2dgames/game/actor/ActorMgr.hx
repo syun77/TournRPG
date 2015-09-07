@@ -126,15 +126,6 @@ class ActorMgr  {
   }
 
   /**
-   * ターン終了
-   **/
-  public static function turnEnd():Void {
-    forEachAlive(function(actor:Actor) {
-      actor.turnEnd();
-    });
-  }
-
-  /**
    * 死亡しているActorを探す
    **/
   public static function searchDead():Actor {

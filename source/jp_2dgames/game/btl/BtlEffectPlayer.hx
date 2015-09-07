@@ -33,9 +33,9 @@ class BtlEffectPlayer {
         // 通常あり得ない
       case BtlCmd.Attack:
         Message.push2(Msg.ATTACK_BEGIN, [actor.name]);
-      case BtlCmd.Skill:
+      case BtlCmd.Skill(id, range, targetID):
         // TODO:
-      case BtlCmd.Item(item, target, targetID):
+      case BtlCmd.Item(item, range, targetID):
         var name = ItemUtil.getName(item);
         Message.push2(Msg.ITEM_USE, [name]);
       case BtlCmd.Escape:
@@ -58,16 +58,16 @@ class BtlEffectPlayer {
       case BtlCmd.Attack:
         // 通常攻撃
         switch(_data.target) {
-          case BtlTarget.One:
+          case BtlRange.One:
             _execTarget(target);
           default:
             // TODO: 未実装
         }
 
-      case BtlCmd.Skill(id, target, targetID):
+      case BtlCmd.Skill(id, range, targetID):
         // スキルを使う
 
-      case BtlCmd.Item(item, target, targetID):
+      case BtlCmd.Item(item, range, targetID):
         // アイテムを使う
         ItemUtil.use(actor, item);
 

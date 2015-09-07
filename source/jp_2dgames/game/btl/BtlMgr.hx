@@ -25,11 +25,6 @@ private enum State {
   Effect;       // 演出中
   EffectEnd;    // 演出終了
 
-  // 行動
-  ActBegin;     // 開始
-  Act;          // 実行中
-  ActEnd;       // 終了
-
   DeadCheck;    // 死亡チェック
 
   TurnEnd;      // ターン終了
@@ -57,9 +52,6 @@ class BtlMgr {
 
   // 再生中のバトル演出
   var _effectPlayer:BtlEffectPlayer = null;
-
-  // 行動主体者
-  var _actor:Actor = null;
 
   // 入力待ちとなるかどうか
   var _bKeyWait:Bool = false;
@@ -95,15 +87,6 @@ class BtlMgr {
   private function _change(s:State):Void {
     _statePrev = _state;
     _state = s;
-
-    // キー入力待ちのチェック
-    switch(_state) {
-      case State.Act, State.ActEnd:
-        _bKeyWait = true;
-      case State.BtlWin, State.BtlLose:
-        _bKeyWait = true;
-      default:
-    }
   }
 
   /**
@@ -112,7 +95,7 @@ class BtlMgr {
   private function _procInputCommand():Void {
     var cmd:BtlCmd = BtlCmd.None;
     if(Input.press.A && FlxG.mouse.justPressed == false) {
-      cmd = BtlCmd.Attack(BtlTarget.One, 0);
+      cmd = BtlCmd.Attack(BtlRange.One, 0);
     }
     else if(Input.press.B) {
       var item = Inventory.getItem(0);
@@ -234,51 +217,12 @@ class BtlMgr {
           _change(State.EffectBegin);
         }
 
-      case State.ActBegin:
-        // 行動実行
-        var bAllDone = true;
-        for(actor in _actorList) {
-          if(actor.isTurnEnd() == false) {
-            _actor = actor;
-            bAllDone = false;
-          }
-        }
-
-        if(bAllDone) {
-          // 全員行動完了
-          _change(State.TurnEnd);
-        }
-        else {
-          // 行動開始
-          _actor.actBegin();
-          _change(State.Act);
-        }
-
-      case State.Act:
-        var cmd = _actor.exec();
-        if(cmd == BtlCmd.Escape) {
-          // TODO: 逃走成功
-          _change(State.Result);
-        }
-        else {
-          _change(State.ActEnd);
-        }
-
-      case State.ActEnd:
-        if(_actor.isActEnd()) {
-          // 行動完了
-          _actor.actEnd();
-          // 死亡チェック
-          _change(State.DeadCheck);
-        }
-
       case State.DeadCheck:
         // 死亡チェック
         _procDeadCheck();
 
       case State.TurnEnd:
         // ターン終了
-        ActorMgr.turnEnd();
         _change(State.TurnStart);
 
       case State.BtlWin:
@@ -312,8 +256,6 @@ class BtlMgr {
         return;
       }
     }
-    _actor = null;
-    _change(State.ActBegin);
   }
 
   /**

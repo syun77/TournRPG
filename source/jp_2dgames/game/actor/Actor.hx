@@ -1,6 +1,6 @@
 package jp_2dgames.game.actor;
 
-import jp_2dgames.game.btl.BtlTarget;
+import jp_2dgames.game.btl.BtlRange;
 import jp_2dgames.game.btl.BtlCmdUtil;
 import flixel.FlxG;
 import jp_2dgames.game.btl.BtlGroupUtil;
@@ -9,11 +9,6 @@ import flixel.FlxSprite;
 private enum State {
   None;     // なし
   Standby;  // 待機
-
-  // 行動
-  ActBegin; // 開始
-  Act;      // 実行中
-  ActEnd;   // 終了
 
   // ターン終了
   TurnEnd;
@@ -288,40 +283,6 @@ class Actor extends FlxSprite {
     return isDead();
   }
 
-  public function actBegin() {
-    /*
-    _change(State.ActBegin);
-    // 行動開始
-    switch(_cmd) {
-      case BtlCmd.None:
-        // 通常あり得ない
-      case BtlCmd.Attack:
-        Message.push2(Msg.ATTACK_BEGIN, [_name]);
-      case BtlCmd.Skill:
-        // TODO:
-      case BtlCmd.Item(id):
-        var item = Inventory.getItem(id);
-        var name = ItemUtil.getName(item);
-        Message.push2(Msg.ITEM_USE, [name]);
-      case BtlCmd.Escape:
-        Message.push2(Msg.ESCAPE, [_name]);
-    }
-    _change(State.Act);
-    */
-  }
-  public function isActEnd():Bool {
-    return _state == State.ActEnd;
-  }
-  public function actEnd() {
-    _change(State.TurnEnd);
-  }
-  public function isTurnEnd():Bool {
-    return _state == State.TurnEnd;
-  }
-  public function turnEnd() {
-    _state = State.Standby;
-  }
-
   /**
    * 更新
    **/
@@ -358,7 +319,7 @@ class Actor extends FlxSprite {
   public function requestAI():Void {
     var target = ActorMgr.random(_group);
     if(target != null) {
-      _cmd = BtlCmd.Attack(BtlTarget.One, target.ID);
+      _cmd = BtlCmd.Attack(BtlRange.One, target.ID);
     }
   }
 }

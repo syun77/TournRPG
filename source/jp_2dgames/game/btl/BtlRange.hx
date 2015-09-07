@@ -1,9 +1,9 @@
 package jp_2dgames.game.btl;
 
 /**
- * 効果対象
+ * 効果範囲
  **/
-enum BtlTarget {
+enum BtlRange {
   Self;   // 自分自身
   One;    // 単体
   We;     // 仲間全員

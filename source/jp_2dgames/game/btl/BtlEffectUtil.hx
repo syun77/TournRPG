@@ -25,7 +25,7 @@ class BtlEffectUtil {
   /**
    * 通常攻撃
    **/
-  private static function _createAttack(actor:Actor, target:BtlTarget, targetID:Int):BtlEffectData {
+  private static function _createAttack(actor:Actor, target:BtlRange, targetID:Int):BtlEffectData {
     // TODO: ランダム攻撃
     var aTarget = ActorMgr.random(actor.group);
     var eft = new BtlEffectData(actor.ID, actor.group, BtlCmd.Attack(target, aTarget.ID));
@@ -40,7 +40,7 @@ class BtlEffectUtil {
   /**
    * スキルを使う
    **/
-  private static function _createSkill(skillID:Int, actor:Actor, target:BtlTarget):BtlEffectData {
+  private static function _createSkill(skillID:Int, actor:Actor, target:BtlRange):BtlEffectData {
     // TODO: 未実装
     var cmd = BtlCmd.Skill(skillID, target, 0);
     var eft = new BtlEffectData(actor.ID, actor.group, cmd);
@@ -50,7 +50,7 @@ class BtlEffectUtil {
   /**
    * アイテムを使う
    **/
-  private static function _createItem(item:ItemData, actor:Actor, target:BtlTarget, targetID:Int):BtlEffectData {
+  private static function _createItem(item:ItemData, actor:Actor, target:BtlRange, targetID:Int):BtlEffectData {
     var cmd = BtlCmd.Item(item, target, targetID);
     var eft = new BtlEffectData(actor.ID, actor.group, cmd);
     return eft;
