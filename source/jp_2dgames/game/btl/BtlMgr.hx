@@ -20,10 +20,10 @@ private enum State {
   TurnStart;    // ターン開始
   InputCommand; // コマンド入力待ち
 
-  EffectCreate; // 演出作成
-  EffectBegin;  // 演出開始
-  Effect;       // 演出中
-  EffectEnd;    // 演出終了
+  LogicCreate; // 演出作成
+  LogicBegin;  // 演出開始
+  LogicMain;       // 演出中
+  LogicEnd;    // 演出終了
 
   DeadCheck;    // 死亡チェック
 
@@ -51,7 +51,7 @@ class BtlMgr {
   var _btlCmdUI:BtlCmdUI = null;
 
   // 再生中のバトル演出
-  var _effectPlayer:BtlEffectPlayer = null;
+  var _logicPlayer:BtlLogicPlayer = null;
 
   // 入力待ちとなるかどうか
   var _bKeyWait:Bool = false;
@@ -145,7 +145,7 @@ class BtlMgr {
     });
 
     // 演出リストの作成開始
-    _change(State.EffectCreate);
+    _change(State.LogicCreate);
   }
 
   /**
@@ -154,12 +154,12 @@ class BtlMgr {
   private function _createEffect():Void {
 
     for(actor in _actorList) {
-      var eft = BtlEffectUtil.create(actor);
-      BtlEffectMgr.push(eft);
+      var eft = BtlLogicUtil.create(actor);
+      BtlLogicMgr.push(eft);
     }
 
     // 演出作成開始
-    _change(State.EffectBegin);
+    _change(State.LogicBegin);
   }
 
   /**
@@ -190,34 +190,34 @@ class BtlMgr {
         // コマンド入力待ち
         _procInputCommand();
 
-      case State.EffectCreate:
+      case State.LogicCreate:
         _createEffect();
 
-      case State.EffectBegin:
-        var eft = BtlEffectMgr.pop();
-        if(eft == null) {
+      case State.LogicBegin:
+        var logic = BtlLogicMgr.pop();
+        if(logic == null) {
           // 再生する演出がなくなったのでおしまい
           _change(State.TurnEnd);
         }
         else {
           // 演出再生
-          _effectPlayer = new BtlEffectPlayer(eft);
-          _effectPlayer.start();
-          _change(State.Effect);
+          _logicPlayer = new BtlLogicPlayer(logic);
+          _logicPlayer.start();
+          _change(State.LogicMain);
         }
 
-      case State.Effect:
+      case State.LogicMain:
         // 演出実行
-        _effectPlayer.update();
+        _logicPlayer.update();
 
-        if(_effectPlayer.isEnd()) {
+        if(_logicPlayer.isEnd()) {
           // 演出終了
-          _change(State.EffectEnd);
+          _change(State.LogicEnd);
         }
 
-      case State.EffectEnd:
+      case State.LogicEnd:
         // 次の演出へ
-        _change(State.EffectBegin);
+        _change(State.LogicBegin);
 
       case State.DeadCheck:
         // 死亡チェック

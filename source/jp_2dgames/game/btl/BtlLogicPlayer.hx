@@ -2,7 +2,7 @@ package jp_2dgames.game.btl;
 
 import jp_2dgames.lib.Input;
 import jp_2dgames.game.actor.Actor;
-import jp_2dgames.game.btl.BtlEffectData;
+import jp_2dgames.game.btl.BtlLogicData;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.btl.BtlCmdUtil;
@@ -20,18 +20,18 @@ private enum State {
 /**
  * バトル演出の再生
  **/
-class BtlEffectPlayer {
+class BtlLogicPlayer {
 
   static inline var TIMER_WAIT:Int = 30;
 
   // 演出情報
-  var _data:BtlEffectData;
+  var _data:BtlLogicData;
   // 状態
   var _state:State = State.Init;
   // 停止タイマー
   var _tWait:Int = 0;
 
-  public function new(data:BtlEffectData) {
+  public function new(data:BtlLogicData) {
     _data = data;
   }
 
@@ -66,10 +66,10 @@ class BtlEffectPlayer {
    **/
   private function _execTarget(target:Actor):Void {
     switch(_data.val) {
-      case BtlEffectVal.HpDamage(val):
+      case BtlLogicVal.HpDamage(val):
         target.damage(val);
-      case BtlEffectVal.HpRecover(val):
-      case BtlEffectVal.ChanceRoll(bSuccess):
+      case BtlLogicVal.HpRecover(val):
+      case BtlLogicVal.ChanceRoll(bSuccess):
 
     }
   }

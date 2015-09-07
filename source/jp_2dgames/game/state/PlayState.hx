@@ -1,6 +1,6 @@
 package jp_2dgames.game.state;
 
-import jp_2dgames.game.btl.BtlEffectMgr;
+import jp_2dgames.game.btl.BtlLogicMgr;
 import jp_2dgames.game.btl.BtlBg;
 import jp_2dgames.game.btl.BtlMgr;
 import jp_2dgames.game.item.Inventory;
@@ -51,7 +51,7 @@ class PlayState extends FlxState {
     _btlMgr = new BtlMgr(_btlUI);
 
     // バトル演出キュー
-    BtlEffectMgr.create();
+    BtlLogicMgr.create();
 
     // デバッグ機能
     _debugActor = new DebugActor();
@@ -65,7 +65,7 @@ class PlayState extends FlxState {
    */
   override public function destroy():Void {
 
-    BtlEffectMgr.destroy();
+    BtlLogicMgr.destroy();
     ActorMgr.destroy();
     Message.instance = null;
 
