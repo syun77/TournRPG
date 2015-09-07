@@ -1,6 +1,6 @@
 package jp_2dgames.game.state;
 
-import jp_2dgames.game.btl.BtlLogicMgr;
+import jp_2dgames.game.btl.logic.BtlLogicMgr;
 import jp_2dgames.game.btl.BtlBg;
 import jp_2dgames.game.btl.BtlMgr;
 import jp_2dgames.game.item.Inventory;

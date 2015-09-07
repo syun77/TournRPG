@@ -1,7 +1,7 @@
 package jp_2dgames.game.gui;
-import jp_2dgames.game.btl.BtlRange;
+import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.item.Inventory;
-import jp_2dgames.game.btl.BtlCmdUtil;
+import jp_2dgames.game.btl.types.BtlCmd;
 import jp_2dgames.game.actor.Actor;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;

@@ -1,7 +1,7 @@
 package jp_2dgames.game.actor;
 
-import jp_2dgames.game.btl.BtlRange;
-import jp_2dgames.game.btl.BtlCmdUtil;
+import jp_2dgames.game.btl.types.BtlRange;
+import jp_2dgames.game.btl.types.BtlCmd;
 import flixel.FlxG;
 import jp_2dgames.game.btl.BtlGroupUtil;
 import flixel.FlxSprite;

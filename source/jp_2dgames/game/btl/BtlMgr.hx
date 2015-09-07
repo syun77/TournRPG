@@ -1,9 +1,13 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.game.btl.logic.BtlLogicUtil;
+import jp_2dgames.game.btl.logic.BtlLogicMgr;
+import jp_2dgames.game.btl.types.BtlRange;
+import jp_2dgames.game.btl.logic.BtlLogicPlayer;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.gui.BtlCmdUI;
-import jp_2dgames.game.btl.BtlCmdUtil;
+import jp_2dgames.game.btl.types.BtlCmd;
 import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.Actor;

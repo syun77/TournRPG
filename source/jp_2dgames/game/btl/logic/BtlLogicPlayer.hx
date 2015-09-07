@@ -1,11 +1,12 @@
-package jp_2dgames.game.btl;
+package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.lib.Input;
 import jp_2dgames.game.actor.Actor;
-import jp_2dgames.game.btl.BtlLogicData;
+import jp_2dgames.game.btl.logic.BtlLogicData;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.actor.ActorMgr;
-import jp_2dgames.game.btl.BtlCmdUtil;
+import jp_2dgames.game.btl.types.BtlCmd;
 
 /**
  * 状態

@@ -1,4 +1,4 @@
-package jp_2dgames.game.btl;
+package jp_2dgames.game.btl.types;
 
 /**
  * 効果範囲

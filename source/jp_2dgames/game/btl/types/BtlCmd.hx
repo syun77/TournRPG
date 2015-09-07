@@ -1,4 +1,4 @@
-package jp_2dgames.game.btl;
+package jp_2dgames.game.btl.types;
 
 import jp_2dgames.game.item.ItemData;
 
@@ -12,10 +12,4 @@ enum BtlCmd {
   Skill(skillID:Int, range:BtlRange, targetID:Int);  // スキル
   Item(item:ItemData, range:BtlRange, targetID:Int); // アイテム
   Escape;                                            // 逃走
-}
-
-/**
- * 戦闘コマンドユーティリティ
- **/
-class BtlCmdUtil {
 }

@@ -1,20 +1,21 @@
-package jp_2dgames.game.btl;
+package jp_2dgames.game.btl.logic;
+import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.item.ItemData;
-import jp_2dgames.game.btl.BtlLogicData;
+import jp_2dgames.game.btl.logic.BtlLogicData;
 import jp_2dgames.game.actor.ActorMgr;
-import jp_2dgames.game.btl.BtlCmdUtil;
+import jp_2dgames.game.btl.types.BtlCmd;
 import jp_2dgames.game.actor.Actor;
 
 class BtlLogicUtil {
   public static function create(actor:Actor):BtlLogicData {
     switch(actor.cmd) {
-      case BtlCmd.Attack(target, targetID):
+      case BtlCmd.Attack(range, targetID):
         // 攻撃演出の作成
-        return _createAttack(actor, target, targetID);
-      case BtlCmd.Skill(skillID, target, targetID):
-        return _createSkill(skillID, actor, target);
-      case BtlCmd.Item(item, target, targetID):
-        return _createItem(item, actor, target, targetID);
+        return _createAttack(actor, range, targetID);
+      case BtlCmd.Skill(skillID, range, targetID):
+        return _createSkill(skillID, actor, range);
+      case BtlCmd.Item(item, range, targetID):
+        return _createItem(item, actor, range, targetID);
       case BtlCmd.Escape:
         return _createEscape(actor);
       case BtlCmd.None:
@@ -44,9 +45,9 @@ class BtlLogicUtil {
   /**
    * スキルを使う
    **/
-  private static function _createSkill(skillID:Int, actor:Actor, target:BtlRange):BtlLogicData {
+  private static function _createSkill(skillID:Int, actor:Actor, range:BtlRange):BtlLogicData {
     // TODO: 未実装
-    var cmd = BtlCmd.Skill(skillID, target, 0);
+    var cmd = BtlCmd.Skill(skillID, range, 0);
     var eft = new BtlLogicData(actor.ID, actor.group, cmd);
     return eft;
   }
@@ -54,8 +55,8 @@ class BtlLogicUtil {
   /**
    * アイテムを使う
    **/
-  private static function _createItem(item:ItemData, actor:Actor, target:BtlRange, targetID:Int):BtlLogicData {
-    var cmd = BtlCmd.Item(item, target, targetID);
+  private static function _createItem(item:ItemData, actor:Actor, range:BtlRange, targetID:Int):BtlLogicData {
+    var cmd = BtlCmd.Item(item, range, targetID);
     var eft = new BtlLogicData(actor.ID, actor.group, cmd);
     return eft;
   }
