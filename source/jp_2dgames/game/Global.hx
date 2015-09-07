@@ -2,7 +2,6 @@ package jp_2dgames.game;
 
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.item.ItemConst;
-import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.PlayerInfo;
@@ -61,8 +60,10 @@ class Global {
     // 初期アイテム
     Inventory.push(new ItemData(ItemConst.POTION01));
     Inventory.push(new ItemData(ItemConst.POTION02));
-    Inventory.push(new ItemData(ItemConst.WEAPON01));
-    Inventory.push(new ItemData(ItemConst.WEAPON02));
+    for(i in 0...9) {
+      Inventory.push(new ItemData(ItemConst.WEAPON01+i));
+      Inventory.push(new ItemData(ItemConst.ARMOR01+i));
+    }
 
   }
 }

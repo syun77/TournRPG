@@ -1,7 +1,5 @@
 package jp_2dgames.game.gui;
 import jp_2dgames.game.MyColor;
-import jp_2dgames.game.MyColor;
-import flixel.util.FlxColor;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.Inventory;
@@ -20,13 +18,18 @@ class InventroyUI extends FlxSpriteGroup {
 
   // 座標
   private static inline var BASE_X = 0;
-  private static inline var BASE_OFS_Y = -80;
+  private static inline var BASE_OFS_Y = -(BTN_DY*3.5)-BTN_Y;
 
   // ボタン
   private static inline var BTN_X = 0;
-  private static inline var BTN_Y = 0;
+  private static inline var BTN_Y = 48;
   private static inline var BTN_DX = 80;
-  private static inline var BTN_DY = 24;
+  private static inline var BTN_DY = 32;
+
+  // ページ切り替えボタン
+  private static inline var BTN_PREV_X = 0;
+  private static inline var BTN_NEXT_X = 80;
+  private static inline var BTN_PAGE_Y = 0;
 
   // ページ情報
   private static inline var PAGE_DISP_NUM:Int = 8;
@@ -88,15 +91,32 @@ class InventroyUI extends FlxSpriteGroup {
     }
 
     // キャンセルボタン
-    var px = BTN_X + BTN_DX*2;
-    var py = BTN_Y + BTN_DY*2;
-    _btnList.push(new MyButton(px, py, "CANCEL", function() {
-      cbFunc(CMD_CANCEL);
-    }));
+    {
+      var px = BTN_X + BTN_DX*2;
+      var py = BTN_Y + BTN_DY*2;
+      _btnList.push(new MyButton(px, py, "CANCEL", function() {
+        cbFunc(CMD_CANCEL);
+      }));
+    }
+
+    // ページ切り替えボタン
+    {
+      var py = BTN_PAGE_Y;
+      _btnList.push(new MyButton(BTN_PREV_X, py, "<<", function() {
+        trace("<<");
+      }));
+    }
+    {
+      var py = BTN_PAGE_Y;
+      _btnList.push(new MyButton(BTN_NEXT_X, py, ">>", function() {
+        trace(">>");
+      }));
+    }
 
     for(btn in _btnList) {
       this.add(btn);
     }
+
 
     // ボタン色を更新
     _updateButtonColor();

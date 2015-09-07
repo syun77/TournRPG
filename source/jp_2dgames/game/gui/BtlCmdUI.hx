@@ -15,13 +15,13 @@ class BtlCmdUI extends FlxSpriteGroup {
   // ■定数
   // 座標
   private static inline var BASE_X = 0;
-  private static inline var BASE_OFS_Y = -80;
+  private static inline var BASE_OFS_Y = -(BTN_DY*3.5);
 
   // ボタン
   private static inline var BTN_X = 0;
   private static inline var BTN_Y = 0;
   private static inline var BTN_DX = 80;
-  private static inline var BTN_DY = 24;
+  private static inline var BTN_DY = 32;
 
   // ■メンバ変数
   private var _inventoryUI:InventroyUI = null;

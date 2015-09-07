@@ -1,14 +1,15 @@
 package jp_2dgames.game;
 
+import openfl.display.BitmapData;
 import jp_2dgames.game.MyColor;
-import jp_2dgames.game.MyColor;
-import flixel.util.FlxColor;
 import flixel.text.FlxText;
 import flixel.ui.FlxTypedButton;
 
 /**
  * 日本語フォントのボタン
  **/
+@:bitmap("assets/images/ui/button2.png")
+private class GraphicButton extends BitmapData {}
 class MyButton extends FlxTypedButton<FlxText> {
   /**
 	 * Used with public variable status, means not highlighted or pressed.
@@ -64,6 +65,7 @@ class MyButton extends FlxTypedButton<FlxText> {
   public function new(X:Float = 0, Y:Float = 0, ?Text:String, ?OnClick:Void->Void)
   {
     super(X, Y, OnClick);
+    loadGraphic(GraphicButton, true, 80, 30);
 
     for (point in labelOffsets)
     {
@@ -111,6 +113,7 @@ class MyButton extends FlxTypedButton<FlxText> {
   override private function updateButton():Void {
     if(_enabled) {
       super.updateButton();
+      label.y += 5;
     }
   }
 }
