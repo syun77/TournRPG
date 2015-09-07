@@ -51,6 +51,7 @@ class BtlUI extends FlxSpriteGroup {
   override public function update():Void {
     super.update();
 
+    // プレイヤー情報
     var player = ActorMgr.search(_playerID);
     if(player != null) {
       var hp = player.hp;
@@ -59,6 +60,7 @@ class BtlUI extends FlxSpriteGroup {
       _barPlayerHp.setPercent(100 * player.hpratio);
     }
 
+    // 敵情報
     var enemy = ActorMgr.search(_enemyID);
     if(enemy != null) {
       var hp = enemy.hp;

@@ -25,12 +25,14 @@ class BtlEffectUtil {
   /**
    * 通常攻撃
    **/
-  private static function _createAttack(actor:Actor, target:BtlRange, targetID:Int):BtlEffectData {
-    // TODO: ランダム攻撃
-    var aTarget = ActorMgr.random(actor.group);
-    var eft = new BtlEffectData(actor.ID, actor.group, BtlCmd.Attack(target, aTarget.ID));
-    eft.setTarget(target, aTarget.ID);
-    var val = Calc.damage(actor, aTarget);
+  private static function _createAttack(actor:Actor, range:BtlRange, targetID:Int):BtlEffectData {
+    // TODO: 相手グループをランダム攻撃
+    var group = BtlGroupUtil.getAgaint(actor.group);
+    var target = ActorMgr.random(group);
+
+    var eft = new BtlEffectData(actor.ID, actor.group, BtlCmd.Attack(range, target.ID));
+    eft.setTarget(range, target.ID);
+    var val = Calc.damage(actor, target);
     // HPダメージ
     eft.val = BtlEffectVal.HpDamage(val);
 

@@ -202,20 +202,22 @@ class BtlMgr {
         else {
           // 演出再生
           _effectPlayer = new BtlEffectPlayer(eft);
-          _effectPlayer.begin();
+          _effectPlayer.start();
           _change(State.Effect);
         }
 
-
       case State.Effect:
-        _effectPlayer.exec();
-        _change(State.EffectEnd);
+        // 演出実行
+        _effectPlayer.update();
+
+        if(_effectPlayer.isEnd()) {
+          // 演出終了
+          _change(State.EffectEnd);
+        }
 
       case State.EffectEnd:
-        _effectPlayer.update();
-        if(_effectPlayer.isEnd()) {
-          _change(State.EffectBegin);
-        }
+        // 次の演出へ
+        _change(State.EffectBegin);
 
       case State.DeadCheck:
         // 死亡チェック
