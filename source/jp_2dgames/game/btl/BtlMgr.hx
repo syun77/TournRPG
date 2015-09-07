@@ -224,12 +224,18 @@ class BtlMgr {
         }
 
       case State.LogicEnd:
-        // 次の演出へ
-        _change(State.LogicBegin);
+        // 死亡チェックへ
+        _change(State.DeadCheck);
 
       case State.DeadCheck:
         // 死亡チェック
-        _procDeadCheck();
+        if(_procDeadCheck()) {
+          // 戦闘終了
+        }
+        else {
+          // 演出開始に戻る
+          _change(State.LogicBegin);
+        }
 
       case State.TurnEnd:
         // ターン終了
@@ -241,31 +247,40 @@ class BtlMgr {
         _change(State.Result);
 
       case State.Result:
-        // プレイヤーパラメータをグローバルに戻しておく
-        Global.setPlayerHp(_player.hp);
-        _change(State.End);
+        if(Input.press.A) {
+          // プレイヤーパラメータをグローバルに戻しておく
+          Global.setPlayerHp(_player.hp);
+          _change(State.End);
+        }
 
       case State.End:
     }
   }
 
-  private function _procDeadCheck():Void {
+  /**
+   * 死亡チェック
+   **/
+  private function _procDeadCheck():Bool {
     var actor = ActorMgr.searchDead();
     if(actor != null) {
+      // 誰か死亡した
       ActorMgr.moveDeadPool(actor);
       if(ActorMgr.countGroup(BtlGroup.Enemy) == 0) {
         // 敵が全滅
         Message.push2(Msg.BATTLE_WIN);
         _change(State.BtlWin);
-        return;
+        return true;
       }
       if(ActorMgr.countGroup(BtlGroup.Player) == 0) {
         // 味方が全滅
         Message.push2(Msg.BATTLE_LOSE);
         _change(State.BtlLose);
-        return;
+        return true;
       }
     }
+
+    // 戦闘続く
+    return false;
   }
 
   /**
