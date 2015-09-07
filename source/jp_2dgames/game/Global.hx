@@ -60,7 +60,7 @@ class Global {
     // 初期アイテム
     Inventory.push(new ItemData(ItemConst.POTION01));
     Inventory.push(new ItemData(ItemConst.POTION02));
-    for(i in 0...9) {
+    for(i in 0...8) {
       Inventory.push(new ItemData(ItemConst.WEAPON01+i));
       Inventory.push(new ItemData(ItemConst.ARMOR01+i));
     }

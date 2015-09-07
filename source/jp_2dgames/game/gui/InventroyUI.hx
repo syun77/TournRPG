@@ -38,6 +38,8 @@ class InventroyUI extends FlxSpriteGroup {
   private var _btnList:Array<MyButton>;
   // ページ番号
   private var _nPage:Int = 0;
+  // ページの最大数
+  private var _nPageMax:Int = 0;
 
   // 装備品UI
   private var _equipUI:EquipUI;
@@ -56,6 +58,9 @@ class InventroyUI extends FlxSpriteGroup {
       super(px, py);
     }
 
+    // 最大ページ数
+    _nPageMax = Math.ceil(Inventory.lengthItemList()/PAGE_DISP_NUM);
+
     // ボタンの表示
     _displayButton(cbFunc, actor);
 
@@ -68,6 +73,7 @@ class InventroyUI extends FlxSpriteGroup {
    **/
   override public function kill():Void {
 
+    // 装備UIを消す
     FlxG.state.remove(_equipUI);
     super.kill();
   }
@@ -80,15 +86,16 @@ class InventroyUI extends FlxSpriteGroup {
     // コマンドボタンの配置
     _btnList = new Array<MyButton>();
 
-    var ofs   = _getPageOffset();
-    var max   = _getPageOffsetMax();
+    var ofs = _getPageOffset();
+    var max = _getPageOffsetMax();
 
     for(idx in ofs...max) {
 
       var item = Inventory.getItem(idx);
+      var idx2 = idx - ofs;
       // 座標
-      var px = BTN_X + BTN_DX * (idx%3);
-      var py = BTN_Y + BTN_DY * Math.floor(idx/3);
+      var px = BTN_X + BTN_DX * (idx2%3);
+      var py = BTN_Y + BTN_DY * Math.floor(idx2/3);
       // アイテム名
       var name = ItemUtil.getName(item);
       var btnID = idx;
@@ -116,16 +123,20 @@ class InventroyUI extends FlxSpriteGroup {
     }
 
     // ページ切り替えボタン
+    if(_nPage > 0)
     {
+      // 1つ前に戻る
       var py = BTN_PAGE_Y;
       _btnList.push(new MyButton(BTN_PREV_X, py, "<<", function() {
-        trace("<<");
+        _changePage(-1, cbFunc, actor);
       }));
     }
+    if(_nPage < _nPageMax - 1)
     {
+      // 1つ先に進む
       var py = BTN_PAGE_Y;
       _btnList.push(new MyButton(BTN_NEXT_X, py, ">>", function() {
-        trace(">>");
+        _changePage(1, cbFunc, actor);
       }));
     }
 
@@ -146,6 +157,27 @@ class InventroyUI extends FlxSpriteGroup {
   }
 
   /**
+   * ページ切り替え
+   **/
+  private function _changePage(ofs:Int, cbFunc:Int->Void, actor:Actor):Void {
+    _nPage += ofs;
+    if(_nPage < 0) {
+      _nPage = _nPageMax - 1;
+    }
+    else if(_nPage >= _nPageMax) {
+      _nPage = 0;
+    }
+
+    // ボタンをすべて消す
+    for(btn in _btnList) {
+      this.remove(btn);
+    }
+
+    // ボタンを再表示
+    _displayButton(cbFunc, actor);
+  }
+
+  /**
    * アイテム装備の切り替え
    **/
   private function _toggleEquip(idx:Int, actor):Void {
@@ -163,8 +195,8 @@ class InventroyUI extends FlxSpriteGroup {
    **/
   private function _updateButtonColor():Void {
     // 装備しているアイテムのボタンの色を変える
-    var ofs   = _getPageOffset();
-    var max   = _getPageOffsetMax();
+    var ofs = _getPageOffset();
+    var max = _getPageOffsetMax();
 
     for(idx in ofs...max) {
       var item = Inventory.getItem(idx);
