@@ -1,8 +1,7 @@
 package jp_2dgames.game.actor;
 
-import jp_2dgames.game.PartyGroupUtil.PartyGroup;
+import jp_2dgames.game.btl.BtlGroupUtil;
 import flixel.util.FlxRandom;
-import jp_2dgames.game.PartyGroupUtil;
 import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
 
@@ -43,7 +42,7 @@ class ActorMgr  {
   /**
    * インスタンスを新規に取得
    **/
-  public static function recycle(group:PartyGroup, param:Params):Actor {
+  public static function recycle(group:BtlGroup, param:Params):Actor {
     var actor:Actor = _instance.recycle();
     actor.init(group, param);
     return actor;
@@ -84,7 +83,7 @@ class ActorMgr  {
   /**
    * 生存している指定のグループをすべて実行
    **/
-  public static function forEachAliveGroup(group:PartyGroup, func:Actor->Void):Void {
+  public static function forEachAliveGroup(group:BtlGroup, func:Actor->Void):Void {
     forEachAlive(function(actor:Actor) {
       if(actor.group == group) {
         func(actor);
@@ -109,10 +108,10 @@ class ActorMgr  {
   /**
    * 指定のグループからランダムに取得する
    **/
-  public static function random(group:PartyGroup):Actor {
+  public static function random(group:BtlGroup):Actor {
     var list = new Array<Actor>();
     forEachAlive(function(actor:Actor) {
-      if(PartyGroupUtil.isSame(actor.ID, group)) {
+      if(BtlGroupUtil.isSame(actor.ID, group)) {
         // グループが一致
         list.push(actor);
       }
@@ -148,7 +147,7 @@ class ActorMgr  {
    * 死亡リストに移動する
    **/
   public static function moveDeadPool(actor:Actor):Void {
-    if(actor.group == PartyGroup.Enemy) {
+    if(actor.group == BtlGroup.Enemy) {
       Message.push2(4, [actor.name]);
     }
 
@@ -159,7 +158,7 @@ class ActorMgr  {
   /**
    * 指定のグループの生存数を取得する
    **/
-  public static function countGroup(group:PartyGroup):Int {
+  public static function countGroup(group:BtlGroup):Int {
     var ret:Int = 0;
     forEachAliveGroup(group, function(actor:Actor) {
       ret++;
@@ -172,7 +171,7 @@ class ActorMgr  {
    * 敵のAIを設定する
    **/
   public static function requestEnemyAI():Void {
-    forEachAliveGroup(PartyGroup.Enemy, function(actor:Actor) {
+    forEachAliveGroup(BtlGroup.Enemy, function(actor:Actor) {
       actor.requestAI();
     });
   }

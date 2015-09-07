@@ -8,7 +8,7 @@ import flixel.FlxState;
 /**
  * ゲーム開始シーン
  **/
-class PlayInitState extends FlxState{
+class PlayInitState extends FlxState {
   /**
    * 生成
    **/

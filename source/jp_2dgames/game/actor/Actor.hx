@@ -1,10 +1,9 @@
 package jp_2dgames.game.actor;
 
-import jp_2dgames.game.item.Inventory;
-import jp_2dgames.game.item.ItemUtil;
-import jp_2dgames.game.BtlCmdUtil.BtlCmd;
+import jp_2dgames.game.btl.BtlTarget;
+import jp_2dgames.game.btl.BtlCmdUtil;
 import flixel.FlxG;
-import jp_2dgames.game.PartyGroupUtil;
+import jp_2dgames.game.btl.BtlGroupUtil;
 import flixel.FlxSprite;
 
 private enum State {
@@ -36,6 +35,10 @@ class Actor extends FlxSprite {
 
   // 実行コマンド
   var _cmd:BtlCmd = BtlCmd.None;
+  public var cmd(get, never):BtlCmd;
+  private function get_cmd() {
+    return _cmd;
+  }
 
   // 開始座標
   var _xstart:Float = 0;
@@ -48,8 +51,8 @@ class Actor extends FlxSprite {
   var _tAnime:Int = 0;
 
   // グループ
-  var _group:PartyGroup;
-  public var group(get, never):PartyGroup;
+  var _group:BtlGroup;
+  public var group(get, never):BtlGroup;
   private function get_group() {
     return _group;
   }
@@ -149,14 +152,14 @@ class Actor extends FlxSprite {
   /**
    * 初期化
    **/
-  public function init(group:PartyGroup, params:Params):Void {
-    ID = _idx + PartyGroupUtil.getOffsetID(group);
+  public function init(group:BtlGroup, params:Params):Void {
+    ID = _idx + BtlGroupUtil.getOffsetID(group);
     _group = group;
     if(params != null) {
       _param.copy(params);
     }
 
-    if(_group == PartyGroup.Enemy) {
+    if(_group == BtlGroup.Enemy) {
       // 敵の場合の処理
       _initEnemy();
     }
@@ -217,7 +220,7 @@ class Actor extends FlxSprite {
    **/
   private function _attackRandom():Void {
     // 対抗グループを取得する
-    var grp = PartyGroupUtil.getAgaint(_group);
+    var grp = BtlGroupUtil.getAgaint(_group);
 
     // 攻撃対象を取得する
     var target = ActorMgr.random(grp);
@@ -233,11 +236,12 @@ class Actor extends FlxSprite {
    **/
   public function exec():BtlCmd {
 
+    /*
     switch(_cmd) {
       case BtlCmd.None:
         // 通常ここにくることはない
 
-      case BtlCmd.Attack(id):
+      case BtlCmd.Attack:
         // 通常攻撃
         _attackRandom();
 
@@ -253,6 +257,7 @@ class Actor extends FlxSprite {
 
     // 行動完了
     _change(State.ActEnd);
+    */
 
     return _cmd;
   }
@@ -265,7 +270,7 @@ class Actor extends FlxSprite {
     _clampHp();
 
     // ダメージメッセージ表示
-    if(_group == PartyGroup.Player) {
+    if(_group == BtlGroup.Player) {
       // プレイヤーにダメージ
       Message.push2(Msg.DAMAGE_PLAYER, [_name, v]);
       // 画面を揺らす
@@ -284,6 +289,7 @@ class Actor extends FlxSprite {
   }
 
   public function actBegin() {
+    /*
     _change(State.ActBegin);
     // 行動開始
     switch(_cmd) {
@@ -301,6 +307,7 @@ class Actor extends FlxSprite {
         Message.push2(Msg.ESCAPE, [_name]);
     }
     _change(State.Act);
+    */
   }
   public function isActEnd():Bool {
     return _state == State.ActEnd;
@@ -330,7 +337,7 @@ class Actor extends FlxSprite {
    * 揺らす
    **/
   private function _updateShake():Void {
-    if(_group != PartyGroup.Enemy) {
+    if(_group != BtlGroup.Enemy) {
       return;
     }
 
@@ -349,6 +356,9 @@ class Actor extends FlxSprite {
    * AIで行動を決定する
    **/
   public function requestAI():Void {
-    _cmd = BtlCmd.Attack(0);
+    var target = ActorMgr.random(_group);
+    if(target != null) {
+      _cmd = BtlCmd.Attack(BtlTarget.One, target.ID);
+    }
   }
 }

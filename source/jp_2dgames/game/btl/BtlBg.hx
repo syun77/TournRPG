@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.btl;
 import flixel.FlxG;
 import flixel.FlxSprite;
 

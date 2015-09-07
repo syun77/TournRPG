@@ -1,6 +1,7 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.btl.BtlTarget;
 import jp_2dgames.game.item.Inventory;
-import jp_2dgames.game.BtlCmdUtil.BtlCmd;
+import jp_2dgames.game.btl.BtlCmdUtil;
 import jp_2dgames.game.actor.Actor;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -36,7 +37,10 @@ class BtlCmdUI extends FlxSpriteGroup {
 
     // アイテム選択のコール関数を登録しておく
     _cbItem = function(btnID:Int) {
-      cbFunc(actor, BtlCmd.Item(btnID));
+      var item = Inventory.getItem(btnID);
+      item.bReserved = true;
+      // ここでは使うアイテムのみ登録
+      cbFunc(actor, BtlCmd.Item(item, null, 0));
     };
 
     // 基準座標を設定
@@ -50,15 +54,15 @@ class BtlCmdUI extends FlxSpriteGroup {
     var px = BTN_X;
     var py = BTN_Y;
     btnList.add(new MyButton(px, py, "ATTACK1", function() {
-      cbFunc(actor, BtlCmd.Attack(0));
+      cbFunc(actor, BtlCmd.Attack(BtlTarget.One, 0));
     }));
     px += BTN_DX;
     btnList.add(new MyButton(px, py, "ATTACK2", function() {
-      cbFunc(actor, BtlCmd.Attack(1));
+      cbFunc(actor, BtlCmd.Attack(BtlTarget.One, 0));
     }));
     px += BTN_DX;
     btnList.add(new MyButton(px, py, "ATTACK3", function() {
-      cbFunc(actor, BtlCmd.Attack(2));
+      cbFunc(actor, BtlCmd.Attack(BtlTarget.One, 0));
     }));
 
     // 2列目

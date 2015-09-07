@@ -1,10 +1,9 @@
-package jp_2dgames.game;
+package jp_2dgames.game.btl;
 
 /**
- * グループ
+ * バトルグループ
  **/
-import openfl._internal.aglsl.assembler.Part;
-enum PartyGroup {
+enum BtlGroup {
   Player; // プレイヤー側
   Enemy;  // 敵側
   Both;   // 両方
@@ -13,7 +12,7 @@ enum PartyGroup {
 /**
  * パーティグループのユーティリティ
  **/
-class PartyGroupUtil {
+class BtlGroupUtil {
 
   private static inline var PLAYER_OFS:Int = 1000;
   private static inline var ENEMY_OFS:Int  = 2000;
@@ -21,13 +20,13 @@ class PartyGroupUtil {
   /**
    * グループによってオフセットする番号を取得する
    **/
-  public static function getOffsetID(group:PartyGroup) {
+  public static function getOffsetID(group:BtlGroup) {
     switch(group) {
-      case PartyGroup.Player:
+      case BtlGroup.Player:
         return PLAYER_OFS;
-      case PartyGroup.Enemy:
+      case BtlGroup.Enemy:
         return ENEMY_OFS;
-      case PartyGroup.Both:
+      case BtlGroup.Both:
         return 0;
     }
   }
@@ -55,27 +54,27 @@ class PartyGroupUtil {
   /**
    * IDに対応するグループを取得する
    **/
-  public static function get(id:Int):PartyGroup {
+  public static function get(id:Int):BtlGroup {
     if(isPlayer(id)) {
-      return PartyGroup.Player;
+      return BtlGroup.Player;
     }
     if(isEnemy(id)) {
-      return PartyGroup.Enemy;
+      return BtlGroup.Enemy;
     }
 
-    return PartyGroup.Both;
+    return BtlGroup.Both;
   }
 
   /**
    * 指定のグループと一致しているかどうか
    **/
-  public static function isSame(id:Int, group:PartyGroup):Bool {
+  public static function isSame(id:Int, group:BtlGroup):Bool {
     switch(group) {
-      case PartyGroup.Player:
+      case BtlGroup.Player:
         return isPlayer(id);
-      case PartyGroup.Enemy:
+      case BtlGroup.Enemy:
         return isEnemy(id);
-      case PartyGroup.Both:
+      case BtlGroup.Both:
         return true;
     }
   }
@@ -83,14 +82,14 @@ class PartyGroupUtil {
   /**
    * 対抗するグループを取得する
    **/
-  public static function getAgaint(group:PartyGroup):PartyGroup {
+  public static function getAgaint(group:BtlGroup):BtlGroup {
     switch(group) {
-      case PartyGroup.Player:
-        return PartyGroup.Enemy;
-      case PartyGroup.Enemy:
-        return PartyGroup.Player;
-      case PartyGroup.Both:
-        return PartyGroup.Both;
+      case BtlGroup.Player:
+        return BtlGroup.Enemy;
+      case BtlGroup.Enemy:
+        return BtlGroup.Player;
+      case BtlGroup.Both:
+        return BtlGroup.Both;
     }
   }
 }

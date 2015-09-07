@@ -1,12 +1,13 @@
-package jp_2dgames.game;
+package jp_2dgames.game.btl;
 
+import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.gui.BtlCmdUI;
-import jp_2dgames.game.BtlCmdUtil.BtlCmd;
+import jp_2dgames.game.btl.BtlCmdUtil;
 import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.Actor;
-import jp_2dgames.game.PartyGroupUtil;
+import jp_2dgames.game.btl.BtlGroupUtil;
 import haxe.ds.ArraySort;
 import jp_2dgames.lib.Input;
 import flixel.FlxG;
@@ -18,6 +19,11 @@ private enum State {
   None;         // なし
   TurnStart;    // ターン開始
   InputCommand; // コマンド入力待ち
+
+  EffectCreate; // 演出作成
+  EffectBegin;  // 演出開始
+  Effect;       // 演出中
+  EffectEnd;    // 演出終了
 
   // 行動
   ActBegin;     // 開始
@@ -49,6 +55,9 @@ class BtlMgr {
   var _actorList:Array<Actor> = null;
   var _btlCmdUI:BtlCmdUI = null;
 
+  // 再生中のバトル演出
+  var _effectPlayer:BtlEffectPlayer = null;
+
   // 行動主体者
   var _actor:Actor = null;
 
@@ -60,10 +69,10 @@ class BtlMgr {
    **/
   public function new(btlUI:BtlUI) {
 
-    _player = ActorMgr.recycle(PartyGroup.Player, Global.getPlayerParam());
+    _player = ActorMgr.recycle(BtlGroup.Player, Global.getPlayerParam());
     var param = new Params();
     param.id = Global.getStage();
-    _enemy = ActorMgr.recycle(PartyGroup.Enemy, param);
+    _enemy = ActorMgr.recycle(BtlGroup.Enemy, param);
 
     // TODO:
     _player.setName("プレイヤー");
@@ -103,16 +112,19 @@ class BtlMgr {
   private function _procInputCommand():Void {
     var cmd:BtlCmd = BtlCmd.None;
     if(Input.press.A && FlxG.mouse.justPressed == false) {
-      cmd = BtlCmd.Attack(0);
+      cmd = BtlCmd.Attack(BtlTarget.One, 0);
     }
     else if(Input.press.B) {
-      cmd = BtlCmd.Attack(1);
+      var item = Inventory.getItem(0);
+      cmd = BtlCmd.Item(item, null, 0);
     }
     else if(Input.press.X) {
-      cmd = BtlCmd.Attack(2);
+      var item = Inventory.getItem(0);
+      cmd = BtlCmd.Item(item, null, 0);
     }
     else if(Input.press.Y) {
-      cmd = BtlCmd.Item(0);
+      var item = Inventory.getItem(0);
+      cmd = BtlCmd.Item(item, null, 0);
     }
     else if(FlxG.keys.justPressed.B) {
       cmd = BtlCmd.Escape;
@@ -145,14 +157,28 @@ class BtlMgr {
     // 行動順の決定
     _actorList = ActorMgr.getAlive();
     ArraySort.sort(_actorList, function(a:Actor, b:Actor) {
+      // 移動速度で降順ソート
       return a.agi - b.agi;
     });
 
-    // 行動開始
-    _change(State.ActBegin);
+    // 演出リストの作成開始
+    _change(State.EffectCreate);
   }
 
-  private var _elapsed:Float = 0;
+  /**
+   * ボトル演出のリスト作成
+   **/
+  private function _createEffect():Void {
+
+    for(actor in _actorList) {
+      var eft = BtlEffectUtil.create(actor);
+      BtlEffectMgr.push(eft);
+    }
+
+    // 演出作成開始
+    _change(State.EffectBegin);
+  }
+
   /**
    * 更新
    **/
@@ -180,6 +206,33 @@ class BtlMgr {
       case State.InputCommand:
         // コマンド入力待ち
         _procInputCommand();
+
+      case State.EffectCreate:
+        _createEffect();
+
+      case State.EffectBegin:
+        var eft = BtlEffectMgr.pop();
+        if(eft == null) {
+          // 再生する演出がなくなったのでおしまい
+          _change(State.TurnEnd);
+        }
+        else {
+          // 演出再生
+          _effectPlayer = new BtlEffectPlayer(eft);
+          _effectPlayer.begin();
+          _change(State.Effect);
+        }
+
+
+      case State.Effect:
+        _effectPlayer.exec();
+        _change(State.EffectEnd);
+
+      case State.EffectEnd:
+        _effectPlayer.update();
+        if(_effectPlayer.isEnd()) {
+          _change(State.EffectBegin);
+        }
 
       case State.ActBegin:
         // 行動実行
@@ -246,13 +299,13 @@ class BtlMgr {
     var actor = ActorMgr.searchDead();
     if(actor != null) {
       ActorMgr.moveDeadPool(actor);
-      if(ActorMgr.countGroup(PartyGroup.Enemy) == 0) {
+      if(ActorMgr.countGroup(BtlGroup.Enemy) == 0) {
         // 敵が全滅
         Message.push2(Msg.BATTLE_WIN);
         _change(State.BtlWin);
         return;
       }
-      if(ActorMgr.countGroup(PartyGroup.Player) == 0) {
+      if(ActorMgr.countGroup(BtlGroup.Player) == 0) {
         // 味方が全滅
         Message.push2(Msg.BATTLE_LOSE);
         _change(State.BtlLose);
