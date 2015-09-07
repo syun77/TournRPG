@@ -6,19 +6,34 @@ import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.btl.types.BtlCmd;
 import jp_2dgames.game.actor.Actor;
 
+/**
+ * 演出を生成するクラス
+ **/
 class BtlLogicUtil {
+
+  /**
+   * 演出の生成
+   **/
   public static function create(actor:Actor):BtlLogicData {
     switch(actor.cmd) {
       case BtlCmd.Attack(range, targetID):
         // 攻撃演出の作成
         return _createAttack(actor, range, targetID);
+
       case BtlCmd.Skill(skillID, range, targetID):
+        // スキル演出の作成
         return _createSkill(skillID, actor, range);
+
       case BtlCmd.Item(item, range, targetID):
+        // アイテム演出の作成
         return _createItem(item, actor, range, targetID);
+
       case BtlCmd.Escape:
+        // 逃走演出の作成
         return _createEscape(actor);
+
       case BtlCmd.None:
+        // 通常ありえない
         return null;
     }
   }
@@ -27,13 +42,11 @@ class BtlLogicUtil {
    * 通常攻撃
    **/
   private static function _createAttack(actor:Actor, range:BtlRange, targetID:Int):BtlLogicData {
-    // TODO: 相手グループをランダム攻撃
-    var group = BtlGroupUtil.getAgaint(actor.group);
-    var target = ActorMgr.random(group);
+    var eft = new BtlLogicData(actor.ID, actor.group, BtlCmd.Attack(range, targetID));
+    eft.setTarget(range, targetID);
 
-    var eft = new BtlLogicData(actor.ID, actor.group, BtlCmd.Attack(range, target.ID));
-    eft.setTarget(range, target.ID);
-
+    // 対象を取得
+    var target = ActorMgr.search(targetID);
     // ダメージ計算
     var val = Calc.damage(actor, target);
     // HPダメージ

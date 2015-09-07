@@ -317,7 +317,9 @@ class Actor extends FlxSprite {
    * AIで行動を決定する
    **/
   public function requestAI():Void {
-    var target = ActorMgr.random(_group);
+    // TODO: 相手グループをランダム攻撃
+    var group = BtlGroupUtil.getAgaint(_group);
+    var target = ActorMgr.random(group);
     if(target != null) {
       _cmd = BtlCmd.Attack(BtlRange.One, target.ID);
     }

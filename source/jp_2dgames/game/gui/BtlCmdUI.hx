@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.actor.ActorMgr;
+import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.btl.types.BtlCmd;
@@ -54,15 +56,17 @@ class BtlCmdUI extends FlxSpriteGroup {
     var px = BTN_X;
     var py = BTN_Y;
     btnList.add(new MyButton(px, py, "ATTACK1", function() {
-      cbFunc(actor, BtlCmd.Attack(BtlRange.One, 0));
+      _attack(actor, cbFunc);
     }));
     px += BTN_DX;
+    // TODO: スキルボタンにする
     btnList.add(new MyButton(px, py, "ATTACK2", function() {
-      cbFunc(actor, BtlCmd.Attack(BtlRange.One, 0));
+      _attack(actor, cbFunc);
     }));
     px += BTN_DX;
+    // TODO: スキルボタンにする
     btnList.add(new MyButton(px, py, "ATTACK3", function() {
-      cbFunc(actor, BtlCmd.Attack(BtlRange.One, 0));
+      _attack(actor, cbFunc);
     }));
 
     // 2列目
@@ -89,6 +93,17 @@ class BtlCmdUI extends FlxSpriteGroup {
 
     // 表示
     _display();
+  }
+
+  /**
+   * 攻撃コマンドを選んだ
+   **/
+  private function _attack(actor:Actor, cbFunc:Actor->BtlCmd->Void):Void {
+    // TODO: 相手グループをランダム攻撃
+    var group = BtlGroupUtil.getAgaint(actor.group);
+    var target = ActorMgr.random(group);
+
+    cbFunc(actor, BtlCmd.Attack(BtlRange.One, target.ID));
   }
 
   /**

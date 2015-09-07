@@ -96,10 +96,14 @@ class BtlMgr {
   /**
    * コマンド入力更新
    **/
-  private function _procInputCommand():Void {
+  private function _debugProcInputCommand():Void {
     var cmd:BtlCmd = BtlCmd.None;
     if(Input.press.A && FlxG.mouse.justPressed == false) {
-      cmd = BtlCmd.Attack(BtlRange.One, 0);
+      // TODO: 相手グループをランダム攻撃
+      var group = BtlGroupUtil.getAgaint(_player.group);
+      var target = ActorMgr.random(group);
+
+      cmd = BtlCmd.Attack(BtlRange.One, target.ID);
     }
     else if(Input.press.B) {
       var item = Inventory.getItem(0);
@@ -192,7 +196,7 @@ class BtlMgr {
 
       case State.InputCommand:
         // コマンド入力待ち
-        _procInputCommand();
+        _debugProcInputCommand();
 
       case State.LogicCreate:
         _createEffect();
