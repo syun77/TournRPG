@@ -10,7 +10,6 @@ class ItemData {
   public var id:Int         = ItemUtil.NONE; // アイテムID
   public var type:IType     = IType.None;    // アイテム種別
   public var isEquip:Bool   = false;         // 装備しているかどうか
-  public var bReserved:Bool = false;         // アイテムを使う予約
 
   /**
    * コンストラクタ
