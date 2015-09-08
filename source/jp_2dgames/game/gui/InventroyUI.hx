@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.ui.FlxButton;
 import flixel.text.FlxText;
 import jp_2dgames.game.MyColor;
 import jp_2dgames.game.actor.Actor;
@@ -37,6 +38,10 @@ class InventroyUI extends FlxSpriteGroup {
   private static inline var PAGE_X = BTN_PREV_X + 4;
   private static inline var PAGE_Y = 0;
 
+  // ボタン番号
+  private static inline var BTN_ID_CANCEL:Int = -1;
+  private static inline var BTN_ID_PAGE:Int = -2;
+
   // ■メンバ変数
   private var _btnList:Array<MyButton>;
   // ページ番号
@@ -48,6 +53,9 @@ class InventroyUI extends FlxSpriteGroup {
 
   // 装備品UI
   private var _equipUI:EquipUI;
+
+  // アイテム詳細UI
+  private var _detailUI:DetailUI;
 
   // 表示アニメーション
   private var _tween:FlxTween = null;
@@ -76,8 +84,15 @@ class InventroyUI extends FlxSpriteGroup {
     // ボタンの表示
     _displayButton(cbFunc, actor);
 
+    // 装備情報
     _equipUI = new EquipUI();
     FlxG.state.add(_equipUI);
+
+    // アイテム詳細
+    _detailUI = new DetailUI();
+    FlxG.state.add(_detailUI);
+    // 非表示にしておく
+    _detailUI.visible = false;
   }
 
   /**
@@ -85,6 +100,8 @@ class InventroyUI extends FlxSpriteGroup {
    **/
   override public function kill():Void {
 
+    // アイテム詳細UIを消す
+    FlxG.state.remove(_detailUI);
     // 装備UIを消す
     FlxG.state.remove(_equipUI);
     super.kill();
@@ -125,6 +142,8 @@ class InventroyUI extends FlxSpriteGroup {
           cbFunc(btnID);
         }
       });
+      // 要素番号を入れておく
+      btn.ID = idx2;
       _btnList.push(btn);
 
     }
@@ -133,9 +152,11 @@ class InventroyUI extends FlxSpriteGroup {
     {
       var px = BTN_X + BTN_DX*2;
       var py = BTN_Y + BTN_DY*2;
-      _btnList.push(new MyButton(px, py, "CANCEL", function() {
+      var btn = new MyButton(px, py, "CANCEL", function() {
         cbFunc(CMD_CANCEL);
-      }));
+      });
+      btn.ID = BTN_ID_CANCEL;
+      _btnList.push(btn);
     }
 
     // ページ切り替えボタン
@@ -146,6 +167,7 @@ class InventroyUI extends FlxSpriteGroup {
         _changePage(-1, cbFunc, actor);
       });
       btn.enable = (_nPage > 0);
+      btn.ID = BTN_ID_PAGE;
       _btnList.push(btn);
     }
     {
@@ -155,6 +177,7 @@ class InventroyUI extends FlxSpriteGroup {
         _changePage(1, cbFunc, actor);
       });
       btn.enable = (_nPage < _nPageMax - 1);
+      btn.ID = BTN_ID_PAGE;
       _btnList.push(btn);
     }
 
@@ -267,5 +290,30 @@ class InventroyUI extends FlxSpriteGroup {
     }
 
     return max;
+  }
+
+  override public function update():Void {
+    super.update();
+
+    // ボタンの状態を調べる
+    for(btn in _btnList) {
+      switch(btn.status) {
+        case FlxButton.HIGHLIGHT, FlxButton.PRESSED:
+          _detailUI.visible = true;
+          var idx = btn.ID;
+          if(idx < 0) {
+            continue;
+          }
+
+          idx += _getPageOffset();
+          // 表示情報を更新
+          var item = Inventory.getItem(idx);
+          _detailUI.setText(item);
+          return;
+      }
+    }
+
+    // ボタンを選択していないので非表示
+    _detailUI.visible = false;
   }
 }

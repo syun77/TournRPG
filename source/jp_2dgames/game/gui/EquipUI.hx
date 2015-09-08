@@ -16,17 +16,17 @@ class EquipUI extends FlxSpriteGroup {
   // ■定数
 
   // 座標
-  private static inline var BASE_X = 120;
+  private static inline var BASE_X = 4;
   private static inline var BASE_Y = 120;
 
   // ウィンドウサイズ
-  private static inline var WIDTH = 120;
+  private static inline var WIDTH = 120 - 4*2;
   private static inline var HEIGHT = 80;
 
   // テキスト
   private static inline var TEXT_X = 4;
   private static inline var TEXT_Y = 4;
-  private static inline var TEXT_DY = 20;
+  private static inline var TEXT_DY = 12;
   private static inline var TEXT_WIDTH:Int = 128;
 
   // ■メンバ変数

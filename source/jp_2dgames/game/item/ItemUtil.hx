@@ -109,6 +109,10 @@ class ItemUtil {
   public static function getDef(item:ItemData):Int {
     return getParam(item.id, "def");
   }
+  // 詳細
+  public static function getDetail(item:ItemData):String {
+    return getParamString(item.id, "detail");
+  }
 
   /**
    * アイテム種別変換
