@@ -47,5 +47,9 @@ class MyColor {
   // ボタン(装備)
   public static inline var BTN_EQUIP         = FlxColor.MAUVE;
   public static inline var BTN_EQUIP_LABEL   = FlxColor.BLACK;
+
+  // ボタン(消費アイテム)
+  public static inline var BTN_CONSUME       = FlxColor.LIME;
+  public static inline var BTN_CONSUME_LABEL = FlxColor.BLACK;
 }
 

@@ -221,15 +221,19 @@ class InventroyUI extends FlxSpriteGroup {
 
     for(idx in ofs...max) {
       var item = Inventory.getItem(idx);
-      if(ItemUtil.isEquip(item.id) == false) {
-        // 装備アイテムでない
-        continue;
-      }
 
       // ボタンを取得
       var btnIdx = idx - ofs;
       var btn = _btnList[btnIdx];
 
+      if(ItemUtil.isConsumable(item.id)) {
+        // 消費アイテム
+        btn.color       = MyColor.BTN_CONSUME;
+        btn.label.color = MyColor.BTN_CONSUME_LABEL;
+        continue;
+      }
+
+      // 装備アイテム
       if(item.isEquip == false) {
         // 装備していない
         // デフォルト色に戻す
