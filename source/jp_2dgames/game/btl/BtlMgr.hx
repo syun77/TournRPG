@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.game.gui.InventoryUI;
 import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.gui.Dialog;
 import jp_2dgames.game.item.ItemUtil;
@@ -43,6 +44,7 @@ private enum State {
   Escape;       // 逃走成功
 
   Result;       // リザルト
+  ResultItem;   // アイテムの取捨選択
   ResultWait;   // リザルト・ボタン入力待ち
   End;          // おしまい
 }
@@ -201,12 +203,6 @@ class BtlMgr {
         FlxG.state.add(_btlCmdUI);
         _change(State.InputCommand);
 
-        /*
-        Dialog.open(Dialog.YESNO, UIMsg.get(UIMsg.ITEM_CHANGE), null, function(btnID:Int) {
-          trace('press: ${btnID}');
-        });
-        */
-
       case State.InputCommand:
         // コマンド入力待ち
         _debugProcInputCommand();
@@ -279,11 +275,49 @@ class BtlMgr {
 
         for(item in items) {
           var name = ItemUtil.getName(item);
-          Message.push2(Msg.ITEM_GET, [name]);
-          Inventory.push(item);
+          if(Inventory.isFull()) {
+            // アイテムが一杯で拾えない
+            Message.push2(Msg.ITEM_CANT_GET, [name]);
+            Dialog.open(Dialog.YESNO, UIMsg.get(UIMsg.ITEM_CHANGE), null, function(btnID:Int) {
+              if(btnID == Dialog.BTN_YES) {
+                var ui = null;
+                ui = new InventoryUI(function(idx:Int) {
+                  // アイテムを捨てる
+                  if(idx == InventoryUI.CMD_CANCEL) {
+                    // キャンセルの場合はそのまま
+                    _change(State.ResultWait);
+                    return;
+                  }
+                  var item2 = Inventory.getItem(idx);
+                  var name2 = ItemUtil.getName(item2);
+                  Inventory.delItem(idx);
+                  Inventory.push(item);
+                  Message.push2(Msg.ITEM_DEL_GET, [name, name2]);
+                  FlxG.state.remove(ui);
+                  _change(State.ResultWait);
+                }, null);
+                FlxG.state.add(ui);
+              }
+              else {
+                // アイテムを捨てる
+                Message.push2(Msg.ITEM_GET, [name]);
+                _change(State.ResultWait);
+              }
+            });
+            _change(State.ResultItem);
+          }
+          else {
+            // 拾えた
+            Message.push2(Msg.ITEM_GET, [name]);
+            Inventory.push(item);
+            _change(State.ResultWait);
+          }
+          break;
         }
 
-        _change(State.ResultWait);
+
+
+      case State.ResultItem:
 
       case State.ResultWait:
         if(Input.press.A) {

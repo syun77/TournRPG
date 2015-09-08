@@ -13,10 +13,14 @@ import flixel.group.FlxSpriteGroup;
 /**
  * インベントリUI
  **/
-class InventroyUI extends FlxSpriteGroup {
+class InventoryUI extends FlxSpriteGroup {
 
   // ■定数
   public static inline var CMD_CANCEL:Int = -1;
+
+  // 起動モード
+  public static inline var MODE_NORMAL:Int = 0; // 通常
+  public static inline var MODE_DROP:Int   = 1; // 捨てる
 
   // 座標
   private static inline var BASE_X = 0;
@@ -42,7 +46,20 @@ class InventroyUI extends FlxSpriteGroup {
   private static inline var BTN_ID_CANCEL:Int = -1;
   private static inline var BTN_ID_PAGE:Int = -2;
 
+  // ■スタティック
+  private static var _instance:InventoryUI = null;
+
+  // 開く
+  public static function open(cbFunc:Int->Void, actor:Actor):Void {
+    if(_instance == null) {
+      _instance = new InventoryUI(cbFunc, actor);
+      FlxG.state.add(_instance);
+    }
+  }
+
   // ■メンバ変数
+  // モード
+  private var _mode:Int;
   private var _btnList:Array<MyButton>;
   // ページ番号
   private var _nPage:Int = 0;
@@ -72,6 +89,13 @@ class InventroyUI extends FlxSpriteGroup {
       var px = BASE_X;
       var py = FlxG.height + BASE_OFS_Y;
       super(px, py);
+    }
+
+    // モード判定
+    _mode = MODE_NORMAL;
+    if(actor == null) {
+      // 捨てるモード
+      _mode = MODE_DROP;
     }
 
     // 最大ページ数
@@ -133,13 +157,25 @@ class InventroyUI extends FlxSpriteGroup {
       var name = ItemUtil.getName(item);
       var btnID = idx;
       var btn = new MyButton(px, py, name, function() {
-        if(ItemUtil.isEquip(item.id)) {
-          // 装備品
-          _toggleEquip(btnID, actor);
-        }
-        else {
-          // 消耗品
-          cbFunc(btnID);
+
+        // ボタンを押した
+        switch(_mode) {
+          case MODE_NORMAL:
+            if(ItemUtil.isEquip(item.id)) {
+              // 装備品
+              _toggleEquip(btnID, actor);
+            }
+            else {
+              // 消耗品
+              cbFunc(btnID);
+              // UIを閉じる
+              _close();
+            }
+          case MODE_DROP:
+            // 捨てる
+            cbFunc(btnID);
+            // UIを閉じる
+            _close();
         }
       });
       // 要素番号を入れておく
@@ -154,6 +190,8 @@ class InventroyUI extends FlxSpriteGroup {
       var py = BTN_Y + BTN_DY*2;
       var btn = new MyButton(px, py, "CANCEL", function() {
         cbFunc(CMD_CANCEL);
+        // UIを閉じる
+        _close();
       });
       btn.ID = BTN_ID_CANCEL;
       _btnList.push(btn);
@@ -315,5 +353,14 @@ class InventroyUI extends FlxSpriteGroup {
 
     // ボタンを選択していないので非表示
     _detailUI.visible = false;
+  }
+
+  /**
+   * UIを閉じる
+   **/
+  private function _close():Void {
+    kill();
+    FlxG.state.remove(this);
+    _instance = null;
   }
 }

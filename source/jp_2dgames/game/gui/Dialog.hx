@@ -19,6 +19,10 @@ class Dialog extends FlxGroup {
   public static inline var SELECT2:Int = 2; // 2択ダイアログ
   public static inline var SELECT3:Int = 3; // 3択ダイアログ
 
+  // 選択した項目
+  public static inline var BTN_YES:Int = 0; // はい
+  public static inline var BTN_NO:Int  = 1; // いいえ
+
   // 幅
   private static inline var WIDTH:Int = 64;
 

@@ -27,7 +27,6 @@ class BtlCmdUI extends FlxSpriteGroup {
   private static inline var BTN_DY = MyButton.HEIGHT + 2;
 
   // ■メンバ変数
-  private var _inventoryUI:InventroyUI = null;
   private var _cbItem:Int->Void = null;
 
   /**
@@ -124,8 +123,7 @@ class BtlCmdUI extends FlxSpriteGroup {
    * インベントリUIを表示する
    **/
   private function _displayInventoryUI(actor:Actor):Void {
-    _inventoryUI = new InventroyUI(_cbItemSelect, actor);
-    FlxG.state.add(_inventoryUI);
+    InventoryUI.open(_cbItemSelect, actor);
     // 自身は非表示
     visible = false;
   }
@@ -135,11 +133,7 @@ class BtlCmdUI extends FlxSpriteGroup {
    **/
   private function _cbItemSelect(btnID:Int):Void {
 
-    // アイテム選択UIを非表示
-    FlxG.state.remove(_inventoryUI);
-    _inventoryUI.kill();
-
-    if(btnID == InventroyUI.CMD_CANCEL) {
+    if(btnID == InventoryUI.CMD_CANCEL) {
       // キャンセルしたのでコマンドUIを再び表示
       _display();
       return;

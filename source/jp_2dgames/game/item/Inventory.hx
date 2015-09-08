@@ -8,7 +8,7 @@ import jp_2dgames.game.actor.Actor;
 class Inventory {
 
   // アイテム所持最大数
-  private static inline var LIMIT_FIRST:Int = 24;
+  private static inline var LIMIT_FIRST:Int = 16;
 
   // ■static変数
   // シングルトン
