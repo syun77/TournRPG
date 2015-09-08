@@ -40,7 +40,7 @@ class MyButton extends FlxTypedButton<FlxText> {
   public var text(get, set):String;
 
   private var _enabled:Bool = true;
-  public var enable(never, set):Bool;
+  public var enable(get, set):Bool;
   private function set_enable(b:Bool):Bool {
     _enabled = b;
     if(b) {
@@ -53,6 +53,9 @@ class MyButton extends FlxTypedButton<FlxText> {
       label.color = MyColor.BTN_DISABLE_LABEL;
     }
     return b;
+  }
+  private function get_enable():Bool {
+    return _enabled;
   }
 
   /**

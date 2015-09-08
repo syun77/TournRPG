@@ -41,7 +41,7 @@ class MyColor {
   public static inline var BTN_DEFAULT_LABEL = FlxColor.BLACK;
 
   // ボタン(無効)
-  public static inline var BTN_DISABLE       = FlxColor.WHITE;
+  public static inline var BTN_DISABLE       = FlxColor.GRAY;
   public static inline var BTN_DISABLE_LABEL = FlxColor.BLACK;
 
   // ボタン(装備)
