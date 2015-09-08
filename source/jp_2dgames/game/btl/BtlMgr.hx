@@ -35,6 +35,7 @@ private enum State {
 
   BtlWin;       // 勝利
   BtlLose;      // 敗北
+  Escape;       // 逃走成功
 
   Result;       // リザルト
   End;          // おしまい
@@ -118,7 +119,7 @@ class BtlMgr {
       cmd = BtlCmd.Item(item, null, 0);
     }
     else if(FlxG.keys.justPressed.B) {
-      cmd = BtlCmd.Escape;
+      cmd = BtlCmd.Escape(true);
     }
 
     if(cmd != BtlCmd.None) {
@@ -224,8 +225,14 @@ class BtlMgr {
         }
 
       case State.LogicEnd:
-        // 死亡チェックへ
-        _change(State.DeadCheck);
+        if(_logicPlayer.isEscape()) {
+          // 逃走した
+          _change(State.Escape);
+        }
+        else {
+          // 死亡チェックへ
+          _change(State.DeadCheck);
+        }
 
       case State.DeadCheck:
         // 死亡チェック
@@ -244,6 +251,8 @@ class BtlMgr {
       case State.BtlWin:
         _change(State.Result);
       case State.BtlLose:
+        _change(State.Result);
+      case State.Escape:
         _change(State.Result);
 
       case State.Result:
@@ -264,7 +273,7 @@ class BtlMgr {
     var actor = ActorMgr.searchDead();
     if(actor != null) {
       // 誰か死亡した
-      ActorMgr.moveDeadPool(actor);
+      ActorMgr.moveGrave(actor);
       if(ActorMgr.countGroup(BtlGroup.Enemy) == 0) {
         // 敵が全滅
         Message.push2(Msg.BATTLE_WIN);

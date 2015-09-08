@@ -13,7 +13,8 @@ class ActorMgr  {
   static inline var MAX:Int = 16;
 
   static var _instance:FlxTypedGroup<Actor> = null;
-  static var _deadPool:Array<Actor> = null;
+  // 墓地
+  static var _graves:Array<Actor> = null;
 
   /**
    * 生成
@@ -28,7 +29,7 @@ class ActorMgr  {
       state.add(_instance);
 
       // 死亡リスト
-      _deadPool = new Array<Actor>();
+      _graves = new Array<Actor>();
     }
   }
 
@@ -135,15 +136,16 @@ class ActorMgr  {
   }
 
   /**
-   * 死亡リストに移動する
+   * 墓場に移動する
    **/
-  public static function moveDeadPool(actor:Actor):Void {
+  public static function moveGrave(actor:Actor):Void {
     if(actor.group == BtlGroup.Enemy) {
       Message.push2(4, [actor.name]);
     }
 
     actor.kill();
-    _deadPool.push(actor);
+    // 墓場送り
+    _graves.push(actor);
   }
 
   /**

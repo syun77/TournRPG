@@ -84,7 +84,7 @@ class BtlCmdUI extends FlxSpriteGroup {
 
     px += BTN_DX;
     btnList.add(new MyButton(px, py, "ESCAPE", function() {
-      cbFunc(actor, BtlCmd.Escape);
+      cbFunc(actor, BtlCmd.Escape(true));
     }));
 
     for(btn in btnList) {

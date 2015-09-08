@@ -11,5 +11,5 @@ enum BtlCmd {
   Attack(range:BtlRange, targetID:Int);              // 通常攻撃
   Skill(skillID:Int, range:BtlRange, targetID:Int);  // スキル
   Item(item:ItemData, range:BtlRange, targetID:Int); // アイテム
-  Escape;                                            // 逃走
+  Escape(bSuccess:Bool);                             // 逃走
 }

@@ -78,8 +78,9 @@ class BtlLogicUtil {
    * 逃走をする
    **/
   private static function _createEscape(actor:Actor):BtlLogicData {
-    // TODO: 未実装
-    var eft = new BtlLogicData(actor.ID, actor.group, BtlCmd.Escape);
+    // TODO: 逃走確率チェック
+    var bSuccess:Bool = true;
+    var eft = new BtlLogicData(actor.ID, actor.group, BtlCmd.Escape(bSuccess));
     return eft;
   }
 

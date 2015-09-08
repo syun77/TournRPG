@@ -150,4 +150,16 @@ class BtlLogicPlayer {
   public function isEnd():Bool {
     return _state == State.End;
   }
+
+  /**
+   * 逃走に成功したかどうか
+   **/
+  public function isEscape():Bool {
+    switch(_data.cmd) {
+      case BtlCmd.Escape(bSuccess):
+        return bSuccess;
+      default:
+        return false;
+    }
+  }
 }
