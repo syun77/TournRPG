@@ -150,7 +150,7 @@ class ItemUtil {
         // 薬
         var val = ItemUtil.getParam(item.id, "hp");
         if(val > 0) {
-          actor.addHp(val);
+          actor.recoverHp(val);
           Message.push2(Msg.RECOVER_HP, [actor.name, val]);
         }
 

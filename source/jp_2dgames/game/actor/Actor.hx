@@ -105,7 +105,7 @@ class Actor extends FlxSprite {
    * HP回復
    * @param val 回復する値
    **/
-  public function addHp(val:Int):Void {
+  public function recoverHp(val:Int):Void {
     _param.hp += val;
     _clampHp();
   }
@@ -208,53 +208,6 @@ class Actor extends FlxSprite {
   }
   public function resetCommand():Void {
     _cmd = BtlCmd.None;
-  }
-
-  /**
-   * 攻撃対象をランダムで選ぶ
-   **/
-  private function _attackRandom():Void {
-    // 対抗グループを取得する
-    var grp = BtlGroupUtil.getAgaint(_group);
-
-    // 攻撃対象を取得する
-    var target = ActorMgr.random(grp);
-    if(target != null) {
-      // ダメージ計算
-      var val = Calc.damage(this, target);
-      target.damage(val);
-    }
-  }
-
-  /**
-   * 行動実行
-   **/
-  public function exec():BtlCmd {
-
-    /*
-    switch(_cmd) {
-      case BtlCmd.None:
-        // 通常ここにくることはない
-
-      case BtlCmd.Attack:
-        // 通常攻撃
-        _attackRandom();
-
-      case BtlCmd.Skill(id):
-        // スキルを使う
-
-      case BtlCmd.Item(id):
-        // アイテムを使う
-        Inventory.useItem(this, id);
-
-      case BtlCmd.Escape:
-    }
-
-    // 行動完了
-    _change(State.ActEnd);
-    */
-
-    return _cmd;
   }
 
   /**

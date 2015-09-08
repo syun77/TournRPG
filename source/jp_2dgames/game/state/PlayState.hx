@@ -1,5 +1,10 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
+import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.logic.BtlLogicMgr;
 import jp_2dgames.game.btl.BtlBg;
 import jp_2dgames.game.btl.BtlMgr;
@@ -97,6 +102,7 @@ class PlayState extends FlxState {
       throw "Terminate.";
     }
     #end
+
     #if debug
     if(FlxG.keys.justPressed.R) {
       FlxG.resetState();
@@ -105,9 +111,23 @@ class PlayState extends FlxState {
       // キャラクターパラメータ閲覧
       _debugActor.toggle();
     }
-    if(FlxG.keys.justPressed.W) {
-      // アイテムデバッグ出力
-      Inventory.dumpItemList();
+    if(FlxG.keys.justPressed.F) {
+      // 自爆
+      ActorMgr.forEachAliveGroup(BtlGroup.Player, function(actor:Actor) {
+        actor.damage(9999);
+      });
+    }
+    if(FlxG.keys.justPressed.D) {
+      // 敵を全滅
+      ActorMgr.forEachAliveGroup(BtlGroup.Enemy, function(actor:Actor) {
+        actor.damage(9999);
+      });
+    }
+    if(FlxG.keys.justPressed.H) {
+      // HP回復
+      ActorMgr.forEachAliveGroup(BtlGroup.Player, function(actor:Actor) {
+        actor.recoverHp(9999);
+      });
     }
     #end
   }

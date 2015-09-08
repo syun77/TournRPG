@@ -201,9 +201,11 @@ class BtlMgr {
         FlxG.state.add(_btlCmdUI);
         _change(State.InputCommand);
 
+        /*
         Dialog.open(Dialog.YESNO, UIMsg.get(UIMsg.ITEM_CHANGE), null, function(btnID:Int) {
           trace('press: ${btnID}');
         });
+        */
 
       case State.InputCommand:
         // コマンド入力待ち
