@@ -1,5 +1,8 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.game.item.ItemUtil;
+import jp_2dgames.game.item.ItemConst;
+import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.btl.logic.BtlLogicUtil;
 import jp_2dgames.game.btl.logic.BtlLogicMgr;
 import jp_2dgames.game.btl.types.BtlRange;
@@ -38,6 +41,7 @@ private enum State {
   Escape;       // 逃走成功
 
   Result;       // リザルト
+  ResultWait;   // リザルト・ボタン入力待ち
   End;          // おしまい
 }
 
@@ -256,6 +260,24 @@ class BtlMgr {
         _change(State.Result);
 
       case State.Result:
+        // アイテム入手
+        var items = new Array<ItemData>();
+        ActorMgr.forEachGrave(function(actor:Actor) {
+          if(actor.group == BtlGroup.Enemy) {
+            var item = new ItemData(ItemConst.POTION01);
+            items.push(item);
+          }
+        });
+
+        for(item in items) {
+          var name = ItemUtil.getName(item);
+          Message.push2(Msg.ITEM_GET, [name]);
+          Inventory.push(item);
+        }
+
+        _change(State.ResultWait);
+
+      case State.ResultWait:
         if(Input.press.A) {
           // プレイヤーパラメータをグローバルに戻しておく
           Global.setPlayerHp(_player.hp);

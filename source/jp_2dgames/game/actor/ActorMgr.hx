@@ -149,6 +149,15 @@ class ActorMgr  {
   }
 
   /**
+   * 墓場にいるActorをすべて実行する
+   **/
+  public static function forEachGrave(func:Actor->Void):Void {
+    for(actor in _graves) {
+      func(actor);
+    }
+  }
+
+  /**
    * 指定のグループの生存数を取得する
    **/
   public static function countGroup(group:BtlGroup):Int {
