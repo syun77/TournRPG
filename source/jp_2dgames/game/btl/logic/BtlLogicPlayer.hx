@@ -23,8 +23,6 @@ private enum State {
  **/
 class BtlLogicPlayer {
 
-  static inline var TIMER_WAIT:Int = 30;
-
   // 演出情報
   var _data:BtlLogicData;
   // 状態
@@ -59,7 +57,7 @@ class BtlLogicPlayer {
 
     // メイン処理へ
     _state = State.Main;
-    _tWait = TIMER_WAIT;
+    _tWait = Reg.TIMER_WAIT;
   }
 
   /**
@@ -104,7 +102,7 @@ class BtlLogicPlayer {
     }
 
     _state = State.Wait;
-    _tWait = TIMER_WAIT;
+    _tWait = Reg.TIMER_WAIT;
   }
 
   private function _checkWait():Bool {

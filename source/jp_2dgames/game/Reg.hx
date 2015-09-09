@@ -15,6 +15,9 @@ class Reg {
   public static inline var FONT_SIZE = 20;
   public static inline var FONT_SIZE_S = 10;
 
+  // メッセージウェイト
+  public static inline var TIMER_WAIT:Int = 30; // 0.5秒
+
   // メッセージウィンドウ
   public static inline var PATH_MSG = "assets/images/ui/message.png";
   // メッセージテキスト背景

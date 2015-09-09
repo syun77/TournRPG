@@ -24,7 +24,7 @@ class Dialog extends FlxGroup {
   public static inline var BTN_NO:Int  = 1; // いいえ
 
   // 幅
-  private static inline var WIDTH:Int = 64;
+  private static inline var HEIGHT:Int = 64;
 
   // 3択ダイアログのオフセット座標(Y)
   private static inline var SELECT3_OFS_Y:Int = 24;
@@ -53,7 +53,7 @@ class Dialog extends FlxGroup {
 
     var px = FlxG.width/2;
     var py = FlxG.height/2;
-    var height = WIDTH;
+    var height = HEIGHT;
     if(type == SELECT3) {
       // 広げる
       height = SELECT3_OFS_Y;
@@ -78,7 +78,7 @@ class Dialog extends FlxGroup {
     spr.x -= width;
     spr.alpha = 0.5;
     spr.scale.set(0.2, 1);
-    FlxTween.tween(spr.scale, {x:1}, 0.2, {ease:FlxEase.expoOut});
+    FlxTween.tween(spr.scale, {x:1}, 0.5, {ease:FlxEase.expoOut});
 
     // 選択肢
     var py2 = FlxG.height / 2;

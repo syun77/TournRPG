@@ -1,5 +1,6 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.lib.Input;
 import flixel.FlxG;
 import jp_2dgames.game.gui.InventoryUI;
 import jp_2dgames.game.gui.UIMsg;
@@ -13,11 +14,13 @@ import jp_2dgames.game.actor.ActorMgr;
  * 状態
  **/
 private enum State {
-  Pickup;    // アイテムを拾う
-  CantGetDialog; // アイテムが一杯で拾えなかった
-  ItemDel; // アイテムを捨てる
-  ItemDelUI; // アイテムを捨てるUI表示中
-  End;     // 終了
+  Pickup;        // アイテムを拾う
+  PickupCheck;   // アイテム拾えるかチェック
+  CantGet;       // アイテムが一杯で拾えない
+  CantGetDialog; // アイテムが一杯で拾えなかったダイアログ
+  ItemDel;       // アイテムを捨てる
+  ItemDelUI;     // アイテムを捨てるUI表示中
+  End;           // 終了
 }
 
 /**
@@ -37,8 +40,12 @@ private class ItemDropInfo {
  **/
 class ItemGet {
 
+  // ■メンバ変数
   // 状態
   var _state:State = State.Pickup;
+
+  // 停止タイマー
+  var _tWait:Int = 0;
 
   // 獲得したアイテム
   var _infos:List<ItemDropInfo>;
@@ -70,15 +77,38 @@ class ItemGet {
     }
   }
 
+  private function _checkWait():Bool {
+    if(_tWait > 0) {
+      _tWait--;
+      if(Input.press.A) {
+        // 演出ウェイトスキップ
+        _tWait = 0;
+      }
+      if(_tWait > 0) {
+        // 停止中
+        return true;
+      }
+    }
+
+    // 停止しない
+    return false;
+  }
+
   /**
    * 更新
    **/
   public function update():Void {
+
+    if(_checkWait()) {
+      // 停止中
+      return;
+    }
+
     switch(_state) {
       case State.Pickup:
         _nowInfo = _infos.pop();
         if(_nowInfo == null) {
-          // おしまい
+          // 拾えるアイテムがないのでおしまい
           _state = State.End;
           return;
         }
@@ -88,31 +118,43 @@ class ItemGet {
 
         // ドロップメッセージの表示
         Message.push2(Msg.ITEM_DROP, [_nowInfo.name, name]);
+        _tWait = Reg.TIMER_WAIT;
+        _state = State.PickupCheck;
 
+      case State.PickupCheck:
+        // アイテム名
+        var name = ItemUtil.getName(_nowInfo.item);
         if(Inventory.isFull()) {
           // アイテムが一杯で拾えない
           Message.push2(Msg.ITEM_CANT_GET, [name]);
-
-          // YES/NOダイアログ表示
-          var msg = UIMsg.get2(UIMsg.ITEM_CHANGE, [name]);
-          Dialog.open(Dialog.YESNO, msg, null, function(btnID:Int) {
-            if(btnID == Dialog.BTN_YES) {
-              // アイテムを捨てて拾う
-              _state = State.ItemDel;
-            }
-            else {
-              // アイテムをあきらめる
-              Message.push2(Msg.ITEM_ABANDAN, [name]);
-              _state = State.End;
-            }
-            _state = State.ItemDel;
-          });
-          _state = State.CantGetDialog;
+          _state = State.CantGet;
+          _tWait = Reg.TIMER_WAIT*3;
         }
         else {
           // 拾えたので次へ進む
+          Message.push2(Msg.ITEM_GET, [name]);
           _state = State.Pickup;
         }
+
+      case State.CantGet:
+        // アイテムが拾えない
+        var name = ItemUtil.getName(_nowInfo.item);
+
+        // YES/NOダイアログ表示
+        var msg = UIMsg.get2(UIMsg.ITEM_CHANGE, [name]);
+        Dialog.open(Dialog.YESNO, msg, null, function(btnID:Int) {
+          if(btnID == Dialog.BTN_YES) {
+            // アイテムを捨てて拾う
+            Message.push2(Msg.ITEM_SEL_DEL);
+            _state = State.ItemDel;
+          }
+          else {
+            // アイテムをあきらめる
+            Message.push2(Msg.ITEM_ABANDAN, [name]);
+            _state = State.Pickup;
+          }
+        });
+        _state = State.CantGetDialog;
 
       case State.CantGetDialog:
 
@@ -122,7 +164,7 @@ class ItemGet {
         ui = new InventoryUI(function(idx:Int) {
           if(idx == InventoryUI.CMD_CANCEL) {
             // キャンセル
-            _state = State.End;
+            _state = State.CantGet;
             return;
           }
 

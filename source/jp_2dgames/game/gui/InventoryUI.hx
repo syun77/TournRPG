@@ -110,7 +110,9 @@ class InventoryUI extends FlxSpriteGroup {
 
     // 装備情報
     _equipUI = new EquipUI();
-    FlxG.state.add(_equipUI);
+    if(_mode == MODE_NORMAL) {
+      FlxG.state.add(_equipUI);
+    }
 
     // アイテム詳細
     _detailUI = new DetailUI();

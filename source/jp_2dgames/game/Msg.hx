@@ -14,5 +14,6 @@ class Msg {
   public static inline var ITEM_CANT_GET:Int = 12; // アイテムを入手できない
   public static inline var ITEM_DEL_GET:Int  = 13; // アイテムを捨てて拾う
   public static inline var ITEM_ABANDAN:Int  = 14; // アイテムをあきらめる
+  public static inline var ITEM_SEL_DEL:Int  = 15; // 捨てるアイテムを選択
 
 }

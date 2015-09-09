@@ -67,9 +67,6 @@ class BtlMgr {
   // 再生中のバトル演出
   var _logicPlayer:BtlLogicPlayer = null;
 
-  // 入力待ちとなるかどうか
-  var _bKeyWait:Bool = false;
-
   // 獲得したアイテム
   var _itemGet:ItemGet = null;
 
@@ -187,15 +184,6 @@ class BtlMgr {
    * 更新
    **/
   public function proc():Void {
-
-    if(_bKeyWait) {
-      // キー入力待ち
-      if(Input.press.A == false) {
-        return;
-      }
-      // キーを入力した
-      _bKeyWait = false;
-    }
 
     switch(_state) {
       case State.None:
