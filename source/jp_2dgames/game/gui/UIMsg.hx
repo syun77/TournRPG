@@ -31,7 +31,7 @@ class UIMsg {
   public static function get2(ID:Int, args:Array<Dynamic>):String {
     var msg = get(ID);
     if(args != null) {
-      var idx:Int = 0;
+      var idx:Int = 1;
       for(val in args) {
         msg = StringTools.replace(msg, '<val${idx}>', '${val}');
         idx++;
