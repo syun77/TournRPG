@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.actor.TempActorMgr;
 import jp_2dgames.game.save.Save;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.Actor;
@@ -69,6 +70,7 @@ class PlayState extends FlxState {
 
     BtlLogicMgr.destroy();
     ActorMgr.destroy();
+    TempActorMgr.destroy();
     Message.instance = null;
 
     super.destroy();

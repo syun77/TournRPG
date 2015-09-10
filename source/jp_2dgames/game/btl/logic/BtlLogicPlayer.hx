@@ -53,6 +53,9 @@ class BtlLogicPlayer {
         Message.push2(Msg.ITEM_USE, [name]);
       case BtlCmd.Escape:
         Message.push2(Msg.ESCAPE, [actor.name]);
+      case BtlCmd.Dead:
+        ActorMgr.moveGrave(actor);
+        Message.push2(Msg.DEFEAT_ENEMY, [actor.name]);
     }
 
     // メイン処理へ
@@ -99,6 +102,8 @@ class BtlLogicPlayer {
         ItemUtil.use(actor, item);
 
       case BtlCmd.Escape:
+
+      case BtlCmd.Dead:
     }
 
     _state = State.Wait;

@@ -3,6 +3,10 @@ package jp_2dgames.game.btl.logic;
 /**
  * バトル演出管理(キュー)
  **/
+import jp_2dgames.game.actor.ActorMgr;
+import haxe.ds.ArraySort;
+import jp_2dgames.game.actor.TempActorMgr;
+import jp_2dgames.game.actor.Actor;
 class BtlLogicMgr {
   private static var _instance:BtlLogicMgr = null;
 
@@ -26,6 +30,44 @@ class BtlLogicMgr {
   }
   private function _pop():BtlLogicData {
     return _pool.pop();
+  }
+
+  /**
+   * 演出データ作成
+   **/
+  public static function createLogic():Void {
+    _instance._createLogic();
+  }
+  private function _createLogic():Void {
+
+    // ActorMgrから情報をコピーする
+    TempActorMgr.copyFromActorMgr();
+
+    // 行動順の決定
+    var actorList = TempActorMgr.getAlive();
+    ArraySort.sort(actorList, function(a:Actor, b:Actor) {
+      // 移動速度で降順ソート
+      return a.agi - b.agi;
+    });
+
+    for(actor in actorList) {
+      var eft = BtlLogicUtil.create(actor);
+      push(eft);
+
+      // 死亡チェック
+      var idx = ActorMgr.MAX;
+      while(idx > 0) {
+        var actor2 = TempActorMgr.searchDead();
+        if(actor2 == null) {
+          break;
+        }
+        var eft = BtlLogicUtil.createDead(actor2);
+        push(eft);
+        TempActorMgr.moveGrave(actor2);
+        idx--;
+      }
+
+    }
   }
 
   // ■メンバ変数

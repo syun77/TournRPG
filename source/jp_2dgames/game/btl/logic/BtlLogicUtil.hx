@@ -1,8 +1,8 @@
 package jp_2dgames.game.btl.logic;
+import jp_2dgames.game.actor.TempActorMgr;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.btl.logic.BtlLogicData;
-import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.btl.types.BtlCmd;
 import jp_2dgames.game.actor.Actor;
 
@@ -32,7 +32,7 @@ class BtlLogicUtil {
         // 逃走演出の作成
         return _createEscape(actor);
 
-      case BtlCmd.None:
+      case BtlCmd.Dead, BtlCmd.None:
         // 通常ありえない
         return null;
     }
@@ -46,11 +46,14 @@ class BtlLogicUtil {
     eft.setTarget(range, targetID);
 
     // 対象を取得
-    var target = ActorMgr.search(targetID);
+    var target = TempActorMgr.search(targetID);
     // ダメージ計算
     var val = Calc.damage(actor, target);
     // HPダメージ
     eft.val = BtlLogicVal.HpDamage(val);
+
+    // ダメージを与えておく
+    target.damage(val, false);
 
     return eft;
   }
@@ -82,6 +85,13 @@ class BtlLogicUtil {
     var bSuccess:Bool = true;
     var eft = new BtlLogicData(actor.ID, actor.group, BtlCmd.Escape(bSuccess));
     return eft;
+  }
+
+  /**
+   * 死亡演出
+   **/
+  public static function createDead(actor:Actor):BtlLogicData {
+    return new BtlLogicData(actor.ID, actor.group, BtlCmd.Dead);
   }
 
 }

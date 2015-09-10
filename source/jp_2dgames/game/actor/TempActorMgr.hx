@@ -1,38 +1,43 @@
 package jp_2dgames.game.actor;
 
+import flixel.util.FlxRandom;
 import jp_2dgames.game.btl.BtlGroupUtil;
-import flixel.FlxState;
+import flixel.group.FlxTypedGroup;
 
 /**
- * キャラクター管理
+ * キャラクター管理のテンポラリ
  **/
-class ActorMgr  {
+class TempActorMgr {
   // 生成インスタンス数
-  public static inline var MAX:Int = 16;
+  static inline var MAX = ActorMgr.MAX;
 
-  static var _pool:ActorPool = null;
+  static var _pool:ActorPool;
 
   /**
-   * 生成
+   * ActorMgrから情報をコピーする
    **/
-  public static function create(state:FlxState) {
-    if(_pool == null) {
-      _pool = new ActorPool(state, MAX);
-    }
+  public static function copyFromActorMgr() {
+
+    // Actor情報をコピー
+    _pool = new ActorPool(null, ActorMgr.MAX);
+    ActorMgr.forEachAlive(function(actor:Actor) {
+      var act = _pool.recycle(actor.group, actor.param);
+      act.copy(actor);
+    });
+
+    // 墓場情報もコピー
+    ActorMgr.forEachGrave(function(actor:Actor) {
+      var act = new Actor(0);
+      act.copy(actor);
+      moveGrave(act);
+    });
   }
 
   /**
-   * 末期化
+   * 破棄
    **/
   public static function destroy() {
     _pool = null;
-  }
-
-  /**
-   * インスタンスを新規に取得
-   **/
-  public static function recycle(group:BtlGroup, param:Params):Actor {
-    return _pool.recycle(group, param);
   }
 
   /**
@@ -57,24 +62,10 @@ class ActorMgr  {
   }
 
   /**
-   * Actorをすべて実行
-  */
-  public static function forEach(func:Actor->Void):Void {
-    _pool.forEach(func);
-  }
-
-  /**
    * 生存している指定のグループをすべて実行
    **/
   public static function forEachAliveGroup(group:BtlGroup, func:Actor->Void):Void {
     _pool.forEachAliveGroup(group, func);
-  }
-
-  /**
-   * 生存しているActorから条件に一致した最初のActorを取得する
-   **/
-  public static function forEachAliveFirstIf(func:Actor->Bool):Actor {
-    return _pool.forEachAliveFirstIf(func);
   }
 
   /**
@@ -106,23 +97,9 @@ class ActorMgr  {
   }
 
   /**
-   * 墓場から指定のActorを探す
-   **/
-  public static function searchGrave(id:Int):Actor {
-    return _pool.searchGrave(id);
-  }
-
-  /**
    * 指定のグループの生存数を取得する
    **/
   public static function countGroup(group:BtlGroup):Int {
     return _pool.countGroup(group);
-  }
-
-  /**
-   * 敵のAIを設定する
-   **/
-  public static function requestEnemyAI():Void {
-    _pool.requestEnemyAI();
   }
 }

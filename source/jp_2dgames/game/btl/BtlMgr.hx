@@ -1,13 +1,8 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.game.actor.TempActorMgr;
 import jp_2dgames.game.item.ResultSequence;
-import jp_2dgames.game.gui.InventoryUI;
-import jp_2dgames.game.gui.UIMsg;
-import jp_2dgames.game.gui.Dialog;
-import jp_2dgames.game.item.ItemUtil;
-import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.item.ItemData;
-import jp_2dgames.game.btl.logic.BtlLogicUtil;
 import jp_2dgames.game.btl.logic.BtlLogicMgr;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.btl.logic.BtlLogicPlayer;
@@ -19,7 +14,6 @@ import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.BtlGroupUtil;
-import haxe.ds.ArraySort;
 import jp_2dgames.lib.Input;
 import flixel.FlxG;
 
@@ -61,7 +55,6 @@ class BtlMgr {
   var _state:State = State.None;
   var _statePrev:State = State.None;
 
-  var _actorList:Array<Actor> = null;
   var _btlCmdUI:BtlCmdUI = null;
 
   // 再生中のバトル演出
@@ -155,26 +148,16 @@ class BtlMgr {
     _btlCmdUI.kill();
     _btlCmdUI = null;
 
-    // 行動順の決定
-    _actorList = ActorMgr.getAlive();
-    ArraySort.sort(_actorList, function(a:Actor, b:Actor) {
-      // 移動速度で降順ソート
-      return a.agi - b.agi;
-    });
-
     // 演出リストの作成開始
     _change(State.LogicCreate);
   }
 
   /**
-   * ボトル演出のリスト作成
+   * バトル演出のリスト作成
    **/
-  private function _createEffect():Void {
+  private function _createLogic():Void {
 
-    for(actor in _actorList) {
-      var eft = BtlLogicUtil.create(actor);
-      BtlLogicMgr.push(eft);
-    }
+    BtlLogicMgr.createLogic();
 
     // 演出作成開始
     _change(State.LogicBegin);
@@ -200,7 +183,8 @@ class BtlMgr {
         _debugProcInputCommand();
 
       case State.LogicCreate:
-        _createEffect();
+        // ロジック生成
+        _createLogic();
 
       case State.LogicBegin:
         var logic = BtlLogicMgr.pop();
@@ -236,7 +220,7 @@ class BtlMgr {
 
       case State.DeadCheck:
         // 死亡チェック
-        if(_procDeadCheck()) {
+        if(_checkBtlEnd()) {
           // 戦闘終了
         }
         else {
@@ -279,25 +263,20 @@ class BtlMgr {
   }
 
   /**
-   * 死亡チェック
+   * 戦闘終了チェック
    **/
-  private function _procDeadCheck():Bool {
-    var actor = ActorMgr.searchDead();
-    if(actor != null) {
-      // 誰か死亡した
-      ActorMgr.moveGrave(actor);
-      if(ActorMgr.countGroup(BtlGroup.Enemy) == 0) {
-        // 敵が全滅
-        Message.push2(Msg.BATTLE_WIN);
-        _change(State.BtlWin);
-        return true;
-      }
-      if(ActorMgr.countGroup(BtlGroup.Player) == 0) {
-        // 味方が全滅
-        Message.push2(Msg.BATTLE_LOSE);
-        _change(State.BtlLose);
-        return true;
-      }
+  private function _checkBtlEnd():Bool {
+    if(ActorMgr.countGroup(BtlGroup.Enemy) == 0) {
+      // 敵が全滅
+      Message.push2(Msg.BATTLE_WIN);
+      _change(State.BtlWin);
+      return true;
+    }
+    if(ActorMgr.countGroup(BtlGroup.Player) == 0) {
+      // 味方が全滅
+      Message.push2(Msg.BATTLE_LOSE);
+      _change(State.BtlLose);
+      return true;
     }
 
     // 戦闘続く

@@ -168,14 +168,23 @@ class Actor extends FlxSprite {
     _change(State.Standby);
 
     if(id < 2) {
-      FlxG.watch.add(this, "_state");
+//      FlxG.watch.add(this, "_state");
     }
+  }
+
+  /**
+   * パラメータをコピーする
+   **/
+  public function copy(actor:Actor):Void {
+    _idx = actor._idx;
+    _cmd = actor.cmd;
+    init(actor.group, actor.param, false);
   }
 
   /**
    * 初期化
    **/
-  public function init(group:BtlGroup, params:Params):Void {
+  public function init(group:BtlGroup, params:Params, bCreate:Bool=true):Void {
     ID = _idx + BtlGroupUtil.getOffsetID(group);
     _group = group;
     if(params != null) {
@@ -184,10 +193,12 @@ class Actor extends FlxSprite {
 
     if(_group == BtlGroup.Enemy) {
       // 敵の場合の処理
-      _initEnemy();
+      if(bCreate) {
+        _initEnemy();
+      }
     }
     else {
-      FlxG.watch.add(this, "_cmd");
+//      FlxG.watch.add(this, "_cmd");
     }
   }
 
@@ -241,24 +252,28 @@ class Actor extends FlxSprite {
   /**
    * ダメージを与える
    **/
-  public function damage(v:Int):Bool {
+  public function damage(v:Int, bEffect:Bool=true):Bool {
     _param.hp -= v;
     _clampHp();
 
-    // ダメージメッセージ表示
-    if(_group == BtlGroup.Player) {
-      // プレイヤーにダメージ
-      Message.push2(Msg.DAMAGE_PLAYER, [_name, v]);
-      // 画面を揺らす
-      var intensity = 0.1 * v / hpmax;
-      var duration  = 0.3;
-      FlxG.camera.shake(intensity, duration);
-    }
-    else {
-      // 敵にダメージ
-      Message.push2(Msg.DAMAGE_ENEMY, [_name, v]);
-      // 揺らす
-      _tShake = TIMER_SHAKE;
+    if(bEffect) {
+
+      // 演出あり
+      // ダメージメッセージ表示
+      if(_group == BtlGroup.Player) {
+        // プレイヤーにダメージ
+        Message.push2(Msg.DAMAGE_PLAYER, [_name, v]);
+        // 画面を揺らす
+        var intensity = 0.1 * v / hpmax;
+        var duration  = 0.3;
+        FlxG.camera.shake(intensity, duration);
+      }
+      else {
+        // 敵にダメージ
+        Message.push2(Msg.DAMAGE_ENEMY, [_name, v]);
+        // 揺らす
+        _tShake = TIMER_SHAKE;
+      }
     }
 
     return isDead();
