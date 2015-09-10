@@ -12,6 +12,8 @@ class Params {
   public var str:Int   = 5;   // 力
   public var vit:Int   = 5;   // 耐久力
   public var agi:Int   = 5;   // 素早さ
+  public var xp:Int    = 10;  // 経験値
+  public var money:Int = 100; // 所持金
 
   public function new() {
   }
@@ -24,5 +26,7 @@ class Params {
     str   = p.str;
     vit   = p.vit;
     agi   = p.agi;
+    xp    = p.xp;
+    money = p.money;
   }
 }

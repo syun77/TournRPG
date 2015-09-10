@@ -89,6 +89,17 @@ class Actor extends FlxSprite {
     return _param.agi;
   }
 
+  // 所持金
+  public var money(get, never):Int;
+  private function get_money() {
+    return _param.money;
+  }
+  // 経験値
+  public var xp(get, never):Int;
+  private function get_xp() {
+    return _param.xp;
+  }
+
   /**
    * HPが最大値・最小値を超えないように丸める
    **/

@@ -14,6 +14,8 @@ import jp_2dgames.game.actor.ActorMgr;
  * 状態
  **/
 private enum State {
+  Money;         // お金
+  Xp;            // 経験値
   Pickup;        // アイテムを拾う
   PickupCheck;   // アイテム拾えるかチェック
   CantGet;       // アイテムが一杯で拾えない
@@ -42,10 +44,16 @@ class ItemGet {
 
   // ■メンバ変数
   // 状態
-  var _state:State = State.Pickup;
+  var _state:State = State.Money;
 
   // 停止タイマー
   var _tWait:Int = 0;
+
+  // 獲得したお金
+  var _moeny:Int = 0;
+
+  // 獲得した経験値
+  var _xp:Int = 0;
 
   // 獲得したアイテム
   var _infos:List<ItemDropInfo>;
@@ -57,26 +65,31 @@ class ItemGet {
    * コンストラクタ
    **/
   public function new() {
+
     // アイテム入手
+    _moeny = 0;
+    _xp    = 0;
     _infos = new List<ItemDropInfo>();
     ActorMgr.forEachGrave(function(actor:Actor) {
       if(actor.group == BtlGroup.Enemy) {
+        // お金
+        _moeny += actor.money;
+
+        // 経験値
+        _xp += actor.xp;
+
+        // アイテム
         var item = new ItemData(ItemConst.POTION01);
         var info = new ItemDropInfo(actor.name, item);
         _infos.push(info);
       }
     });
 
-    if(_infos.length > 0) {
-      // アイテムを拾う処理へ
-      _state = State.Pickup;
-    }
-    else {
-      // アイテムなし
-      _state = State.End;
-    }
   }
 
+  /**
+   * キー入力待ちであるかどうかをチェックする
+   **/
   private function _checkWait():Bool {
     if(_tWait > 0) {
       _tWait--;
@@ -105,6 +118,19 @@ class ItemGet {
     }
 
     switch(_state) {
+      case State.Money:
+        // お金
+        var str = '${_moeny}G';
+        Message.push2(Msg.ITEM_GET, [str]);
+        _tWait = Reg.TIMER_WAIT;
+        _state = State.Xp;
+
+      case State.Xp:
+        // 経験値
+        Message.push2(Msg.XP_GET, [_xp]);
+        _tWait = Reg.TIMER_WAIT;
+        _state = State.Pickup;
+
       case State.Pickup:
         _nowInfo = _infos.pop();
         if(_nowInfo == null) {
