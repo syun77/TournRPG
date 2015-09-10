@@ -1,14 +1,11 @@
 package jp_2dgames.game.state;
 
-import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
-import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
-import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
+import jp_2dgames.game.save.Save;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.logic.BtlLogicMgr;
 import jp_2dgames.game.btl.BtlBg;
 import jp_2dgames.game.btl.BtlMgr;
-import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.DebugActor;
@@ -128,6 +125,14 @@ class PlayState extends FlxState {
       ActorMgr.forEachAliveGroup(BtlGroup.Player, function(actor:Actor) {
         actor.recoverHp(9999);
       });
+    }
+    if(FlxG.keys.justPressed.S) {
+      // セーブ
+      Save.save(true, true);
+    }
+    if(FlxG.keys.justPressed.A) {
+      // ロード
+      Save.load(true, true);
     }
     #end
   }

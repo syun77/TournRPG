@@ -18,7 +18,7 @@ class Params {
   public function new() {
   }
 
-  public function copy(p:Params):Void {
+  public function copy(p:Dynamic):Void {
     id    = p.id;
     lv    = p.lv;
     hp    = p.hp;

@@ -53,8 +53,13 @@ class Global {
   public static function getStage():Int {
     return _stage;
   }
+  // 次のステージに進める
   public static function nextStage():Void {
     _stage++;
+  }
+  // ステージ番号の設定
+  public static function setStage(val:Int):Void {
+    _stage = val;
   }
 
   // インベントリの初期化
@@ -65,6 +70,12 @@ class Global {
 
     // 初期アイテム
     Inventory.push(new ItemData(ItemConst.POTION01));
+  }
+
+  // アイテムリストを設定
+  public static function setItemList(array:Array<ItemData>):Void {
+    _itemList = array;
+    Inventory.create(_itemList);
   }
 
   // 所持金を取得する
@@ -78,5 +89,9 @@ class Global {
   // 所持金を減らす
   public static function useMoney(val:Int):Void {
     _money -= val;
+  }
+  // 所持金の設定
+  public static function setMoney(val:Int):Void {
+    _money = val;
   }
 }

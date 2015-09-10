@@ -31,6 +31,9 @@ class Reg {
   public static inline var PATH_CSV_ITEM_EQUIPMENT  = "assets/data/csv/item_equipment.csv";
   public static inline var PATH_CSV_UI_MSG  = "assets/data/csv/ui.csv";
 
+  // セーブデータ保存先
+  public static inline var PATH_SAVE = "/Users/syun/Desktop/TournRPG/save.txt";
+
   /**
    * 敵画像のパスを取得する
    **/

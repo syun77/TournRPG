@@ -30,6 +30,13 @@ class Inventory {
   }
 
   /**
+   * アイテムリストを設定する
+   **/
+  public static function setItemList(itemList:Array<ItemData>) {
+    _instance._init(itemList);
+  }
+
+  /**
    * インベントリにアイテムを追加する
    **/
   public static function push(itemData:ItemData):Void {
@@ -170,6 +177,13 @@ class Inventory {
    * コンストラクタ
    **/
   public function new(itemList:Array<ItemData>) {
+    _init(itemList);
+  }
+
+  /**
+   * 初期化
+   **/
+  private function _init(itemList:Array<ItemData>):Void {
     _itemList = itemList;
 
     // 何も装備していないときに返却するNULLオブジェクト
