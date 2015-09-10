@@ -104,6 +104,11 @@ class Actor extends FlxSprite {
   private function get_xp() {
     return _param.xp;
   }
+  // パラメータを取得する
+  public var param(get, never):Params;
+  private function get_param() {
+    return _param;
+  }
 
   /**
    * 経験値を増やす
@@ -299,5 +304,45 @@ class Actor extends FlxSprite {
     if(target != null) {
       _cmd = BtlCmd.Attack(BtlRange.One, target.ID);
     }
+  }
+
+  /**
+   * レベルアップのパラメータ上昇
+   **/
+  private function _levelup():Void {
+    _param.hpmax += PlayerInfo.get(lv, "hp");
+    _param.str   += PlayerInfo.get(lv, "str");
+    _param.vit   += PlayerInfo.get(lv, "vit");
+
+  }
+
+  /**
+   * レベルアップのチェック
+   **/
+  public function checkLevelup():Bool {
+    if(lv >= 99) {
+      // レベル99で打ち止め
+      return false;
+    }
+
+    var bLevelup = false;
+    // 次のレベルに必要な経験値を取得
+    var nextXp = PlayerInfo.get(lv+1, "exp");
+    while(xp >= nextXp) {
+      // レベルアップ
+      _param.lv++;
+      // パラメータ上昇
+      _levelup();
+
+      bLevelup = true;
+      if(lv >= 99) {
+        // レベル99で打ち止め
+        break;
+      }
+
+      nextXp = PlayerInfo.get(lv+1, "exp");
+    }
+
+    return bLevelup;
   }
 }

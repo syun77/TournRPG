@@ -15,6 +15,7 @@ class Msg {
   public static inline var ITEM_DEL_GET:Int  = 13; // アイテムを捨てて拾う
   public static inline var ITEM_ABANDAN:Int  = 14; // アイテムをあきらめる
   public static inline var ITEM_SEL_DEL:Int  = 15; // 捨てるアイテムを選択
-  public static inline var XP_GET:Int        = 16; // 経験値獲得
-
+  public static inline var XP_GET:Int        = 16; // 経験値を獲得
+  public static inline var LEVELUP:Int       = 17; // レベルアップ
+  public static inline var RECOVER_HP_ALL:Int= 18; // HP全回復
 }

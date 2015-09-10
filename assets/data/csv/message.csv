@@ -16,3 +16,5 @@ int,str,str
 14,<val1>をあきらめた,green
 15,捨てるアイテムを選択してください,white
 16,<val1>の経験値を獲得した,green
+17,<val1>はレベルアップした,orange
+18,<val1>はHPが全回復した,blue

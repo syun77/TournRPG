@@ -1,6 +1,6 @@
 package jp_2dgames.game.btl;
 
-import jp_2dgames.game.item.ItemGet;
+import jp_2dgames.game.item.ResultSequence;
 import jp_2dgames.game.gui.InventoryUI;
 import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.gui.Dialog;
@@ -68,7 +68,7 @@ class BtlMgr {
   var _logicPlayer:BtlLogicPlayer = null;
 
   // 獲得したアイテム
-  var _itemGet:ItemGet = null;
+  var _result:ResultSequence = null;
 
   /**
    * コンストラクタ
@@ -256,13 +256,13 @@ class BtlMgr {
         _change(State.Result);
 
       case State.Result:
-        // アイテム入手
-        _itemGet = new ItemGet();
+        // リザルト
+        _result = new ResultSequence();
         _change(State.ResultItem);
 
       case State.ResultItem:
-        _itemGet.update();
-        if(_itemGet.isEnd()) {
+        _result.update();
+        if(_result.isEnd()) {
           // リザルトへ
           _change(State.ResultWait);
         }
@@ -270,7 +270,7 @@ class BtlMgr {
       case State.ResultWait:
         if(Input.press.A) {
           // プレイヤーパラメータをグローバルに戻しておく
-          Global.setPlayerHp(_player.hp);
+          Global.setPlayerParam(_player.param);
           _change(State.End);
         }
 

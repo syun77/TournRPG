@@ -16,6 +16,7 @@ import jp_2dgames.game.actor.ActorMgr;
 private enum State {
   Money;         // お金
   Xp;            // 経験値
+  Levelup;       // レベルアップチェック
   Pickup;        // アイテムを拾う
   PickupCheck;   // アイテム拾えるかチェック
   CantGet;       // アイテムが一杯で拾えない
@@ -38,9 +39,9 @@ private class ItemDropInfo {
 }
 
 /**
- * アイテム入手
+ * リザルト制御
  **/
-class ItemGet {
+class ResultSequence {
 
   // ■メンバ変数
   // 状態
@@ -134,6 +135,25 @@ class ItemGet {
         });
         Message.push2(Msg.XP_GET, [_xp]);
         _tWait = Reg.TIMER_WAIT;
+        _state = State.Levelup;
+
+      case State.Levelup:
+        // レベルアップチェック
+        var bLevelup = false;
+        ActorMgr.forEachAliveGroup(BtlGroup.Player, function(actor:Actor) {
+          if(actor.checkLevelup()) {
+            // レベルアップした
+            bLevelup = true;
+            Message.push2(Msg.LEVELUP, [actor.name]);
+            // HP全回復
+            actor.recoverHp(9999);
+            Message.push2(Msg.RECOVER_HP_ALL, [actor.name]);
+          }
+        });
+        if(bLevelup) {
+          // レベルアップした
+          _tWait = Reg.TIMER_WAIT;
+        }
         _state = State.Pickup;
 
       case State.Pickup:

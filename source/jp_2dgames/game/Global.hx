@@ -44,8 +44,9 @@ class Global {
   public static function getPlayerParam():Params {
     return _playerParam;
   }
-  public static function setPlayerHp(hp:Int):Void {
-    _playerParam.hp = hp;
+  // プレイヤーパラメータの設定
+  public static function setPlayerParam(param:Params):Void {
+    _playerParam.copy(param);
   }
 
   // ステージ番号の取得
