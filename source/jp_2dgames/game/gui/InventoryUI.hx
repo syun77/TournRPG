@@ -196,6 +196,8 @@ class InventoryUI extends FlxSpriteGroup {
         _close();
       });
       btn.ID = BTN_ID_CANCEL;
+      btn.color       = MyColor.BTN_CANCEL;
+      btn.label.color = MyColor.BTN_CANCEL_LABEL;
       _btnList.push(btn);
     }
 

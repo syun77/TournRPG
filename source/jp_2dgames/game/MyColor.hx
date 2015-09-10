@@ -51,5 +51,9 @@ class MyColor {
   // ボタン(消費アイテム)
   public static inline var BTN_CONSUME       = FlxColor.LIME;
   public static inline var BTN_CONSUME_LABEL = FlxColor.BLACK;
+
+  // ボタン(キャンセル)
+  public static inline var BTN_CANCEL        = FlxColor.SILVER;
+  public static inline var BTN_CANCEL_LABEL  = FlxColor.BLACK;
 }
 
