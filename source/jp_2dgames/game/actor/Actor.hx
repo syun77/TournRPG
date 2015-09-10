@@ -101,6 +101,13 @@ class Actor extends FlxSprite {
   }
 
   /**
+   * 経験値を増やす
+   **/
+  public function addXp(val:Int):Void {
+    _param.xp += val;
+  }
+
+  /**
    * HPが最大値・最小値を超えないように丸める
    **/
   private function _clampHp():Void {

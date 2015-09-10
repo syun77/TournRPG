@@ -15,6 +15,8 @@ import flixel.text.FlxText;
 private class MessageText extends FlxText {
 
   private static inline var BG_OFS_Y = 2;
+  // 消えるまでの時間
+  private static inline var TIME_KILL = 8.0;
 
   private var _ofsY:Float = 0;
   public function setOfsY(ofsY:Float) {
@@ -42,7 +44,7 @@ private class MessageText extends FlxText {
     x += 64;
     FlxTween.tween(this, {x:xnext}, 0.3, {ease:FlxEase.expoOut});
     // 消滅判定
-    new FlxTimer(5, function(t:FlxTimer) {
+    new FlxTimer(TIME_KILL, function(t:FlxTimer) {
       // じわじわ消す
       FlxTween.tween(this, {_baseY:-8}, 0.3, {ease:FlxEase.sineOut});
       FlxTween.tween(this, {alpha:0}, 0.3, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {

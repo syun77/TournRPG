@@ -50,7 +50,7 @@ class ItemGet {
   var _tWait:Int = 0;
 
   // 獲得したお金
-  var _moeny:Int = 0;
+  var _money:Int = 0;
 
   // 獲得した経験値
   var _xp:Int = 0;
@@ -67,13 +67,13 @@ class ItemGet {
   public function new() {
 
     // アイテム入手
-    _moeny = 0;
+    _money = 0;
     _xp    = 0;
     _infos = new List<ItemDropInfo>();
     ActorMgr.forEachGrave(function(actor:Actor) {
       if(actor.group == BtlGroup.Enemy) {
         // お金
-        _moeny += actor.money;
+        _money += actor.money;
 
         // 経験値
         _xp += actor.xp;
@@ -120,13 +120,18 @@ class ItemGet {
     switch(_state) {
       case State.Money:
         // お金
-        var str = '${_moeny}G';
+        Global.addMoney(_money);
+        var str = '${_money}G';
         Message.push2(Msg.ITEM_GET, [str]);
         _tWait = Reg.TIMER_WAIT;
         _state = State.Xp;
 
       case State.Xp:
         // 経験値
+        ActorMgr.forEachAliveGroup(BtlGroup.Player, function(actor:Actor) {
+          // 経験値加算
+          actor.addXp(_xp);
+        });
         Message.push2(Msg.XP_GET, [_xp]);
         _tWait = Reg.TIMER_WAIT;
         _state = State.Pickup;

@@ -11,11 +11,13 @@ import jp_2dgames.game.actor.PlayerInfo;
  **/
 class Global {
   static inline var STAGE_FIRST:Int = 1;
+  static inline var MONEY_FIRST:Int = 0;
 
   // ■スタティック変数
   static var _playerParam:Params = null;
   static var _stage:Int = 0;
   static var _itemList:Array<ItemData> = null;
+  static var _money:Int = 0;
 
   public static function init():Void {
 
@@ -27,6 +29,9 @@ class Global {
 
     // ステージ初期化
     _stage = STAGE_FIRST;
+
+    // 所持金を初期化
+    _money = MONEY_FIRST;
   }
 
   // プレイヤー情報の初期化
@@ -59,11 +64,18 @@ class Global {
 
     // 初期アイテム
     Inventory.push(new ItemData(ItemConst.POTION01));
-    Inventory.push(new ItemData(ItemConst.POTION02));
-    for(i in 0...8) {
-      Inventory.push(new ItemData(ItemConst.WEAPON01+i));
-      Inventory.push(new ItemData(ItemConst.ARMOR01+i));
-    }
+  }
 
+  // 所持金を取得する
+  public static function getMoney():Int {
+    return _money;
+  }
+  // 所持金を増やす
+  public static function addMoney(val:Int):Void {
+    _money += val;
+  }
+  // 所持金を減らす
+  public static function useMoney(val:Int):Void {
+    _money -= val;
   }
 }
