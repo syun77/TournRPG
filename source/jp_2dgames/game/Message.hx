@@ -231,8 +231,7 @@ class Message extends FlxGroup {
 
   private function _push2(msgId:Int, args:Array<Dynamic>):Void {
     var msg = _csv.getString(msgId, "msg");
-//    var color = MyColor.strToColor(_csv.getString(msgId, "color"));
-    var color = FlxColor.WHITE;
+    var color = MyColor.strToColor(_csv.getString(msgId, "color"));
     if(args != null) {
       var idx:Int = 1;
       for(val in args) {
