@@ -190,7 +190,8 @@ class InventoryUI extends FlxSpriteGroup {
     {
       var px = BTN_X + BTN_DX*2;
       var py = BTN_Y + BTN_DY*2;
-      var btn = new MyButton(px, py, "CANCEL", function() {
+      var label = UIMsg.get(UIMsg.CANCEL);
+      var btn = new MyButton(px, py, label, function() {
         cbFunc(CMD_CANCEL);
         // UIを閉じる
         _close();

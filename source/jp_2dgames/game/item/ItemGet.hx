@@ -163,6 +163,7 @@ class ItemGet {
         }
         else {
           // 拾えたので次へ進む
+          Inventory.push(_nowInfo.item);
           Message.push2(Msg.ITEM_GET, [name]);
           _state = State.Pickup;
         }

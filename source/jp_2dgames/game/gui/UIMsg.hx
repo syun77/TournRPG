@@ -11,6 +11,7 @@ class UIMsg {
   public static inline var YES:Int     = 3; // はい
   public static inline var NO:Int      = 4; // いいえ
   public static inline var ITEM_CHANGE = 5; // アイテムを捨てて手に入れる
+  public static inline var CANCEL:Int  = 6; // キャンセル
 
 
   private static var _csv:CsvLoader = null;
