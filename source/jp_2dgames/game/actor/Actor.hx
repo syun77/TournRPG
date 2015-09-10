@@ -59,6 +59,11 @@ class Actor extends FlxSprite {
     return _name;
   }
   var _param:Params;
+  // レベル
+  public var lv(get, never):Int;
+  private function get_lv() {
+    return _param.lv;
+  }
   // HP
   public var hp(get, never):Int;
   private function get_hp() {

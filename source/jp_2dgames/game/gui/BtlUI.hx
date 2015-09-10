@@ -12,9 +12,18 @@ import flixel.group.FlxSpriteGroup;
  **/
 class BtlUI extends FlxSpriteGroup {
 
+  // ■定数
+  static inline var PLAYER_X:Int = 4;
+  static inline var PLAYER_Y:Int = 4;
+  static inline var PLAYER_DY:Int = 12;
+
+  // ■メンバ変数
   var _playerID:Int = 0;
   var _enemyID:Int = 0;
 
+  var _txtPlayerLv:FlxText;
+  var _txtPlayerXp:FlxText;
+  var _txtPlayerMoney:FlxText;
   var _txtPlayerHp:FlxText;
   var _txtEnemyHp:FlxText;
   var _barPlayerHp:StatusBar;
@@ -30,10 +39,24 @@ class BtlUI extends FlxSpriteGroup {
     bg.alpha = 0.6;
     this.add(bg);
 
-    _txtPlayerHp = new FlxText(0, 0);
-    _barPlayerHp = new StatusBar(0, 24);
-    _txtEnemyHp = new FlxText(0, 48);
-    _barEnemyHp = new StatusBar(0, 64);
+    var px = PLAYER_X;
+    var py = PLAYER_Y;
+    _txtPlayerLv = new FlxText(px, py);
+    py += PLAYER_DY;
+    _txtPlayerXp = new FlxText(px, py);
+    py += PLAYER_DY;
+    _txtPlayerMoney = new FlxText(px, py);
+    py += PLAYER_DY;
+    _txtPlayerHp = new FlxText(px, py);
+    py += PLAYER_DY;
+    _barPlayerHp = new StatusBar(px, py);
+    py += PLAYER_DY;
+    _txtEnemyHp = new FlxText(px, py);
+    py += PLAYER_DY;
+    _barEnemyHp = new StatusBar(px, py);
+    this.add(_txtPlayerLv);
+    this.add(_txtPlayerXp);
+    this.add(_txtPlayerMoney);
     this.add(_txtPlayerHp);
     this.add(_barPlayerHp);
     this.add(_txtEnemyHp);
@@ -56,7 +79,10 @@ class BtlUI extends FlxSpriteGroup {
     if(player != null) {
       var hp = player.hp;
       var hpmax = player.hpmax;
-      _txtPlayerHp.text = 'Player HP: ${hp}/${hpmax}';
+      _txtPlayerLv.text = 'LV: ${player.lv}';
+      _txtPlayerXp.text = 'Exp: ${player.xp}';
+      _txtPlayerMoney.text = 'MONEY: ${Global.getMoney()}';
+      _txtPlayerHp.text = 'HP: ${hp}/${hpmax}';
       _barPlayerHp.setPercent(100 * player.hpratio);
     }
 
