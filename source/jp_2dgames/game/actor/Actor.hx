@@ -37,7 +37,15 @@ class Actor extends FlxSprite {
 
   // 開始座標
   var _xstart:Float = 0;
+  public var xstart(get, never):Float;
+  private function get_xstart() {
+    return _xstart;
+  }
   var _ystart:Float = 0;
+  public var ystart(get, never):Float;
+  private function get_ystart() {
+    return _ystart;
+  }
 
   // ダメージ時の揺れ
   var _tShake:Float = 0;

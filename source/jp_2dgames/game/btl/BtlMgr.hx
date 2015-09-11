@@ -1,6 +1,6 @@
 package jp_2dgames.game.btl;
 
-import jp_2dgames.game.actor.TempActorMgr;
+import flixel.FlxCamera;
 import jp_2dgames.game.item.ResultSequence;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.btl.logic.BtlLogicMgr;
@@ -22,6 +22,7 @@ import flixel.FlxG;
  **/
 private enum State {
   None;         // なし
+
   TurnStart;    // ターン開始
   InputCommand; // コマンド入力待ち
 
@@ -71,18 +72,24 @@ class BtlMgr {
     _player = ActorMgr.recycle(BtlGroup.Player, Global.getPlayerParam());
     var param = new Params();
     param.id = Global.getStage();
-    _enemy = ActorMgr.recycle(BtlGroup.Enemy, param);
-
-    // TODO:
-    _player.setName("プレイヤー");
-    {
-      var px = FlxG.width/2 - _enemy.width/2;
+    var cnt = 2;
+    var baseX = FlxG.width/(cnt+1);
+    var dx = baseX;
+    for(i in 0...cnt) {
+      _enemy = ActorMgr.recycle(BtlGroup.Enemy, param);
+      var px = (baseX+dx*i) - _enemy.width/2;
       var py = FlxG.height/2 - _enemy.height/2;
       _enemy.setDrawPosition(px, py);
     }
 
+    // TODO:
+    _player.setName("プレイヤー");
+
     btlUI.setPlayerID(_player.ID);
     btlUI.setEnemyID(_enemy.ID);
+
+    _player.x = FlxG.width/2;
+    _player.y = FlxG.height/2;
 
     // ターン開始
     _change(State.TurnStart);

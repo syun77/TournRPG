@@ -62,6 +62,9 @@ class BtlUI extends FlxSpriteGroup {
     this.add(_txtEnemyHp);
     this.add(_barEnemyHp);
 
+    for(obj in members) {
+      obj.scrollFactor.set(0, 0);
+    }
   }
 
   public function setPlayerID(id:Int) {

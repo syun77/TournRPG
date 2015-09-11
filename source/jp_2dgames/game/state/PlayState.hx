@@ -1,5 +1,8 @@
 package jp_2dgames.game.state;
 
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.FlxCamera;
 import jp_2dgames.game.actor.TempActorMgr;
 import jp_2dgames.game.save.Save;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
@@ -36,7 +39,8 @@ class PlayState extends FlxState {
     super.create();
 
     // 背景の表示
-    this.add(new BtlBg());
+    var bg = new BtlBg();
+    this.add(bg);
 
     // キャラクター管理生成
     ActorMgr.create(this);

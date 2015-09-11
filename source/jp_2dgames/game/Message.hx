@@ -214,6 +214,8 @@ class Message extends FlxGroup {
     var text = new MessageText(POS_X + MSG_POS_X, 0, WIDTH);
     text.text = msg;
     text.color = color;
+    text.scrollFactor.set(0, 0);
+    text.bg.scrollFactor.set(0, 0);
     _msgList.add(text);
 
     // 座標を更新

@@ -1,5 +1,11 @@
 package jp_2dgames.game.btl.logic;
 
+import flixel.FlxObject;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
+import flixel.FlxG;
+import flixel.FlxCamera;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.lib.Input;
 import jp_2dgames.game.actor.Actor;
@@ -57,6 +63,24 @@ class BtlLogicPlayer {
         ActorMgr.moveGrave(actor);
         Message.push2(Msg.DEFEAT_ENEMY, [actor.name]);
     }
+
+    if(_data.cmd != BtlCmd.Dead) {
+      // ズーム演出
+      if(actor.group == BtlGroup.Enemy) {
+
+        var obj = new FlxObject();
+        obj.x = actor.xstart + actor.width/2;
+        obj.y = actor.ystart + actor.height/2;
+
+        FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 10);
+        FlxTween.tween(FlxG.camera, {zoom:2}, 1, {ease:FlxEase.expoOut});
+      }
+      else {
+        FlxG.camera.follow(actor, FlxCamera.STYLE_LOCKON, null, 10);
+        FlxTween.tween(FlxG.camera, {zoom:FlxCamera.defaultZoom}, 1, {ease:FlxEase.expoOut});
+      }
+    }
+
 
     // メイン処理へ
     _state = State.Main;
