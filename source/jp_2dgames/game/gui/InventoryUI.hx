@@ -119,6 +119,10 @@ class InventoryUI extends FlxSpriteGroup {
     FlxG.state.add(_detailUI);
     // 非表示にしておく
     _detailUI.visible = false;
+
+    for(obj in members) {
+      obj.scrollFactor.set(0, 0);
+    }
   }
 
   /**
@@ -226,6 +230,7 @@ class InventoryUI extends FlxSpriteGroup {
 
     for(btn in _btnList) {
       this.add(btn);
+      btn.scrollFactor.set(0, 0);
     }
 
     // ボタン色を更新

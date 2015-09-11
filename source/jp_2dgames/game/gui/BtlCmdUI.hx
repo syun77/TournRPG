@@ -97,6 +97,7 @@ class BtlCmdUI extends FlxSpriteGroup {
 
     for(btn in btnList) {
       this.add(btn);
+      btn.scrollFactor.set(0, 0);
     }
 
     // 表示

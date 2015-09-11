@@ -1,8 +1,7 @@
 package jp_2dgames.game.btl.logic;
 
+import flixel.util.FlxRandom;
 import flixel.FlxObject;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import flixel.FlxG;
 import flixel.FlxCamera;
@@ -40,6 +39,31 @@ class BtlLogicPlayer {
     _data = data;
   }
 
+  private function _getFollowObj(actor:Actor, targetID:Int):FlxObject {
+    var obj = new FlxObject();
+    if(actor.group == BtlGroup.Enemy) {
+      // 主体者をフォーカス
+      obj.x = actor.x + actor.width/2;
+      obj.y = actor.y + actor.height/2;
+    }
+    else {
+      var target = ActorMgr.search(targetID);
+      if(target != null && target.group == BtlGroup.Enemy) {
+        // 対象をフォーカス
+        obj.x = target.x + target.width/2;
+        obj.y = target.y + target.height/2;
+      }
+      else {
+        // フォーカスの対象なし
+        return null;
+      }
+    }
+
+    // ランダムで上下に揺らす
+    obj.y += FlxRandom.floatRanged(-8, 8);
+
+    return obj;
+  }
   /**
    * 開始演出を再生
    **/
@@ -64,23 +88,20 @@ class BtlLogicPlayer {
         Message.push2(Msg.DEFEAT_ENEMY, [actor.name]);
     }
 
-    if(_data.cmd != BtlCmd.Dead) {
-      // ズーム演出
-      if(actor.group == BtlGroup.Enemy) {
-
-        var obj = new FlxObject();
-        obj.x = actor.xstart + actor.width/2;
-        obj.y = actor.ystart + actor.height/2;
-
-        FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 10);
-        FlxTween.tween(FlxG.camera, {zoom:2}, 1, {ease:FlxEase.expoOut});
-      }
-      else {
-        FlxG.camera.follow(actor, FlxCamera.STYLE_LOCKON, null, 10);
-        FlxTween.tween(FlxG.camera, {zoom:FlxCamera.defaultZoom}, 1, {ease:FlxEase.expoOut});
-      }
+    // ズーム演出
+    var obj = null;
+    switch(_data.cmd) {
+      case BtlCmd.Attack(range, targetID):
+        obj = _getFollowObj(actor, targetID);
+      case BtlCmd.Skill(id, range, targetID):
+        obj = _getFollowObj(actor, targetID);
+      case BtlCmd.Item(item, range, targetID):
+        obj = _getFollowObj(actor, targetID);
+      default:
     }
-
+    if(obj != null) {
+      FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 10);
+    }
 
     // メイン処理へ
     _state = State.Main;
@@ -140,6 +161,7 @@ class BtlLogicPlayer {
 
     _state = State.Wait;
     _tWait = Reg.TIMER_WAIT;
+
   }
 
   private function _checkWait():Bool {
@@ -174,8 +196,15 @@ class BtlLogicPlayer {
       case State.Main:
         _updateMain();
       case State.Wait:
+        // ズーム演出
         _state = State.End;
+        var obj = new FlxObject();
+        obj.x = FlxG.width/2;
+        obj.y = FlxG.height/2;
+        FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 50);
+
       case State.End:
+
     }
   }
 

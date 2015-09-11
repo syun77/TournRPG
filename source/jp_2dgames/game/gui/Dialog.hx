@@ -61,6 +61,7 @@ class Dialog extends FlxGroup {
 
     // ウィンドウ
     var spr = new FlxSprite(px, py - height);
+    spr.scrollFactor.set(0, 0);
     this.add(spr);
 
     // メッセージ
@@ -70,6 +71,7 @@ class Dialog extends FlxGroup {
     // 中央揃え
     var width = text.textField.textWidth;
     text.x = px - width / 2;
+    text.scrollFactor.set(0, 0);
     this.add(text);
 
     // ウィンドウサイズを設定
@@ -114,6 +116,8 @@ class Dialog extends FlxGroup {
       py2 += BTN_DY;
 
       idx++;
+
+      btn.scrollFactor.set(0, 0);
     }
   }
 

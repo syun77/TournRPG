@@ -62,6 +62,10 @@ class EquipUI extends FlxSpriteGroup {
 
     // テキスト設定
     setText();
+
+    for(obj in members) {
+      obj.scrollFactor.set(0, 0);
+    }
   }
 
   /**

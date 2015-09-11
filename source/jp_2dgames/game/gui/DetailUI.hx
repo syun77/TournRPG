@@ -45,6 +45,10 @@ class DetailUI extends FlxSpriteGroup {
     _txtDetail = new FlxText(TEXT_X, TEXT_Y, TEXT_WIDTH);
     _txtDetail.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     this.add(_txtDetail);
+
+    for(obj in members) {
+      obj.scrollFactor.set(0, 0);
+    }
   }
 
   /**
