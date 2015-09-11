@@ -18,3 +18,4 @@ int,str,str
 16,<val1>の経験値を獲得した,green
 17,<val1>はレベルアップした,orange
 18,<val1>はHPが全回復した,blue
+19,<val1>は<val2>を発動した,green

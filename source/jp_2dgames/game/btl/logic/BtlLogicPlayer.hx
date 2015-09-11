@@ -47,7 +47,7 @@ class BtlLogicPlayer {
       case BtlCmd.Attack:
         Message.push2(Msg.ATTACK_BEGIN, [actor.name]);
       case BtlCmd.Skill(id, range, targetID):
-        // TODO:
+        Message.push2(Msg.SKILL_BEGIN, [actor.name, 'Skill${id}']);
       case BtlCmd.Item(item, range, targetID):
         var name = ItemUtil.getName(item);
         Message.push2(Msg.ITEM_USE, [name]);
@@ -69,6 +69,7 @@ class BtlLogicPlayer {
   private function _execTarget(target:Actor):Void {
     switch(_data.val) {
       case BtlLogicVal.HpDamage(val):
+        // HPダメージ
         target.damage(val);
       case BtlLogicVal.HpRecover(val):
       case BtlLogicVal.ChanceRoll(bSuccess):
@@ -96,6 +97,13 @@ class BtlLogicPlayer {
 
       case BtlCmd.Skill(id, range, targetID):
         // スキルを使う
+        // TODO: 仮
+        switch(_data.target) {
+          case BtlRange.One:
+            _execTarget(target);
+          default:
+          // TODO: 未実装
+        }
 
       case BtlCmd.Item(item, range, targetID):
         // アイテムを使う

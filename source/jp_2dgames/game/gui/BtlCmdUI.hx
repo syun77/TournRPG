@@ -58,24 +58,28 @@ class BtlCmdUI extends FlxSpriteGroup {
     var btnList = new List<MyButton>();
     var px = BTN_X;
     var py = BTN_Y;
-    btnList.add(new MyButton(px, py, "ATTACK1", function() {
+    var lblAtk = UIMsg.get(UIMsg.CMD_ATK);
+    btnList.add(new MyButton(px, py, lblAtk, function() {
       _attack(actor, cbFunc);
     }));
     px += BTN_DX;
     // TODO: スキルボタンにする
-    btnList.add(new MyButton(px, py, "ATTACK2", function() {
-      _attack(actor, cbFunc);
+    btnList.add(new MyButton(px, py, "SKILL1", function() {
+      // スキル1を選択
+      _skill(actor, cbFunc, 0);
     }));
     px += BTN_DX;
     // TODO: スキルボタンにする
-    btnList.add(new MyButton(px, py, "ATTACK3", function() {
-      _attack(actor, cbFunc);
+    btnList.add(new MyButton(px, py, "SKILL2", function() {
+      // スキル2を選択
+      _skill(actor, cbFunc, 1);
     }));
 
     // 2列目
     px = BTN_X;
     py += BTN_DY;
-    var btnItem = new MyButton(px, py, "ITEM", function() {
+    var lblItem = UIMsg.get(UIMsg.CMD_ITEM);
+    var btnItem = new MyButton(px, py, lblItem, function() {
       // インベントリ表示
       _displayInventoryUI(actor);
     });
@@ -86,7 +90,8 @@ class BtlCmdUI extends FlxSpriteGroup {
     btnList.add(btnItem);
 
     px += BTN_DX;
-    btnList.add(new MyButton(px, py, "ESCAPE", function() {
+    var lblEscape = UIMsg.get(UIMsg.CMD_ESCAPE);
+    btnList.add(new MyButton(px, py, lblEscape, function() {
       cbFunc(actor, BtlCmd.Escape(true));
     }));
 
@@ -107,6 +112,17 @@ class BtlCmdUI extends FlxSpriteGroup {
     var target = ActorMgr.random(group);
 
     cbFunc(actor, BtlCmd.Attack(BtlRange.One, target.ID));
+  }
+
+  /**
+   * スキルコマンドを選んだ
+   **/
+  private function _skill(actor:Actor, cbFunc:Actor->BtlCmd->Void, btnID:Int):Void {
+    // TODO: 相手グループをランダム攻撃
+    var group = BtlGroupUtil.getAgaint(actor.group);
+    var target = ActorMgr.random(group);
+
+    cbFunc(actor, BtlCmd.Skill(1, BtlRange.One, target.ID));
   }
 
   /**

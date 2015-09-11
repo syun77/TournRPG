@@ -22,7 +22,7 @@ class BtlLogicUtil {
 
       case BtlCmd.Skill(skillID, range, targetID):
         // スキル演出の作成
-        return _createSkill(skillID, actor, range);
+        return _createSkill(skillID, actor, range, targetID);
 
       case BtlCmd.Item(item, range, targetID):
         // アイテム演出の作成
@@ -61,10 +61,23 @@ class BtlLogicUtil {
   /**
    * スキルを使う
    **/
-  private static function _createSkill(skillID:Int, actor:Actor, range:BtlRange):BtlLogicData {
+  private static function _createSkill(skillID:Int, actor:Actor, range:BtlRange, targetID:Int):BtlLogicData {
     // TODO: 未実装
-    var cmd = BtlCmd.Skill(skillID, range, 0);
+    var cmd = BtlCmd.Skill(skillID, range, targetID);
     var eft = new BtlLogicData(actor.ID, actor.group, cmd);
+    eft.setTarget(range, targetID);
+
+    // 対象を取得
+    var target = TempActorMgr.search(targetID);
+    // ダメージ計算
+    // TODO: スキルダメージ計算式を作る
+    var val = Calc.damage(actor, target);
+    // HPダメージ
+    eft.val = BtlLogicVal.HpDamage(val);
+
+    // ダメージを与える
+    target.damage(val, false);
+
     return eft;
   }
 
