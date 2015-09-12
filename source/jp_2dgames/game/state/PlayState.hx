@@ -1,5 +1,7 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.actor.Params;
+import jp_2dgames.game.particle.Particle;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxCamera;
@@ -60,6 +62,9 @@ class PlayState extends FlxState {
     // バトル演出キュー
     BtlLogicMgr.create();
 
+    // パーティクル
+    Particle.create(this);
+
     // デバッグ機能
     _debugActor = new DebugActor();
     this.add(_debugActor);
@@ -72,6 +77,7 @@ class PlayState extends FlxState {
    */
   override public function destroy():Void {
 
+    Particle.terminate();
     BtlLogicMgr.destroy();
     ActorMgr.destroy();
     TempActorMgr.destroy();

@@ -1,5 +1,7 @@
 package jp_2dgames.game.btl.logic;
 
+import flixel.util.FlxColor;
+import jp_2dgames.game.particle.Particle;
 import flixel.util.FlxRandom;
 import flixel.FlxObject;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
@@ -57,15 +59,15 @@ class BtlLogicPlayer {
     var obj = new FlxObject();
     if(actor.group == BtlGroup.Enemy) {
       // 主体者をフォーカス
-      obj.x = actor.x + actor.width/2;
-      obj.y = actor.y + actor.height/2;
+      obj.x = actor.xcenter;
+      obj.y = actor.ycenter;
     }
     else {
       var target = ActorMgr.search(targetID);
       if(target != null && target.group == BtlGroup.Enemy) {
         // 対象をフォーカス
-        obj.x = target.x + target.width/2;
-        obj.y = target.y + target.height/2;
+        obj.x = target.xcenter;
+        obj.y = target.ycenter;
       }
       else {
         // フォーカスの対象なし
@@ -101,6 +103,13 @@ class BtlLogicPlayer {
       case BtlCmd.Dead:
         ActorMgr.moveGrave(actor);
         Message.push2(Msg.DEFEAT_ENEMY, [actor.name]);
+        if(actor.group == BtlGroup.Enemy) {
+          // 消滅エフェクト再生
+          var px = actor.xcenter;
+          var py = actor.ycenter;
+          Particle.start(PType.Ring, px, py, FlxColor.YELLOW);
+        }
+
       case BtlCmd.BtlEnd(bWin):
         if(bWin) {
           // 敵が全滅

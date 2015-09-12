@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import flixel.util.FlxColor;
+import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.btl.types.BtlCmd;
 import flixel.FlxG;
@@ -116,6 +118,15 @@ class Actor extends FlxSprite {
   public var param(get, never):Params;
   private function get_param() {
     return _param;
+  }
+  // 中心座標を取得する
+  public var xcenter(get, never):Float;
+  private function get_xcenter() {
+    return x + width/2;
+  }
+  public var ycenter(get, never):Float;
+  private function get_ycenter() {
+    return y + height/2;
   }
 
   /**
@@ -281,6 +292,10 @@ class Actor extends FlxSprite {
         Message.push2(Msg.DAMAGE_ENEMY, [_name, v]);
         // 揺らす
         _tShake = TIMER_SHAKE;
+        // パーティクル発生
+        var px = xcenter;
+        var py = ycenter;
+        Particle.start(PType.Circle, px, py, FlxColor.RED);
       }
     }
 
