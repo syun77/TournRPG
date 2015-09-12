@@ -55,5 +55,9 @@ class MyColor {
   // ボタン(キャンセル)
   public static inline var BTN_CANCEL        = FlxColor.SILVER;
   public static inline var BTN_CANCEL_LABEL  = FlxColor.BLACK;
+
+  // 数値
+  // ダメージ
+  public static inline var NUM_DAMAGE = 0xFFFFC0C0;
 }
 

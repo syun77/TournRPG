@@ -90,7 +90,7 @@ class Particle extends FlxSprite {
 
   public function new() {
     super();
-    loadGraphic("assets/images/effect/effect.png", true);
+    loadGraphic(Reg.PATH_EFFECT, true);
 
     // アニメーション登録
     animation.add('${PType.Circle}', [0], 1);

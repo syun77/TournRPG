@@ -6,6 +6,8 @@ import jp_2dgames.lib.TextUtil;
  * リソースのパスや共通の定数
  */
 class Reg {
+
+  // ■フォント
   // フォントのパス
   public static inline var PATH_FONT = "assets/font/PixelMplus10-Regular.ttf";
   // スプライトフォント
@@ -48,4 +50,7 @@ class Reg {
     var str = TextUtil.fillZero(id, 3);
     return 'assets/images/bg/${str}.jpg';
   }
+
+  // エフェクト
+  public static inline var PATH_EFFECT = "assets/images/effect/effect.png";
 }

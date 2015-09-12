@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.MyColor;
+import jp_2dgames.game.particle.ParticleDamage;
 import flixel.util.FlxColor;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.btl.types.BtlRange;
@@ -296,6 +298,10 @@ class Actor extends FlxSprite {
         var px = xcenter;
         var py = ycenter;
         Particle.start(PType.Circle, px, py, FlxColor.RED);
+        // ダメージ数値
+        var p = ParticleDamage.start(px, py, v);
+        p.color = MyColor.NUM_DAMAGE;
+
       }
     }
 

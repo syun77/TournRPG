@@ -1,5 +1,7 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.particle.ParticleDamage;
+import openfl._internal.aglsl.assembler.Part;
 import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.particle.Particle;
 import flixel.tweens.FlxEase;
@@ -51,19 +53,22 @@ class PlayState extends FlxState {
     _btlUI = new BtlUI();
     this.add(_btlUI);
 
-    // メッセージウィンドウ登録
-    var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
-    Message.instance = new Message(csv);
-    this.add(Message.instance);
-
     // バトル管理生成
     _btlMgr = new BtlMgr(_btlUI);
 
     // バトル演出キュー
     BtlLogicMgr.create();
 
+    // パーティクルダメージ
+    ParticleDamage.create(this);
     // パーティクル
     Particle.create(this);
+
+    // メッセージウィンドウ登録
+    var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
+    Message.instance = new Message(csv);
+    this.add(Message.instance);
+
 
     // デバッグ機能
     _debugActor = new DebugActor();
@@ -77,6 +82,7 @@ class PlayState extends FlxState {
    */
   override public function destroy():Void {
 
+    ParticleDamage.terminate();
     Particle.terminate();
     BtlLogicMgr.destroy();
     ActorMgr.destroy();
