@@ -31,12 +31,16 @@ class PrimitiveSettings:
 		self.count = 0 # 引数の数
 		self.count_max = 0 # 最大引数の数
 		for d in data[2:]:
+			d = d.strip()
 			info = {} # 引数情報
 			info["default"] = None
-			if '=' in d:
+			if d == "":
+				# 引数なし
+				self.count_max = -1
+			elif '=' in d:
 				# デフォルト引数あり
 				p = d.split('=')
-				info["key"]     = p[0]
+				info["key"]     = p[0].strip()
 				info["default"] = int(p[1])
 			else:
 				info["key"] = d
@@ -52,12 +56,9 @@ class Primitive:
 		self.name = settings.name
 		self.paramList = paramList
 		count = len(self.paramList)
-		if count < settings.count:
+		if count < settings.count or settings.count_max < count:
 			# 引数が正しくない
-			raise Exception("Error: %s() invalid parameter count. [%d]"%(self.name, count))
-		elif count > settings.count_max:
-			# 引数が正しくない
-			raise Exception("Error: %s() invalid parameter count. [%d]"%(self.name, count))
+			raise Exception("Error: %s() invalid parameter count. need [%d] but [%d]"%(self.name, settings.count, count))
 		self.count = count
 
 	def run(self, writer):
