@@ -93,13 +93,23 @@ class BtlLogicPlayer {
         // 通常あり得ない
       case BtlCmd.Attack:
         Message.push2(Msg.ATTACK_BEGIN, [actor.name]);
+        if(actor.group == BtlGroup.Enemy) {
+          // 攻撃開始エフェクト再生
+          var px = actor.xcenter;
+          var py = actor.ycenter;
+          Particle.start(PType.Ring3, px, py, FlxColor.RED);
+        }
+
       case BtlCmd.Skill(id, range, targetID):
         Message.push2(Msg.SKILL_BEGIN, [actor.name, 'Skill${id}']);
+
       case BtlCmd.Item(item, range, targetID):
         var name = ItemUtil.getName(item);
         Message.push2(Msg.ITEM_USE, [name]);
+
       case BtlCmd.Escape:
         Message.push2(Msg.ESCAPE, [actor.name]);
+
       case BtlCmd.Dead:
         ActorMgr.moveGrave(actor);
         Message.push2(Msg.DEFEAT_ENEMY, [actor.name]);

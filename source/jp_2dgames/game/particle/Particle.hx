@@ -15,6 +15,7 @@ enum PType {
   Circle2; // 円2
   Ring;    // リング
   Ring2;   // リング2
+  Ring3;   // リング3(逆再生)
 }
 
 /**
@@ -58,7 +59,7 @@ class Particle extends FlxSprite {
           p.color = color;
           dir += FlxRandom.floatRanged(40, 50);
         }
-      case PType.Ring, PType.Ring2:
+      case PType.Ring, PType.Ring2, PType.Ring3:
         var t = 60;
         var p:Particle = parent.recycle();
         p.init(type, t, X, Y, 0, 0);
@@ -96,6 +97,7 @@ class Particle extends FlxSprite {
     animation.add('${PType.Circle}', [0], 1);
     animation.add('${PType.Ring}', [1], 2);
     animation.add('${PType.Ring2}', [1], 2);
+    animation.add('${PType.Ring3}', [1], 2);
     animation.add('${PType.Circle2}', [0], 1);
 
     // 中心を基準に描画
@@ -132,7 +134,7 @@ class Particle extends FlxSprite {
       case PType.Circle:
         scale.set(0.5, 0.5);
         acceleration.y = 300;
-      case PType.Ring, PType.Ring2:
+      case PType.Ring, PType.Ring2, PType.Ring3:
         scale.set(0, 0);
         acceleration.y = 0;
       case PType.Circle2:
@@ -163,6 +165,11 @@ class Particle extends FlxSprite {
       case PType.Ring2:
         _timer = Std.int(_timer * 0.93);
         var sc = 2 * (_tStart - _timer) / _tStart;
+        scale.set(sc, sc);
+        alpha = _timer / _tStart;
+      case PType.Ring3:
+        _timer = Std.int(_timer * 0.93);
+        var sc = 3 * _timer / _tStart;
         scale.set(sc, sc);
         alpha = _timer / _tStart;
       case PType.Circle2:
