@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.lib.AdvScript;
 import jp_2dgames.game.MyColor;
 import jp_2dgames.game.particle.ParticleDamage;
 import flixel.util.FlxColor;
@@ -56,6 +57,9 @@ class Actor extends FlxSprite {
 
   // アニメーションタイマー
   var _tAnime:Int = 0;
+
+  // AI
+  var _ai:ActorAI;
 
   // グループ
   var _group:BtlGroup;
@@ -254,6 +258,9 @@ class Actor extends FlxSprite {
 
     // 表示する
     visible = true;
+
+    // AIスクリプト読み込み
+    _ai = new ActorAI(this);
   }
 
   public function setName(str:String):Void {
@@ -352,12 +359,8 @@ class Actor extends FlxSprite {
    * AIで行動を決定する
    **/
   public function requestAI():Void {
-    // TODO: 相手グループをランダム攻撃
-    var group = BtlGroupUtil.getAgaint(_group);
-    var target = ActorMgr.random(group);
-    if(target != null) {
-      _cmd = BtlCmd.Attack(BtlRange.One, target.ID);
-    }
+    _ai.exec();
+    _cmd = _ai.cmd;
   }
 
   /**
@@ -399,4 +402,6 @@ class Actor extends FlxSprite {
 
     return bLevelup;
   }
+
+
 }

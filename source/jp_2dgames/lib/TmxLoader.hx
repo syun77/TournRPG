@@ -111,7 +111,7 @@ class TmxLoader {
     var tmx:String = Assets.getText(filepath);
     if(tmx == null) {
       // 読み込み失敗
-      FlxG.log.warn("TmxLoader.load() tmx is null. file:'" + filepath + "''");
+      FlxG.log.warn("TmxLoader.load() tmx is null. file:'" + filepath + "'");
       return;
     }
 

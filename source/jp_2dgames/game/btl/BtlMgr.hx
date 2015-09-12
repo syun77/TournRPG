@@ -70,7 +70,8 @@ class BtlMgr {
     _player = ActorMgr.recycle(BtlGroup.Player, Global.getPlayerParam());
     var param = new Params();
     param.id = Global.getStage();
-    var cnt = 2;
+//    var cnt = 2; // TODO:
+    var cnt = 1; // TODO:
     var baseX = FlxG.width/(cnt+1);
     var dx = baseX;
     for(i in 0...cnt) {
