@@ -130,6 +130,16 @@ class Actor extends FlxSprite {
   private function get_ycenter() {
     return y + height/2;
   }
+  // 一番上の座標を取得する
+  public var top(get, never):Float;
+  private function get_top() {
+    return y;
+  }
+  // 一番下の座標を取得する
+  public var bottom(get, never):Float;
+  private function get_bottom() {
+    return y + height;
+  }
 
   /**
    * 経験値を増やす

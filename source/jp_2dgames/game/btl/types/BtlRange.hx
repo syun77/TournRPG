@@ -6,8 +6,7 @@ package jp_2dgames.game.btl.types;
 enum BtlRange {
   Self;   // 自分自身
   One;    // 単体
-  We;     // 仲間全員
-  Others; // 相手全員
+  Group;  // グループ
   All;    // すべて
 }
 

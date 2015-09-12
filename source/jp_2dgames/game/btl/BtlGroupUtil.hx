@@ -66,9 +66,9 @@ class BtlGroupUtil {
   }
 
   /**
-   * 指定のグループと一致しているかどうか
+   * 指定のIDとグループと一致しているかどうか
    **/
-  public static function isSame(id:Int, group:BtlGroup):Bool {
+  public static function isSameFromID(id:Int, group:BtlGroup):Bool {
     switch(group) {
       case BtlGroup.Player:
         return isPlayer(id);
@@ -77,6 +77,17 @@ class BtlGroupUtil {
       case BtlGroup.Both:
         return true;
     }
+  }
+
+  /**
+   * 同一のグループかどうか
+   **/
+  public static function isSame(gr1:BtlGroup, gr2:BtlGroup):Bool {
+    if(gr1 == BtlGroup.Both || gr2 == BtlGroup.Both) {
+      return true;
+    }
+
+    return gr1 == gr2;
   }
 
   /**

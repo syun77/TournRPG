@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.btl.BtlGroupUtil;
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import flixel.FlxState;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.btl.BtlGroupUtil;
@@ -84,7 +86,7 @@ class ActorPool {
    **/
   public function forEachAliveGroup(group:BtlGroup, func:Actor->Void):Void {
     forEachAlive(function(actor:Actor) {
-      if(actor.group == group) {
+      if(BtlGroupUtil.isSame(actor.group, group)) {
         func(actor);
       }
     });
@@ -112,7 +114,7 @@ class ActorPool {
   public function random(group:BtlGroup):Actor {
     var list = new Array<Actor>();
     forEachAlive(function(actor:Actor) {
-      if(BtlGroupUtil.isSame(actor.ID, group)) {
+      if(BtlGroupUtil.isSameFromID(actor.ID, group)) {
         // グループが一致
         list.push(actor);
       }

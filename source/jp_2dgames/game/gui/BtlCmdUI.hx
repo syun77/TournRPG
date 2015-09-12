@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.btl.BtlGroupUtil;
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.game.btl.types.BtlRange;
@@ -27,6 +29,8 @@ class BtlCmdUI extends FlxSpriteGroup {
   private static inline var BTN_DY = MyButton.HEIGHT + 2;
 
   // ■メンバ変数
+
+  // アイテム選択用のコールバック関数
   private var _cbItem:Int->Void = null;
 
   /**
@@ -104,15 +108,26 @@ class BtlCmdUI extends FlxSpriteGroup {
     _display();
   }
 
+  private function _cbTarget(actor:Actor, cbFunc:Actor->BtlCmd->Void):Void {
+
+  }
+
   /**
    * 攻撃コマンドを選んだ
    **/
   private function _attack(actor:Actor, cbFunc:Actor->BtlCmd->Void):Void {
-    // TODO: 相手グループをランダム攻撃
     var group = BtlGroupUtil.getAgaint(actor.group);
-    var target = ActorMgr.random(group);
+    var range = BtlRange.One;
 
-    cbFunc(actor, BtlCmd.Attack(BtlRange.One, target.ID));
+    BtlTargetUI.open(function(targetID) {
+      if(targetID == BtlTargetUI.CMD_CANCEL) {
+        visible = true;
+        return;
+      }
+      cbFunc(actor, BtlCmd.Attack(range, targetID));
+    }, group, range);
+
+    visible = false;
   }
 
   /**
