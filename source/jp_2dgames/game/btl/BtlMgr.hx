@@ -26,12 +26,10 @@ private enum State {
   TurnStart;    // ターン開始
   InputCommand; // コマンド入力待ち
 
-  LogicCreate; // 演出作成
-  LogicBegin;  // 演出開始
-  LogicMain;       // 演出中
-  LogicEnd;    // 演出終了
-
-  DeadCheck;    // 死亡チェック
+  LogicCreate;  // 演出作成
+  LogicBegin;   // 演出開始
+  LogicMain;    // 演出中
+  LogicEnd;     // 演出終了
 
   TurnEnd;      // ターン終了
 
@@ -220,23 +218,19 @@ class BtlMgr {
         }
 
       case State.LogicEnd:
-        if(_logicPlayer.isEscape()) {
-          // 逃走した
-          _change(State.Escape);
-        }
-        else {
-          // 死亡チェックへ
-          _change(State.DeadCheck);
-        }
-
-      case State.DeadCheck:
-        // 死亡チェック
-        if(_checkBtlEnd()) {
-          // 戦闘終了
-        }
-        else {
-          // 演出開始に戻る
-          _change(State.LogicBegin);
+        switch(_logicPlayer.getBtlEnd()) {
+          case BtlLogicPlayer.BTL_END_ESCAPE:
+            // 逃走した
+            _change(State.Escape);
+          case BtlLogicPlayer.BTL_END_WIN:
+            // バトル勝利
+            _change(State.BtlWin);
+          case BtlLogicPlayer.BTL_END_LOSE:
+            // バトル敗北
+            _change(State.BtlLose);
+          default:
+            // 演出開始に戻る
+            _change(State.LogicBegin);
         }
 
       case State.TurnEnd:
@@ -271,27 +265,6 @@ class BtlMgr {
 
       case State.End:
     }
-  }
-
-  /**
-   * 戦闘終了チェック
-   **/
-  private function _checkBtlEnd():Bool {
-    if(ActorMgr.countGroup(BtlGroup.Enemy) == 0) {
-      // 敵が全滅
-      Message.push2(Msg.BATTLE_WIN);
-      _change(State.BtlWin);
-      return true;
-    }
-    if(ActorMgr.countGroup(BtlGroup.Player) == 0) {
-      // 味方が全滅
-      Message.push2(Msg.BATTLE_LOSE);
-      _change(State.BtlLose);
-      return true;
-    }
-
-    // 戦闘続く
-    return false;
   }
 
   /**

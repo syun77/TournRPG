@@ -28,6 +28,12 @@ private enum State {
  **/
 class BtlLogicPlayer {
 
+  // ■バトル終了条件の取得
+  public static inline var BTL_END_NONE:Int   = 0; // なし
+  public static inline var BTL_END_ESCAPE:Int = 1; // 逃走
+  public static inline var BTL_END_WIN:Int    = 2; // バトル勝利
+  public static inline var BTL_END_LOSE:Int   = 3; // バトル敗北
+
   // 演出情報
   var _data:BtlLogicData;
   // 状態
@@ -37,10 +43,16 @@ class BtlLogicPlayer {
   // ズーム倍率
   var _zoom:Float = FlxCamera.defaultZoom;
 
+  /**
+   * コンストラクタ
+   **/
   public function new(data:BtlLogicData) {
     _data = data;
   }
 
+  /**
+   * カメラフォーカス対象の取得
+   **/
   private function _getFollowObj(actor:Actor, targetID:Int):FlxObject {
     var obj = new FlxObject();
     if(actor.group == BtlGroup.Enemy) {
@@ -66,6 +78,7 @@ class BtlLogicPlayer {
 
     return obj;
   }
+
   /**
    * 開始演出を再生
    **/
@@ -88,6 +101,15 @@ class BtlLogicPlayer {
       case BtlCmd.Dead:
         ActorMgr.moveGrave(actor);
         Message.push2(Msg.DEFEAT_ENEMY, [actor.name]);
+      case BtlCmd.BtlEnd(bWin):
+        if(bWin) {
+          // 敵が全滅
+          Message.push2(Msg.BATTLE_WIN);
+        }
+        else {
+          // 味方が全滅
+          Message.push2(Msg.BATTLE_LOSE);
+        }
     }
 
     // ズーム演出
@@ -160,6 +182,8 @@ class BtlLogicPlayer {
       case BtlCmd.Escape:
 
       case BtlCmd.Dead:
+
+      case BtlCmd.BtlEnd:
     }
 
     _state = State.Wait;
@@ -228,14 +252,30 @@ class BtlLogicPlayer {
   }
 
   /**
-   * 逃走に成功したかどうか
+   * バトル終了条件の取得
    **/
-  public function isEscape():Bool {
+  public function getBtlEnd():Int {
     switch(_data.cmd) {
       case BtlCmd.Escape(bSuccess):
-        return bSuccess;
+        if(bSuccess) {
+          // 逃走成功
+          return BTL_END_ESCAPE;
+        }
+
+      case BtlCmd.BtlEnd(bWin):
+        if(bWin) {
+          // バトル勝利
+          return BTL_END_WIN;
+        }
+        else {
+          // バトル敗北
+          return BTL_END_LOSE;
+        }
+
       default:
-        return false;
     }
+
+    // 続行
+    return BTL_END_NONE;
   }
 }

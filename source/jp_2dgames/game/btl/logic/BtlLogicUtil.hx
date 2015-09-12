@@ -1,4 +1,5 @@
 package jp_2dgames.game.btl.logic;
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.TempActorMgr;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.item.ItemData;
@@ -32,7 +33,7 @@ class BtlLogicUtil {
         // 逃走演出の作成
         return _createEscape(actor);
 
-      case BtlCmd.Dead, BtlCmd.None:
+      case BtlCmd.Dead, BtlCmd.BtlEnd, BtlCmd.None:
         // 通常ありえない
         return null;
     }
@@ -107,4 +108,10 @@ class BtlLogicUtil {
     return new BtlLogicData(actor.ID, actor.group, BtlCmd.Dead);
   }
 
+  /**
+   * バトル終了
+   **/
+  public static function createBtlEnd(bWin:Bool):BtlLogicData {
+    return new BtlLogicData(0, BtlGroup.Both, BtlCmd.BtlEnd(bWin));
+  }
 }

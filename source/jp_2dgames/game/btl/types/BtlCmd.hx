@@ -14,5 +14,6 @@ enum BtlCmd {
   Escape(bSuccess:Bool);                             // 逃走
 
   // 演出用
-  Dead; // 死亡
+  Dead;              // 死亡
+  BtlEnd(bWin:Bool); // バトル勝利
 }

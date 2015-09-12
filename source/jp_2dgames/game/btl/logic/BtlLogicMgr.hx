@@ -3,6 +3,7 @@ package jp_2dgames.game.btl.logic;
 /**
  * バトル演出管理(キュー)
  **/
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.ActorMgr;
 import haxe.ds.ArraySort;
 import jp_2dgames.game.actor.TempActorMgr;
@@ -61,12 +62,29 @@ class BtlLogicMgr {
         if(actor2 == null) {
           break;
         }
+        // 死亡した人がいる
         var eft = BtlLogicUtil.createDead(actor2);
         push(eft);
+        // 墓場送り
         TempActorMgr.moveGrave(actor2);
         idx--;
       }
 
+      // 全滅チェック
+      if(TempActorMgr.countGroup(BtlGroup.Player) == 0) {
+        // 味方が全滅
+        var eft = BtlLogicUtil.createBtlEnd(false);
+        push(eft);
+        // 終了
+        break;
+      }
+      else if(TempActorMgr.countGroup(BtlGroup.Enemy) == 0) {
+        // 敵が全滅
+        var eft = BtlLogicUtil.createBtlEnd(true);
+        push(eft);
+        // 終了
+        break;
+      }
     }
   }
 
