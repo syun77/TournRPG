@@ -34,6 +34,8 @@ class BtlLogicPlayer {
   var _state:State = State.Init;
   // 停止タイマー
   var _tWait:Int = 0;
+  // ズーム倍率
+  var _zoom:Float = FlxCamera.defaultZoom;
 
   public function new(data:BtlLogicData) {
     _data = data;
@@ -101,6 +103,7 @@ class BtlLogicPlayer {
     }
     if(obj != null) {
       FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 10);
+      _zoom = 2;
     }
 
     // メイン処理へ
@@ -186,6 +189,12 @@ class BtlLogicPlayer {
    **/
   public function update():Void {
 
+    // ズーム計算
+    {
+      var d = _zoom - FlxG.camera.zoom;
+      FlxG.camera.zoom += (d * 0.2);
+    }
+
     if(_checkWait()) {
       // 停止中
       return;
@@ -197,11 +206,14 @@ class BtlLogicPlayer {
         _updateMain();
       case State.Wait:
         // ズーム演出
-        _state = State.End;
         var obj = new FlxObject();
         obj.x = FlxG.width/2;
         obj.y = FlxG.height/2;
         FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 50);
+        // デフォルトに戻す
+        _zoom = FlxCamera.defaultZoom;
+        // おしまい
+        _state = State.End;
 
       case State.End:
 

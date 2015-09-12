@@ -187,6 +187,10 @@ class BtlMgr {
 
       case State.InputCommand:
         // コマンド入力待ち
+        // カメラズームを戻す
+        var d = FlxCamera.defaultZoom - FlxG.camera.zoom;
+        FlxG.camera.zoom += (d * 0.1);
+        // デバッグ用入力チェック
         _debugProcInputCommand();
 
       case State.LogicCreate:
