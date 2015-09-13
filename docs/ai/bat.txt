@@ -4,3 +4,7 @@
 SEL_RND()
 // 通常攻撃
 ACT_ATTACK()
+$1 = 123
+if($1 == 123) {
+	SEL_RND()
+}

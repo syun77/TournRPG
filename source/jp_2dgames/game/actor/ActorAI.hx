@@ -27,6 +27,10 @@ class ActorAI {
 
   // ログ出力
   var _bLog:Bool = false;
+  public function setLog(b:Bool):Void {
+    _bLog = b;
+    _script.setLog(b);
+  }
 
   // コマンド
   var _cmd:BtlCmd;

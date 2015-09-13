@@ -263,6 +263,8 @@ class Actor extends FlxSprite {
     var ai = EnemyInfo.getString(id, "ai");
     var script = Reg.getEnemyScriptPath(ai);
     _ai = new ActorAI(this, script);
+    // TODO:
+//    _ai.setLog(true);
   }
 
   public function setName(str:String):Void {
