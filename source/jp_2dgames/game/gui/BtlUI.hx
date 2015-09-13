@@ -20,6 +20,7 @@ class BtlUI extends FlxSpriteGroup {
   // ■メンバ変数
   var _playerID:Int = 0;
 
+  var _txtStage:FlxText;
   var _txtPlayerLv:FlxText;
   var _txtPlayerXp:FlxText;
   var _txtPlayerMoney:FlxText;
@@ -32,27 +33,33 @@ class BtlUI extends FlxSpriteGroup {
   public function new() {
     super();
 
-    var bg = new FlxSprite().makeGraphic(FlxG.width, 104, FlxColor.BLACK);
-    bg.alpha = 0.6;
-    this.add(bg);
-
+    var txtList = new List<FlxText>();
     var px = PLAYER_X;
     var py = PLAYER_Y;
+    _txtStage = new FlxText(px, py);
+    txtList.add(_txtStage);
+    py += PLAYER_DY;
     _txtPlayerLv = new FlxText(px, py);
+    txtList.add(_txtPlayerLv);
     py += PLAYER_DY;
     _txtPlayerXp = new FlxText(px, py);
+    txtList.add(_txtPlayerXp);
     py += PLAYER_DY;
     _txtPlayerMoney = new FlxText(px, py);
+    txtList.add(_txtPlayerMoney);
     py += PLAYER_DY;
     _txtPlayerHp = new FlxText(px, py);
+    txtList.add(_txtPlayerHp);
     py += PLAYER_DY;
+
     _barPlayerHp = new StatusBar(px, py);
-    py += PLAYER_DY;
-    this.add(_txtPlayerLv);
-    this.add(_txtPlayerXp);
-    this.add(_txtPlayerMoney);
-    this.add(_txtPlayerHp);
     this.add(_barPlayerHp);
+    py += PLAYER_DY;
+
+    for(txt in txtList) {
+      this.add(txt);
+      txt.setBorderStyle(FlxText.BORDER_OUTLINE);
+    }
 
     for(obj in members) {
       obj.scrollFactor.set(0, 0);
@@ -71,10 +78,11 @@ class BtlUI extends FlxSpriteGroup {
     if(player != null) {
       var hp = player.hp;
       var hpmax = player.hpmax;
-      _txtPlayerLv.text = 'LV: ${player.lv}';
-      _txtPlayerXp.text = 'Exp: ${player.xp}';
+      _txtStage.text       = 'Stage: ${Global.getStage()}';
+      _txtPlayerLv.text    = 'LV: ${player.lv}';
+      _txtPlayerXp.text    = 'Exp: ${player.xp}';
       _txtPlayerMoney.text = 'MONEY: ${Global.getMoney()}';
-      _txtPlayerHp.text = 'HP: ${hp}/${hpmax}';
+      _txtPlayerHp.text    = 'HP: ${hp}/${hpmax}';
       _barPlayerHp.setPercent(100 * player.hpratio);
     }
   }

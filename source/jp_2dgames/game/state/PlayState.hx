@@ -142,6 +142,14 @@ class PlayState extends FlxState {
       // ロード
       Save.load(true, true);
     }
+    if(FlxG.keys.justPressed.TWO) {
+      // ステージを進める
+      Global.nextStage();
+    }
+    if(FlxG.keys.justPressed.ONE) {
+      // ステージを戻る
+      Global.prevStage();
+    }
     #end
   }
 }

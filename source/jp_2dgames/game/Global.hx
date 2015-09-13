@@ -57,6 +57,10 @@ class Global {
   public static function nextStage():Void {
     _stage++;
   }
+  // 1つ前のステージに戻る
+  public static function prevStage():Void {
+    _stage--;
+  }
   // ステージ番号の設定
   public static function setStage(val:Int):Void {
     _stage = val;
