@@ -46,9 +46,13 @@ class BtlTargetUI extends FlxSpriteGroup {
       btnList.push(btn);
     });
 
+    var cnt = btnList.length;
+    var idx = 0;
     for(btn in btnList) {
       btn.scrollFactor.set(0, 0);
       this.add(btn);
+
+      idx++;
     }
   }
 

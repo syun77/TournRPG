@@ -34,6 +34,11 @@ class BtlUtil {
       var e = ActorMgr.recycle(BtlGroup.Enemy, param);
       var px = (baseX + (dx*idx)) - e.width/2;
       var py = FlxG.height/2 - e.height/2;
+      if(cnt >= 3) {
+        if(idx%2 == 1) {
+          py += MyButton.HEIGHT;
+        }
+      }
       e.setDrawPosition(px, py);
 
       idx++;
