@@ -1,9 +1,9 @@
 //関数名,   命令コード, 引数リスト, ...
-ACT_ATTACK,   ACT_ATTACK, 
+ACT_ATTACK,   ACT_ATTACK,
 ACT_SKILL,    ACT_SKILL,  id
-ACT_ESCAPE,   ACT_ESCAPE, 
-SEL_RND,      SEL_RND,    
-LOG,          LOG,        b
+ACT_ESCAPE,   ACT_ESCAPE,
+SEL_RND,      SEL_RND,
+LOG,          LOG,        level
 //draw_bg,    DRB,        id, effectId=0
 //erase_bg,   ERB,        effectId=0
 //draw_ch,    DRC,        id, pos, effectId=0
