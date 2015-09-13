@@ -260,7 +260,9 @@ class Actor extends FlxSprite {
     visible = true;
 
     // AIスクリプト読み込み
-    _ai = new ActorAI(this);
+    var ai = EnemyInfo.getString(id, "ai");
+    var script = Reg.getEnemyScriptPath(ai);
+    _ai = new ActorAI(this, script);
   }
 
   public function setName(str:String):Void {

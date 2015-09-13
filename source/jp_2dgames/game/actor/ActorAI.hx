@@ -38,7 +38,7 @@ class ActorAI {
   /**
    * コンストラクタ
    **/
-  public function new(actor:Actor) {
+  public function new(actor:Actor, script:String) {
 
     _actor = actor;
 
@@ -48,7 +48,7 @@ class ActorAI {
       "LOG"        => _LOG,
     ];
 
-    _script = new AdvScript(tbl, "assets/data/ai/bat.csv");
+    _script = new AdvScript(tbl, script);
   }
 
   /**

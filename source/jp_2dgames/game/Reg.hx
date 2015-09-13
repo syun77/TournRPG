@@ -44,6 +44,13 @@ class Reg {
   }
 
   /**
+   * 敵のスクリプトのパスを取得する
+   **/
+  public static function getEnemyScriptPath(name:String):String {
+    return 'assets/data/ai/${name}.csv';
+  }
+
+  /**
    * 背景画像のパスを取得
    **/
   public static function getBackImagePath(id:Int):String {
