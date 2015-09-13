@@ -1,12 +1,7 @@
 package jp_2dgames.game.state;
 
 import jp_2dgames.game.particle.ParticleDamage;
-import openfl._internal.aglsl.assembler.Part;
-import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.particle.Particle;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import flixel.FlxCamera;
 import jp_2dgames.game.actor.TempActorMgr;
 import jp_2dgames.game.save.Save;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
@@ -33,8 +28,6 @@ class PlayState extends FlxState {
 
   // 背景
   var _bg:BtlBg;
-  // デバッグ機能
-  var _debugActor:DebugActor;
 
   /**
    * 生成
@@ -71,9 +64,6 @@ class PlayState extends FlxState {
 
 
     // デバッグ機能
-    _debugActor = new DebugActor();
-    this.add(_debugActor);
-
     FlxG.debugger.toggleKeys = ["ALT"];
   }
 
@@ -124,7 +114,7 @@ class PlayState extends FlxState {
     }
     if(FlxG.keys.justPressed.Q) {
       // キャラクターパラメータ閲覧
-      _debugActor.toggle();
+      openSubState(new DebugActor());
     }
     if(FlxG.keys.justPressed.F) {
       // 自爆

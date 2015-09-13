@@ -1,14 +1,15 @@
 package jp_2dgames.game.actor;
+import flixel.FlxG;
+import flixel.FlxSubState;
 import jp_2dgames.lib.Input;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
-import flixel.group.FlxSpriteGroup;
 
 /**
  * キャラクターデバッグ機能
  **/
-class DebugActor extends FlxSpriteGroup {
+class DebugActor extends FlxSubState {
 
   // 背景のサイズ
   static inline var BG_WIDTH:Int = 128;
@@ -19,6 +20,22 @@ class DebugActor extends FlxSpriteGroup {
   static inline var TEXT_Y:Int = 16;
   static inline var TEXT_DY:Int = 12;
 
+  // カーソルの位置に対応する項目
+  static inline var ITEM_ID:Int    = 0;
+  static inline var ITEM_NAME:Int  = 1;
+  static inline var ITEM_GROUP:Int = 2;
+  static inline var ITEM_HP:Int    = 3;
+  static inline var ITEM_STR:Int   = 4;
+  static inline var ITEM_VIT:Int   = 5;
+  static inline var ITEM_AGI:Int   = 6;
+  static inline var ITEM_XP:Int    = 7;
+  static inline var ITEM_MONEY:Int = 8;
+
+  // 開始番号
+  static inline var ITEM_FIRST:Int = ITEM_ID;
+  // 終端番号
+  static inline var ITEM_LAST:Int  = ITEM_MONEY;
+
   // ページ情報
   var _nPage:Int;
   var _nPageMax:Int;
@@ -26,28 +43,46 @@ class DebugActor extends FlxSpriteGroup {
 
   var _actorList:Array<Actor>;
 
-  var _txtID:FlxText;
-  var _txtName:FlxText;
-  var _txtGroup:FlxText;
-  var _txtHp:FlxText;
-  var _txtStr:FlxText;
-  var _txtVit:FlxText;
-  var _txtAgi:FlxText;
+  // 表示中のActor
+  var _actor:Actor;
+
+  // カーソル
+  var _txtCursor:FlxText;
+  var _cursor:Int;
+
+  var _txtID:FlxText;    // ID
+  var _txtName:FlxText;  // 名前
+  var _txtGroup:FlxText; // 所属グループ
+  var _txtHp:FlxText;    // HP
+  var _txtStr:FlxText;   // 力
+  var _txtVit:FlxText;   // 耐久力
+  var _txtAgi:FlxText;   // 素早さ
+  var _txtXp:FlxText;    // 経験値
+  var _txtMoney:FlxText; // 所持金
 
   /**
-   * コンストラクタ
+   * 生成
    **/
-  public function new() {
-    super(16, 16);
+  override public function create() {
+    super.create();
 
     var bg = new FlxSprite().makeGraphic(BG_WIDTH, BG_HEIGHT, FlxColor.BLACK);
     bg.alpha = 0.8;
     this.add(bg);
 
+    // ページ番号
     _txtPage = new FlxText(0, 0);
     _txtPage.color = FlxColor.SILVER;
     this.add(_txtPage);
 
+    _actor = null;
+
+    // カーソル
+    _txtCursor = new FlxText(TEXT_X-12, TEXT_Y, 32, ">");
+    this.add(_txtCursor);
+    _cursor = ITEM_HP;
+
+    // 項目テキスト
     var txtList = new List<FlxText>();
     var px = TEXT_X;
     var py = TEXT_Y;
@@ -73,33 +108,21 @@ class DebugActor extends FlxSpriteGroup {
     _txtAgi = new FlxText(px, py);
     txtList.add(_txtAgi);
     py += TEXT_DY;
+    _txtXp = new FlxText(px, py);
+    txtList.add(_txtXp);
+    py += TEXT_DY;
+    _txtMoney = new FlxText(px, py);
+    txtList.add(_txtMoney);
 
     for(txt in txtList) {
       this.add(txt);
     }
 
-    // 非表示
-    visible = false;
-  }
+    _nPage = 0;
+    _actorList = ActorMgr.getAlive();
+    _nPageMax = _actorList.length;
 
-  /**
-   * 表示・非表示の切り替え
-   **/
-  public function toggle():Void {
-    if(visible == false) {
-      // 開く
-      visible = true;
-
-      _nPage = 0;
-      _actorList = ActorMgr.getAlive();
-      _nPageMax = _actorList.length;
-
-      _setText(_nPage);
-    }
-    else {
-      // 閉じる
-      visible = false;
-    }
+    _setText(_nPage);
   }
 
   /**
@@ -109,6 +132,7 @@ class DebugActor extends FlxSpriteGroup {
     _txtPage.text = 'page(${idx}/${_nPageMax-1})';
 
     var act = _actorList[idx];
+    _actor = act;
 
     _txtID.text    = 'ID: ${act.ID}';
     _txtName.text  = ${act.name};
@@ -117,6 +141,22 @@ class DebugActor extends FlxSpriteGroup {
     _txtStr.text   = 'STR: ${act.str}';
     _txtVit.text   = 'VIT: ${act.vit}';
     _txtAgi.text   = 'AGI: ${act.agi}';
+    _txtXp.text    = 'XP: ${act.xp}';
+    _txtMoney.text = 'MONEY: ${act.money}';
+  }
+
+  /**
+   * カーソルの位置が変更できる項目かどうかをチェック
+   **/
+  private function _checkCursor():Bool {
+    switch(_cursor) {
+      case ITEM_ID, ITEM_NAME, ITEM_GROUP:
+        // 変更できない
+        return false;
+      default:
+        // 変更できる
+        return true;
+    }
   }
 
   /**
@@ -125,20 +165,105 @@ class DebugActor extends FlxSpriteGroup {
   override public function update():Void {
     super.update();
 
-    // ページ切り替え
+    if(FlxG.keys.justPressed.Q) {
+      // 閉じる
+      close();
+      return;
+    }
+
+    if(Input.on.B) {
+      // ページ切り替え
+      if(Input.press.LEFT) {
+        _nPage--;
+        if(_nPage < 0) {
+          _nPage = _nPageMax-1;
+        }
+        _setText(_nPage);
+      }
+      if(Input.press.RIGHT) {
+        _nPage++;
+        if(_nPage >= _nPageMax) {
+          _nPage = 0;
+        }
+        _setText(_nPage);
+      }
+    }
+    else {
+      // 項目の移動
+      _moveCursor();
+
+      // 項目の編集
+      _editItem();
+    }
+
+    // カーソル位置の更新
+    _txtCursor.y = TEXT_Y + (TEXT_DY * _cursor);
+  }
+
+  private function _moveCursor():Void {
+    if(Input.press.UP) {
+      // 上に移動
+      _cursor--;
+      if(_cursor < ITEM_FIRST) {
+        _cursor = ITEM_LAST;
+      }
+      while(_checkCursor() == false) {
+        _cursor--;
+        if(_cursor < ITEM_FIRST) {
+          _cursor = ITEM_LAST;
+        }
+      }
+    }
+    if(Input.press.DOWN) {
+      // 下に移動
+      _cursor++;
+      if(_cursor > ITEM_LAST) {
+        _cursor = ITEM_FIRST;
+      }
+      while(_checkCursor() == false) {
+        _cursor++;
+        if(_cursor > ITEM_LAST) {
+          _cursor = ITEM_FIRST;
+        }
+      }
+    }
+  }
+
+  private function _editItem():Void {
+    var val = 1;
+    if(Input.on.X) {
+      val *= 10;
+    }
+    if(Input.on.Y) {
+      val *= 100;
+    }
+
     if(Input.press.LEFT) {
-      _nPage--;
-      if(_nPage < 0) {
-        _nPage = _nPageMax-1;
-      }
-      _setText(_nPage);
+      val *= -1;
     }
-    if(Input.press.RIGHT) {
-      _nPage++;
-      if(_nPage >= _nPageMax) {
-        _nPage = 0;
-      }
-      _setText(_nPage);
+    else if(Input.press.RIGHT) {
     }
+    else {
+      // 編集していない
+      return;
+    }
+    switch(_cursor) {
+      case ITEM_HP:
+        _actor.param.hp    += val;
+        _actor.param.hpmax += val;
+      case ITEM_STR:
+        _actor.param.str += val;
+      case ITEM_VIT:
+        _actor.param.vit += val;
+      case ITEM_AGI:
+        _actor.param.agi += val;
+      case ITEM_XP:
+        _actor.param.xp += val;
+      case ITEM_MONEY:
+        _actor.param.money += val;
+    }
+
+    // テキスト更新
+    _setText(_nPage);
   }
 }
