@@ -19,15 +19,12 @@ class BtlUI extends FlxSpriteGroup {
 
   // ■メンバ変数
   var _playerID:Int = 0;
-  var _enemyID:Int = 0;
 
   var _txtPlayerLv:FlxText;
   var _txtPlayerXp:FlxText;
   var _txtPlayerMoney:FlxText;
   var _txtPlayerHp:FlxText;
-  var _txtEnemyHp:FlxText;
   var _barPlayerHp:StatusBar;
-  var _barEnemyHp:StatusBar;
 
   /**
    * コンストラクタ
@@ -51,16 +48,11 @@ class BtlUI extends FlxSpriteGroup {
     py += PLAYER_DY;
     _barPlayerHp = new StatusBar(px, py);
     py += PLAYER_DY;
-    _txtEnemyHp = new FlxText(px, py);
-    py += PLAYER_DY;
-    _barEnemyHp = new StatusBar(px, py);
     this.add(_txtPlayerLv);
     this.add(_txtPlayerXp);
     this.add(_txtPlayerMoney);
     this.add(_txtPlayerHp);
     this.add(_barPlayerHp);
-    this.add(_txtEnemyHp);
-    this.add(_barEnemyHp);
 
     for(obj in members) {
       obj.scrollFactor.set(0, 0);
@@ -69,9 +61,6 @@ class BtlUI extends FlxSpriteGroup {
 
   public function setPlayerID(id:Int) {
     _playerID = id;
-  }
-  public function setEnemyID(id:Int) {
-    _enemyID = id;
   }
 
   override public function update():Void {
@@ -87,15 +76,6 @@ class BtlUI extends FlxSpriteGroup {
       _txtPlayerMoney.text = 'MONEY: ${Global.getMoney()}';
       _txtPlayerHp.text = 'HP: ${hp}/${hpmax}';
       _barPlayerHp.setPercent(100 * player.hpratio);
-    }
-
-    // 敵情報
-    var enemy = ActorMgr.search(_enemyID);
-    if(enemy != null) {
-      var hp = enemy.hp;
-      var hpmax = enemy.hpmax;
-      _txtEnemyHp.text = 'Enemy HP: ${hp}/${hpmax}';
-      _barEnemyHp.setPercent(100 * enemy.hpratio);
     }
   }
 }

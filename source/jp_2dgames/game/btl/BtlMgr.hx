@@ -48,8 +48,10 @@ private enum State {
  **/
 class BtlMgr {
 
+  // 敵出現の最大数
+  public static var ENEMY_APPEAR_MAX:Int = 5;
+
   var _player:Actor;
-  var _enemy:Actor;
 
   var _state:State = State.None;
   var _statePrev:State = State.None;
@@ -68,6 +70,10 @@ class BtlMgr {
   public function new(btlUI:BtlUI) {
 
     _player = ActorMgr.recycle(BtlGroup.Player, Global.getPlayerParam());
+    // TODO:
+    _player.setName("プレイヤー");
+
+    /*
     var param = new Params();
     param.id = Global.getStage();
 //    var cnt = 2; // TODO:
@@ -80,12 +86,11 @@ class BtlMgr {
       var py = FlxG.height/2 - _enemy.height/2;
       _enemy.setDrawPosition(px, py);
     }
-
-    // TODO:
-    _player.setName("プレイヤー");
+    */
+    // 敵の生成
+    BtlUtil.createEnemyGroup(Global.getStage());
 
     btlUI.setPlayerID(_player.ID);
-    btlUI.setEnemyID(_enemy.ID);
 
     _player.x = FlxG.width/2;
     _player.y = FlxG.height/2;
