@@ -15,6 +15,10 @@ class BtlTargetUI extends FlxSpriteGroup {
   // ■定数
   public static inline var CMD_CANCEL:Int = -1;
 
+  // 座標
+  // キャンセルボタンのオフセット
+  private static inline var BTN_CANCEL_OFS_Y = 64;
+
   // ■スタティック
   private static var _instance:BtlTargetUI = null;
 
@@ -36,7 +40,7 @@ class BtlTargetUI extends FlxSpriteGroup {
     super();
 
     var btnList = new Array<MyButton>();
-    // 対象Actorを決める
+    // 対象Actorを決めるボタン
     ActorMgr.forEachAliveGroup(group, function(actor:Actor) {
       var px = actor.xcenter - MyButton.WIDTH/2;
       var py = actor.bottom;
@@ -46,13 +50,22 @@ class BtlTargetUI extends FlxSpriteGroup {
       btnList.push(btn);
     });
 
+    // キャンセルボタン
+    {
+      var px = FlxG.width/2 - MyButton.WIDTH/2;
+      var py = FlxG.height - BTN_CANCEL_OFS_Y;
+      var label = UIMsg.get(UIMsg.CANCEL);
+      var btn = new MyButton(px, py, label, function() {
+        // キャンセル
+        _click(cbFunc, CMD_CANCEL);
+      });
+      btnList.push(btn);
+    }
+
     var cnt = btnList.length;
-    var idx = 0;
     for(btn in btnList) {
       btn.scrollFactor.set(0, 0);
       this.add(btn);
-
-      idx++;
     }
   }
 

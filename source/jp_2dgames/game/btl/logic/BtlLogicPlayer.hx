@@ -144,7 +144,7 @@ class BtlLogicPlayer {
     }
     if(obj != null) {
       FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 10);
-      _zoom = 2.1;
+      _zoom = FlxCamera.defaultZoom + 0.1;
     }
 
     // メイン処理へ

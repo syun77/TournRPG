@@ -121,9 +121,12 @@ class BtlCmdUI extends FlxSpriteGroup {
 
     BtlTargetUI.open(function(targetID) {
       if(targetID == BtlTargetUI.CMD_CANCEL) {
+        // キャンセルした
+        _display();
         visible = true;
         return;
       }
+      // 攻撃
       cbFunc(actor, BtlCmd.Attack(range, targetID));
     }, group, range);
 
