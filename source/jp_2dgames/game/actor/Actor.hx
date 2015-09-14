@@ -330,6 +330,20 @@ class Actor extends FlxSprite {
   }
 
   /**
+   * 攻撃が外れた
+   **/
+  public function miss():Void {
+    if(group == BtlGroup.Enemy) {
+      // パーティクル発生
+      var px = xcenter;
+      var py = ycenter;
+      // ダメージ数値
+      var p = ParticleDamage.start(px, py, -1);
+      p.color = MyColor.NUM_MISS;
+    }
+  }
+
+  /**
    * 更新
    **/
   override public function update():Void {

@@ -1,5 +1,6 @@
 package jp_2dgames.game.particle;
 
+import jp_2dgames.lib.SprFont;
 import flixel.FlxState;
 import flash.geom.Rectangle;
 import flash.geom.Point;
@@ -15,6 +16,7 @@ private enum State {
   Main;  // メイン
   Wait;  // ちょっと待つ
   Blink; // 点滅
+  Fade;  // フェードで消える
 }
 
 /**
@@ -28,6 +30,7 @@ class ParticleDamage extends FlxSprite {
   // ■速度関連
   // 開始速度
   private static inline var SPEED_Y_INIT:Float = -200;
+  private static inline var SPEED_Y_INIT_MISS:Float = -20;
   // 重力加速度
   private static inline var GRAVITY:Float = 15;
   // 床との反発係数
@@ -62,11 +65,12 @@ class ParticleDamage extends FlxSprite {
   private var _ystart:Float;
   private var _state:State;
   private var _timer:Int;
+  // ミス用の演出かどうか
+  private var _bMiss:Bool;
 
   /**
-	 * コンストラクタ
-	 **/
-
+   * コンストラクタ
+   **/
   public function new() {
     super();
 
@@ -77,69 +81,74 @@ class ParticleDamage extends FlxSprite {
   }
 
   /**
-	 * 初期化
-	 **/
-
+   * 初期化
+   **/
   public function init(X:Float, Y:Float, val:Int) {
     x = X;
     y = Y;
     _ystart = Y;
 
-    // 描画をクリアする
-    pixels.fillRect(new Rectangle(0, 0, FONT_SIZE * 8, FONT_SIZE), FlxColor.TRANSPARENT);
-
-    // フォント画像読み込み
-    var bmp = FlxG.bitmap.add(Reg.PATH_SPR_FONT);
-    var pt = new Point();
-    var rect = new Rectangle(0, 0, FONT_SIZE, FONT_SIZE);
-    // 数字の桁数を求める
-    var digit = Std.string(val).length;
-    for(i in 0...digit) {
-      // フォントをレンダリングする
-      pt.x = (digit - i - 1) * FONT_SIZE;
-      var v = Std.int(val / Math.pow(10, i)) % 10;
-      rect.left = v * FONT_SIZE;
-      rect.right = rect.left + FONT_SIZE;
-      pixels.copyPixels(bmp.bitmap, rect, pt);
+    var w = 0;
+    if(val >= 0) {
+      // 数値フォントを描画する
+      w = SprFont.render(this, '${val}');
+      // 移動開始
+      velocity.y = SPEED_Y_INIT;
+      _bMiss = false;
     }
-    dirty = true;
-    updateFrameData();
+    else {
+      // 攻撃が外れた
+      w = SprFont.render(this, 'MISS');
+      // 移動開始
+      velocity.y = SPEED_Y_INIT_MISS;
+      _bMiss = true;
+      _timer = 16;
+    }
 
     // フォントを中央揃えする
-    x = X - (FONT_SIZE * digit / 2);
-
-    // 移動開始
-    velocity.y = SPEED_Y_INIT;
+    x = X - (w / 2);
 
     visible = true;
+    alpha = 1;
 
     // メイン状態へ
     _state = State.Main;
   }
 
   /**
-	 * コンストラクタ
-	 **/
-
+   * コンストラクタ
+   **/
   override public function update():Void {
     super.update();
 
     switch(_state) {
       case State.Main:
         // 落下中
-        velocity.y += GRAVITY;
-        if(y > _ystart) {
-          // 出現位置より下に下がった
-          y = _ystart;
-          // バウンドする
-          velocity.y *= -FRICTION;
-          if(Math.abs(velocity.y) < 30) {
-            // 一定速度以下でバウンド終了
-            velocity.y = 0;
-            _timer = 30;
-            _state = State.Wait;
+        if(_bMiss == false) {
+          // 通常ダメージ
+          velocity.y += GRAVITY;
+          if(y > _ystart) {
+            // 出現位置より下に下がった
+            y = _ystart;
+            // バウンドする
+            velocity.y *= -FRICTION;
+            if(Math.abs(velocity.y) < 30) {
+              // 一定速度以下でバウンド終了
+              velocity.y = 0;
+              _timer = 30;
+              _state = State.Wait;
+            }
           }
         }
+        else {
+          // MISS
+          _timer--;
+          if(_timer == 0) {
+            // フェードで消える
+            _state = State.Fade;
+          }
+        }
+
       case State.Wait:
         // ちょっと待つ
         _timer--;
@@ -152,6 +161,13 @@ class ParticleDamage extends FlxSprite {
         visible = (_timer % 4 >= 2);
         _timer--;
         if(_timer < 1) {
+          kill();
+        }
+
+      case State.Fade:
+        // フェードで消える
+        alpha -= 1.0 / 30;
+        if(alpha < 0) {
           kill();
         }
     }

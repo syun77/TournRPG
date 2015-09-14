@@ -17,9 +17,30 @@ class Calc {
   static inline var DAMAGE_RATIO = 0.125;
 
   /**
+   * 命中判定
+   * @return 回避できたらtrue
+   **/
+  public static function checkHit(act:Actor, target:Actor):Bool {
+    if(FlxRandom.chanceRoll(93.7)) {
+      // 命中した
+      return true;
+    }
+
+    // 回避した
+    return false;
+  }
+
+  /**
    * ダメージ計算式
+   * @return ダメージ量。回避された場合は「-1」
    **/
   public static function damage(act:Actor, target:Actor):Int {
+
+    if(checkHit(act, target) == false) {
+      // 外れ
+      return -1;
+    }
+
     // 力
     var str = act.str;
     // 耐久力

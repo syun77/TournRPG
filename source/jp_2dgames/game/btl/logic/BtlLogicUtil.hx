@@ -50,11 +50,16 @@ class BtlLogicUtil {
     var target = TempActorMgr.search(targetID);
     // ダメージ計算
     var val = Calc.damage(actor, target);
-    // HPダメージ
-    eft.val = BtlLogicVal.HpDamage(val);
-
-    // ダメージを与えておく
-    target.damage(val, false);
+    if(val > 0) {
+      // HPダメージ
+      eft.val = BtlLogicVal.HpDamage(val);
+      // ダメージを与えておく
+      target.damage(val, false);
+    }
+    else {
+      // 回避された
+      eft.val = BtlLogicVal.ChanceRoll(false);
+    }
 
     return eft;
   }

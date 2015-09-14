@@ -162,7 +162,10 @@ class BtlLogicPlayer {
         target.damage(val);
       case BtlLogicVal.HpRecover(val):
       case BtlLogicVal.ChanceRoll(bSuccess):
-
+        if(bSuccess == false) {
+          // 失敗
+          target.miss();
+        }
     }
   }
 
