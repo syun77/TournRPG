@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import flash.text.TextFormatAlign;
 import jp_2dgames.lib.Input;
 import flixel.FlxG;
 import flixel.text.FlxText;
@@ -16,7 +17,8 @@ class TitleState extends FlxState {
   override public function create():Void {
     super.create();
 
-    var txt = new FlxText(FlxG.width/2, FlxG.height/2, 128, "Tourn RPG");
+    var txt = new FlxText(0, FlxG.height/2, FlxG.width, "Title", 24);
+    txt.alignment = "center";
     this.add(txt);
   }
 

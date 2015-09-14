@@ -1,13 +1,13 @@
 package jp_2dgames.game.state;
-
-import jp_2dgames.game.gui.UIMsg;
+import jp_2dgames.lib.Input;
 import flixel.FlxG;
+import flixel.text.FlxText;
 import flixel.FlxState;
 
 /**
- * 起動開始シーン
+ * リザルト画面
  **/
-class BootState extends FlxState {
+class ResultState extends FlxState {
 
   /**
    * 生成
@@ -15,25 +15,26 @@ class BootState extends FlxState {
   override public function create():Void {
     super.create();
 
-    // UIテキスト読み込み
-    UIMsg.load();
+    var txt = new FlxText(0, FlxG.height/2, FlxG.width, "Result", 24);
+    txt.alignment = "center";
+    this.add(txt);
   }
 
   /**
    * 破棄
-   */
+   **/
   override public function destroy():Void {
     super.destroy();
   }
 
   /**
    * 更新
-   */
+   **/
   override public function update():Void {
     super.update();
 
-    FlxG.switchState(new PlayInitState());
-//    FlxG.switchState(new TitleState());
-//    FlxG.switchState(new ResultState());
+    if(Input.press.A) {
+      FlxG.switchState(new TitleState());
+    }
   }
 }
