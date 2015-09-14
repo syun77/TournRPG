@@ -101,7 +101,13 @@ class PlayState extends FlxState {
         default:
           // 次のステージへ
           Global.nextStage();
-          FlxG.switchState(new PlayState());
+          if(Global.isStageMax()) {
+            // ゲームクリア
+            FlxG.switchState(new ResultState());
+          }
+          else {
+            FlxG.switchState(new PlayState());
+          }
       }
     }
 

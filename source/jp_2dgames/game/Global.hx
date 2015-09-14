@@ -65,6 +65,10 @@ class Global {
   public static function setStage(val:Int):Void {
     _stage = val;
   }
+  // 最大ステージかどうか
+  public static function isStageMax():Bool {
+    return _stage > 5;
+  }
 
   // インベントリの初期化
   private static function _initInventory():Void {
