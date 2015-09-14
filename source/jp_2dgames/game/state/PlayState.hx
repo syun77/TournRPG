@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.btl.logic.BtlLogicPlayer;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.actor.TempActorMgr;
@@ -92,9 +93,16 @@ class PlayState extends FlxState {
     _btlMgr.proc();
 
     if(_btlMgr.isEnd()) {
-      // 次のステージへ
-      Global.nextStage();
-      FlxG.switchState(new PlayState());
+      switch(_btlMgr.btlEnd) {
+        case BtlLogicPlayer.BTL_END_LOSE:
+          // ゲームオーバー
+        FlxG.switchState(new ResultState());
+
+        default:
+          // 次のステージへ
+          Global.nextStage();
+          FlxG.switchState(new PlayState());
+      }
     }
 
     // デバッグ機能

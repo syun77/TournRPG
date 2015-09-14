@@ -1,7 +1,6 @@
 package jp_2dgames.game.btl;
 
 import flixel.FlxCamera;
-import jp_2dgames.game.item.ResultSequence;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.btl.logic.BtlLogicMgr;
 import jp_2dgames.game.btl.types.BtlRange;
@@ -61,8 +60,15 @@ class BtlMgr {
   // 再生中のバトル演出
   var _logicPlayer:BtlLogicPlayer = null;
 
-  // 獲得したアイテム
-  var _result:ResultSequence = null;
+  // リザルト管理
+  var _result:BtlResult = null;
+
+  // バトル終了理由
+  var _btlEnd:Int = BtlLogicPlayer.BTL_END_NONE;
+  public var btlEnd(get, never):Int;
+  private function get_btlEnd() {
+    return _btlEnd;
+  }
 
   /**
    * コンストラクタ
@@ -73,20 +79,6 @@ class BtlMgr {
     // TODO:
     _player.setName("プレイヤー");
 
-    /*
-    var param = new Params();
-    param.id = Global.getStage();
-//    var cnt = 2; // TODO:
-    var cnt = 1; // TODO:
-    var baseX = FlxG.width/(cnt+1);
-    var dx = baseX;
-    for(i in 0...cnt) {
-      _enemy = ActorMgr.recycle(BtlGroup.Enemy, param);
-      var px = (baseX+dx*i) - _enemy.width/2;
-      var py = FlxG.height/2 - _enemy.height/2;
-      _enemy.setDrawPosition(px, py);
-    }
-    */
     // 敵の生成
     BtlUtil.createEnemyGroup(Global.getStage());
 
@@ -224,7 +216,9 @@ class BtlMgr {
         }
 
       case State.LogicEnd:
-        switch(_logicPlayer.getBtlEnd()) {
+        _btlEnd = _logicPlayer.getBtlEnd();
+
+        switch(_btlEnd) {
           case BtlLogicPlayer.BTL_END_ESCAPE:
             // 逃走した
             _change(State.Escape);
@@ -244,15 +238,16 @@ class BtlMgr {
         _change(State.TurnStart);
 
       case State.BtlWin:
+        // アイテム獲得
         _change(State.Result);
       case State.BtlLose:
-        _change(State.Result);
+        _change(State.ResultWait);
       case State.Escape:
-        _change(State.Result);
+        _change(State.ResultWait);
 
       case State.Result:
         // リザルト
-        _result = new ResultSequence();
+        _result = new BtlResult();
         _change(State.ResultItem);
 
       case State.ResultItem:

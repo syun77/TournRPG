@@ -1,12 +1,15 @@
-package jp_2dgames.game.item;
+package jp_2dgames.game.btl;
 
+import jp_2dgames.game.item.ItemConst;
+import jp_2dgames.game.item.ItemData;
+import jp_2dgames.game.item.Inventory;
 import jp_2dgames.lib.Input;
 import flixel.FlxG;
 import jp_2dgames.game.gui.InventoryUI;
 import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.gui.Dialog;
 import jp_2dgames.game.item.ItemUtil;
-import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
+import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.actor.ActorMgr;
 
@@ -41,7 +44,7 @@ private class ItemDropInfo {
 /**
  * リザルト制御
  **/
-class ResultSequence {
+class BtlResult {
 
   // ■メンバ変数
   // 状態
@@ -80,6 +83,7 @@ class ResultSequence {
         _xp += actor.xp;
 
         // アイテム
+        // TODO:
         var item = new ItemData(ItemConst.POTION01);
         var info = new ItemDropInfo(actor.name, item);
         _infos.push(info);
