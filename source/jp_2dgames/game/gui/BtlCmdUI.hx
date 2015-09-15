@@ -2,7 +2,6 @@ package jp_2dgames.game.gui;
 import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.ActorMgr;
-import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.btl.types.BtlCmd;
