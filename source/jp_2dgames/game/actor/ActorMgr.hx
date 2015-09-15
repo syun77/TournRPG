@@ -43,6 +43,20 @@ class ActorMgr  {
   }
 
   /**
+   * 指定したIDに一致するインスタンスを取得する (墓場を含める)
+   **/
+  public static function searchAll(id:Int):Actor {
+    var actor = _pool.search(id);
+    if(actor != null) {
+      // 見つかった
+      return actor;
+    }
+
+    // 見つからないので墓場から探す
+    return searchGrave(id);
+  }
+
+  /**
    * 生存しているActorのリストを取得
    **/
   public static function getAlive():Array<Actor> {

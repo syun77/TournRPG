@@ -94,6 +94,20 @@ class Actor extends FlxSprite {
   private function get_hpratio() {
     return _param.hp / _param.hpmax;
   }
+  // MP
+  public var mp(get, never):Int;
+  private function get_mp() {
+    return _param.mp;
+  }
+  // 最大MP
+  public var mpmax(get, never):Int;
+  private function get_mpmax() {
+    return _param.mpmax;
+  }
+  public var mpratio(get, never):Float;
+  private function get_mpratio() {
+    return _param.mp / _param.mpmax;
+  }
   // 力
   public var str(get, never):Int;
   private function get_str() {

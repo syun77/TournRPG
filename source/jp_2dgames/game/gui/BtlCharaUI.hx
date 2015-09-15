@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.actor.ActorMgr;
 import flixel.util.FlxColor;
 import jp_2dgames.lib.StatusBar;
 import flixel.text.FlxText;
@@ -102,6 +103,10 @@ class BtlCharaUI extends FlxSpriteGroup {
   // MPゲージ
   var _barMp:StatusBar;
 
+
+  // 表示するActorのID
+  var _actorID:Int = 0;
+
   /**
    * コンストラクタ
    **/
@@ -135,14 +140,12 @@ class BtlCharaUI extends FlxSpriteGroup {
     this.add(_txtLvCaption);
     // Lv数値
     _txtLv = new FlxText(TXT_LV_OFS_X, TXT_LV_OFS_Y, TXT_LV_WIDTH, TXT_LV_SIZE);
-    _txtLv.text = "99"; // TODO:
     _txtLv.alignment = "right";
     this.add(_txtLv);
 
     // 名前
     _txtName = new FlxText(TXT_NAME_OFS_X, TXT_NAME_OFS_Y);
     _txtName.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-    _txtName.text = "プレイヤー"; // TODO:
     this.add(_txtName);
 
     // HPラベル
@@ -153,12 +156,10 @@ class BtlCharaUI extends FlxSpriteGroup {
     // HPゲージ
     _barHp = new StatusBar(BAR_HP_X, BAR_HPMP_Y, BAR_HPMP_WIDTH, BAR_HPMP_HEIGHT);
     _barHp.createGradientBar([FlxColor.CHARCOAL, FlxColor.CHARCOAL], [FlxColor.WHEAT, FlxColor.CORAL], 2);
-    _barHp.setPercent(100); // TODO:
     this.add(_barHp);
     // HP数値
     _txtHp = new FlxText(TXT_HP_OFS_X, TXT_HP_OFS_Y, TXT_HPMP_WIDTH, TXT_HPMP_SIZE);
     _txtHp.alignment = "right";
-    _txtHp.text = "999"; // TODO:
     this.add(_txtHp);
 
     // MPラベル
@@ -169,17 +170,40 @@ class BtlCharaUI extends FlxSpriteGroup {
     // MPゲージ
     _barMp = new StatusBar(BAR_MP_X, BAR_HPMP_Y, BAR_HPMP_WIDTH, BAR_HPMP_HEIGHT);
     _barMp.createGradientBar([FlxColor.CHARCOAL, FlxColor.CHARCOAL], [FlxColor.LIME, FlxColor.FOREST_GREEN], 2);
-    _barMp.setPercent(100); // TODO:
     this.add(_barMp);
     // MP数値
     _txtMp = new FlxText(TXT_MP_OFS_X, TXT_MP_OFS_Y, TXT_HPMP_WIDTH, TXT_HPMP_SIZE);
     _txtMp.alignment = "right";
-    _txtMp.text = "999";
     this.add(_txtMp);
+  }
 
+  /**
+   * 表示するActorを設定する
+   **/
+  public function setActorID(actorID:Int):Void {
+    _actorID = actorID;
     for(obj in members) {
       // スクロール無効
       obj.scrollFactor.set(0, 0);
     }
+  }
+
+  /**
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
+
+    var actor = ActorMgr.searchAll(_actorID);
+    if(actor == null) {
+      return;
+    }
+
+    _txtLv.text   = '${actor.lv}';
+    _txtName.text = actor.name;
+    _txtHp.text   = '${actor.hp}';
+    _barHp.setPercent(100 * actor.hpratio);
+    _txtMp.text   = '${actor.mp}';
+    _barMp.setPercent(100 * actor.mpratio);
   }
 }

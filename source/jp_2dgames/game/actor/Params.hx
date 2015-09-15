@@ -9,6 +9,8 @@ class Params {
   public var lv:Int    = 1;   // レベル
   public var hp:Int    = 100; // HP
   public var hpmax:Int = 100; // 最大HP
+  public var mp:Int    = 30;  // MP
+  public var mpmax:Int = 30;  // 最大MP
   public var str:Int   = 5;   // 力
   public var vit:Int   = 5;   // 耐久力
   public var agi:Int   = 5;   // 素早さ
@@ -23,6 +25,8 @@ class Params {
     lv    = p.lv;
     hp    = p.hp;
     hpmax = p.hpmax;
+    mp    = p.mp;
+    mpmax = p.mpmax;
     str   = p.str;
     vit   = p.vit;
     agi   = p.agi;
