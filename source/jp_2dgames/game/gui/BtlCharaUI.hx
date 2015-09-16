@@ -11,6 +11,9 @@ import flixel.group.FlxSpriteGroup;
  **/
 class BtlCharaUI extends FlxSpriteGroup {
 
+  // ■定数
+  static inline var TIMER_SHAKE:Int = 120;
+
   // 全体のサイズ
   public static inline var WIDTH  = 80;
   public static inline var HEIGHT = 32;
@@ -72,6 +75,17 @@ class BtlCharaUI extends FlxSpriteGroup {
   public static inline var BAR_HPMP_WIDTH  = 32;
   public static inline var BAR_HPMP_HEIGHT = 2;
 
+
+  // ■メンバ変数
+  var _xstart:Float = 0;
+  var _ystart:Float = 0;
+
+  // アニメーションタイマー
+  var _tAnime:Int = 0;
+
+  // ダメージ時の揺れ
+  var _tShake:Float = 0;
+
   // 背景枠
   var _bg:FlxSprite;
   // レベル背景
@@ -103,15 +117,20 @@ class BtlCharaUI extends FlxSpriteGroup {
   // MPゲージ
   var _barMp:StatusBar;
 
-
   // 表示するActorのID
   var _actorID:Int = 0;
+  public var actorID(get, never):Int;
+  private function get_actorID() {
+    return _actorID;
+  }
 
   /**
    * コンストラクタ
    **/
   public function new(X:Float, Y:Float) {
     super(X, Y);
+    _xstart = X;
+    _ystart = Y;
 
     // 背景
     _bg = new FlxSprite(0, 0).makeGraphic(WIDTH, HEIGHT, FlxColor.BLACK);
@@ -189,10 +208,22 @@ class BtlCharaUI extends FlxSpriteGroup {
   }
 
   /**
+   * ダメージ
+   **/
+  public function damage(val:Int):Void {
+    // TODO:
+  }
+
+  /**
    * 更新
    **/
   override public function update():Void {
     super.update();
+
+    _tAnime++;
+
+    // 揺れ更新
+    _updateShake();
 
     var actor = ActorMgr.searchAll(_actorID);
     if(actor == null) {
@@ -205,5 +236,27 @@ class BtlCharaUI extends FlxSpriteGroup {
     _barHp.setPercent(100 * actor.hpratio);
     _txtMp.text   = '${actor.mp}';
     _barMp.setPercent(100 * actor.mpratio);
+
+  }
+
+  /**
+   * 揺らす
+   **/
+  private function _updateShake():Void {
+    if(_tShake > 0) {
+      _tShake *= 0.9;
+      if(_tShake < 1) {
+        _tShake = 0;
+      }
+      var xsign = if(_tAnime%4 < 2) 1 else -1;
+      x = _xstart + (_tShake * xsign * 0.2);
+    }
+  }
+
+  /**
+   * ダメージの揺れ開始
+   **/
+  public function shake():Void {
+    _tShake = TIMER_SHAKE;
   }
 }

@@ -24,8 +24,6 @@ class PlayState extends FlxState {
 
   // バトル管理
   var _btlMgr:BtlMgr;
-  // バトルUI
-  var _btlUI:BtlUI;
 
   // 背景
   var _bg:BtlBg;
@@ -44,11 +42,10 @@ class PlayState extends FlxState {
     ActorMgr.create(this);
 
     // UI登録
-    _btlUI = new BtlUI();
-    this.add(_btlUI);
+    BtlUI.open();
 
     // バトル管理生成
-    _btlMgr = new BtlMgr(_btlUI);
+    _btlMgr = new BtlMgr();
 
     // バトル演出キュー
     BtlLogicMgr.create();
@@ -77,6 +74,7 @@ class PlayState extends FlxState {
     Particle.terminate();
     BtlLogicMgr.destroy();
     ActorMgr.destroy();
+    BtlUI.close();
     TempActorMgr.destroy();
     Message.instance = null;
 

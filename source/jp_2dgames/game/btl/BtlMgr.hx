@@ -73,7 +73,7 @@ class BtlMgr {
   /**
    * コンストラクタ
    **/
-  public function new(btlUI:BtlUI) {
+  public function new() {
 
     _player = ActorMgr.recycle(BtlGroup.Player, Global.getPlayerParam());
     // TODO:
@@ -82,7 +82,7 @@ class BtlMgr {
     // 敵の生成
     BtlUtil.createEnemyGroup(Global.getStage());
 
-    btlUI.setPlayerID(0, _player.ID);
+    BtlUI.setPlayerID(0, _player.ID);
 
     _player.x = FlxG.width/2;
     _player.y = FlxG.height/2;

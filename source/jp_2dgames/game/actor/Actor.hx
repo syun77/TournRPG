@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.lib.AdvScript;
 import jp_2dgames.game.MyColor;
 import jp_2dgames.game.particle.ParticleDamage;
@@ -319,10 +320,7 @@ class Actor extends FlxSprite {
       if(_group == BtlGroup.Player) {
         // プレイヤーにダメージ
         Message.push2(Msg.DAMAGE_PLAYER, [_name, v]);
-        // 画面を揺らす
-        var intensity = 0.1 * v / hpmax;
-        var duration  = 0.3;
-        FlxG.camera.shake(intensity, duration);
+        BtlUI.damagePlayer(ID, v);
       }
       else {
         // 敵にダメージ
