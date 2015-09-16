@@ -178,6 +178,7 @@ class BtlLogicPlayer {
             var p = ParticleDamage.start(px, py, -1);
             p.color = MyColor.NUM_MISS;
           }
+          Message.push2(Msg.ATTACK_MISS, [target.name]);
         }
     }
   }

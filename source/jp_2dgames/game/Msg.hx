@@ -19,4 +19,6 @@ class Msg {
   public static inline var LEVELUP:Int        = 17; // レベルアップ
   public static inline var RECOVER_HP_ALL:Int = 18; // HP全回復
   public static inline var SKILL_BEGIN:Int    = 19; // スキル発動
+  public static inline var ATTACK_MISS:Int    = 20; // 攻撃回避
+  public static inline var SKILL_MISS:Int     = 21; // スキル回避
 }
