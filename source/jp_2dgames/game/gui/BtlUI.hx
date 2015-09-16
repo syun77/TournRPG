@@ -45,6 +45,10 @@ class BtlUI extends FlxSpriteGroup {
   public static function damagePlayer(actorID:Int, val:Int):Void {
     _instance._damagePlayer(actorID, val);
   }
+  // アクティブ
+  public static function setActivePlayer(actorID:Int, b:Bool):Void {
+    _instance._setActivePlayer(actorID, b);
+  }
 
   // ■メンバ変数
   var _charaUIList:Array<BtlCharaUI>;
@@ -120,6 +124,19 @@ class BtlUI extends FlxSpriteGroup {
     }
   }
 
+  /**
+   * アクティブ状態を設定する
+   **/
+  private function _setActivePlayer(actorID:Int, b:Bool):Void {
+    var ui = _getCharaUI(actorID);
+    if(ui != null) {
+      ui.setActive(b);
+    }
+  }
+
+  /**
+   * 更新
+   **/
   override public function update():Void {
     super.update();
   }

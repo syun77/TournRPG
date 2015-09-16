@@ -61,5 +61,8 @@ class MyColor {
   public static inline var NUM_DAMAGE = FlxColor.SILVER;
   // MISS
   public static inline var NUM_MISS   = FlxColor.AQUAMARINE;
+
+  // パネル
+  public static inline var PANEL_NON_ACTIVE = 0xFF80FF;
 }
 

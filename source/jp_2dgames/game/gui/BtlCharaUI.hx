@@ -144,7 +144,8 @@ class BtlCharaUI extends FlxSpriteGroup {
     _ystart = Y;
 
     // 背景
-    _bg = new FlxSprite(0, 0).makeGraphic(WIDTH, HEIGHT, FlxColor.BLACK);
+    _bg = new FlxSprite(0, 0).makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
+    _bg.color = FlxColor.BLACK;
     this.add(_bg);
 
     // レベル背景
@@ -242,6 +243,20 @@ class BtlCharaUI extends FlxSpriteGroup {
     // スクロール無効
     p.scrollFactor.set(0, 0);
     p.color = MyColor.NUM_MISS;
+  }
+
+  /**
+   * アクティブ状態の設定
+   **/
+  public function setActive(b:Bool):Void {
+    if(b) {
+      // アクティブ
+      _bg.color = MyColor.PANEL_NON_ACTIVE;
+    }
+    else {
+      // 非アクティブ
+      _bg.color = FlxColor.BLACK;
+    }
   }
 
   /**

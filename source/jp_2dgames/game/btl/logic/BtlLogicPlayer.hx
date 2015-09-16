@@ -133,6 +133,15 @@ class BtlLogicPlayer {
         }
     }
 
+    // アクティブ状態の設定
+    if(actor.group == BtlGroup.Player) {
+      // プレイヤー
+      BtlUI.setActivePlayer(_data.actorID, true);
+    }
+    else {
+      // 敵
+    }
+
     // ズーム演出
     var obj = null;
     switch(_data.cmd) {
@@ -272,11 +281,26 @@ class BtlLogicPlayer {
         FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 50);
         // デフォルトに戻す
         _zoom = FlxCamera.defaultZoom;
+        // 終了処理
+        _end();
         // おしまい
         _state = State.End;
 
       case State.End:
 
+    }
+  }
+
+  /**
+   * 終了
+   **/
+  private function _end():Void {
+    if(_data.group == BtlGroup.Player) {
+      // プレイヤー
+      BtlUI.setActivePlayer(_data.actorID, false);
+    }
+    else {
+      // 敵
     }
   }
 
