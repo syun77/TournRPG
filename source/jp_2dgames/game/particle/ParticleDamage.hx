@@ -111,6 +111,9 @@ class ParticleDamage extends FlxSprite {
     visible = true;
     alpha = 1;
 
+    // スクロール有効
+    scrollFactor.set(1, 1);
+
     // メイン状態へ
     _state = State.Main;
   }

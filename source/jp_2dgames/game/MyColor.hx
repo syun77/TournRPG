@@ -58,7 +58,7 @@ class MyColor {
 
   // 数値
   // ダメージ
-  public static inline var NUM_DAMAGE = 0xFFFFC0C0;
+  public static inline var NUM_DAMAGE = FlxColor.SILVER;//0xFFFFC0C0;
   // MISS
   public static inline var NUM_MISS   = FlxColor.AQUAMARINE;
 }

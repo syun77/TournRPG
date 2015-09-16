@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.actor.ActorMgr;
 import flixel.util.FlxColor;
 import jp_2dgames.lib.StatusBar;
@@ -124,6 +125,16 @@ class BtlCharaUI extends FlxSpriteGroup {
     return _actorID;
   }
 
+  // 中心座標
+  public var xcenter(get, never):Float;
+  private function get_xcenter() {
+    return _xstart + WIDTH/2;
+  }
+  public var ycenter(get, never):Float;
+  private function get_ycenter() {
+    return _ystart + HEIGHT/2;
+  }
+
   /**
    * コンストラクタ
    **/
@@ -210,8 +221,15 @@ class BtlCharaUI extends FlxSpriteGroup {
   /**
    * ダメージ
    **/
-  public function damage(val:Int):Void {
+  public function damage(v:Int):Void {
     // TODO:
+    var px = xcenter;
+    var py = ycenter;
+    var p = ParticleDamage.start(px, py, v);
+    // スクロール無効
+    p.scrollFactor.set(0, 0);
+    // 色を変える
+    p.color = MyColor.NUM_DAMAGE;
   }
 
   /**
