@@ -63,6 +63,8 @@ class MyColor {
   public static inline var NUM_MISS   = FlxColor.AQUAMARINE;
 
   // パネル
-  public static inline var PANEL_NON_ACTIVE = 0xFF80FF;
+  public static inline var PANEL_NON_ACTIVE = FlxColor.BLACK;
+  public static inline var PANEL_ACTIVE = FlxColor.AQUAMARINE;
+  public static inline var PANEL_DAMAGE = FlxColor.RED;
 }
 

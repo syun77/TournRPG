@@ -134,7 +134,7 @@ class BtlLogicPlayer {
     }
 
     // アクティブ状態の設定
-    if(actor.group == BtlGroup.Player) {
+    if(_data.group == BtlGroup.Player) {
       // プレイヤー
       BtlUI.setActivePlayer(_data.actorID, true);
     }

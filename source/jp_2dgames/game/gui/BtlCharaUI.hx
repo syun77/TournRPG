@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.util.FlxColorUtil;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.actor.ActorMgr;
 import flixel.util.FlxColor;
@@ -13,7 +14,10 @@ import flixel.group.FlxSpriteGroup;
 class BtlCharaUI extends FlxSpriteGroup {
 
   // ■定数
+  // 揺れ時間
   static inline var TIMER_SHAKE:Int = 120;
+  // 背景枠の色変化の時間
+  static inline var TIMER_BG_COLOR:Int = 60;
 
   // 全体のサイズ
   public static inline var WIDTH  = 80;
@@ -87,6 +91,11 @@ class BtlCharaUI extends FlxSpriteGroup {
   // ダメージ時の揺れ
   var _tShake:Float = 0;
 
+  // 変化させた枠の色
+  var _bgColor:Int = MyColor.PANEL_NON_ACTIVE;
+  // 変化させた枠の色のタイマー
+  var _tBgColor:Int = 0;
+
   // 背景枠
   var _bg:FlxSprite;
   // レベル背景
@@ -145,7 +154,7 @@ class BtlCharaUI extends FlxSpriteGroup {
 
     // 背景
     _bg = new FlxSprite(0, 0).makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
-    _bg.color = FlxColor.BLACK;
+    _bg.color = MyColor.PANEL_NON_ACTIVE;
     this.add(_bg);
 
     // レベル背景
@@ -220,9 +229,18 @@ class BtlCharaUI extends FlxSpriteGroup {
   }
 
   /**
+   * 背景枠の色を変化する
+   **/
+  private function _changeBgColor(c:Int):Void {
+    _tBgColor = TIMER_BG_COLOR;
+    _bgColor = c;
+  }
+
+  /**
    * ダメージ
    **/
   public function damage(v:Int):Void {
+    // ダメージ数値
     var px = xcenter;
     var py = ycenter;
     var p = ParticleDamage.start(px, py, v);
@@ -230,6 +248,9 @@ class BtlCharaUI extends FlxSpriteGroup {
     p.scrollFactor.set(0, 0);
     // 色を変える
     p.color = MyColor.NUM_DAMAGE;
+
+    // 枠を赤くする
+    _changeBgColor(MyColor.PANEL_DAMAGE);
   }
 
   /**
@@ -251,12 +272,13 @@ class BtlCharaUI extends FlxSpriteGroup {
   public function setActive(b:Bool):Void {
     if(b) {
       // アクティブ
-      _bg.color = MyColor.PANEL_NON_ACTIVE;
+      _bg.color = MyColor.PANEL_ACTIVE;
     }
     else {
       // 非アクティブ
-      _bg.color = FlxColor.BLACK;
+      _bg.color = MyColor.PANEL_NON_ACTIVE;
     }
+    _tBgColor = 0;
   }
 
   /**
@@ -269,6 +291,9 @@ class BtlCharaUI extends FlxSpriteGroup {
 
     // 揺れ更新
     _updateShake();
+
+    // 枠の色更新
+    _updateBgColor();
 
     var actor = ActorMgr.searchAll(_actorID);
     if(actor == null) {
@@ -295,6 +320,16 @@ class BtlCharaUI extends FlxSpriteGroup {
       }
       var xsign = if(_tAnime%4 < 2) 1 else -1;
       x = _xstart + (_tShake * xsign * 0.2);
+    }
+  }
+
+  /**
+   * 枠の色
+   **/
+  private function _updateBgColor():Void {
+    if(_tBgColor > 0) {
+      _tBgColor--;
+      _bg.color = FlxColorUtil.interpolateColor(_bgColor, MyColor.PANEL_NON_ACTIVE, TIMER_BG_COLOR, (TIMER_BG_COLOR - _tBgColor));
     }
   }
 
