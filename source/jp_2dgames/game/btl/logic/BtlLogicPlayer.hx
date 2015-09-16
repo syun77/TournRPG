@@ -1,5 +1,7 @@
 package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.game.gui.BtlUI;
+import jp_2dgames.game.particle.ParticleDamage;
 import flixel.util.FlxColor;
 import jp_2dgames.game.particle.Particle;
 import flixel.util.FlxRandom;
@@ -164,7 +166,18 @@ class BtlLogicPlayer {
       case BtlLogicVal.ChanceRoll(bSuccess):
         if(bSuccess == false) {
           // 失敗
-          target.miss();
+          if(target.group == BtlGroup.Player) {
+            // プレイヤー
+            BtlUI.missPlayer(target.ID);
+          }
+          else {
+            // 敵
+            var px = target.xcenter;
+            var py = target.ycenter;
+            // MISS表示
+            var p = ParticleDamage.start(px, py, -1);
+            p.color = MyColor.NUM_MISS;
+          }
         }
     }
   }

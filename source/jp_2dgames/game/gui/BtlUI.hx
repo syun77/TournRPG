@@ -37,6 +37,10 @@ class BtlUI extends FlxSpriteGroup {
     _instance._setPlayerID(idx, actorID);
   }
 
+  // MISS
+  public static function missPlayer(actorID):Void {
+    _instance._missPlayer(actorID);
+  }
   // ダメージ
   public static function damagePlayer(actorID:Int, val:Int):Void {
     _instance._damagePlayer(actorID, val);
@@ -88,6 +92,16 @@ class BtlUI extends FlxSpriteGroup {
   }
 
   /**
+   * MISS演出開始
+   **/
+  private function _missPlayer(actorID:Int):Void {
+    var ui = _getCharaUI(actorID);
+    if(ui != null) {
+      ui.miss();
+    }
+  }
+
+  /**
    * ダメージ演出開始
    **/
   private function _damagePlayer(actorID:Int, val:Int):Void {
@@ -95,7 +109,9 @@ class BtlUI extends FlxSpriteGroup {
     // ダメージ演出
     {
       var ui = _getCharaUI(actorID);
-      ui.damage(val);
+      if(ui != null) {
+        ui.damage(val);
+      }
     }
 
     // 全部揺らす

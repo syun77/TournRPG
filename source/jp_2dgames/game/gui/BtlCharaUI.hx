@@ -222,7 +222,6 @@ class BtlCharaUI extends FlxSpriteGroup {
    * ダメージ
    **/
   public function damage(v:Int):Void {
-    // TODO:
     var px = xcenter;
     var py = ycenter;
     var p = ParticleDamage.start(px, py, v);
@@ -230,6 +229,19 @@ class BtlCharaUI extends FlxSpriteGroup {
     p.scrollFactor.set(0, 0);
     // 色を変える
     p.color = MyColor.NUM_DAMAGE;
+  }
+
+  /**
+   * ミス
+   **/
+  public function miss():Void {
+    var px = xcenter;
+    var py = ycenter;
+    // ダメージ数値
+    var p = ParticleDamage.start(px, py, -1);
+    // スクロール無効
+    p.scrollFactor.set(0, 0);
+    p.color = MyColor.NUM_MISS;
   }
 
   /**
