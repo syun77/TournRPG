@@ -98,7 +98,7 @@ class ParticleDamage extends FlxSprite {
     }
     else {
       // 攻撃が外れた
-      w = SprFont.render(this, 'MISS');
+      w = SprFont.render(this, 'MISS!');
       // 移動開始
       velocity.y = SPEED_Y_INIT_MISS;
       _bMiss = true;

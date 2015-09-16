@@ -20,7 +20,6 @@ class SprFont {
   // 文字の並び
   static var _conv:String = "0123456789"
     + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    + "abcdefghijklmnopqrstuvwxyz"
     + ".()[]#$%&'" + '"'
     + "!?^+-*/=;:_<>" + "|@`";
 
@@ -60,6 +59,9 @@ class SprFont {
       // フォントをレンダリングする
       pt.x = i * FONT_WIDTH;
       var idx = _charToIdx(str.charAt(i));
+      if(idx == -1) {
+        continue;
+      }
       rect.left = idx * FONT_WIDTH;
       rect.right = rect.left + FONT_WIDTH;
       spr.pixels.copyPixels(bmp.bitmap, rect, pt);
