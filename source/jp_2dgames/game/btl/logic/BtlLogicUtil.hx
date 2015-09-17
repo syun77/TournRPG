@@ -1,4 +1,6 @@
 package jp_2dgames.game.btl.logic;
+import jp_2dgames.game.skill.SkillUtil;
+import flixel.util.FlxRandom;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.TempActorMgr;
 import jp_2dgames.game.btl.types.BtlRange;
@@ -52,13 +54,13 @@ class BtlLogicUtil {
     var val = Calc.damage(actor, target);
     if(val > 0) {
       // HPダメージ
-      eft.val = BtlLogicVal.HpDamage(val);
+      eft.vals.push(BtlLogicVal.HpDamage(val));
       // ダメージを与えておく
       target.damage(val, false);
     }
     else {
       // 回避された
-      eft.val = BtlLogicVal.ChanceRoll(false);
+      eft.vals.push(BtlLogicVal.ChanceRoll(false));
     }
 
     return eft;
@@ -75,14 +77,22 @@ class BtlLogicUtil {
 
     // 対象を取得
     var target = TempActorMgr.search(targetID);
+
+    // 攻撃回数を取得
+    var min = SkillUtil.getParam(skillID, "min");
+    var max = SkillUtil.getParam(skillID, "max");
+    var cnt = FlxRandom.intRanged(min, max);
+
     // ダメージ計算
     // TODO: スキルダメージ計算式を作る
-    var val = Calc.damage(actor, target);
-    // HPダメージ
-    eft.val = BtlLogicVal.HpDamage(val);
+    for(i in 0...cnt) {
+      var val = Calc.damage(actor, target);
+      // HPダメージ
+      eft.vals.push(BtlLogicVal.HpDamage(val));
 
-    // ダメージを与える
-    target.damage(val, false);
+      // ダメージを与える
+      target.damage(val, false);
+    }
 
     return eft;
   }

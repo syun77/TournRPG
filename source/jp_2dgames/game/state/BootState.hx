@@ -1,5 +1,9 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.skill.SkillUtil;
+import jp_2dgames.game.actor.EnemyInfo;
+import jp_2dgames.game.actor.PlayerInfo;
+import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.lib.SprFont;
 import jp_2dgames.game.gui.UIMsg;
 import flixel.FlxG;
@@ -21,6 +25,16 @@ class BootState extends FlxState {
 
     // UIテキスト読み込み
     UIMsg.load();
+
+    // アイテムパラメータロード
+    ItemUtil.load();
+    // プレイヤーパラメータロード
+    PlayerInfo.load();
+    // 敵パラメータロード
+    EnemyInfo.load();
+    // スキルパラメータロード
+    SkillUtil.load();
+
   }
 
   /**

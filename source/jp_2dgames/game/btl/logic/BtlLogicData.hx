@@ -22,7 +22,7 @@ class BtlLogicData {
   public var cmd:BtlCmd      = BtlCmd.None;       // コマンド種別
   public var target:BtlRange = BtlRange.One;      // 対象種別
   public var targetID:Int    = 0;                 // 対象者
-  public var val:BtlLogicVal = BtlLogicVal.HpDamage(1); // 効果値
+  public var vals:List<BtlLogicVal>;              // 効果値
 
   /**
    * コンストラクタ
@@ -34,6 +34,19 @@ class BtlLogicData {
     this.actorID = actorID;
     this.group   = group;
     this.cmd     = cmd;
+    vals = new List<BtlLogicVal>();
+  }
+
+  /**
+   * コピーする
+   **/
+  public function copy(src:BtlLogicData):Void {
+    actorID  = src.actorID;
+    group    = src.group;
+    cmd      = src.cmd;
+    target   = src.target;
+    targetID = src.targetID;
+    vals      = src.vals;
   }
 
   /**

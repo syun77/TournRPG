@@ -174,28 +174,34 @@ class BtlLogicPlayer {
    * ターゲットに対する処理
    **/
   private function _execTarget(target:Actor):Void {
-    switch(_data.val) {
-      case BtlLogicVal.HpDamage(val):
-        // HPダメージ
-        target.damage(val);
-      case BtlLogicVal.HpRecover(val):
-      case BtlLogicVal.ChanceRoll(bSuccess):
-        if(bSuccess == false) {
-          // 失敗
-          if(target.group == BtlGroup.Player) {
-            // プレイヤー
-            BtlUI.missPlayer(target.ID);
+
+    var idx = 0;
+    for(val in _data.vals) {
+      switch(val) {
+        case BtlLogicVal.HpDamage(val):
+          // HPダメージ
+          target.damage(val, idx);
+        case BtlLogicVal.HpRecover(val):
+        case BtlLogicVal.ChanceRoll(bSuccess):
+          if(bSuccess == false) {
+            // 失敗
+            if(target.group == BtlGroup.Player) {
+              // プレイヤー
+              BtlUI.missPlayer(target.ID);
+            }
+            else {
+              // 敵
+              var px = target.xcenter;
+              var py = target.ycenter;
+              // MISS表示
+              var p = ParticleDamage.start(px, py, -1);
+              p.color = MyColor.NUM_MISS;
+            }
+            Message.push2(Msg.ATTACK_MISS, [target.name]);
           }
-          else {
-            // 敵
-            var px = target.xcenter;
-            var py = target.ycenter;
-            // MISS表示
-            var p = ParticleDamage.start(px, py, -1);
-            p.color = MyColor.NUM_MISS;
-          }
-          Message.push2(Msg.ATTACK_MISS, [target.name]);
-        }
+      }
+
+      idx++;
     }
   }
 

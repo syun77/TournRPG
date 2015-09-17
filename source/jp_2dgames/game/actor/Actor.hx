@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import flixel.util.FlxRandom;
 import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.lib.AdvScript;
 import jp_2dgames.game.MyColor;
@@ -318,7 +319,7 @@ class Actor extends FlxSprite {
   /**
    * ダメージを与える
    **/
-  public function damage(v:Int, bEffect:Bool=true):Bool {
+  public function damage(v:Int, idx:Int=0, bEffect:Bool=true):Bool {
     _param.hp -= v;
     _clampHp();
 
@@ -341,6 +342,10 @@ class Actor extends FlxSprite {
         var py = ycenter;
         Particle.start(PType.Circle, px, py, FlxColor.RED);
         // ダメージ数値
+        if(idx > 0) {
+          px += FlxRandom.intRanged(-16, 16);
+          py += FlxRandom.intRanged(-16, 16);
+        }
         var p = ParticleDamage.start(px, py, v);
         p.color = MyColor.NUM_DAMAGE;
 

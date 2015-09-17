@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.skill.SkillConst;
+import jp_2dgames.game.skill.SkillUtil;
 import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.ActorMgr;
@@ -67,9 +69,10 @@ class BtlCmdUI extends FlxSpriteGroup {
     }));
     px += BTN_DX;
     // TODO: スキルボタンにする
-    btnList.add(new MyButton(px, py, "SKILL1", function() {
+    var name = SkillUtil.getName(SkillConst.SKILL001);
+    btnList.add(new MyButton(px, py, name, function() {
       // スキル1を選択
-      _skill(actor, cbFunc, 0);
+      _skill(actor, cbFunc, SkillConst.SKILL001);
     }));
     px += BTN_DX;
     // TODO: スキルボタンにする
@@ -140,7 +143,7 @@ class BtlCmdUI extends FlxSpriteGroup {
     var group = BtlGroupUtil.getAgaint(actor.group);
     var target = ActorMgr.random(group);
 
-    cbFunc(actor, BtlCmd.Skill(1, BtlRange.One, target.ID));
+    cbFunc(actor, BtlCmd.Skill(btnID, BtlRange.One, target.ID));
   }
 
   /**

@@ -40,7 +40,9 @@ class Reg {
   public static inline var PATH_CSV_ENEMY_GROUP     = "assets/data/csv/enemy_group.csv";
   public static inline var PATH_CSV_ITEM_CONSUMABLE = "assets/data/csv/item_consumable.csv";
   public static inline var PATH_CSV_ITEM_EQUIPMENT  = "assets/data/csv/item_equipment.csv";
-  public static inline var PATH_CSV_UI_MSG  = "assets/data/csv/ui.csv";
+  public static inline var PATH_CSV_UI_MSG          = "assets/data/csv/ui.csv";
+  public static inline var PATH_CSV_SKILL_NORMAL    = "assets/data/csv/skill.csv";
+  public static inline var PATH_CSV_SKILL_AUTO      = "assets/data/csv/skill_auto.csv";
 
   // セーブデータ保存先
   public static inline var PATH_SAVE = "/Users/syun/Desktop/TournRPG/save.txt";
