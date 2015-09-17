@@ -56,7 +56,7 @@ class BtlLogicUtil {
       // HPダメージ
       eft.vals.push(BtlLogicVal.HpDamage(val));
       // ダメージを与えておく
-      target.damage(val, false);
+      target.damage(val, 0, false);
     }
     else {
       // 回避された
@@ -91,7 +91,7 @@ class BtlLogicUtil {
       eft.vals.push(BtlLogicVal.HpDamage(val));
 
       // ダメージを与える
-      target.damage(val, false);
+      target.damage(val, 0, false);
     }
 
     return eft;
