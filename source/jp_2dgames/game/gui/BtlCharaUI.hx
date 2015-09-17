@@ -205,7 +205,7 @@ class BtlCharaUI extends FlxSpriteGroup {
 
     // MPラベル
     _txtMpLabel = new FlxText(TXT_MP_LABEL_OFS_X, TXT_MP_LABEL_OFS_Y, 64, TXT_HPMP_LABEL_SIZE);
-    _txtMpLabel.text = "MP";
+    _txtMpLabel.text = "TP";
     _txtMpLabel.color = FlxColor.LIME;
     this.add(_txtMpLabel);
     // MPゲージ

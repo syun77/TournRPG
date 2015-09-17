@@ -1,0 +1,7 @@
+id,name,type,hp,mp,range,attr,min,max,pow,bst,bst_hit,bst_pow,rec,rec_bst,buff_atk,buff_def,buff_spd,detail
+int,str,str,int,int,str,str,int,int,int,str,int,int,int,int,int,int,int,str
+1,二段攻撃,ATK_PHY,10,,敵単,AT_PHY,2,2,125,,,,,,,,,2回攻撃
+2,魔弾,ATK_MAG,,3,敵単,AT_MAG,1,1,110,,,,,,,,,火炎属性の小ダメージ
+3,毒の粉,ATK_BST,,3,敵全,AT_POISON,1,1,,poison,60,25,,,,,,敵全体に一定確率で毒
+4,HP回復,RECOVER,,5,味単,,,,,,,,40,,,,,HPを小回復
+5,攻撃アップ,BUFF,,7,味全,,,,,,,,,,1,,,攻撃力アップ
