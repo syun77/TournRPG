@@ -250,6 +250,15 @@ class Actor extends FlxSprite {
     else {
 //      FlxG.watch.add(this, "_cmd");
     }
+
+    color = FlxColor.WHITE;
+  }
+
+  /**
+   * 色を変える
+   **/
+  public function changeColor(c:Int):Void {
+    color = c;
   }
 
   /**

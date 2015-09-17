@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.particle.Particle;
 import flixel.util.FlxColorUtil;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.actor.ActorMgr;
@@ -240,6 +241,13 @@ class BtlCharaUI extends FlxSpriteGroup {
    * ダメージ
    **/
   public function damage(v:Int):Void {
+
+    // パーティクル発生
+    var px = xcenter;
+    var py = ycenter;
+    var bScroll = false;
+    Particle.start(PType.Circle, px, py, FlxColor.RED, bScroll);
+
     // ダメージ数値
     var px = xcenter;
     var py = ycenter;

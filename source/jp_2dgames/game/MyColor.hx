@@ -36,6 +36,7 @@ class MyColor {
     }
   }
 
+  // ■ボタン
   // ボタン(デフォルト)
   public static inline var BTN_DEFAULT       = FlxColor.WHITE;
   public static inline var BTN_DEFAULT_LABEL = FlxColor.BLACK;
@@ -56,7 +57,7 @@ class MyColor {
   public static inline var BTN_CANCEL        = FlxColor.SILVER;
   public static inline var BTN_CANCEL_LABEL  = FlxColor.BLACK;
 
-  // 数値
+  // ■数値
   // ダメージ
   public static inline var NUM_DAMAGE = FlxColor.SILVER;
   // MISS
@@ -66,5 +67,8 @@ class MyColor {
   public static inline var PANEL_NON_ACTIVE = FlxColor.BLACK;
   public static inline var PANEL_ACTIVE = FlxColor.AQUAMARINE;
   public static inline var PANEL_DAMAGE = FlxColor.RED;
+
+  // ■敵の色
+  public static inline var ENEMY_NON_ACTIVE:Int = FlxColor.CHARCOAL;
 }
 

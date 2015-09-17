@@ -134,12 +134,19 @@ class BtlLogicPlayer {
     }
 
     // アクティブ状態の設定
-    if(_data.group == BtlGroup.Player) {
-      // プレイヤー
-      BtlUI.setActivePlayer(_data.actorID, true);
-    }
-    else {
-      // 敵
+    switch(_data.group) {
+      case BtlGroup.Player:
+        // プレイヤー
+        BtlUI.setActivePlayer(_data.actorID, true);
+      case BtlGroup.Enemy:
+        // 敵
+        ActorMgr.forEachAliveGroup(BtlGroup.Enemy, function(act:Actor) {
+          if(_data.actorID != act.ID) {
+            // 自分以外は暗くする
+            act.changeColor(MyColor.ENEMY_NON_ACTIVE);
+          }
+        });
+      default:
     }
 
     // ズーム演出
@@ -295,12 +302,19 @@ class BtlLogicPlayer {
    * 終了
    **/
   private function _end():Void {
-    if(_data.group == BtlGroup.Player) {
-      // プレイヤー
-      BtlUI.setActivePlayer(_data.actorID, false);
-    }
-    else {
-      // 敵
+    switch(_data.group) {
+      case BtlGroup.Player:
+        // プレイヤー
+        BtlUI.setActivePlayer(_data.actorID, false);
+      case BtlGroup.Enemy:
+        // 敵
+        // 色を戻す
+        ActorMgr.forEachAliveGroup(BtlGroup.Enemy, function(act:Actor) {
+          if(_data.actorID != act.ID) {
+            act.changeColor(FlxColor.WHITE);
+          }
+        });
+      default:
     }
   }
 

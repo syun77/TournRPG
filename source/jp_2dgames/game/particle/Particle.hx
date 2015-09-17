@@ -47,7 +47,7 @@ class Particle extends FlxSprite {
   /**
    * 開始
    **/
-  public static function start(type:PType, X:Float, Y:Float, color:Int):Void {
+  public static function start(type:PType, X:Float, Y:Float, color:Int, bScroll:Bool=true):Void {
     switch(type) {
       case PType.Circle:
         var dir = FlxRandom.floatRanged(0, 45);
@@ -55,21 +55,21 @@ class Particle extends FlxSprite {
           var p:Particle = parent.recycle();
           var spd = FlxRandom.floatRanged(100, 400);
           var t = FlxRandom.intRanged(40, 60);
-          p.init(type, t, X, Y, dir, spd);
+          p.init(type, t, X, Y, dir, spd, bScroll);
           p.color = color;
           dir += FlxRandom.floatRanged(40, 50);
         }
       case PType.Ring, PType.Ring2, PType.Ring3:
         var t = 60;
         var p:Particle = parent.recycle();
-        p.init(type, t, X, Y, 0, 0);
+        p.init(type, t, X, Y, 0, 0, bScroll);
         p.color = color;
 
       case PType.Circle2:
         var p:Particle = parent.recycle();
         var spd = FlxRandom.floatRanged(10, 20);
         var t = FlxRandom.intRanged(40, 60);
-        p.init(type, t, X, Y, 90, spd);
+        p.init(type, t, X, Y, 90, spd, bScroll);
         p.color = color;
     }
   }
@@ -113,7 +113,7 @@ class Particle extends FlxSprite {
   /**
    * 初期化
    **/
-  public function init(type:PType, timer:Int, X:Float, Y:Float, direction:Float, speed:Float):Void {
+  public function init(type:PType, timer:Int, X:Float, Y:Float, direction:Float, speed:Float, bScroll:Bool):Void {
     _type = type;
     animation.play('${type}');
     _timer = timer;
@@ -141,6 +141,13 @@ class Particle extends FlxSprite {
         scale.set(0.25, 0.25);
         acceleration.y = -200;
         _val = FlxRandom.float() * 3.14*2;
+    }
+
+    if(bScroll) {
+      scrollFactor.set(1, 1);
+    }
+    else {
+      scrollFactor.set(0, 0);
     }
   }
 

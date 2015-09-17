@@ -110,7 +110,7 @@ class BtlLogicUtil {
    * 死亡演出
    **/
   public static function createDead(actor:Actor):BtlLogicData {
-    return new BtlLogicData(actor.ID, actor.group, BtlCmd.Dead);
+    return new BtlLogicData(actor.ID, BtlGroup.Both, BtlCmd.Dead);
   }
 
   /**
