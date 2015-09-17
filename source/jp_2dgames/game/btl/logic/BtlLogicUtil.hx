@@ -56,7 +56,7 @@ class BtlLogicUtil {
       // HPダメージ
       eft.vals.push(BtlLogicVal.HpDamage(val));
       // ダメージを与えておく
-      target.damage(val, 0, false);
+      target.damage(val);
     }
     else {
       // 回避された
@@ -87,11 +87,17 @@ class BtlLogicUtil {
     // TODO: スキルダメージ計算式を作る
     for(i in 0...cnt) {
       var val = Calc.damage(actor, target);
-      // HPダメージ
-      eft.vals.push(BtlLogicVal.HpDamage(val));
+      if(val > 0) {
+        // HPダメージ
+        eft.vals.push(BtlLogicVal.HpDamage(val));
+        // ダメージを与える
+        target.damage(val);
+      }
+      else {
+        // 回避された
+        eft.vals.push(BtlLogicVal.ChanceRoll(false));
+      }
 
-      // ダメージを与える
-      target.damage(val, 0, false);
     }
 
     return eft;

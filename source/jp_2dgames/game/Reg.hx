@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxRandom;
 import jp_2dgames.lib.TextUtil;
 
 /**
@@ -67,6 +68,13 @@ class Reg {
   public static function getBackImagePath(id:Int):String {
     var str = TextUtil.fillZero(id, 3);
     return 'assets/images/bg/${str}.jpg';
+  }
+
+  /**
+   * 連続攻撃時にランダムで移動させる座標値を取得する
+   **/
+  public static function getContinuousAttackRandom():Int {
+    return FlxRandom.intRanged(-32, 32);
   }
 
   // エフェクト

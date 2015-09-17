@@ -1,5 +1,7 @@
 package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.game.skill.SkillUtil;
+import flixel.util.FlxTimer;
 import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.particle.ParticleDamage;
 import flixel.util.FlxColor;
@@ -93,6 +95,7 @@ class BtlLogicPlayer {
     switch(_data.cmd) {
       case BtlCmd.None:
         // 通常あり得ない
+
       case BtlCmd.Attack:
         Message.push2(Msg.ATTACK_BEGIN, [actor.name]);
         if(actor.group == BtlGroup.Enemy) {
@@ -103,7 +106,8 @@ class BtlLogicPlayer {
         }
 
       case BtlCmd.Skill(id, range, targetID):
-        Message.push2(Msg.SKILL_BEGIN, [actor.name, 'Skill${id}']);
+        var name = SkillUtil.getName(id);
+        Message.push2(Msg.SKILL_BEGIN, [actor.name, name]);
 
       case BtlCmd.Item(item, range, targetID):
         var name = ItemUtil.getName(item);
@@ -171,37 +175,113 @@ class BtlLogicPlayer {
   }
 
   /**
+   * メイン処理終了
+   **/
+  private function _endMain():Void {
+    _state = State.Wait;
+    _tWait = Reg.TIMER_WAIT;
+  }
+
+  /**
    * ターゲットに対する処理
    **/
-  private function _execTarget(target:Actor):Void {
+  private function _execTarget(target:Actor):Bool {
 
     var idx = 0;
     for(val in _data.vals) {
-      switch(val) {
-        case BtlLogicVal.HpDamage(val):
-          // HPダメージ
-          target.damage(val, idx);
-        case BtlLogicVal.HpRecover(val):
-        case BtlLogicVal.ChanceRoll(bSuccess):
-          if(bSuccess == false) {
-            // 失敗
-            if(target.group == BtlGroup.Player) {
-              // プレイヤー
-              BtlUI.missPlayer(target.ID);
-            }
-            else {
-              // 敵
-              var px = target.xcenter;
-              var py = target.ycenter;
-              // MISS表示
-              var p = ParticleDamage.start(px, py, -1);
-              p.color = MyColor.NUM_MISS;
-            }
-            Message.push2(Msg.ATTACK_MISS, [target.name]);
-          }
-      }
+      // 演出の座標をランダムでずらすかどうか
+      var bRandom = idx > 0;
 
+      // 最後の演出かどうか
+      var bLast = (idx == _data.vals.length - 1);
+
+      new FlxTimer(idx*0.25, function(timer:FlxTimer) {
+        switch(val) {
+          case BtlLogicVal.HpDamage(val):
+            // HPダメージ
+            _damage(target, val, bRandom);
+
+          case BtlLogicVal.HpRecover(val):
+          case BtlLogicVal.ChanceRoll(bSuccess):
+            if(bSuccess == false) {
+              // 失敗
+              if(target.group == BtlGroup.Player) {
+                // プレイヤー
+                BtlUI.missPlayer(target.ID);
+              }
+              else {
+                // 敵
+                var px = target.xcenter;
+                var py = target.ycenter;
+                // MISS表示
+                var p = ParticleDamage.start(px, py, -1);
+                p.color = MyColor.NUM_MISS;
+              }
+              Message.push2(Msg.ATTACK_MISS, [target.name]);
+            }
+        }
+        if(bLast) {
+          // 次の状態に進む
+          _endMain();
+        }
+
+      });
       idx++;
+    }
+
+    // 連続攻撃は演出内で次の状態に進める
+    return false;
+  }
+
+  /**
+   * ダメージ演出
+   **/
+  private function _damage(target:Actor, v:Int, bRandom:Bool):Void {
+
+    // ダメージ値反映
+    target.damage(v);
+
+    var px:Float = 0;
+    var py:Float = 0;
+    if(target.group == BtlGroup.Player) {
+      // プレイヤーにダメージ
+      Message.push2(Msg.DAMAGE_PLAYER, [target.name, v]);
+
+      // UI全体を揺らす
+      BtlUI.shake();
+
+      // パーティクルの座標取得
+      px = BtlUI.getPlayerX(target.ID);
+      py = BtlUI.getPlayerY(target.ID);
+
+    }
+    else {
+
+      // 敵にダメージ
+      Message.push2(Msg.DAMAGE_ENEMY, [target.name, v]);
+      // 揺らす
+      target.shake();
+
+      // パーティクルの座標取得
+      px = target.xcenter;
+      py = target.ycenter;
+    }
+
+    // スクロール有効・無効
+    var bScroll = (target.group == BtlGroup.Enemy);
+
+    // パーティクル発生
+    Particle.start(PType.Circle, px, py, FlxColor.RED, bScroll);
+
+    // ダメージ数値
+    if(bRandom) {
+      px += Reg.getContinuousAttackRandom();
+      py += Reg.getContinuousAttackRandom();
+    }
+    var p = ParticleDamage.start(px, py, v);
+    p.color = MyColor.NUM_DAMAGE;
+    if(bScroll == false) {
+      p.scrollFactor.set(0, 0);
     }
   }
 
@@ -209,6 +289,9 @@ class BtlLogicPlayer {
 
     var actor = ActorMgr.search(_data.actorID);
     var target = ActorMgr.search(_data.targetID);
+
+    // 次の状態に進むかどうか
+    var bNext:Bool = true;
 
     switch(_data.cmd) {
       case BtlCmd.None:
@@ -218,7 +301,7 @@ class BtlLogicPlayer {
         // 通常攻撃
         switch(_data.target) {
           case BtlRange.One:
-            _execTarget(target);
+            bNext = _execTarget(target);
           default:
             // TODO: 未実装
         }
@@ -244,9 +327,10 @@ class BtlLogicPlayer {
       case BtlCmd.BtlEnd:
     }
 
-    _state = State.Wait;
-    _tWait = Reg.TIMER_WAIT;
-
+    if(bNext) {
+      // メイン処理終了
+      _endMain();
+    }
   }
 
   private function _checkWait():Bool {

@@ -319,40 +319,18 @@ class Actor extends FlxSprite {
   /**
    * ダメージを与える
    **/
-  public function damage(v:Int, idx:Int=0, bEffect:Bool=true):Bool {
+  public function damage(v:Int):Bool {
     _param.hp -= v;
     _clampHp();
 
-    if(bEffect) {
-
-      // 演出あり
-      // ダメージメッセージ表示
-      if(_group == BtlGroup.Player) {
-        // プレイヤーにダメージ
-        Message.push2(Msg.DAMAGE_PLAYER, [_name, v]);
-        BtlUI.damagePlayer(ID, v);
-      }
-      else {
-        // 敵にダメージ
-        Message.push2(Msg.DAMAGE_ENEMY, [_name, v]);
-        // 揺らす
-        _tShake = TIMER_SHAKE;
-        // パーティクル発生
-        var px = xcenter;
-        var py = ycenter;
-        Particle.start(PType.Circle, px, py, FlxColor.RED);
-        // ダメージ数値
-        if(idx > 0) {
-          px += FlxRandom.intRanged(-16, 16);
-          py += FlxRandom.intRanged(-16, 16);
-        }
-        var p = ParticleDamage.start(px, py, v);
-        p.color = MyColor.NUM_DAMAGE;
-
-      }
-    }
-
     return isDead();
+  }
+
+  /**
+   * 揺らす
+   **/
+  public function shake():Void {
+    _tShake = TIMER_SHAKE;
   }
 
   /**
