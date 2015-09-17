@@ -17,6 +17,14 @@ class Reg {
   public static inline var FONT_SIZE = 20;
   public static inline var FONT_SIZE_S = 10;
 
+  // ■ボタン
+  public static inline var BTN_OFS_X:Int = 8;
+  public static inline var BTN_OFS_DX:Int = 4;
+  public static inline var BTN_OFS_DY:Int = 2;
+
+  // 敵の出現位置
+  public static inline var ENEMY_OFS_Y:Int = -48;
+
   // メッセージウェイト
   public static inline var TIMER_WAIT:Int = 30; // 0.5秒
 

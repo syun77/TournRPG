@@ -13,9 +13,9 @@ private class GraphicButton extends BitmapData {}
 class MyButton extends FlxTypedButton<FlxText> {
 
   // 幅
-  public static inline var WIDTH = 80;
+  public static inline var WIDTH = 76;
   // 高さ
-  public static inline var HEIGHT = 30;
+  public static inline var HEIGHT = 40;
 
   // ラベルオフセット
   private static inline var LABEL_OFS_X:Int = -1;

@@ -22,10 +22,10 @@ class BtlCmdUI extends FlxSpriteGroup {
   private static inline var BASE_OFS_Y = -(BTN_DY*3.5);
 
   // ボタン
-  private static inline var BTN_X = 0;
+  private static inline var BTN_X = Reg.BTN_OFS_X;
   private static inline var BTN_Y = 0;
-  private static inline var BTN_DX = MyButton.WIDTH;
-  private static inline var BTN_DY = MyButton.HEIGHT + 2;
+  private static inline var BTN_DX = MyButton.WIDTH + Reg.BTN_OFS_DX;
+  private static inline var BTN_DY = MyButton.HEIGHT + Reg.BTN_OFS_DY;
 
   // ■メンバ変数
 

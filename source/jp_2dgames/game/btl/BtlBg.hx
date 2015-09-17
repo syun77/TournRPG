@@ -11,6 +11,8 @@ class BtlBg extends FlxSprite {
 
     x = FlxG.width/2 - width/2;
     y = FlxG.height/2 - height/2;
+
+    scale.set(1.3, 1.3);
   }
 
 }

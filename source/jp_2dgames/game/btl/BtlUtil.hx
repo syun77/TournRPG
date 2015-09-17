@@ -24,7 +24,10 @@ class BtlUtil {
       }
     }
 
+    // 敵の数
     var cnt = enemyList.length;
+
+    // X座標を決める
     var baseX = FlxG.width/(cnt+1);
     var dx = baseX;
     var param = new Params();
@@ -33,12 +36,17 @@ class BtlUtil {
       param.id = enemyID;
       var e = ActorMgr.recycle(BtlGroup.Enemy, param);
       var px = (baseX + (dx*idx)) - e.width/2;
+      // Y座標は画面の中心
       var py = FlxG.height/2 - e.height/2;
+      // 少しずらす
+      py += Reg.ENEMY_OFS_Y;
       if(cnt >= 3) {
+        // 3体以上の場合は上下にずらす
         if(idx%2 == 1) {
-          py += MyButton.HEIGHT;
+          py += MyButton.HEIGHT + Reg.BTN_OFS_DY;
         }
       }
+      // 座標を設定
       e.setDrawPosition(px, py);
 
       idx++;
