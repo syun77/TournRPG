@@ -84,9 +84,8 @@ class BtlLogicUtil {
     var cnt = FlxRandom.intRanged(min, max);
 
     // ダメージ計算
-    // TODO: スキルダメージ計算式を作る
     for(i in 0...cnt) {
-      var val = Calc.damage(actor, target);
+      var val = Calc.damageSkill(skillID, actor, target);
       if(val > 0) {
         // HPダメージ
         eft.vals.push(BtlLogicVal.HpDamage(val));

@@ -14,6 +14,8 @@ class SkillUtil {
   private static var _csvSkill:CsvLoader = null;
   // 自動発動スキル
   private static var _csvSkillAuto:CsvLoader = null;
+  // 文字からenumへの変換
+  private static var _typeTbl:Map<String,SkillType>;
 
   /**
    * ロード
@@ -21,6 +23,16 @@ class SkillUtil {
   public static function load():Void {
     _csvSkill     = new CsvLoader(Reg.PATH_CSV_SKILL_NORMAL);
     _csvSkillAuto = new CsvLoader(Reg.PATH_CSV_SKILL_AUTO);
+    _typeTbl = [
+      "ATK_PHY"   => SkillType.AtkPhyscal,
+      "ATK_MAG"   => SkillType.AtkMagical,
+      "ATK_BST"   => SkillType.AtkBadstatus,
+      "RECOVER"   => SkillType.Recover,
+      "BUFF"      => SkillType.Buff,
+      "AUTO"      => SkillType.Auto,
+      "AUTO_ATTR" => SkillType.AutoAttr,
+      "AUTO_STUP" => SkillType.AutoStatusUp
+    ];
   }
 
   /**
@@ -83,5 +95,25 @@ class SkillUtil {
    **/
   public static function getName(skillID:Int):String {
     return getParamString(skillID, "name");
+  }
+
+  /**
+   * スキル種別変換
+   **/
+  public static function fromString(str:String):SkillType {
+    return _typeTbl[str];
+  }
+
+  /**
+   * スキルIDからスキル種別を求める
+   **/
+  public static function toType(skillID:Int):SkillType {
+    var str = getParamString(skillID, "type");
+    if(str == "") {
+      // 無効なアイテム
+      return SkillType.None;
+    }
+
+    return fromString(str);
   }
 }
