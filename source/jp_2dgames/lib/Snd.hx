@@ -40,11 +40,8 @@ class Snd {
   /**
    * キャッシュする
    **/
-  public static function cache():Void {
-
-    FlxG.sound.volume = 1;
-
-    //FlxG.sound.cache("title");
+  public static function cache(name:String):Void {
+    FlxG.sound.cache(name);
   }
 
   /**
