@@ -19,8 +19,8 @@ class Reg {
   public static inline var FONT_SIZE_S = 10;
 
   // ■ボタン
-  public static inline var BTN_OFS_X:Int = 8;
-  public static inline var BTN_OFS_DX:Int = 4;
+  public static inline var BTN_OFS_X:Int = 4;
+  public static inline var BTN_OFS_DX:Int = 2;
   public static inline var BTN_OFS_DY:Int = 2;
 
   // 敵の出現位置
