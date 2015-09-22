@@ -5,7 +5,7 @@ enum BadStatus {
   Dead;      // 死亡
   Poison;    // 毒
   Confusion; // 混乱
-  Closed;    // 封印
+  Close;     // 封印
   Paralyze;  // 麻痺
   Sleep;     // 眠り
   Blind;     // 盲目
@@ -22,18 +22,93 @@ class BadStatusUtil {
   }
   public static function fromString(str:String):BadStatus {
     switch(str) {
-      case '${BadStatus.None}': return BadStatus.None;
-      case '${BadStatus.Dead}': return BadStatus.Dead;
-      case '${BadStatus.Poison}': return BadStatus.Poison;
+      case '${BadStatus.None}':      return BadStatus.None;
+      case '${BadStatus.Dead}':      return BadStatus.Dead;
+      case '${BadStatus.Poison}':    return BadStatus.Poison;
       case '${BadStatus.Confusion}': return BadStatus.Confusion;
-      case '${BadStatus.Closed}': return BadStatus.Closed;
-      case '${BadStatus.Paralyze}': return BadStatus.Paralyze;
-      case '${BadStatus.Sleep}': return BadStatus.Sleep;
-      case '${BadStatus.Blind}': return BadStatus.Blind;
-      case '${BadStatus.Curse}': return BadStatus.Curse;
-      case '${BadStatus.Weak}': return BadStatus.Weak;
+      case '${BadStatus.Close}':     return BadStatus.Close;
+      case '${BadStatus.Paralyze}':  return BadStatus.Paralyze;
+      case '${BadStatus.Sleep}':     return BadStatus.Sleep;
+      case '${BadStatus.Blind}':     return BadStatus.Blind;
+      case '${BadStatus.Curse}':     return BadStatus.Curse;
+      case '${BadStatus.Weak}':      return BadStatus.Weak;
       default:
         return BadStatus.None;
     }
+  }
+
+  /**
+   * バッドステータスが付着するかどうか
+   **/
+  public static function isAdhere(from:BadStatus, to:BadStatus):Bool {
+    var a = _getPriority(from);
+    var b = _getPriority(to);
+    if(b > a) {
+      // 新しいバステの方が優先順位が高い
+      return true;
+    }
+
+    // 付着しない
+    return false;
+  }
+
+  /**
+   * バッドステータスの優先順位を取得する
+   * @param bst バッドステータス
+   * @return 優先順位。大きいほど優先順位が高い
+   **/
+  private static function _getPriority(bst:BadStatus):Int {
+    switch(bst) {
+      case BadStatus.Dead:      return 100;
+      case BadStatus.Curse:     return 90;
+      case BadStatus.Poison:    return 80;
+      case BadStatus.Paralyze:  return 70;
+      case BadStatus.Confusion: return 60;
+      case BadStatus.Weak:      return 50;
+      case BadStatus.Close:     return 30;
+      case BadStatus.Sleep:     return 20;
+      case BadStatus.Blind:     return 10;
+      case BadStatus.None:      return 0;
+    }
+  }
+
+  /**
+   * 次のバステを取得する (デバッグ用）
+   **/
+  public static function next(bst:BadStatus):BadStatus {
+    var tbl = [
+      BadStatus.Dead      => BadStatus.None,
+      BadStatus.Curse     => BadStatus.Dead,
+      BadStatus.Poison    => BadStatus.Curse,
+      BadStatus.Paralyze  => BadStatus.Poison,
+      BadStatus.Confusion => BadStatus.Paralyze,
+      BadStatus.Weak      => BadStatus.Confusion,
+      BadStatus.Close     => BadStatus.Weak,
+      BadStatus.Sleep     => BadStatus.Close,
+      BadStatus.Blind     => BadStatus.Sleep,
+      BadStatus.None      => BadStatus.Blind
+    ];
+
+    return tbl[bst];
+  }
+
+  /**
+   * 前のバステを取得する（デバッグ用）
+   **/
+  public static function prev(bst:BadStatus):BadStatus {
+    var tbl = [
+      BadStatus.Dead      => BadStatus.Curse,
+      BadStatus.Curse     => BadStatus.Poison,
+      BadStatus.Poison    => BadStatus.Paralyze,
+      BadStatus.Paralyze  => BadStatus.Confusion,
+      BadStatus.Confusion => BadStatus.Weak,
+      BadStatus.Weak      => BadStatus.Close,
+      BadStatus.Close     => BadStatus.Sleep,
+      BadStatus.Sleep     => BadStatus.Blind,
+      BadStatus.Blind     => BadStatus.None,
+      BadStatus.None      => BadStatus.Dead
+    ];
+
+    return tbl[bst];
   }
 }

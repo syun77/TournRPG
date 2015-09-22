@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.lib.AdvScript;
@@ -26,8 +27,11 @@ private enum State {
  **/
 class Actor extends FlxSprite {
 
+  // ■定数
+  // 揺れタイマー
   static inline var TIMER_SHAKE:Int = 120;
 
+  // ■メンバ変数
   // 状態
   var _state:State     = State.None;
   var _statePrev:State = State.None;
@@ -141,6 +145,13 @@ class Actor extends FlxSprite {
   private function get_param() {
     return _param;
   }
+  // バッドステータス
+  private var _badstatus:BadStatus = BadStatus.None;
+  public var badstatus(get, never):BadStatus;
+  private function get_badstatus() {
+    return _badstatus;
+  }
+
   // 中心座標を取得する
   public var xcenter(get, never):Float;
   private function get_xcenter() {
@@ -253,6 +264,9 @@ class Actor extends FlxSprite {
     }
 
     color = FlxColor.WHITE;
+
+    // バッドステータス初期化
+    _badstatus = BadStatus.None;
   }
 
   /**
@@ -260,6 +274,22 @@ class Actor extends FlxSprite {
    **/
   public function changeColor(c:Int):Void {
     color = c;
+  }
+
+  /**
+   * バステ付着
+   * @param bst    付着するバッドステータス
+   * @param bForce 強制付着フラグ
+   * @return 付着したらtrue
+   **/
+  public function adhereBadStatus(bst:BadStatus, bForce:Bool=false):Bool {
+    if(bForce || BadStatusUtil.isAdhere(badstatus, bst)) {
+      // 付着できる
+      _badstatus = bst;
+      return true;
+    }
+
+    return false;
   }
 
   /**

@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.FlxG;
 import flixel.FlxSubState;
 import jp_2dgames.lib.Input;
@@ -13,7 +14,7 @@ class DebugActor extends FlxSubState {
 
   // 背景のサイズ
   static inline var BG_WIDTH:Int = 128;
-  static inline var BG_HEIGHT:Int = 128;
+  static inline var BG_HEIGHT:Int = 12 * 12;
 
   // テキストの座標
   static inline var TEXT_X:Int = 16;
@@ -25,11 +26,12 @@ class DebugActor extends FlxSubState {
   static inline var ITEM_NAME:Int  = 1;
   static inline var ITEM_GROUP:Int = 2;
   static inline var ITEM_HP:Int    = 3;
-  static inline var ITEM_STR:Int   = 4;
-  static inline var ITEM_VIT:Int   = 5;
-  static inline var ITEM_AGI:Int   = 6;
-  static inline var ITEM_XP:Int    = 7;
-  static inline var ITEM_MONEY:Int = 8;
+  static inline var ITEM_BST:Int   = 4;
+  static inline var ITEM_STR:Int   = 5;
+  static inline var ITEM_VIT:Int   = 6;
+  static inline var ITEM_AGI:Int   = 7;
+  static inline var ITEM_XP:Int    = 8;
+  static inline var ITEM_MONEY:Int = 9;
 
   // 開始番号
   static inline var ITEM_FIRST:Int = ITEM_ID;
@@ -54,6 +56,7 @@ class DebugActor extends FlxSubState {
   var _txtName:FlxText;  // 名前
   var _txtGroup:FlxText; // 所属グループ
   var _txtHp:FlxText;    // HP
+  var _txtBst:FlxText;   // バッドステータス
   var _txtStr:FlxText;   // 力
   var _txtVit:FlxText;   // 耐久力
   var _txtAgi:FlxText;   // 素早さ
@@ -99,6 +102,9 @@ class DebugActor extends FlxSubState {
     _txtHp = new FlxText(px, py);
     txtList.add(_txtHp);
     py += TEXT_DY;
+    _txtBst = new FlxText(px, py);
+    txtList.add(_txtBst);
+    py += TEXT_DY;
     _txtStr = new FlxText(px, py);
     txtList.add(_txtStr);
     py += TEXT_DY;
@@ -138,6 +144,7 @@ class DebugActor extends FlxSubState {
     _txtName.text  = ${act.name};
     _txtGroup.text = 'Grp: ${act.group}';
     _txtHp.text    = 'HP: ${act.hp}/${act.hpmax}';
+    _txtBst.text   = '${act.badstatus}';
     _txtStr.text   = 'STR: ${act.str}';
     _txtVit.text   = 'VIT: ${act.vit}';
     _txtAgi.text   = 'AGI: ${act.agi}';
@@ -251,6 +258,13 @@ class DebugActor extends FlxSubState {
       case ITEM_HP:
         _actor.param.hp    += val;
         _actor.param.hpmax += val;
+      case ITEM_BST:
+        var bst = _actor.badstatus;
+        var next = BadStatusUtil.next(bst);
+        if(val < 0) {
+          next = BadStatusUtil.prev(bst);
+        }
+        _actor.adhereBadStatus(next, true);
       case ITEM_STR:
         _actor.param.str += val;
       case ITEM_VIT:
