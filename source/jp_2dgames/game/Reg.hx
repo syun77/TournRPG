@@ -33,6 +33,8 @@ class Reg {
   public static inline var PATH_MSG = "assets/images/ui/message.png";
   // メッセージテキスト背景
   public static inline var PATH_MSG_TEXT = "assets/images/ui/messagetext.png";
+  // バッドステータスアイコン
+  public static inline var PATH_BADSTATUS = "assets/images/ui/badstatus.png";
 
   // CSV
   public static inline var PATH_CSV_MESSAGE         = "assets/data/csv/message.csv";
