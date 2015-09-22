@@ -17,9 +17,17 @@ enum BadStatus {
  * バッドステータスユーティリティ
  **/
 class BadStatusUtil {
-  public static function toString(s:BadStatus):String {
-    return '${s}';
+
+  /**
+   * バッドステータスを文字列として取得する
+   **/
+  public static function toString(bst:BadStatus):String {
+    return '${bst}';
   }
+
+  /**
+   * 文字列からenum値に変換する
+   **/
   public static function fromString(str:String):BadStatus {
     switch(str) {
       case '${BadStatus.None}':      return BadStatus.None;

@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.game.particle.Particle;
 import flixel.util.FlxColorUtil;
 import jp_2dgames.game.particle.ParticleDamage;
@@ -81,6 +82,10 @@ class BtlCharaUI extends FlxSpriteGroup {
   public static inline var BAR_HPMP_WIDTH  = 32;
   public static inline var BAR_HPMP_HEIGHT = 2;
 
+  // バステアイコン
+  public static inline var BST_X = 0;
+  public static inline var BST_Y = HEIGHT;
+
 
   // ■メンバ変数
   var _xstart:Float = 0;
@@ -113,7 +118,7 @@ class BtlCharaUI extends FlxSpriteGroup {
   // 名前
   var _txtName:FlxText;
   // バステアイコン
-  var _icon:FlxSprite;
+  var _icon:BadStatusUI;
 
   // HPラベル
   var _txtHpLabel:FlxText;
@@ -216,6 +221,11 @@ class BtlCharaUI extends FlxSpriteGroup {
     _txtMp = new FlxText(TXT_MP_OFS_X, TXT_MP_OFS_Y, TXT_HPMP_WIDTH, TXT_HPMP_SIZE);
     _txtMp.alignment = "right";
     this.add(_txtMp);
+
+    // バステアイコン
+    _icon = new BadStatusUI(BST_X, BST_Y);
+    _icon.set(BadStatus.None);
+    this.add(_icon);
   }
 
   /**
@@ -314,6 +324,9 @@ class BtlCharaUI extends FlxSpriteGroup {
     _barHp.setPercent(100 * actor.hpratio);
     _txtMp.text   = '${actor.mp}';
     _barMp.setPercent(100 * actor.mpratio);
+
+    // バステアイコン更新
+    _icon.set(actor.badstatus);
 
   }
 
