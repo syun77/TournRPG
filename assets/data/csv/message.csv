@@ -21,3 +21,12 @@ int,str,str
 19,<val1>は<val2>を発動した,green
 20,<val1>は攻撃をかわした,green
 21,<val1>に効果はなかった,green
+22,<val1>は力尽きた,red
+23,<val1>は毒になった,yellow
+24,<val1>は混乱した,yellow
+25,<val1>のスキルを封印した,yellow
+26,<val1>は麻痺した,yellow
+27,<val1>は眠った,yellow
+28,<val1>は盲目になった,yellow
+29,<val1>は呪われた,yellow
+30,<val1>は衰弱した,yellow

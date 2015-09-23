@@ -8,21 +8,21 @@ import jp_2dgames.game.btl.BtlGroupUtil;
  * バトル発生効果値
  **/
 enum BtlLogicVal {
-  HpDamage(val:Int);  // HPダメージ
-  HpRecover(val:Int); // HP回復
-  ChanceRoll(b:Bool); // 成功or失敗
+  HpDamage(val:Int);        // HPダメージ
+  HpRecover(val:Int);       // HP回復
+  ChanceRoll(b:Bool);       // 成功or失敗
 }
 
 /**
  * バトル演出情報
  **/
 class BtlLogicData {
-  public var actorID:Int     = 0;                 // 行動主体者
-  public var group:BtlGroup  = BtlGroup.Player;   // 所属グループ
-  public var cmd:BtlCmd      = BtlCmd.None;       // コマンド種別
-  public var target:BtlRange = BtlRange.One;      // 対象種別
-  public var targetID:Int    = 0;                 // 対象者
-  public var vals:List<BtlLogicVal>;              // 効果値
+  public var actorID:Int     = 0;                  // 行動主体者
+  public var group:BtlGroup  = BtlGroup.Player;    // 所属グループ
+  public var cmd:BtlCmd      = BtlCmd.None;        // コマンド種別
+  public var target:BtlRange = BtlRange.One;       // 対象種別
+  public var targetID:Int    = 0;                  // 対象者
+  public var vals:List<BtlLogicVal>;               // 効果値
 
   /**
    * コンストラクタ

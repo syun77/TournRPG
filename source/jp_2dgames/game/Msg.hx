@@ -21,4 +21,12 @@ class Msg {
   public static inline var SKILL_BEGIN:Int    = 19; // スキル発動
   public static inline var ATTACK_MISS:Int    = 20; // 攻撃回避
   public static inline var SKILL_MISS:Int     = 21; // スキル回避
+  public static inline var PLAYER_DEAD:Int    = 22; // プレイヤー死亡
+  public static inline var BST_POISON:Int     = 23; // バステ: 毒
+  public static inline var BST_CONFUSION:Int  = 24; // バステ: 混乱
+  public static inline var BST_CLOSE:Int      = 25; // バステ: 封印
+  public static inline var BST_PARALYZE:Int   = 26; // バステ: 麻痺
+  public static inline var BST_SLEEP:Int      = 27; // バステ: 眠り
+  public static inline var BST_BLIND:Int      = 28; // バステ: 盲目
+  public static inline var BST_WEAK:Int       = 29; // バステ: 衰弱
 }
