@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.skill.SkillUtil;
 import flixel.util.FlxTimer;
 import jp_2dgames.game.gui.BtlUI;
@@ -219,6 +220,10 @@ class BtlLogicPlayer {
               }
               Message.push2(Msg.ATTACK_MISS, [target.name]);
             }
+          case BtlLogicVal.Badstatus(bst):
+            // バステ付着
+            target.adhereBadStatus(bst);
+            BadStatusUtil.pushMessage(bst, target.name);
         }
         if(bLast) {
           // 次の状態に進む

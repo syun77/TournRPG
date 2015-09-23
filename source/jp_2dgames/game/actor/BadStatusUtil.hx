@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 enum BadStatus {
   None;      // 何もなし
   Dead;      // 死亡
@@ -77,6 +78,30 @@ class BadStatusUtil {
       case BadStatus.Sleep:     return 20;
       case BadStatus.Blind:     return 10;
       case BadStatus.None:      return 0;
+    }
+  }
+
+  /**
+   * バッドステータスメッセージの表示
+   **/
+  public static function pushMessage(badstatus:BadStatus, name:String):Void {
+    var func = function(bst:BadStatus) {
+      switch(bst) {
+        case BadStatus.Dead:      return 0;
+        case BadStatus.Curse:     return Msg.BST_CURSE;
+        case BadStatus.Poison:    return Msg.BST_POISON;
+        case BadStatus.Paralyze:  return Msg.BST_PARALYZE;
+        case BadStatus.Confusion: return Msg.BST_CONFUSION;
+        case BadStatus.Weak:      return Msg.BST_WEAK;
+        case BadStatus.Close:     return Msg.BST_CLOSE;
+        case BadStatus.Sleep:     return Msg.BST_SLEEP;
+        case BadStatus.Blind:     return Msg.BST_BLIND;
+        case BadStatus.None:      return 0;
+      }
+    }
+    var msgID = func(badstatus);
+    if(msgID != 0) {
+      Message.push2(msgID, [name]);
     }
   }
 

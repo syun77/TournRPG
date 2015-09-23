@@ -28,5 +28,6 @@ class Msg {
   public static inline var BST_PARALYZE:Int   = 26; // バステ: 麻痺
   public static inline var BST_SLEEP:Int      = 27; // バステ: 眠り
   public static inline var BST_BLIND:Int      = 28; // バステ: 盲目
-  public static inline var BST_WEAK:Int       = 29; // バステ: 衰弱
+  public static inline var BST_CURSE:Int      = 29; // バステ: 呪い
+  public static inline var BST_WEAK:Int       = 30; // バステ: 衰弱
 }

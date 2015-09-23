@@ -1,4 +1,5 @@
 package jp_2dgames.game.btl.logic;
+import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.game.skill.SkillUtil;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
@@ -98,6 +99,10 @@ class BtlLogicUtil {
       }
 
     }
+    /*
+    // TODO: バステテスト
+    eft.vals.push(BtlLogicVal.Badstatus(BadStatus.Curse));
+    */
 
     return eft;
   }
