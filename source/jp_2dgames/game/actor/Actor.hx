@@ -241,6 +241,7 @@ class Actor extends FlxSprite {
     _idx = actor._idx;
     _cmd = actor.cmd;
     init(actor.group, actor.param, false);
+    _badstatus = actor.badstatus;
   }
 
   /**

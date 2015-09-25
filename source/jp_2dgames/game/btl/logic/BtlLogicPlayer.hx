@@ -136,6 +136,9 @@ class BtlLogicPlayer {
           // 味方が全滅
           Message.push2(Msg.BATTLE_LOSE);
         }
+
+      case BtlCmd.TurnEnd:
+        // 何もしない
     }
 
     // アクティブ状態の設定
@@ -330,6 +333,21 @@ class BtlLogicPlayer {
       case BtlCmd.Dead:
 
       case BtlCmd.BtlEnd:
+
+      case BtlCmd.TurnEnd:
+        // ターン終了
+        switch(_data.target) {
+          case BtlRange.Self:
+            // 自分自身
+            _execTarget(actor);
+
+          case BtlRange.One:
+            // 自分以外の単体
+            _execTarget(target);
+
+          default:
+          // TODO: 未実装
+        }
     }
 
     if(bNext) {

@@ -1,4 +1,5 @@
 package jp_2dgames.game.btl.logic;
+import jp_2dgames.game.gui.BtlTargetUI;
 import flixel.FlxG;
 import jp_2dgames.game.skill.SkillType;
 import jp_2dgames.game.actor.BadStatusUtil;
@@ -38,7 +39,7 @@ class BtlLogicUtil {
         // 逃走演出の作成
         return _createEscape(actor);
 
-      case BtlCmd.Dead, BtlCmd.BtlEnd, BtlCmd.None:
+      case BtlCmd.Dead, BtlCmd.BtlEnd, BtlCmd.TurnEnd, BtlCmd.None:
         // 通常ありえない
         return null;
     }
@@ -112,6 +113,9 @@ class BtlLogicUtil {
         var bst  = BadStatusUtil.fromSkillAttribute(attr);
         eft.vals.push(BtlLogicVal.Badstatus(bst));
 
+        // バステ付着
+        target.adhereBadStatus(bst);
+
       default:
         FlxG.log.warn('Invalid SkillType "${SkillType}"');
     }
@@ -150,5 +154,32 @@ class BtlLogicUtil {
    **/
   public static function createBtlEnd(bWin:Bool):BtlLogicData {
     return new BtlLogicData(0, BtlGroup.Both, BtlCmd.BtlEnd(bWin));
+  }
+
+  /**
+   * ターン終了演出の生成
+   **/
+  public static function createTurnEnd(actor:Actor):BtlLogicData {
+
+    var eft = new BtlLogicData(actor.ID, actor.group, BtlCmd.TurnEnd);
+    eft.target = BtlRange.Self;
+
+    switch(actor.badstatus) {
+      case BadStatus.None:
+        // 何もしない
+        eft = null;
+
+      case BadStatus.Poison:
+        // TODO: 10ダメージ固定
+        var val = BtlLogicVal.HpDamage(10);
+        eft.vals.push(val);
+        actor.damage(10);
+
+      default:
+        // 何もしない
+        eft = null;
+    }
+
+    return eft;
   }
 }

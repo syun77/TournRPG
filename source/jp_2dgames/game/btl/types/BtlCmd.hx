@@ -16,4 +16,5 @@ enum BtlCmd {
   // 演出用
   Dead;              // 死亡
   BtlEnd(bWin:Bool); // バトル勝利
+  TurnEnd;           // ターン終了
 }
