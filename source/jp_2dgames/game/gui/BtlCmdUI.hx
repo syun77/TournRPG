@@ -78,7 +78,7 @@ class BtlCmdUI extends FlxSpriteGroup {
     // TODO: スキルボタンにする
     btnList.add(new MyButton(px, py, "SKILL2", function() {
       // スキル2を選択
-      _skill(actor, cbFunc, 1);
+      _skill(actor, cbFunc, SkillConst.SKILL003);
     }));
 
     // 2列目

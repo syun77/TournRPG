@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.skill.SkillAttr;
 import jp_2dgames.game.actor.BadStatusUtil;
 import flixel.FlxSprite;
 
@@ -41,6 +42,25 @@ class BadStatusUI extends FlxSprite {
       // バステアイコン表示
       visible = true;
       animation.play(BadStatusUtil.toString(bst));
+    }
+  }
+
+  /**
+   * スキル属性をバッドステータスに変換する
+   **/
+  public function fromSkillAttribute(attr:SkillAttr):BadStatus {
+    switch(attr) {
+      case SkillAttr.Poision:   return BadStatus.Poison;
+      case SkillAttr.Confusion: return BadStatus.Confusion;
+      case SkillAttr.Close:     return BadStatus.Close;
+      case SkillAttr.Paralyze:  return BadStatus.Paralyze;
+      case SkillAttr.Sleep:     return BadStatus.Sleep;
+      case SkillAttr.Blind:     return BadStatus.Blind;
+      case SkillAttr.Curse:     return BadStatus.Curse;
+      case SkillAttr.Weak:      return BadStatus.Weak;
+      default:
+        // 特になし
+        return BadStatus.None;
     }
   }
 }

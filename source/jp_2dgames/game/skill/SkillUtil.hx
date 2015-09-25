@@ -14,8 +14,10 @@ class SkillUtil {
   private static var _csvSkill:CsvLoader = null;
   // 自動発動スキル
   private static var _csvSkillAuto:CsvLoader = null;
-  // 文字からenumへの変換
+  // スキルタイプ：文字からenumへの変換
   private static var _typeTbl:Map<String,SkillType>;
+  // スキル属性：文字からenumへの変換
+  private static var _attrTbl:Map<String,SkillAttr>;
 
   /**
    * ロード
@@ -32,6 +34,17 @@ class SkillUtil {
       "AUTO"      => SkillType.Auto,
       "AUTO_ATTR" => SkillType.AutoAttr,
       "AUTO_STUP" => SkillType.AutoStatusUp
+    ];
+    _attrTbl = [
+      "AT_PHY"       => SkillAttr.Physcal,
+      "AT_MAG"       => SkillAttr.Magical,
+      "AT_POISON"    => SkillAttr.Poision,
+      "AT_CONFUSION" => SkillAttr.Confusion,
+      "AT_CLOSE"     => SkillAttr.Close,
+      "AT_PARALYZE"  => SkillAttr.Paralyze,
+      "AT_SLEEP"     => SkillAttr.Sleep,
+      "AT_BLIND"     => SkillAttr.Blind,
+      "AT_WEAK"      => SkillAttr.Weak
     ];
   }
 
@@ -98,9 +111,9 @@ class SkillUtil {
   }
 
   /**
-   * スキル種別変換
+   * 文字列をスキル種別に変換
    **/
-  public static function fromString(str:String):SkillType {
+  public static function fromTypeString(str:String):SkillType {
     return _typeTbl[str];
   }
 
@@ -110,10 +123,30 @@ class SkillUtil {
   public static function toType(skillID:Int):SkillType {
     var str = getParamString(skillID, "type");
     if(str == "") {
-      // 無効なアイテム
+      // 無効なスキル
       return SkillType.None;
     }
 
-    return fromString(str);
+    return fromTypeString(str);
+  }
+
+  /**
+   * 文字列をスキル属性に変換
+   **/
+  public static function fromAttributeString(str:String):SkillAttr {
+    return _attrTbl[str];
+  }
+
+  /**
+   * スキルIDからスキル属性を求める
+   **/
+  public static function toAttribute(skillID:Int):SkillAttr {
+    var str = getParamString(skillID, "attr");
+    if(str == "") {
+      // 無効なスキル
+      return SkillAttr.None;
+    }
+
+    return fromAttributeString(str);
   }
 }
