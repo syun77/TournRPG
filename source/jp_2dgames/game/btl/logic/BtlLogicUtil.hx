@@ -1,4 +1,6 @@
 package jp_2dgames.game.btl.logic;
+import flixel.FlxG;
+import jp_2dgames.game.skill.SkillType;
 import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.skill.SkillUtil;
 import flixel.util.FlxRandom;
@@ -76,6 +78,9 @@ class BtlLogicUtil {
     var eft = new BtlLogicData(actor.ID, actor.group, cmd);
     eft.setTarget(range, targetID);
 
+    // スキル種別を取得
+    var type = SkillUtil.toType(skillID);
+
     // 対象を取得
     var target = TempActorMgr.search(targetID);
 
@@ -84,25 +89,32 @@ class BtlLogicUtil {
     var max = SkillUtil.getParam(skillID, "max");
     var cnt = FlxRandom.intRanged(min, max);
 
-    // ダメージ計算
-    for(i in 0...cnt) {
-      var val = Calc.damageSkill(skillID, actor, target);
-      if(val > 0) {
-        // HPダメージ
-        eft.vals.push(BtlLogicVal.HpDamage(val));
-        // ダメージを与える
-        target.damage(val);
-      }
-      else {
-        // 回避された
-        eft.vals.push(BtlLogicVal.ChanceRoll(false));
-      }
+    switch(type) {
+      case SkillType.AtkPhyscal, SkillType.AtkMagical:
+        // ダメージ計算
+        for(i in 0...cnt) {
+          var val = Calc.damageSkill(skillID, actor, target);
+          if(val > 0) {
+            // HPダメージ
+            eft.vals.push(BtlLogicVal.HpDamage(val));
+            // ダメージを与える
+            target.damage(val);
+          }
+          else {
+            // 回避された
+            eft.vals.push(BtlLogicVal.ChanceRoll(false));
+          }
+        }
 
+      case SkillType.AtkBadstatus:
+        // バステ攻撃
+        var attr = SkillUtil.toAttribute(skillID);
+        var bst  = BadStatusUtil.fromSkillAttribute(attr);
+        eft.vals.push(BtlLogicVal.Badstatus(bst));
+
+      default:
+        FlxG.log.warn('Invalid SkillType "${SkillType}"');
     }
-    /*
-    // TODO: バステテスト
-    eft.vals.push(BtlLogicVal.Badstatus(BadStatus.Curse));
-    */
 
     return eft;
   }
