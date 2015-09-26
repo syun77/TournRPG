@@ -1,5 +1,7 @@
 package jp_2dgames.game.skill;
 
+import jp_2dgames.game.btl.types.BtlRange;
+import jp_2dgames.game.skill.SkillRange;
 import jp_2dgames.lib.CsvLoader;
 
 /**
@@ -21,6 +23,8 @@ class SkillUtil {
   private static var _typeTbl:Map<String,SkillType>;
   // スキル属性：文字からenumへの変換
   private static var _attrTbl:Map<String,SkillAttr>;
+  // 攻撃範囲：文字からenumへの変換
+  private static var _rangeTbl:Map<String,SkillRange>;
 
   /**
    * ロード
@@ -48,6 +52,14 @@ class SkillUtil {
       "AT_SLEEP"     => SkillAttr.Sleep,
       "AT_BLIND"     => SkillAttr.Blind,
       "AT_WEAK"      => SkillAttr.Weak
+    ];
+    _rangeTbl = [
+      "SELF"       => SkillRange.Self,
+      "FRIEND_ONE" => SkillRange.FriendOne,
+      "FRIEND_ALL" => SkillRange.FriendAll,
+      "ENEMY_ONE"  => SkillRange.EnemyOne,
+      "ENEMY_ALL"  => SkillRange.EnemyAll,
+      "ALL"        => SkillRange.All
     ];
   }
 
@@ -151,5 +163,41 @@ class SkillUtil {
     }
 
     return fromAttributeString(str);
+  }
+
+  /**
+   * 文字列を効果範囲に変換
+   **/
+  public static function fromRangeString(str:String):SkillRange {
+    return _rangeTbl[str];
+  }
+
+  /**
+   * 効果範囲を取得する
+   **/
+  public static function toRange(skillID:Int):SkillRange {
+    var str = getParamString(skillID, "range");
+    if(str == "") {
+      // 無効なスキル
+      return SkillRange.EnemyOne;
+    }
+
+    return fromRangeString(str);
+  }
+
+  /**
+   * バトルの効果範囲に変換する
+   **/
+  public static function rangeToBtlRange(range:SkillRange):BtlRange {
+    switch(range) {
+      case SkillRange.Self:
+        return BtlRange.Self;
+      case SkillRange.FriendOne, SkillRange.EnemyOne:
+        return BtlRange.One;
+      case SkillRange.FriendAll, SkillRange.EnemyAll:
+        return BtlRange.Group;
+      case SkillRange.All:
+        return BtlRange.All;
+    }
   }
 }

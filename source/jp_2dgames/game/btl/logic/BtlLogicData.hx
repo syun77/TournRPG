@@ -22,7 +22,7 @@ class BtlLogicData {
   public var actorID:Int     = 0;                  // 行動主体者
   public var group:BtlGroup  = BtlGroup.Player;    // 所属グループ
   public var cmd:BtlCmd      = BtlCmd.None;        // コマンド種別
-  public var target:BtlRange = BtlRange.One;       // 対象種別
+  public var range:BtlRange = BtlRange.One;  // 対象種別
   public var targetID:Int    = 0;                  // 対象者
   public var vals:List<BtlLogicVal>;               // 効果値
 
@@ -46,7 +46,7 @@ class BtlLogicData {
     actorID  = src.actorID;
     group    = src.group;
     cmd      = src.cmd;
-    target   = src.target;
+    range   = src.range;
     targetID = src.targetID;
     vals      = src.vals;
   }
@@ -55,7 +55,7 @@ class BtlLogicData {
    * 対象者を設定
    **/
   public function setTarget(target:BtlRange, targetID:Int):Void {
-    this.target   = target;
+    this.range   = target;
     this.targetID = targetID;
   }
 }

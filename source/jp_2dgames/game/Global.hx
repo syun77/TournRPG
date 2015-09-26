@@ -50,6 +50,7 @@ class Global {
     // スキル初期化
     _skillList = new Array<SkillData>();
     _skillList.push(new SkillData(SkillConst.SKILL001));
+    _skillList.push(new SkillData(SkillConst.SKILL003));
     SkillSlot.create(_skillList);
   }
 

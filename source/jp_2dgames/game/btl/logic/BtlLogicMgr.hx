@@ -81,8 +81,12 @@ class BtlLogicMgr {
       }
 
       // 演出データを生成
-      var eft = BtlLogicUtil.create(actor);
-      push(eft);
+      var efts = BtlLogicUtil.create(actor);
+      if(efts != null) {
+        for(eft in efts) {
+          push(eft);
+        }
+      }
 
       // 死亡チェック
       _checkDead();

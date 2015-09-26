@@ -137,7 +137,7 @@ class BtlLogicPlayer {
           Message.push2(Msg.BATTLE_LOSE);
         }
 
-      case BtlCmd.TurnEnd:
+      case BtlCmd.TurnEnd, BtlCmd.Sequence:
         // 何もしない
     }
 
@@ -307,7 +307,7 @@ class BtlLogicPlayer {
 
       case BtlCmd.Attack:
         // 通常攻撃
-        switch(_data.target) {
+        switch(_data.range) {
           case BtlRange.One:
             bNext = _execTarget(target);
           default:
@@ -316,13 +316,7 @@ class BtlLogicPlayer {
 
       case BtlCmd.Skill(id, range, targetID):
         // スキルを使う
-        // TODO: 仮
-        switch(_data.target) {
-          case BtlRange.One:
-            _execTarget(target);
-          default:
-          // TODO: 未実装
-        }
+        _execTarget(target);
 
       case BtlCmd.Item(item, range, targetID):
         // アイテムを使う
@@ -336,7 +330,7 @@ class BtlLogicPlayer {
 
       case BtlCmd.TurnEnd:
         // ターン終了
-        switch(_data.target) {
+        switch(_data.range) {
           case BtlRange.Self:
             // 自分自身
             _execTarget(actor);
@@ -348,6 +342,11 @@ class BtlLogicPlayer {
           default:
           // TODO: 未実装
         }
+
+      case BtlCmd.Sequence:
+        // 連続演出
+        // TODO: 仮
+        _execTarget(target);
     }
 
     if(bNext) {

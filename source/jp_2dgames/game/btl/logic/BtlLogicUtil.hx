@@ -1,5 +1,5 @@
 package jp_2dgames.game.btl.logic;
-import jp_2dgames.game.gui.BtlTargetUI;
+import jp_2dgames.game.btl.logic.BtlLogicData;
 import flixel.FlxG;
 import jp_2dgames.game.skill.SkillType;
 import jp_2dgames.game.actor.BadStatusUtil;
@@ -9,7 +9,6 @@ import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.TempActorMgr;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.item.ItemData;
-import jp_2dgames.game.btl.logic.BtlLogicData;
 import jp_2dgames.game.btl.types.BtlCmd;
 import jp_2dgames.game.actor.Actor;
 
@@ -21,28 +20,39 @@ class BtlLogicUtil {
   /**
    * 演出の生成
    **/
-  public static function create(actor:Actor):BtlLogicData {
+  public static function create(actor:Actor):List<BtlLogicData> {
+
+    var ret = new List<BtlLogicData>();
+
     switch(actor.cmd) {
       case BtlCmd.Attack(range, targetID):
         // 攻撃演出の作成
-        return _createAttack(actor, range, targetID);
+        var eft = _createAttack(actor, range, targetID);
+        ret.add(eft);
 
       case BtlCmd.Skill(skillID, range, targetID):
         // スキル演出の作成
-        return _createSkill(skillID, actor, range, targetID);
+        var efts = _createSkill(skillID, actor, range, targetID);
+        for(eft in efts) {
+          ret.add(eft);
+        }
 
       case BtlCmd.Item(item, range, targetID):
         // アイテム演出の作成
-        return _createItem(item, actor, range, targetID);
+        var eft = _createItem(item, actor, range, targetID);
+        ret.add(eft);
 
       case BtlCmd.Escape:
         // 逃走演出の作成
-        return _createEscape(actor);
+        var eft = _createEscape(actor);
+        ret.add(eft);
 
-      case BtlCmd.Dead, BtlCmd.BtlEnd, BtlCmd.TurnEnd, BtlCmd.None:
+      case BtlCmd.Dead, BtlCmd.BtlEnd, BtlCmd.TurnEnd, BtlCmd.Sequence, BtlCmd.None:
         // 通常ありえない
         return null;
     }
+
+    return ret;
   }
 
   /**
@@ -73,8 +83,10 @@ class BtlLogicUtil {
   /**
    * スキルを使う
    **/
-  private static function _createSkill(skillID:Int, actor:Actor, range:BtlRange, targetID:Int):BtlLogicData {
-    // TODO: 未実装
+  private static function _createSkill(skillID:Int, actor:Actor, range:BtlRange, targetID:Int):List<BtlLogicData> {
+
+    var ret = new List<BtlLogicData>();
+
     var cmd = BtlCmd.Skill(skillID, range, targetID);
     var eft = new BtlLogicData(actor.ID, actor.group, cmd);
     eft.setTarget(range, targetID);
@@ -93,34 +105,127 @@ class BtlLogicUtil {
     switch(type) {
       case SkillType.AtkPhyscal, SkillType.AtkMagical:
         // ダメージ計算
-        for(i in 0...cnt) {
-          var val = Calc.damageSkill(skillID, actor, target);
-          if(val > 0) {
-            // HPダメージ
-            eft.vals.push(BtlLogicVal.HpDamage(val));
-            // ダメージを与える
-            target.damage(val);
+        if(cnt > 1) {
+          // 連続攻撃
+          for(i in 0...cnt) {
+            var val = Calc.damageSkill(skillID, actor, target);
+            if(val > 0) {
+              // HPダメージ
+              eft.vals.push(BtlLogicVal.HpDamage(val));
+              // ダメージを与える
+              target.damage(val);
+            }
+            else {
+              // 回避された
+              eft.vals.push(BtlLogicVal.ChanceRoll(false));
+            }
           }
-          else {
-            // 回避された
-            eft.vals.push(BtlLogicVal.ChanceRoll(false));
-          }
-        }
 
+          // 演出データを追加
+          ret.add(eft);
+        }
+        else {
+          // 1回攻撃
+          switch(range) {
+            case BtlRange.One:
+              // 単体
+              var val = Calc.damageSkill(skillID, actor, target);
+              _damageTarget(eft, target, val);
+
+            case BtlRange.Group:
+              // グループ
+              TempActorMgr.forEachAliveGroup(target.group, function(act:Actor) {
+                var val = Calc.damageSkill(skillID, actor, act);
+                if(eft != null) {
+                  // 初回のダメージ
+                  _damageTarget(eft, act, val);
+                  ret.add(eft);
+                  eft = null;
+                }
+                else {
+                  // 2回目以降のダメージ
+                  var cmd = BtlCmd.Sequence;
+                  var eft2 = new BtlLogicData(act.ID, act.group, cmd);
+                  eft2.setTarget(range, targetID);
+                  _damageTarget(eft, act, val);
+                  ret.add(eft2);
+                }
+              });
+
+            default:
+              // TODO: 未実装
+              throw "Not implements.";
+          }
+
+          // 演出データを追加
+          ret.add(eft);
+        }
       case SkillType.AtkBadstatus:
         // バステ攻撃
-        var attr = SkillUtil.toAttribute(skillID);
-        var bst  = BadStatusUtil.fromSkillAttribute(attr);
-        eft.vals.push(BtlLogicVal.Badstatus(bst));
+        switch(range) {
+          case BtlRange.One:
+            // 単体
+            var attr = SkillUtil.toAttribute(skillID);
+            var bst  = BadStatusUtil.fromSkillAttribute(attr);
+            eft.vals.push(BtlLogicVal.Badstatus(bst));
 
-        // バステ付着
-        target.adhereBadStatus(bst);
+            // バステ付着
+            target.adhereBadStatus(bst);
 
+            // 演出データを追加
+            ret.add(eft);
+
+          case BtlRange.Group:
+            // グループ
+            TempActorMgr.forEachAliveGroup(target.group, function(act:Actor) {
+              if(eft != null) {
+                // 初回
+                var attr = SkillUtil.toAttribute(skillID);
+                var bst  = BadStatusUtil.fromSkillAttribute(attr);
+                eft.vals.push(BtlLogicVal.Badstatus(bst));
+                eft.setTarget(range, act.ID);
+
+                // バステ付着
+                act.adhereBadStatus(bst);
+                ret.add(eft);
+                eft = null;
+              }
+              else {
+                // 2回目以降
+                var cmd = BtlCmd.Sequence;
+                var eft2 = new BtlLogicData(act.ID, act.group, cmd);
+                eft2.setTarget(range, act.ID);
+                var attr = SkillUtil.toAttribute(skillID);
+                var bst  = BadStatusUtil.fromSkillAttribute(attr);
+                eft2.vals.push(BtlLogicVal.Badstatus(bst));
+
+                // バステ付着
+                target.adhereBadStatus(bst);
+                ret.add(eft2);
+              }
+            });
+
+          default:
+            // TODO:
+        }
       default:
         FlxG.log.warn('Invalid SkillType "${SkillType}"');
     }
 
-    return eft;
+    return ret;
+  }
+
+  private static function _damageTarget(eft:BtlLogicData, target:Actor, val:Int):Void {
+    if(val > 0) {
+      // HPダメージ
+      eft.vals.push(BtlLogicVal.HpDamage(val));
+      // ダメージを与える
+      target.damage(val);
+    }
+    else {
+      // 回避された
+      eft.vals.push(BtlLogicVal.ChanceRoll(false));
+    }
   }
 
   /**
@@ -162,7 +267,7 @@ class BtlLogicUtil {
   public static function createTurnEnd(actor:Actor):BtlLogicData {
 
     var eft = new BtlLogicData(actor.ID, actor.group, BtlCmd.TurnEnd);
-    eft.target = BtlRange.Self;
+    eft.range = BtlRange.Self;
 
     switch(actor.badstatus) {
       case BadStatus.None:

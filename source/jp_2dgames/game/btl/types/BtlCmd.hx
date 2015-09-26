@@ -17,4 +17,5 @@ enum BtlCmd {
   Dead;              // 死亡
   BtlEnd(bWin:Bool); // バトル勝利
   TurnEnd;           // ターン終了
+  Sequence;          // 連続ダメージ時
 }

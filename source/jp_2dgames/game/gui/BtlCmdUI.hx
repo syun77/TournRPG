@@ -154,7 +154,10 @@ class BtlCmdUI extends FlxSpriteGroup {
     // 対象グループ取得
     var group = BtlGroupUtil.getAgaint(actor.group);
     // 攻撃対象範囲
-    var range = BtlRange.One;
+    var range = SkillUtil.toRange(skill.id);
+
+    // バトル用の範囲
+    var btlRange = SkillUtil.rangeToBtlRange(range);
 
     BtlTargetUI.open(function(targetID) {
       if(targetID == BtlTargetUI.CMD_CANCEL) {
@@ -164,8 +167,8 @@ class BtlCmdUI extends FlxSpriteGroup {
         return;
       }
       // スキル使用
-      cbFunc(actor, BtlCmd.Skill(skill.id, range, targetID));
-    }, group, range);
+      cbFunc(actor, BtlCmd.Skill(skill.id, btlRange, targetID));
+    }, group, btlRange);
 
     visible = false;
   }
