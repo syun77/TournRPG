@@ -1,17 +1,6 @@
 package jp_2dgames.game.btl.logic;
 
 import jp_2dgames.game.btl.BtlGroupUtil;
-import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
-
-/**
- * バトル発生効果値
- **/
-enum BtlLogicVal {
-  HpDamage(val:Int);        // HPダメージ
-  HpRecover(val:Int);       // HP回復
-  ChanceRoll(b:Bool);       // 成功or失敗
-  Badstatus(bst:BadStatus); // バステ付着
-}
 
 /**
  * バトル演出情報
