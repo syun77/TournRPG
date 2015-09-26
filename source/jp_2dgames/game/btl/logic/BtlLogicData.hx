@@ -1,7 +1,6 @@
 package jp_2dgames.game.btl.logic;
 
 import jp_2dgames.game.btl.types.BtlRange;
-import jp_2dgames.game.btl.types.BtlCmd;
 import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 
@@ -22,15 +21,15 @@ class BtlLogicData {
   public var actorID:Int     = 0;                  // 行動主体者
   public var group:BtlGroup  = BtlGroup.Player;    // 所属グループ
   public var type:BtlLogic   = BtlLogic.None;      // 演出種別
-  public var range:BtlRange  = BtlRange.One;       // 対象種別
   public var targetID:Int    = 0;                  // 対象者
   public var vals:List<BtlLogicVal>;               // 効果値
+  public var bAttackEnd:Bool = true;               // 攻撃終了かどうか
 
   /**
    * コンストラクタ
    * @param actorID 行動主体者
    * @param group   所属グループ
-   * @param type    実行コマンド
+   * @param type    実行種別
    **/
   public function new(actorID:Int, group:BtlGroup, type:BtlLogic) {
     this.actorID = actorID;
@@ -46,7 +45,6 @@ class BtlLogicData {
     actorID  = src.actorID;
     group    = src.group;
     type     = src.type;
-    range    = src.range;
     targetID = src.targetID;
     vals     = src.vals;
   }
@@ -54,8 +52,7 @@ class BtlLogicData {
   /**
    * 対象者を設定
    **/
-  public function setTarget(target:BtlRange, targetID:Int):Void {
-    this.range   = target;
+  public function setTarget(targetID:Int):Void {
     this.targetID = targetID;
   }
 }

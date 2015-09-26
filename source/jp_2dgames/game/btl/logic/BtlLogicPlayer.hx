@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.game.btl.logic.BtlLogic.BtlLogicUtil;
 import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.skill.SkillUtil;
 import flixel.util.FlxTimer;
@@ -12,7 +13,6 @@ import flixel.FlxObject;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import flixel.FlxG;
 import flixel.FlxCamera;
-import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.lib.Input;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.logic.BtlLogicData;
@@ -54,18 +54,6 @@ class BtlLogicPlayer {
    **/
   public function new(data:BtlLogicData) {
     _data = data;
-  }
-
-  /**
-   * 開始演出かどうか
-   **/
-  private function _isBegin(type:BtlLogic):Bool {
-    switch(type) {
-      case BtlLogic.BeginAttack, BtlLogic.BeginSkill, BtlLogic.BeginItem:
-        return true;
-      default:
-        return false;
-    }
   }
 
   /**
@@ -113,6 +101,9 @@ class BtlLogicPlayer {
     _state = State.Wait;
     if(bWait) {
       _tWait = Reg.TIMER_WAIT;
+      if(_data.bAttackEnd == false) {
+        _tWait = Reg.TIMER_WAIT_SEQUENCE;
+      }
     }
   }
 
@@ -171,6 +162,32 @@ class BtlLogicPlayer {
 
     // 連続攻撃は演出内で次の状態に進める
     return false;
+  }
+
+  /**
+   * 成功 or 失敗
+   **/
+  private function _chanceRool(bSuccess:Bool):Void {
+
+    var actor = ActorMgr.search(_data.actorID);
+    var target = ActorMgr.search(_data.targetID);
+
+    if(bSuccess == false) {
+      // 失敗
+      if(target.group == BtlGroup.Player) {
+        // プレイヤー
+        BtlUI.missPlayer(target.ID);
+      }
+      else {
+        // 敵
+        var px = target.xcenter;
+        var py = target.ycenter;
+        // MISS表示
+        var p = ParticleDamage.start(px, py, -1);
+        p.color = MyColor.NUM_MISS;
+      }
+      Message.push2(Msg.ATTACK_MISS, [target.name]);
+    }
   }
 
   /**
@@ -234,10 +251,8 @@ class BtlLogicPlayer {
     var target = ActorMgr.search(_data.targetID);
 
     switch(_data.type) {
-      case BtlLogic.None:
-        // 通常ここにくることはない
-
       case BtlLogic.BeginAttack:
+        // 攻撃
         Message.push2(Msg.ATTACK_BEGIN, [actor.name]);
         if(actor.group == BtlGroup.Enemy) {
           // 攻撃開始エフェクト再生
@@ -247,19 +262,18 @@ class BtlLogicPlayer {
         }
 
       case BtlLogic.BeginSkill(id):
+        // スキル
         var name = SkillUtil.getName(id);
         Message.push2(Msg.SKILL_BEGIN, [actor.name, name]);
 
       case BtlLogic.BeginItem(item):
+        // アイテム
         var name = ItemUtil.getName(item);
         Message.push2(Msg.ITEM_USE, [name]);
 
       default:
         throw 'Invalid _data.type (${_data.type})';
     }
-
-    // メイン処理終了
-    _endMain(true);
 
     // アクティブ状態の設定
     switch(_data.group) {
@@ -283,6 +297,9 @@ class BtlLogicPlayer {
       FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 10);
       _zoom = FlxCamera.defaultZoom + 0.1;
     }
+
+    // メイン処理終了
+    _endMain(true);
   }
 
   /**
@@ -299,25 +316,22 @@ class BtlLogicPlayer {
     var bWait:Bool = true;
 
     switch(_data.type) {
-      case BtlLogic.None:
-        // 通常ここにくることはない
-
-      case BtlLogic.BeginAttack, BtlLogic.BeginSkill, BtlLogic.BeginItem:
+      case BtlLogic.None, BtlLogic.BeginAttack, BtlLogic.BeginSkill, BtlLogic.BeginItem:
         // ここに来てはいけない
         throw 'Invalid _data.type ${_data.type}';
 
-      case BtlLogic.Attack:
-        // 通常攻撃
-        switch(_data.range) {
-          case BtlRange.One:
-            bNext = _execTarget(target);
-          default:
-            // TODO: 未実装
-        }
+      case BtlLogic.HpDamage(val, bSeq):
+        // HPダメージ
+        _damage(target, val, bSeq);
 
-      case BtlLogic.Skill:
-        // スキルを使う
-        _execTarget(target);
+      case BtlLogic.ChanceRoll(b):
+        // 成功 or 失敗
+        _chanceRool(b);
+
+      case BtlLogic.Badstatus(bst):
+        // バステ付着
+        target.adhereBadStatus(bst);
+        BadStatusUtil.pushMessage(bst, target.name);
 
       case BtlLogic.Item(item):
         // アイテムを使う
@@ -345,26 +359,7 @@ class BtlLogicPlayer {
           // 味方が全滅
           Message.push2(Msg.BATTLE_LOSE);
         }
-
-      case BtlLogic.TurnEnd:
-        // ターン終了
-        switch(_data.range) {
-          case BtlRange.Self:
-            // 自分自身
-            _execTarget(actor);
-
-          case BtlRange.One:
-            // 自分以外の単体
-            _execTarget(target);
-
-          default:
-          // TODO: 未実装
-        }
-
-      case BtlLogic.Sequence:
-        // 連続演出
-        // TODO: 仮
-        _execTarget(target);
+        bWait = false;
 
       case BtlLogic.EndAction:
         // 行動終了
@@ -408,7 +403,7 @@ class BtlLogicPlayer {
   public function update():Void {
 
     // ズーム計算
-    if(_isBegin(_data.type))
+    if(BtlLogicUtil.isBegin(_data.type))
     {
       var d = _zoom - FlxG.camera.zoom;
       FlxG.camera.zoom += (d * 0.2);
@@ -422,7 +417,7 @@ class BtlLogicPlayer {
     switch(_state) {
       case State.Init:
       case State.Main:
-        if(_isBegin(_data.type)) {
+        if(BtlLogicUtil.isBegin(_data.type)) {
           _updateMainBegin();
         }
         else {
