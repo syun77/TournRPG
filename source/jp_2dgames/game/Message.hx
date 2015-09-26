@@ -80,10 +80,10 @@ private class MessageText extends FlxText {
 class Message extends FlxGroup {
 
   // メッセージログの最大
-  private static inline var MESSAGE_MAX = 10;
+  private static inline var MESSAGE_MAX = 5;
   // ウィンドウ座標
   private static inline var POS_X = 8;
-  private static inline var POS_Y = 260 - HEIGHT - 24 - 8;
+  private static inline var POS_Y = 184 - HEIGHT - 24 - 8;
   // ウィンドウサイズ
   private static inline var WIDTH = 640 - 8 * 2;
   private static inline var HEIGHT = (MESSAGE_MAX*DY)+14;

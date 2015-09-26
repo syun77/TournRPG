@@ -40,15 +40,44 @@ class BtlTargetUI extends FlxSpriteGroup {
     super();
 
     var btnList = new Array<MyButton>();
+
     // 対象Actorを決めるボタン
-    ActorMgr.forEachAliveGroup(group, function(actor:Actor) {
-      var px = actor.xcenter - MyButton.WIDTH/2;
-      var py = actor.bottom;
-      var btn = new MyButton(px, py, actor.name, function() {
-        _click(cbFunc, actor.ID);
-      });
-      btnList.push(btn);
-    });
+    switch(range) {
+      case BtlRange.Self:
+        // 自分自身
+        throw '未実装の効果範囲 ${range}';
+
+      case BtlRange.One:
+        // 単体
+        ActorMgr.forEachAliveGroup(group, function(actor:Actor) {
+          var px = actor.xcenter - MyButton.WIDTH/2;
+          var py = actor.bottom;
+          var btn = new MyButton(px, py, actor.name, function() {
+            _click(cbFunc, actor.ID);
+          });
+          btnList.push(btn);
+        });
+
+      case BtlRange.Group:
+        // グループ
+        var actor = ActorMgr.forEachAliveFirstIf(function(actor:Actor) {
+          if(group == actor.group) {
+            return true;
+          }
+          return false;
+        });
+        var px = FlxG.width/2 - MyButton.WIDTH/2;
+        var py = actor.bottom;
+        var name = UIMsg.get(UIMsg.CMD_ENEMY_ALL);
+        var btn = new MyButton(px, py, name, function() {
+          _click(cbFunc, actor.ID);
+        });
+        btnList.push(btn);
+
+      case BtlRange.All:
+        // 全体
+        throw '未実装の効果範囲 ${range}';
+    }
 
     // キャンセルボタン
     {

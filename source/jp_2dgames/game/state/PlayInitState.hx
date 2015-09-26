@@ -1,4 +1,6 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.skill.SkillConst;
+import jp_2dgames.game.skill.SkillData;
 import flixel.FlxG;
 import flixel.FlxState;
 
@@ -14,6 +16,11 @@ class PlayInitState extends FlxState {
 
     // ゲームグローバルパラメータ初期化
     Global.init();
+
+    // 初期スキルを設定
+    var skills = Global.getSkillSlot();
+    skills.push(new SkillData(SkillConst.SKILL001));
+    skills.push(new SkillData(SkillConst.SKILL003));
   }
 
   /**

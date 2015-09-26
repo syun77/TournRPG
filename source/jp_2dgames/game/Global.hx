@@ -2,8 +2,6 @@ package jp_2dgames.game;
 
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.skill.SkillData;
-import jp_2dgames.game.skill.SkillData;
-import jp_2dgames.game.skill.SkillConst;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.item.ItemData;
@@ -49,8 +47,6 @@ class Global {
 
     // スキル初期化
     _skillList = new Array<SkillData>();
-    _skillList.push(new SkillData(SkillConst.SKILL001));
-    _skillList.push(new SkillData(SkillConst.SKILL003));
     SkillSlot.create(_skillList);
   }
 
