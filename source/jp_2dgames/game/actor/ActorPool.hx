@@ -27,6 +27,9 @@ class ActorPool {
     }
     if(state != null) {
       state.add(_pool);
+      _pool.forEach(function(actor:Actor) {
+        state.add(actor.bstIcon);
+      });
     }
 
     // 死亡リスト

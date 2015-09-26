@@ -1,16 +1,9 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.gui.BadStatusUI;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
-import flixel.util.FlxRandom;
-import jp_2dgames.game.gui.BtlUI;
-import jp_2dgames.lib.AdvScript;
-import jp_2dgames.game.MyColor;
-import jp_2dgames.game.particle.ParticleDamage;
 import flixel.util.FlxColor;
-import jp_2dgames.game.particle.Particle;
-import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.btl.types.BtlCmd;
-import flixel.FlxG;
 import jp_2dgames.game.btl.BtlGroupUtil;
 import flixel.FlxSprite;
 
@@ -172,6 +165,13 @@ class Actor extends FlxSprite {
     return y + height;
   }
 
+  // バッドステータスアイコン
+  private var _bstIcon:BadStatusUI;
+  public var bstIcon(get, never):BadStatusUI;
+  private function get_bstIcon() {
+    return _bstIcon;
+  }
+
   /**
    * 経験値を増やす
    **/
@@ -223,15 +223,22 @@ class Actor extends FlxSprite {
     _idx = id;
     _param = new Params();
 
+    _change(State.Standby);
+
+    // バステアイコン
+    _bstIcon = new BadStatusUI(0, 0);
+
     // 非表示にしておく
     kill();
     visible = false;
+  }
 
-    _change(State.Standby);
-
-    if(id < 2) {
-//      FlxG.watch.add(this, "_state");
-    }
+  /**
+   * 消滅
+   **/
+  override public function kill():Void {
+    _bstIcon.kill();
+    super.kill();
   }
 
   /**
@@ -260,14 +267,13 @@ class Actor extends FlxSprite {
         _initEnemy();
       }
     }
-    else {
-//      FlxG.watch.add(this, "_cmd");
-    }
 
     color = FlxColor.WHITE;
 
     // バッドステータス初期化
     _badstatus = BadStatus.None;
+    _bstIcon.revive();
+    _bstIcon.set(_badstatus);
   }
 
   /**
@@ -287,6 +293,10 @@ class Actor extends FlxSprite {
     if(bForce || BadStatusUtil.isAdhere(badstatus, bst)) {
       // 付着できる
       _badstatus = bst;
+      if(group == BtlGroup.Enemy) {
+        // バステアイコン表示
+        _bstIcon.set(bst);
+      }
       return true;
     }
 
@@ -335,6 +345,9 @@ class Actor extends FlxSprite {
     _ystart = ystart;
     x = xstart;
     y = ystart;
+
+    _bstIcon.x = xcenter;
+    _bstIcon.y = ycenter;
   }
 
   /**
