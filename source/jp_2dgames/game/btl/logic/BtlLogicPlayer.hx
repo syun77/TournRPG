@@ -57,9 +57,22 @@ class BtlLogicPlayer {
   }
 
   /**
+   * 開始演出かどうか
+   **/
+  private function _isBegin(type:BtlLogic):Bool {
+    switch(type) {
+      case BtlLogic.BeginAttack, BtlLogic.BeginSkill, BtlLogic.BeginItem:
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /**
    * カメラフォーカス対象の取得
    **/
   private function _getFollowObj(actor:Actor, targetID:Int):FlxObject {
+
     var obj = new FlxObject();
     if(actor.group == BtlGroup.Enemy) {
       // 主体者をフォーカス
@@ -88,108 +101,19 @@ class BtlLogicPlayer {
   /**
    * 開始演出を再生
    **/
-  /*
-  public function start():Void {
-
-    var actor = ActorMgr.search(_data.actorID);
-
-    switch(_data.type) {
-      case BtlLogic.None:
-        // 通常あり得ない
-
-      case BtlLogic.Attack:
-        Message.push2(Msg.ATTACK_BEGIN, [actor.name]);
-        if(actor.group == BtlGroup.Enemy) {
-          // 攻撃開始エフェクト再生
-          var px = actor.xcenter;
-          var py = actor.ycenter;
-          Particle.start(PType.Ring3, px, py, FlxColor.RED);
-        }
-
-      case BtlLogic.Skill(id):
-        var name = SkillUtil.getName(id);
-        Message.push2(Msg.SKILL_BEGIN, [actor.name, name]);
-
-      case BtlLogic.Item(item):
-        var name = ItemUtil.getName(item);
-        Message.push2(Msg.ITEM_USE, [name]);
-
-      case BtlLogic.Escape:
-        Message.push2(Msg.ESCAPE, [actor.name]);
-
-      case BtlLogic.Dead:
-        ActorMgr.moveGrave(actor);
-        Message.push2(Msg.DEFEAT_ENEMY, [actor.name]);
-        if(actor.group == BtlGroup.Enemy) {
-          // 消滅エフェクト再生
-          var px = actor.xcenter;
-          var py = actor.ycenter;
-          Particle.start(PType.Ring, px, py, FlxColor.YELLOW);
-        }
-
-      case BtlLogic.BtlEnd(bWin):
-        if(bWin) {
-          // 敵が全滅
-          Message.push2(Msg.BATTLE_WIN);
-        }
-        else {
-          // 味方が全滅
-          Message.push2(Msg.BATTLE_LOSE);
-        }
-
-      case BtlLogic.TurnEnd, BtlLogic.Sequence:
-        // 何もしない
-    }
-
-    // アクティブ状態の設定
-    switch(_data.group) {
-      case BtlGroup.Player:
-        // プレイヤー
-        BtlUI.setActivePlayer(_data.actorID, true);
-      case BtlGroup.Enemy:
-        // 敵
-        ActorMgr.forEachAliveGroup(BtlGroup.Enemy, function(act:Actor) {
-          if(_data.actorID != act.ID) {
-            // 自分以外は暗くする
-            act.changeColor(MyColor.ENEMY_NON_ACTIVE);
-          }
-        });
-      default:
-    }
-
-    // ズーム演出
-    var obj = null;
-    switch(_data.type) {
-      case BtlLogic.Attack:
-        obj = _getFollowObj(actor, _data.targetID);
-      case BtlLogic.Skill:
-        obj = _getFollowObj(actor, _data.targetID);
-      case BtlLogic.Item:
-        obj = _getFollowObj(actor, _data.targetID);
-      default:
-    }
-    if(obj != null) {
-      FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 10);
-      _zoom = FlxCamera.defaultZoom + 0.1;
-    }
-
-    // メイン処理へ
-    _state = State.Main;
-    _tWait = Reg.TIMER_WAIT;
-  }
-  */
   public function start():Void {
     // メイン処理へ
     _state = State.Main;
-    _tWait = Reg.TIMER_WAIT;
   }
 
   /**
    * メイン処理終了
    **/
-  private function _endMain():Void {
+  private function _endMain(bWait:Bool):Void {
     _state = State.Wait;
-    _tWait = Reg.TIMER_WAIT;
+    if(bWait) {
+      _tWait = Reg.TIMER_WAIT;
+    }
   }
 
   /**
@@ -206,6 +130,8 @@ class BtlLogicPlayer {
       var bLast = (idx == _data.vals.length - 1);
 
       new FlxTimer(idx*0.25, function(timer:FlxTimer) {
+
+        var bWait:Bool = true;
         switch(val) {
           case BtlLogicVal.HpDamage(val):
             // HPダメージ
@@ -236,7 +162,7 @@ class BtlLogicPlayer {
         }
         if(bLast) {
           // 次の状態に進む
-          _endMain();
+          _endMain(bWait);
         }
 
       });
@@ -299,13 +225,13 @@ class BtlLogicPlayer {
     }
   }
 
-  private function _updateMain():Void {
+  /**
+   * 更新・メイン・開始演出
+   **/
+  private function _updateMainBegin():Void {
 
     var actor = ActorMgr.search(_data.actorID);
     var target = ActorMgr.search(_data.targetID);
-
-    // 次の状態に進むかどうか
-    var bNext:Bool = true;
 
     switch(_data.type) {
       case BtlLogic.None:
@@ -328,6 +254,58 @@ class BtlLogicPlayer {
         var name = ItemUtil.getName(item);
         Message.push2(Msg.ITEM_USE, [name]);
 
+      default:
+        throw 'Invalid _data.type (${_data.type})';
+    }
+
+    // メイン処理終了
+    _endMain(true);
+
+    // アクティブ状態の設定
+    switch(_data.group) {
+      case BtlGroup.Player:
+        // プレイヤー
+        BtlUI.setActivePlayer(_data.actorID, true);
+      case BtlGroup.Enemy:
+        // 敵
+        ActorMgr.forEachAliveGroup(BtlGroup.Enemy, function(act:Actor) {
+          if(_data.actorID != act.ID) {
+            // 自分以外は暗くする
+            act.changeColor(MyColor.ENEMY_NON_ACTIVE);
+          }
+        });
+      default:
+    }
+
+    // ズーム演出
+    var obj = _getFollowObj(actor, _data.targetID);
+    if(obj != null) {
+      FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 10);
+      _zoom = FlxCamera.defaultZoom + 0.1;
+    }
+  }
+
+  /**
+   * 更新・メイン
+   **/
+  private function _updateMain():Void {
+
+    var actor = ActorMgr.search(_data.actorID);
+    var target = ActorMgr.search(_data.targetID);
+
+    // 次の状態に進むかどうか
+    var bNext:Bool = true;
+    // 一時停止するかどうか
+    var bWait:Bool = true;
+
+    switch(_data.type) {
+      case BtlLogic.None:
+        // 通常ここにくることはない
+
+      case BtlLogic.BeginAttack, BtlLogic.BeginSkill, BtlLogic.BeginItem:
+        // ここに来てはいけない
+        throw 'Invalid _data.type ${_data.type}';
+
       case BtlLogic.Attack:
         // 通常攻撃
         switch(_data.range) {
@@ -346,10 +324,27 @@ class BtlLogicPlayer {
         ItemUtil.use(actor, item);
 
       case BtlLogic.Escape:
+        Message.push2(Msg.ESCAPE, [actor.name]);
 
       case BtlLogic.Dead:
+        ActorMgr.moveGrave(actor);
+        Message.push2(Msg.DEFEAT_ENEMY, [actor.name]);
+        if(actor.group == BtlGroup.Enemy) {
+          // 消滅エフェクト再生
+          var px = actor.xcenter;
+          var py = actor.ycenter;
+          Particle.start(PType.Ring, px, py, FlxColor.YELLOW);
+        }
 
-      case BtlLogic.BtlEnd:
+      case BtlLogic.BtlEnd(bWin):
+        if(bWin) {
+          // 敵が全滅
+          Message.push2(Msg.BATTLE_WIN);
+        }
+        else {
+          // 味方が全滅
+          Message.push2(Msg.BATTLE_LOSE);
+        }
 
       case BtlLogic.TurnEnd:
         // ターン終了
@@ -370,11 +365,23 @@ class BtlLogicPlayer {
         // 連続演出
         // TODO: 仮
         _execTarget(target);
+
+      case BtlLogic.EndAction:
+        // 行動終了
+        // カメラ制御
+        var obj = new FlxObject();
+        obj.x = FlxG.width/2;
+        obj.y = FlxG.height/2;
+        FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 50);
+        // デフォルトに戻す
+        _zoom = FlxCamera.defaultZoom;
+        _end();
+        bWait = false;
     }
 
     if(bNext) {
       // メイン処理終了
-      _endMain();
+      _endMain(bWait);
     }
   }
 
@@ -401,6 +408,7 @@ class BtlLogicPlayer {
   public function update():Void {
 
     // ズーム計算
+    if(_isBegin(_data.type))
     {
       var d = _zoom - FlxG.camera.zoom;
       FlxG.camera.zoom += (d * 0.2);
@@ -414,18 +422,13 @@ class BtlLogicPlayer {
     switch(_state) {
       case State.Init:
       case State.Main:
-        _updateMain();
+        if(_isBegin(_data.type)) {
+          _updateMainBegin();
+        }
+        else {
+          _updateMain();
+        }
       case State.Wait:
-        // ズーム演出
-        var obj = new FlxObject();
-        obj.x = FlxG.width/2;
-        obj.y = FlxG.height/2;
-        FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 50);
-        // デフォルトに戻す
-        _zoom = FlxCamera.defaultZoom;
-        // 終了処理
-        _end();
-        // おしまい
         _state = State.End;
 
       case State.End:

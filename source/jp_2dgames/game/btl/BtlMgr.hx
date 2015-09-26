@@ -209,7 +209,6 @@ class BtlMgr {
       case State.LogicMain:
         // 演出実行
         _logicPlayer.update();
-
         if(_logicPlayer.isEnd()) {
           // 演出終了
           _change(State.LogicEnd);

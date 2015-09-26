@@ -33,6 +33,10 @@ class BtlLogicFactory {
         }
         var eft = _createAttack(actor, range, targetID);
         ret.add(eft);
+        {
+          var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.EndAction);
+          ret.add(eft);
+        }
 
       case BtlCmd.Skill(skillID, range, targetID):
         // スキル演出の作成
@@ -44,6 +48,10 @@ class BtlLogicFactory {
         for(eft in efts) {
           ret.add(eft);
         }
+        {
+          var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.EndAction);
+          ret.add(eft);
+        }
 
       case BtlCmd.Item(item, range, targetID):
         // アイテム演出の作成
@@ -53,6 +61,10 @@ class BtlLogicFactory {
         }
         var eft = _createItem(item, actor, range, targetID);
         ret.add(eft);
+        {
+          var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.EndAction);
+          ret.add(eft);
+        }
 
       case BtlCmd.Escape:
         // 逃走演出の作成

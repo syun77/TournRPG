@@ -13,6 +13,9 @@ enum BtlLogic {
   BeginSkill(id:Int);       // スキル開始
   BeginItem(item:ItemData); // アイテム開始
 
+  // 行動終了
+  EndAction;
+
   Attack;                // 通常攻撃
   Skill(id:Int);         // スキル
   Item(item:ItemData);   // アイテム
