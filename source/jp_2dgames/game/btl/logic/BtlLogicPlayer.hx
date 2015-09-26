@@ -3,7 +3,6 @@ package jp_2dgames.game.btl.logic;
 import jp_2dgames.game.btl.logic.BtlLogic.BtlLogicUtil;
 import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.skill.SkillUtil;
-import flixel.util.FlxTimer;
 import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.particle.ParticleDamage;
 import flixel.util.FlxColor;
@@ -101,67 +100,11 @@ class BtlLogicPlayer {
     _state = State.Wait;
     if(bWait) {
       _tWait = Reg.TIMER_WAIT;
-      if(_data.bAttackEnd == false) {
+      if(_data.bWaitQuick) {
+        // 待ち時間短縮
         _tWait = Reg.TIMER_WAIT_SEQUENCE;
       }
     }
-  }
-
-  /**
-   * ターゲットに対する処理
-   **/
-  private function _execTarget(target:Actor):Bool {
-
-    var idx = 0;
-    for(val in _data.vals) {
-      // 演出の座標をランダムでずらすかどうか
-      var bRandom = idx > 0;
-
-      // 最後の演出かどうか
-      var bLast = (idx == _data.vals.length - 1);
-
-      new FlxTimer(idx*0.25, function(timer:FlxTimer) {
-
-        var bWait:Bool = true;
-        switch(val) {
-          case BtlLogicVal.HpDamage(val):
-            // HPダメージ
-            _damage(target, val, bRandom);
-
-          case BtlLogicVal.HpRecover(val):
-          case BtlLogicVal.ChanceRoll(bSuccess):
-            if(bSuccess == false) {
-              // 失敗
-              if(target.group == BtlGroup.Player) {
-                // プレイヤー
-                BtlUI.missPlayer(target.ID);
-              }
-              else {
-                // 敵
-                var px = target.xcenter;
-                var py = target.ycenter;
-                // MISS表示
-                var p = ParticleDamage.start(px, py, -1);
-                p.color = MyColor.NUM_MISS;
-              }
-              Message.push2(Msg.ATTACK_MISS, [target.name]);
-            }
-          case BtlLogicVal.Badstatus(bst):
-            // バステ付着
-            target.adhereBadStatus(bst);
-            BadStatusUtil.pushMessage(bst, target.name);
-        }
-        if(bLast) {
-          // 次の状態に進む
-          _endMain(bWait);
-        }
-
-      });
-      idx++;
-    }
-
-    // 連続攻撃は演出内で次の状態に進める
-    return false;
   }
 
   /**
@@ -310,8 +253,6 @@ class BtlLogicPlayer {
     var actor = ActorMgr.search(_data.actorID);
     var target = ActorMgr.search(_data.targetID);
 
-    // 次の状態に進むかどうか
-    var bNext:Bool = true;
     // 一時停止するかどうか
     var bWait:Bool = true;
 
@@ -363,21 +304,12 @@ class BtlLogicPlayer {
 
       case BtlLogic.EndAction:
         // 行動終了
-        // カメラ制御
-        var obj = new FlxObject();
-        obj.x = FlxG.width/2;
-        obj.y = FlxG.height/2;
-        FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 50);
-        // デフォルトに戻す
-        _zoom = FlxCamera.defaultZoom;
-        _end();
+        _endAction();
         bWait = false;
     }
 
-    if(bNext) {
-      // メイン処理終了
-      _endMain(bWait);
-    }
+    // メイン処理終了
+    _endMain(bWait);
   }
 
   private function _checkWait():Bool {
@@ -418,9 +350,11 @@ class BtlLogicPlayer {
       case State.Init:
       case State.Main:
         if(BtlLogicUtil.isBegin(_data.type)) {
+          // 開始演出
           _updateMainBegin();
         }
         else {
+          // 通常演出
           _updateMain();
         }
       case State.Wait:
@@ -432,9 +366,17 @@ class BtlLogicPlayer {
   }
 
   /**
-   * 終了
+   * アクション終了
    **/
-  private function _end():Void {
+  private function _endAction():Void {
+    // カメラ制御
+    var obj = new FlxObject();
+    obj.x = FlxG.width/2;
+    obj.y = FlxG.height/2;
+    FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 50);
+    // デフォルトに戻す
+    _zoom = FlxCamera.defaultZoom;
+
     switch(_data.group) {
       case BtlGroup.Player:
         // プレイヤー

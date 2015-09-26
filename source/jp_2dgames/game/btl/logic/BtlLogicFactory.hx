@@ -116,10 +116,10 @@ class BtlLogicFactory {
           for(i in 0...cnt) {
             var val = Calc.damageSkill(skillID, actor, target);
             var eft = _createDamage(actor, target, val, true);
-            eft.bAttackEnd = false;
+            eft.bWaitQuick = true;
             if(i == cnt-1) {
               // 攻撃終了
-              eft.bAttackEnd = true;
+              eft.bWaitQuick = false;
             }
             // 演出データを追加
             ret.add(eft);
@@ -203,6 +203,7 @@ class BtlLogicFactory {
     var attr = SkillUtil.toAttribute(skillID);
     var bst  = BadStatusUtil.fromSkillAttribute(attr);
     eft.type = BtlLogic.Badstatus(bst);
+    eft.bWaitQuick = true;
 
     // バステ付着
     target.adhereBadStatus(bst);
@@ -261,6 +262,7 @@ class BtlLogicFactory {
         // 自分自身が対象
         eft.setTarget(actor.ID);
         eft.type = BtlLogic.HpDamage(val, false);
+        eft.bWaitQuick = true;
         actor.damage(val);
 
         return eft;

@@ -1,6 +1,5 @@
 package jp_2dgames.game.btl.logic;
 
-import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 
@@ -22,8 +21,7 @@ class BtlLogicData {
   public var group:BtlGroup  = BtlGroup.Player;    // 所属グループ
   public var type:BtlLogic   = BtlLogic.None;      // 演出種別
   public var targetID:Int    = 0;                  // 対象者
-  public var vals:List<BtlLogicVal>;               // 効果値
-  public var bAttackEnd:Bool = true;               // 攻撃終了かどうか
+  public var bWaitQuick:Bool = false;              // 完了待ちを短縮するかどうか
 
   /**
    * コンストラクタ
@@ -35,7 +33,6 @@ class BtlLogicData {
     this.actorID = actorID;
     this.group   = group;
     this.type    = type;
-    vals = new List<BtlLogicVal>();
   }
 
   /**
@@ -46,7 +43,6 @@ class BtlLogicData {
     group    = src.group;
     type     = src.type;
     targetID = src.targetID;
-    vals     = src.vals;
   }
 
   /**
