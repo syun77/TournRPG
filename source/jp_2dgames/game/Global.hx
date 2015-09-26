@@ -1,5 +1,9 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.skill.SkillSlot;
+import jp_2dgames.game.skill.SkillData;
+import jp_2dgames.game.skill.SkillData;
+import jp_2dgames.game.skill.SkillConst;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.item.ItemData;
@@ -18,6 +22,7 @@ class Global {
   static var _stage:Int = 0;
   static var _itemList:Array<ItemData> = null;
   static var _money:Int = 0;
+  static var _skillList:Array<SkillData> = null;
 
   public static function init():Void {
 
@@ -36,8 +41,16 @@ class Global {
 
   // プレイヤー情報の初期化
   private static function _initPlayer():Void {
+
+    // パラメータ生成
     _playerParam = new Params();
-    PlayerInfo.setParam(_playerParam, 1);
+    var lv:Int = 1;
+    PlayerInfo.setParam(_playerParam, lv);
+
+    // スキル初期化
+    _skillList = new Array<SkillData>();
+    _skillList.push(new SkillData(SkillConst.SKILL001));
+    SkillSlot.create(_skillList);
   }
 
   // プレイヤー情報の取得
@@ -47,6 +60,16 @@ class Global {
   // プレイヤーパラメータの設定
   public static function setPlayerParam(param:Params):Void {
     _playerParam.copy(param);
+  }
+
+  // スキルスロットの取得
+  public static function getSkillSlot():Array<SkillData> {
+    return _skillList;
+  }
+
+  // スキルスロットの設定
+  public static function setSkillSlot(slot:Array<SkillData>):Void {
+    _skillList = slot;
   }
 
   // ステージ番号の取得

@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.skill.SkillData;
+import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.skill.SkillConst;
 import jp_2dgames.game.skill.SkillUtil;
 import jp_2dgames.game.btl.BtlGroupUtil;
@@ -60,32 +62,25 @@ class BtlCmdUI extends FlxSpriteGroup {
     }
 
     // コマンドボタンの配置
+    // 攻撃
     var btnList = new List<MyButton>();
-    var px = BTN_X;
-    var py = BTN_Y;
     var lblAtk = UIMsg.get(UIMsg.CMD_ATK);
-    btnList.add(new MyButton(px, py, lblAtk, function() {
+    btnList.add(new MyButton(0, 0, lblAtk, function() {
       _attack(actor, cbFunc);
     }));
-    px += BTN_DX;
-    // TODO: スキルボタンにする
-    var name = SkillUtil.getName(SkillConst.SKILL001);
-    btnList.add(new MyButton(px, py, name, function() {
-      // スキル1を選択
-      _skill(actor, cbFunc, SkillConst.SKILL001);
-    }));
-    px += BTN_DX;
-    // TODO: スキルボタンにする
-    btnList.add(new MyButton(px, py, "SKILL2", function() {
-      // スキル2を選択
-      _skill(actor, cbFunc, SkillConst.SKILL003);
-    }));
 
-    // 2列目
-    px = BTN_X;
-    py += BTN_DY;
+    //  スキル
+    for(idx in 0...SkillSlot.count()) {
+      var skill = SkillSlot.getSkill(idx);
+      var name = SkillUtil.getName(skill.id);
+      btnList.add(new MyButton(0, 0, name, function() {
+        _skill(actor, cbFunc, skill);
+      }));
+    }
+
+    // アイテム
     var lblItem = UIMsg.get(UIMsg.CMD_ITEM);
-    var btnItem = new MyButton(px, py, lblItem, function() {
+    var btnItem = new MyButton(0, 0, lblItem, function() {
       // インベントリ表示
       _displayInventoryUI(actor);
     });
@@ -95,15 +90,31 @@ class BtlCmdUI extends FlxSpriteGroup {
     }
     btnList.add(btnItem);
 
-    px += BTN_DX;
+    // 逃走
     var lblEscape = UIMsg.get(UIMsg.CMD_ESCAPE);
-    btnList.add(new MyButton(px, py, lblEscape, function() {
+    btnList.add(new MyButton(0, 0, lblEscape, function() {
       cbFunc(actor, BtlCmd.Escape(true));
     }));
 
+    // ボタンの登録と座標の調整
+    var px = BTN_X;
+    var py = BTN_Y;
+    var idx = 0;
     for(btn in btnList) {
+      // 登録
       this.add(btn);
-      btn.scrollFactor.set(0, 0);
+      // 座標を調整
+      btn.x = px;
+      btn.y = py;
+      // スクロール無効
+      btn.scrollFactor.set();
+      px += BTN_DX;
+      idx++;
+      if(idx%3 == 0) {
+        // 次の行
+        px = BTN_X;
+        py += BTN_DY;
+      }
     }
 
     // 表示
@@ -138,7 +149,7 @@ class BtlCmdUI extends FlxSpriteGroup {
   /**
    * スキルコマンドを選んだ
    **/
-  private function _skill(actor:Actor, cbFunc:Actor->BtlCmd->Void, skillID:Int):Void {
+  private function _skill(actor:Actor, cbFunc:Actor->BtlCmd->Void, skill:SkillData):Void {
 
     // 対象グループ取得
     var group = BtlGroupUtil.getAgaint(actor.group);
@@ -153,7 +164,7 @@ class BtlCmdUI extends FlxSpriteGroup {
         return;
       }
       // スキル使用
-      cbFunc(actor, BtlCmd.Skill(skillID, range, targetID));
+      cbFunc(actor, BtlCmd.Skill(skill.id, range, targetID));
     }, group, range);
 
     visible = false;

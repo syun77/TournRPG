@@ -7,6 +7,9 @@ import jp_2dgames.lib.CsvLoader;
  **/
 class SkillUtil {
 
+  // 無効なスキルID
+  public static inline var NONE:Int = -1;
+
   // 自動発動スキルIDの開始オフセット
   private static inline var ID_OFFSET:Int = 500;
 

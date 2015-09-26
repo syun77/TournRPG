@@ -1,10 +1,11 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.game.item.ItemUtil.IType;
+import jp_2dgames.game.actor.Actor;
+
 /**
  * インベントリ
  **/
-import jp_2dgames.game.item.ItemUtil.IType;
-import jp_2dgames.game.actor.Actor;
 class Inventory {
 
   // アイテム所持最大数

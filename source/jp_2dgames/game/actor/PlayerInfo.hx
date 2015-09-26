@@ -24,6 +24,11 @@ class PlayerInfo {
     return _csv.getString(id, key);
   }
 
+  /**
+   * パラメータ設定
+   * @parma param 設定先パラメータ
+   * @param lv    レベル
+   **/
   public static function setParam(param:Params, lv:Int):Void {
     param.id    = 0;
     param.lv    = lv;

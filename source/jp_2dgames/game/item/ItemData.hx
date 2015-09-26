@@ -23,6 +23,9 @@ class ItemData {
     setItemID(itemID);
   }
 
+  /**
+   * アイテムIDを設定
+   **/
   public function setItemID(itemID:Int):Void {
     id   = itemID;
     type = ItemUtil.toType(itemID);
