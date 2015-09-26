@@ -136,7 +136,7 @@ class BtlMgr {
   /**
    * コマンド入力結果受け取り
    * @param actor 実行主体者
-   * @param cmd   コマンド
+   * @param type   コマンド
    **/
   private function _cbCommand(actor:Actor, cmd:BtlCmd):Void {
 

@@ -21,8 +21,8 @@ enum BtlLogicVal {
 class BtlLogicData {
   public var actorID:Int     = 0;                  // 行動主体者
   public var group:BtlGroup  = BtlGroup.Player;    // 所属グループ
-  public var cmd:BtlCmd      = BtlCmd.None;        // コマンド種別
-  public var range:BtlRange = BtlRange.One;  // 対象種別
+  public var type:BtlLogic   = BtlLogic.None;      // 演出種別
+  public var range:BtlRange  = BtlRange.One;       // 対象種別
   public var targetID:Int    = 0;                  // 対象者
   public var vals:List<BtlLogicVal>;               // 効果値
 
@@ -30,12 +30,12 @@ class BtlLogicData {
    * コンストラクタ
    * @param actorID 行動主体者
    * @param group   所属グループ
-   * @param cmd     実行コマンド
+   * @param type    実行コマンド
    **/
-  public function new(actorID:Int, group:BtlGroup, cmd:BtlCmd) {
+  public function new(actorID:Int, group:BtlGroup, type:BtlLogic) {
     this.actorID = actorID;
     this.group   = group;
-    this.cmd     = cmd;
+    this.type    = type;
     vals = new List<BtlLogicVal>();
   }
 
@@ -45,10 +45,10 @@ class BtlLogicData {
   public function copy(src:BtlLogicData):Void {
     actorID  = src.actorID;
     group    = src.group;
-    cmd      = src.cmd;
-    range   = src.range;
+    type     = src.type;
+    range    = src.range;
     targetID = src.targetID;
-    vals      = src.vals;
+    vals     = src.vals;
   }
 
   /**

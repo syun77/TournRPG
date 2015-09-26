@@ -18,7 +18,6 @@ import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.logic.BtlLogicData;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.actor.ActorMgr;
-import jp_2dgames.game.btl.types.BtlCmd;
 
 /**
  * 状態
@@ -89,15 +88,16 @@ class BtlLogicPlayer {
   /**
    * 開始演出を再生
    **/
+  /*
   public function start():Void {
 
     var actor = ActorMgr.search(_data.actorID);
 
-    switch(_data.cmd) {
-      case BtlCmd.None:
+    switch(_data.type) {
+      case BtlLogic.None:
         // 通常あり得ない
 
-      case BtlCmd.Attack:
+      case BtlLogic.Attack:
         Message.push2(Msg.ATTACK_BEGIN, [actor.name]);
         if(actor.group == BtlGroup.Enemy) {
           // 攻撃開始エフェクト再生
@@ -106,18 +106,18 @@ class BtlLogicPlayer {
           Particle.start(PType.Ring3, px, py, FlxColor.RED);
         }
 
-      case BtlCmd.Skill(id, range, targetID):
+      case BtlLogic.Skill(id):
         var name = SkillUtil.getName(id);
         Message.push2(Msg.SKILL_BEGIN, [actor.name, name]);
 
-      case BtlCmd.Item(item, range, targetID):
+      case BtlLogic.Item(item):
         var name = ItemUtil.getName(item);
         Message.push2(Msg.ITEM_USE, [name]);
 
-      case BtlCmd.Escape:
+      case BtlLogic.Escape:
         Message.push2(Msg.ESCAPE, [actor.name]);
 
-      case BtlCmd.Dead:
+      case BtlLogic.Dead:
         ActorMgr.moveGrave(actor);
         Message.push2(Msg.DEFEAT_ENEMY, [actor.name]);
         if(actor.group == BtlGroup.Enemy) {
@@ -127,7 +127,7 @@ class BtlLogicPlayer {
           Particle.start(PType.Ring, px, py, FlxColor.YELLOW);
         }
 
-      case BtlCmd.BtlEnd(bWin):
+      case BtlLogic.BtlEnd(bWin):
         if(bWin) {
           // 敵が全滅
           Message.push2(Msg.BATTLE_WIN);
@@ -137,7 +137,7 @@ class BtlLogicPlayer {
           Message.push2(Msg.BATTLE_LOSE);
         }
 
-      case BtlCmd.TurnEnd, BtlCmd.Sequence:
+      case BtlLogic.TurnEnd, BtlLogic.Sequence:
         // 何もしない
     }
 
@@ -159,13 +159,13 @@ class BtlLogicPlayer {
 
     // ズーム演出
     var obj = null;
-    switch(_data.cmd) {
-      case BtlCmd.Attack(range, targetID):
-        obj = _getFollowObj(actor, targetID);
-      case BtlCmd.Skill(id, range, targetID):
-        obj = _getFollowObj(actor, targetID);
-      case BtlCmd.Item(item, range, targetID):
-        obj = _getFollowObj(actor, targetID);
+    switch(_data.type) {
+      case BtlLogic.Attack:
+        obj = _getFollowObj(actor, _data.targetID);
+      case BtlLogic.Skill:
+        obj = _getFollowObj(actor, _data.targetID);
+      case BtlLogic.Item:
+        obj = _getFollowObj(actor, _data.targetID);
       default:
     }
     if(obj != null) {
@@ -173,6 +173,12 @@ class BtlLogicPlayer {
       _zoom = FlxCamera.defaultZoom + 0.1;
     }
 
+    // メイン処理へ
+    _state = State.Main;
+    _tWait = Reg.TIMER_WAIT;
+  }
+  */
+  public function start():Void {
     // メイン処理へ
     _state = State.Main;
     _tWait = Reg.TIMER_WAIT;
@@ -301,11 +307,28 @@ class BtlLogicPlayer {
     // 次の状態に進むかどうか
     var bNext:Bool = true;
 
-    switch(_data.cmd) {
-      case BtlCmd.None:
+    switch(_data.type) {
+      case BtlLogic.None:
         // 通常ここにくることはない
 
-      case BtlCmd.Attack:
+      case BtlLogic.BeginAttack:
+        Message.push2(Msg.ATTACK_BEGIN, [actor.name]);
+        if(actor.group == BtlGroup.Enemy) {
+          // 攻撃開始エフェクト再生
+          var px = actor.xcenter;
+          var py = actor.ycenter;
+          Particle.start(PType.Ring3, px, py, FlxColor.RED);
+        }
+
+      case BtlLogic.BeginSkill(id):
+        var name = SkillUtil.getName(id);
+        Message.push2(Msg.SKILL_BEGIN, [actor.name, name]);
+
+      case BtlLogic.BeginItem(item):
+        var name = ItemUtil.getName(item);
+        Message.push2(Msg.ITEM_USE, [name]);
+
+      case BtlLogic.Attack:
         // 通常攻撃
         switch(_data.range) {
           case BtlRange.One:
@@ -314,21 +337,21 @@ class BtlLogicPlayer {
             // TODO: 未実装
         }
 
-      case BtlCmd.Skill(id, range, targetID):
+      case BtlLogic.Skill:
         // スキルを使う
         _execTarget(target);
 
-      case BtlCmd.Item(item, range, targetID):
+      case BtlLogic.Item(item):
         // アイテムを使う
         ItemUtil.use(actor, item);
 
-      case BtlCmd.Escape:
+      case BtlLogic.Escape:
 
-      case BtlCmd.Dead:
+      case BtlLogic.Dead:
 
-      case BtlCmd.BtlEnd:
+      case BtlLogic.BtlEnd:
 
-      case BtlCmd.TurnEnd:
+      case BtlLogic.TurnEnd:
         // ターン終了
         switch(_data.range) {
           case BtlRange.Self:
@@ -343,7 +366,7 @@ class BtlLogicPlayer {
           // TODO: 未実装
         }
 
-      case BtlCmd.Sequence:
+      case BtlLogic.Sequence:
         // 連続演出
         // TODO: 仮
         _execTarget(target);
@@ -441,14 +464,14 @@ class BtlLogicPlayer {
    * バトル終了条件の取得
    **/
   public function getBtlEnd():Int {
-    switch(_data.cmd) {
-      case BtlCmd.Escape(bSuccess):
+    switch(_data.type) {
+      case BtlLogic.Escape(bSuccess):
         if(bSuccess) {
           // 逃走成功
           return BTL_END_ESCAPE;
         }
 
-      case BtlCmd.BtlEnd(bWin):
+      case BtlLogic.BtlEnd(bWin):
         if(bWin) {
           // バトル勝利
           return BTL_END_WIN;

@@ -15,7 +15,7 @@ import jp_2dgames.game.actor.Actor;
 /**
  * 演出を生成するクラス
  **/
-class BtlLogicUtil {
+class BtlLogicFactory {
 
   /**
    * 演出の生成
@@ -27,11 +27,19 @@ class BtlLogicUtil {
     switch(actor.cmd) {
       case BtlCmd.Attack(range, targetID):
         // 攻撃演出の作成
+        {
+          var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.BeginAttack);
+          ret.add(eft);
+        }
         var eft = _createAttack(actor, range, targetID);
         ret.add(eft);
 
       case BtlCmd.Skill(skillID, range, targetID):
         // スキル演出の作成
+        {
+          var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.BeginSkill(skillID));
+          ret.add(eft);
+        }
         var efts = _createSkill(skillID, actor, range, targetID);
         for(eft in efts) {
           ret.add(eft);
@@ -39,6 +47,10 @@ class BtlLogicUtil {
 
       case BtlCmd.Item(item, range, targetID):
         // アイテム演出の作成
+        {
+          var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.BeginItem(item));
+          ret.add(eft);
+        }
         var eft = _createItem(item, actor, range, targetID);
         ret.add(eft);
 
@@ -47,7 +59,7 @@ class BtlLogicUtil {
         var eft = _createEscape(actor);
         ret.add(eft);
 
-      case BtlCmd.Dead, BtlCmd.BtlEnd, BtlCmd.TurnEnd, BtlCmd.Sequence, BtlCmd.None:
+      case BtlCmd.None:
         // 通常ありえない
         return null;
     }
@@ -59,7 +71,7 @@ class BtlLogicUtil {
    * 通常攻撃
    **/
   private static function _createAttack(actor:Actor, range:BtlRange, targetID:Int):BtlLogicData {
-    var eft = new BtlLogicData(actor.ID, actor.group, BtlCmd.Attack(range, targetID));
+    var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.Attack);
     eft.setTarget(range, targetID);
 
     // 対象を取得
@@ -87,8 +99,7 @@ class BtlLogicUtil {
 
     var ret = new List<BtlLogicData>();
 
-    var cmd = BtlCmd.Skill(skillID, range, targetID);
-    var eft = new BtlLogicData(actor.ID, actor.group, cmd);
+    var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.Skill(skillID));
     eft.setTarget(range, targetID);
 
     // スキル種別を取得
@@ -144,8 +155,7 @@ class BtlLogicUtil {
                 }
                 else {
                   // 2回目以降のダメージ
-                  var cmd = BtlCmd.Sequence;
-                  var eft2 = new BtlLogicData(act.ID, act.group, cmd);
+                  var eft2 = new BtlLogicData(act.ID, act.group, BtlLogic.Sequence);
                   eft2.setTarget(range, targetID);
                   _damageTarget(eft, act, val);
                   ret.add(eft2);
@@ -192,8 +202,7 @@ class BtlLogicUtil {
               }
               else {
                 // 2回目以降
-                var cmd = BtlCmd.Sequence;
-                var eft2 = new BtlLogicData(act.ID, act.group, cmd);
+                var eft2 = new BtlLogicData(act.ID, act.group, BtlLogic.Sequence);
                 eft2.setTarget(range, act.ID);
                 var attr = SkillUtil.toAttribute(skillID);
                 var bst  = BadStatusUtil.fromSkillAttribute(attr);
@@ -232,8 +241,7 @@ class BtlLogicUtil {
    * アイテムを使う
    **/
   private static function _createItem(item:ItemData, actor:Actor, range:BtlRange, targetID:Int):BtlLogicData {
-    var cmd = BtlCmd.Item(item, range, targetID);
-    var eft = new BtlLogicData(actor.ID, actor.group, cmd);
+    var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.Item(item));
     return eft;
   }
 
@@ -243,7 +251,7 @@ class BtlLogicUtil {
   private static function _createEscape(actor:Actor):BtlLogicData {
     // TODO: 逃走確率チェック
     var bSuccess:Bool = true;
-    var eft = new BtlLogicData(actor.ID, actor.group, BtlCmd.Escape(bSuccess));
+    var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.Escape(bSuccess));
     return eft;
   }
 
@@ -251,14 +259,14 @@ class BtlLogicUtil {
    * 死亡演出
    **/
   public static function createDead(actor:Actor):BtlLogicData {
-    return new BtlLogicData(actor.ID, BtlGroup.Both, BtlCmd.Dead);
+    return new BtlLogicData(actor.ID, BtlGroup.Both, BtlLogic.Dead);
   }
 
   /**
    * バトル終了
    **/
   public static function createBtlEnd(bWin:Bool):BtlLogicData {
-    return new BtlLogicData(0, BtlGroup.Both, BtlCmd.BtlEnd(bWin));
+    return new BtlLogicData(0, BtlGroup.Both, BtlLogic.BtlEnd(bWin));
   }
 
   /**
@@ -266,7 +274,7 @@ class BtlLogicUtil {
    **/
   public static function createTurnEnd(actor:Actor):BtlLogicData {
 
-    var eft = new BtlLogicData(actor.ID, actor.group, BtlCmd.TurnEnd);
+    var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.TurnEnd);
     eft.range = BtlRange.Self;
 
     switch(actor.badstatus) {

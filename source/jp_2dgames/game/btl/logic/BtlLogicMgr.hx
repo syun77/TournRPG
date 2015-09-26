@@ -81,7 +81,7 @@ class BtlLogicMgr {
       }
 
       // 演出データを生成
-      var efts = BtlLogicUtil.create(actor);
+      var efts = BtlLogicFactory.create(actor);
       if(efts != null) {
         for(eft in efts) {
           push(eft);
@@ -102,7 +102,7 @@ class BtlLogicMgr {
     // ターン終了処理
     if(bEnd == false) {
       for(actor in TempActorMgr.getAlive()) {
-        var eft = BtlLogicUtil.createTurnEnd(actor);
+        var eft = BtlLogicFactory.createTurnEnd(actor);
         if(eft != null) {
           push(eft);
         }
@@ -144,7 +144,7 @@ class BtlLogicMgr {
       }
 
       // 死亡した人がいる
-      var eft = BtlLogicUtil.createDead(actor2);
+      var eft = BtlLogicFactory.createDead(actor2);
       push(eft);
       // 墓場送り
       TempActorMgr.moveGrave(actor2);
@@ -161,14 +161,14 @@ class BtlLogicMgr {
     // 全滅チェック
     if(TempActorMgr.countGroup(BtlGroup.Player) == 0) {
       // 味方が全滅
-      var eft = BtlLogicUtil.createBtlEnd(false);
+      var eft = BtlLogicFactory.createBtlEnd(false);
       push(eft);
       // 終了
       return true;
     }
     else if(TempActorMgr.countGroup(BtlGroup.Enemy) == 0) {
       // 敵が全滅
-      var eft = BtlLogicUtil.createBtlEnd(true);
+      var eft = BtlLogicFactory.createBtlEnd(true);
       push(eft);
       // 終了
       return true;
