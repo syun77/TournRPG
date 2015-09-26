@@ -138,12 +138,25 @@ class BtlCmdUI extends FlxSpriteGroup {
   /**
    * スキルコマンドを選んだ
    **/
-  private function _skill(actor:Actor, cbFunc:Actor->BtlCmd->Void, btnID:Int):Void {
-    // TODO: 相手グループをランダム攻撃
-    var group = BtlGroupUtil.getAgaint(actor.group);
-    var target = ActorMgr.random(group);
+  private function _skill(actor:Actor, cbFunc:Actor->BtlCmd->Void, skillID:Int):Void {
 
-    cbFunc(actor, BtlCmd.Skill(btnID, BtlRange.One, target.ID));
+    // 対象グループ取得
+    var group = BtlGroupUtil.getAgaint(actor.group);
+    // 攻撃対象範囲
+    var range = BtlRange.One;
+
+    BtlTargetUI.open(function(targetID) {
+      if(targetID == BtlTargetUI.CMD_CANCEL) {
+        // キャンセルした
+        _display();
+        visible = true;
+        return;
+      }
+      // スキル使用
+      cbFunc(actor, BtlCmd.Skill(skillID, range, targetID));
+    }, group, range);
+
+    visible = false;
   }
 
   /**
