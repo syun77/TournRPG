@@ -55,8 +55,8 @@ class InventoryUI extends FlxSpriteGroup {
 
   // 開く
   public static function open(state:FlxState, cbFunc:Int->Void, actor:Actor):Void {
-    _instance = new InventoryUI(cbFunc, actor);
     _state = state;
+    _instance = new InventoryUI(cbFunc, actor);
     state.add(_instance);
   }
 

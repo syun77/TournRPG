@@ -25,6 +25,7 @@ class Dialog extends FlxGroup {
   public static inline var BTN_NO:Int  = 1; // いいえ
 
   // 幅
+  private static inline var FRAME_SIZE:Int = 2;
   private static inline var HEIGHT:Int = 64;
 
   // 3択ダイアログのオフセット座標(Y)
@@ -64,8 +65,11 @@ class Dialog extends FlxGroup {
     }
 
     // ウィンドウ
+    var frame = new FlxSprite(px-FRAME_SIZE, py - height - FRAME_SIZE);
+    frame.scrollFactor.set();
+    this.add(frame);
     var spr = new FlxSprite(px, py - height);
-    spr.scrollFactor.set(0, 0);
+    spr.scrollFactor.set();
     this.add(spr);
 
     // メッセージ
@@ -79,6 +83,12 @@ class Dialog extends FlxGroup {
     this.add(text);
 
     // ウィンドウサイズを設定
+    frame.makeGraphic(Std.int(width + FRAME_SIZE) * 2, (height + FRAME_SIZE) * 2, FlxColor.WHITE);
+    frame.x -= width;
+    frame.alpha = 0.5;
+    frame.scale.set(0.2, 1);
+    FlxTween.tween(frame.scale, {x:1}, 0.5, {ease:FlxEase.expoOut});
+
     spr.makeGraphic(Std.int(width * 2), height * 2, FlxColor.WHITE);
     spr.color = MyColor.MESSAGE_WINDOW;
     spr.x -= width;
