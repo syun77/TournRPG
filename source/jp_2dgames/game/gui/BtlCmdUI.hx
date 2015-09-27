@@ -1,11 +1,10 @@
 package jp_2dgames.game.gui;
+import flixel.ui.FlxButton;
 import jp_2dgames.game.skill.SkillData;
 import jp_2dgames.game.skill.SkillSlot;
-import jp_2dgames.game.skill.SkillConst;
 import jp_2dgames.game.skill.SkillUtil;
 import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
-import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.btl.types.BtlCmd;
@@ -36,6 +35,12 @@ class BtlCmdUI extends FlxSpriteGroup {
   // アイテム選択用のコールバック関数
   private var _cbItem:Int->Void = null;
 
+  // コマンド詳細
+  private var _detailUI:DetailUI;
+
+  // ボタン
+  private var _btnList:List<MyButton>;
+
   /**
    * コンストラクタ
    * @param actor 行動主体者
@@ -63,9 +68,9 @@ class BtlCmdUI extends FlxSpriteGroup {
 
     // コマンドボタンの配置
     // 攻撃
-    var btnList = new List<MyButton>();
+    _btnList = new List<MyButton>();
     var lblAtk = UIMsg.get(UIMsg.CMD_ATK);
-    btnList.add(new MyButton(0, 0, lblAtk, function() {
+    _btnList.add(new MyButton(0, 0, lblAtk, function() {
       _attack(actor, cbFunc);
     }));
 
@@ -73,9 +78,12 @@ class BtlCmdUI extends FlxSpriteGroup {
     for(idx in 0...SkillSlot.count()) {
       var skill = SkillSlot.getSkill(idx);
       var name = SkillUtil.getName(skill.id);
-      btnList.add(new MyButton(0, 0, name, function() {
+      var btn = new MyButton(0, 0, name, function() {
         _skill(actor, cbFunc, skill);
-      }));
+      });
+      // スキル説明
+      btn.detail = SkillUtil.getDetail2(skill.id);
+      _btnList.add(btn);
     }
 
     // アイテム
@@ -88,11 +96,11 @@ class BtlCmdUI extends FlxSpriteGroup {
       // アイテムがないので選べない
       btnItem.enable = false;
     }
-    btnList.add(btnItem);
+    _btnList.add(btnItem);
 
     // 逃走
     var lblEscape = UIMsg.get(UIMsg.CMD_ESCAPE);
-    btnList.add(new MyButton(0, 0, lblEscape, function() {
+    _btnList.add(new MyButton(0, 0, lblEscape, function() {
       cbFunc(actor, BtlCmd.Escape(true));
     }));
 
@@ -100,7 +108,7 @@ class BtlCmdUI extends FlxSpriteGroup {
     var px = BTN_X;
     var py = BTN_Y;
     var idx = 0;
-    for(btn in btnList) {
+    for(btn in _btnList) {
       // 登録
       this.add(btn);
       // 座標を調整
@@ -119,6 +127,24 @@ class BtlCmdUI extends FlxSpriteGroup {
 
     // 表示
     _display();
+
+    // コマンド詳細
+    _detailUI = new DetailUI();
+    FlxG.state.add(_detailUI);
+
+    // 非表示にしておく
+    _detailUI.visible = false;
+  }
+
+  /**
+   * 消滅
+   **/
+  override public function kill():Void {
+
+    // コマンド詳細を消す
+    FlxG.state.remove(_detailUI);
+
+    super.kill();
   }
 
   private function _cbTarget(actor:Actor, cbFunc:Actor->BtlCmd->Void):Void {
@@ -205,5 +231,31 @@ class BtlCmdUI extends FlxSpriteGroup {
 
     // アイテムを選んだ
     _cbItem(btnID);
+  }
+
+  /**
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
+
+    // ボタンの状態を調べる
+    for(btn in _btnList) {
+      switch(btn.status) {
+        case FlxButton.HIGHLIGHT, FlxButton.PRESSED:
+          _detailUI.visible = true;
+
+          // 表示情報を更新
+          var detail = btn.detail;
+          if(detail == "") {
+            continue;
+          }
+          _detailUI.setText(detail);
+          return;
+      }
+    }
+
+    // ボタンを選択していないので非表示
+    _detailUI.visible = false;
   }
 }

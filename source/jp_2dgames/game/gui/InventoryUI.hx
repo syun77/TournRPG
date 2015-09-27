@@ -338,6 +338,9 @@ class InventoryUI extends FlxSpriteGroup {
     return max;
   }
 
+  /**
+   * 更新
+   **/
   override public function update():Void {
     super.update();
 
@@ -354,7 +357,8 @@ class InventoryUI extends FlxSpriteGroup {
           idx += _getPageOffset();
           // 表示情報を更新
           var item = Inventory.getItem(idx);
-          _detailUI.setText(item);
+          var detail = ItemUtil.getDetail(item);
+          _detailUI.setText(detail);
           return;
       }
     }

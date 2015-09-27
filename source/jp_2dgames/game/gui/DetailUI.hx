@@ -1,6 +1,4 @@
 package jp_2dgames.game.gui;
-import jp_2dgames.game.item.ItemUtil;
-import jp_2dgames.game.item.ItemData;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
@@ -54,8 +52,7 @@ class DetailUI extends FlxSpriteGroup {
   /**
    * テキストを設定する
    **/
-  public function setText(item:ItemData):Void {
-    var detail = ItemUtil.getDetail(item);
-    _txtDetail.text = detail;
+  public function setText(txt:String):Void {
+    _txtDetail.text = txt;
   }
 }

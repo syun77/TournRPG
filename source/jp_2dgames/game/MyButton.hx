@@ -58,6 +58,17 @@ class MyButton extends FlxTypedButton<FlxText> {
     return _enabled;
   }
 
+  // ボタンにカーソルを合わせたときの詳細情報
+  private var _detail:String = "";
+  public var detail(get, set):String;
+  private function get_detail() {
+    return _detail;
+  }
+  private function set_detail(s:String):String {
+    _detail = s;
+    return _detail;
+  }
+
   /**
    * 初期の色に戻す
    **/

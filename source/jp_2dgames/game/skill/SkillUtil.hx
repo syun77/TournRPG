@@ -126,6 +126,28 @@ class SkillUtil {
   }
 
   /**
+   * 詳細情報を取得する
+   **/
+  public static function getDetail(skillID:Int):String {
+    return getParamString(skillID, "detail");
+  }
+
+  /**
+   * 詳細情報(消費コスト付き)を取得する
+   **/
+  public static function getDetail2(skillID:Int):String {
+    var detail = getDetail(skillID);
+    var hp = getCostHp(skillID);
+    if(hp > 0) {
+      return '${detail} (HP -${hp})';
+    }
+    else {
+      var mp = getCostMp(skillID);
+      return '${detail} (TP -${mp})';
+    }
+  }
+
+  /**
    * スキルコスト(HP)を取得する
    **/
   public static function getCostHp(skillID:Int):Int {
