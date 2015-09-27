@@ -1,4 +1,8 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.item.ItemUtil;
+import jp_2dgames.game.item.ItemConst;
+import jp_2dgames.game.item.ItemData;
+import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.gui.Dialog;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -49,6 +53,7 @@ private enum State {
   Main;   // メイン
   Moving; // 移動中
   Battle; // バトル
+  BattleEnd; // バトル終了
   Goal;   // ゴールにたどり着いた
 }
 
@@ -93,10 +98,10 @@ class FieldState extends FlxState {
           var py = SIZE * j;
           var ev:FieldEvent = FieldEvent.None;
           var rnd2 = FlxRandom.intRanged(0, 10);
-          if(rnd2 < 5) {
+          if(rnd2 < 3) {
             // 何もなし
           }
-          else if(rnd2 < 8) {
+          else if(rnd2 < 7) {
             // 敵
             ev = FieldEvent.Enemy;
           }
@@ -105,7 +110,7 @@ class FieldState extends FlxState {
             ev = FieldEvent.Item;
           }
           FieldNode.add(px, py, ev);
-          rnd += 3;
+          rnd += 2;
         }
         else {
           rnd--;
@@ -119,7 +124,7 @@ class FieldState extends FlxState {
     // プレイヤー
     _token = new FlxSprite();
     _token.loadGraphic("assets/images/field/token.png", true);
-    _token.animation.add("play", [0, 1, 2, 3], 2);
+    _token.animation.add("play", [0, 1], 2);
     _token.animation.play("play");
     this.add(_token);
 
@@ -183,6 +188,7 @@ class FieldState extends FlxState {
       case State.Goal:
         _updateGoal();
       case State.Battle:
+      case State.BattleEnd:
         _updateBattle();
     }
 
@@ -250,44 +256,62 @@ class FieldState extends FlxState {
         _state = State.Moving;
         FlxTween.tween(_token, {x:selNode.x, y:selNode.y-_token.height/2}, 1, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {
           // 移動完了
-          switch(selNode.evType) {
-            case FieldEvent.Goal:
-              // ゴールにたどり着いた
-              _state = State.Goal;
-
-            case FieldEvent.Enemy:
-              // バトル
-              _state = State.Battle;
-              selNode.setEventType(FieldEvent.Start);
-              _nowNode = selNode;
-              openSubState(new PlayState());
-
-            case FieldEvent.Item:
-              Dialog.open(this, Dialog.OK, 'アイテムを見つけた', null, function(btnID:Int) {
-                // メイン処理に戻る
-                selNode.setEventType(FieldEvent.Start);
-                _nowNode = selNode;
-
-                _checkReachable();
-                _state = State.Main;
-              });
-
-            case FieldEvent.None:
-              // メイン処理に戻る
-              selNode.setEventType(FieldEvent.Start);
-              _nowNode = selNode;
-
-              _checkReachable();
-              _state = State.Main;
-
-            case FieldEvent.Start:
-              throw '不正なイベントタイプ ${selNode.evType}';
-          }
+          _event(selNode.evType, selNode);
         }});
-
       }
     }
+  }
 
+  /**
+   * イベント処理
+   **/
+  private function _event(event:FieldEvent, selNode:FieldNode):Void {
+
+    switch(selNode.evType) {
+      case FieldEvent.Goal:
+        // ゴールにたどり着いた
+        _state = State.Goal;
+        Dialog.open(this, Dialog.OK, 'ゲームクリア！', null, function(btnID:Int) {
+          FlxG.switchState(new ResultState());
+        });
+
+      case FieldEvent.Enemy:
+        // バトル
+        _state = State.Battle;
+        Dialog.open(this, Dialog.OK, 'モンスターに接触した！', null, function(btnID:Int) {
+          // バトル開始
+          _state = State.BattleEnd;
+          selNode.setEventType(FieldEvent.Start);
+          _nowNode = selNode;
+          openSubState(new PlayState());
+        });
+
+      case FieldEvent.Item:
+        // アイテム入手
+        var item = new ItemData(ItemConst.ARMOR01);
+        Inventory.push(item);
+        var name = ItemUtil.getName(item);
+
+        Dialog.open(this, Dialog.OK, '${name}を見つけた', null, function(btnID:Int) {
+          // メイン処理に戻る
+          selNode.setEventType(FieldEvent.Start);
+          _nowNode = selNode;
+
+          _checkReachable();
+          _state = State.Main;
+        });
+
+      case FieldEvent.None:
+        // メイン処理に戻る
+        selNode.setEventType(FieldEvent.Start);
+        _nowNode = selNode;
+
+        _checkReachable();
+        _state = State.Main;
+
+      case FieldEvent.Start:
+        throw '不正なイベントタイプ ${selNode.evType}';
+    }
   }
 
   /**
