@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl;
 
+import flixel.FlxState;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.Inventory;
@@ -65,10 +66,14 @@ class BtlResult {
   // 現在処理するアイテム
   var _nowInfo:ItemDropInfo = null;
 
+  var _flxState:FlxState;
+
   /**
    * コンストラクタ
    **/
-  public function new() {
+  public function new(flxState:FlxState) {
+
+    _flxState = flxState;
 
     // アイテム入手
     _money = 0;
@@ -198,7 +203,7 @@ class BtlResult {
 
         // YES/NOダイアログ表示
         var msg = UIMsg.get2(UIMsg.ITEM_CHANGE, [name]);
-        Dialog.open(Dialog.YESNO, msg, null, function(btnID:Int) {
+        Dialog.open(_flxState, Dialog.YESNO, msg, null, function(btnID:Int) {
           if(btnID == Dialog.BTN_YES) {
             // アイテムを捨てて拾う
             Message.push2(Msg.ITEM_SEL_DEL);
@@ -230,12 +235,12 @@ class BtlResult {
           Inventory.delItem(idx);
           Inventory.push(_nowInfo.item);
           Message.push2(Msg.ITEM_DEL_GET, [name, name2]);
-          FlxG.state.remove(ui);
+          _flxState.remove(ui);
 
           // 次のアイテムを見る
           _state = State.Pickup;
         }, null);
-        FlxG.state.add(ui);
+        _flxState.add(ui);
 
         _state = State.ItemDelUI;
 

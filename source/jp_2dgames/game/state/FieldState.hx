@@ -48,6 +48,7 @@ private class _Line extends FlxSpriteGroup {
 private enum State {
   Main;   // メイン
   Moving; // 移動中
+  Battle; // バトル
   Goal;   // ゴールにたどり着いた
 }
 
@@ -181,6 +182,8 @@ class FieldState extends FlxState {
         _updateMoving();
       case State.Goal:
         _updateGoal();
+      case State.Battle:
+        _updateBattle();
     }
 
     #if neko
@@ -247,20 +250,38 @@ class FieldState extends FlxState {
         _state = State.Moving;
         FlxTween.tween(_token, {x:selNode.x, y:selNode.y-_token.height/2}, 1, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {
           // 移動完了
-          if(selNode.evType == FieldEvent.Goal) {
-            // ゴールにたどり着いた
-            _state = State.Goal;
-          }
-          else {
+          switch(selNode.evType) {
+            case FieldEvent.Goal:
+              // ゴールにたどり着いた
+              _state = State.Goal;
 
-            Dialog.open(Dialog.OK, '${selNode.evType} アイテムを見つけた', null, function(btnID:Int) {
+            case FieldEvent.Enemy:
+              // バトル
+              _state = State.Battle;
+              selNode.setEventType(FieldEvent.Start);
+              _nowNode = selNode;
+              openSubState(new PlayState());
+
+            case FieldEvent.Item:
+              Dialog.open(this, Dialog.OK, 'アイテムを見つけた', null, function(btnID:Int) {
+                // メイン処理に戻る
+                selNode.setEventType(FieldEvent.Start);
+                _nowNode = selNode;
+
+                _checkReachable();
+                _state = State.Main;
+              });
+
+            case FieldEvent.None:
               // メイン処理に戻る
               selNode.setEventType(FieldEvent.Start);
               _nowNode = selNode;
 
               _checkReachable();
               _state = State.Main;
-            });
+
+            case FieldEvent.Start:
+              throw '不正なイベントタイプ ${selNode.evType}';
           }
         }});
 
@@ -279,6 +300,16 @@ class FieldState extends FlxState {
    * 更新・ゴール
    **/
   private function _updateGoal():Void {
+  }
 
+  /**
+   * 更新・バトル
+   **/
+  private function _updateBattle():Void {
+
+    // メイン処理に戻る
+    _checkReachable();
+    _state = State.Main;
   }
 }
+

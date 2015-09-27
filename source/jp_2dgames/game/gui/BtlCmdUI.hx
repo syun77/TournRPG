@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.FlxState;
 import flixel.ui.FlxButton;
 import jp_2dgames.game.skill.SkillData;
 import jp_2dgames.game.skill.SkillSlot;
@@ -41,12 +42,16 @@ class BtlCmdUI extends FlxSpriteGroup {
   // ボタン
   private var _btnList:List<MyButton>;
 
+  private var _state:FlxState;
+
   /**
    * コンストラクタ
    * @param actor 行動主体者
    * @param cbFunc コマンド実行コールバック関数
    **/
-  public function new(actor:Actor, cbFunc:Actor->BtlCmd->Void) {
+  public function new(state:FlxState, actor:Actor, cbFunc:Actor->BtlCmd->Void) {
+
+    _state = state;
 
     // アイテム選択のコール関数を登録しておく
     _cbItem = function(btnID:Int) {
@@ -132,7 +137,7 @@ class BtlCmdUI extends FlxSpriteGroup {
 
     // コマンド詳細
     _detailUI = new DetailUI();
-    FlxG.state.add(_detailUI);
+    state.add(_detailUI);
 
     // 非表示にしておく
     _detailUI.visible = false;
@@ -141,10 +146,9 @@ class BtlCmdUI extends FlxSpriteGroup {
   /**
    * 消滅
    **/
-  override public function kill():Void {
-
+  public function vanish(state:FlxState):Void {
     // コマンド詳細を消す
-    FlxG.state.remove(_detailUI);
+    state.remove(_detailUI);
 
     super.kill();
   }
@@ -160,7 +164,7 @@ class BtlCmdUI extends FlxSpriteGroup {
     var group = BtlGroupUtil.getAgaint(actor.group);
     var range = BtlRange.One;
 
-    BtlTargetUI.open(function(targetID) {
+    BtlTargetUI.open(_state, function(targetID) {
       if(targetID == BtlTargetUI.CMD_CANCEL) {
         // キャンセルした
         _display();
@@ -187,7 +191,7 @@ class BtlCmdUI extends FlxSpriteGroup {
     // バトル用の範囲
     var btlRange = SkillUtil.rangeToBtlRange(range);
 
-    BtlTargetUI.open(function(targetID) {
+    BtlTargetUI.open(_state, function(targetID) {
       if(targetID == BtlTargetUI.CMD_CANCEL) {
         // キャンセルした
         _display();
@@ -215,7 +219,7 @@ class BtlCmdUI extends FlxSpriteGroup {
    * インベントリUIを表示する
    **/
   private function _displayInventoryUI(actor:Actor):Void {
-    InventoryUI.open(_cbItemSelect, actor);
+    InventoryUI.open(_state, _cbItemSelect, actor);
     // 自身は非表示
     visible = false;
   }

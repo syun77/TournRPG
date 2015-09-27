@@ -1,6 +1,7 @@
 package jp_2dgames.game.state;
 
-import jp_2dgames.game.btl.logic.BtlLogicPlayer;
+import flixel.FlxSubState;
+import flixel.FlxG;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.actor.TempActorMgr;
@@ -14,13 +15,11 @@ import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.DebugActor;
 import jp_2dgames.lib.CsvLoader;
-import flixel.FlxG;
-import flixel.FlxState;
 
 /**
  * メインゲーム
  */
-class PlayState extends FlxState {
+class PlayState extends FlxSubState {
 
   // バトル管理
   var _btlMgr:BtlMgr;
@@ -42,10 +41,10 @@ class PlayState extends FlxState {
     ActorMgr.create(this);
 
     // UI登録
-    BtlUI.open();
+    BtlUI.open(this);
 
     // バトル管理生成
-    _btlMgr = new BtlMgr();
+    _btlMgr = new BtlMgr(this);
 
     // バトル演出キュー
     BtlLogicMgr.create();
@@ -74,7 +73,7 @@ class PlayState extends FlxState {
     Particle.terminate();
     BtlLogicMgr.destroy();
     ActorMgr.destroy();
-    BtlUI.close();
+    BtlUI.close(this);
     TempActorMgr.destroy();
     Message.instance = null;
 
@@ -90,6 +89,7 @@ class PlayState extends FlxState {
     // バトル更新
     _btlMgr.proc();
 
+    /*
     if(_btlMgr.isEnd()) {
       switch(_btlMgr.btlEnd) {
         case BtlLogicPlayer.BTL_END_LOSE:
@@ -107,6 +107,12 @@ class PlayState extends FlxState {
             FlxG.switchState(new PlayState());
           }
       }
+    }
+    */
+
+    if(_btlMgr.isEnd()) {
+      // 戦闘終了
+      close();
     }
 
     // デバッグ機能

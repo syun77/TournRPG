@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import flixel.FlxState;
+import flixel.FlxState;
 import flixel.ui.FlxButton;
 import flixel.text.FlxText;
 import jp_2dgames.game.MyColor;
@@ -49,10 +51,13 @@ class InventoryUI extends FlxSpriteGroup {
   // ■スタティック
   private static var _instance:InventoryUI = null;
 
+  private static var _state:FlxState = null;
+
   // 開く
-  public static function open(cbFunc:Int->Void, actor:Actor):Void {
+  public static function open(state:FlxState, cbFunc:Int->Void, actor:Actor):Void {
     _instance = new InventoryUI(cbFunc, actor);
-    FlxG.state.add(_instance);
+    _state = state;
+    state.add(_instance);
   }
 
   // ■メンバ変数
@@ -109,12 +114,12 @@ class InventoryUI extends FlxSpriteGroup {
     // 装備情報
     _equipUI = new EquipUI();
     if(_mode == MODE_NORMAL) {
-      FlxG.state.add(_equipUI);
+      _state.add(_equipUI);
     }
 
     // アイテム詳細
     _detailUI = new DetailUI();
-    FlxG.state.add(_detailUI);
+    _state.add(_detailUI);
     // 非表示にしておく
     _detailUI.visible = false;
 
@@ -129,9 +134,9 @@ class InventoryUI extends FlxSpriteGroup {
   override public function kill():Void {
 
     // アイテム詳細UIを消す
-    FlxG.state.remove(_detailUI);
+    _state.remove(_detailUI);
     // 装備UIを消す
-    FlxG.state.remove(_equipUI);
+    _state.remove(_equipUI);
     super.kill();
   }
 
@@ -372,7 +377,8 @@ class InventoryUI extends FlxSpriteGroup {
    **/
   private function _close():Void {
     kill();
-    FlxG.state.remove(this);
+    _state.remove(this);
     _instance = null;
+    _state = null;
   }
 }

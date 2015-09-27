@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl;
 
+import flixel.FlxState;
 import flixel.FlxCamera;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.btl.logic.BtlLogicMgr;
@@ -70,10 +71,14 @@ class BtlMgr {
     return _btlEnd;
   }
 
+  private var _flxState:FlxState;
+
   /**
    * コンストラクタ
    **/
-  public function new() {
+  public function new(flxState:FlxState) {
+
+    _flxState = flxState;
 
     _player = ActorMgr.recycle(BtlGroup.Player, Global.getPlayerParam());
     // TODO:
@@ -147,8 +152,8 @@ class BtlMgr {
     ActorMgr.requestEnemyAI();
 
     // バトルUI消去
-    FlxG.state.remove(_btlCmdUI);
-    _btlCmdUI.kill();
+    _flxState.remove(_btlCmdUI);
+    _btlCmdUI.vanish(_flxState);
     _btlCmdUI = null;
 
     // 演出リストの作成開始
@@ -177,8 +182,8 @@ class BtlMgr {
 
       case State.TurnStart:
         // ターン開始
-        _btlCmdUI = new BtlCmdUI(_player, _cbCommand);
-        FlxG.state.add(_btlCmdUI);
+        _btlCmdUI = new BtlCmdUI(_flxState, _player, _cbCommand);
+        _flxState.add(_btlCmdUI);
         _change(State.InputCommand);
 
       case State.InputCommand:
@@ -246,7 +251,7 @@ class BtlMgr {
 
       case State.Result:
         // リザルト
-        _result = new BtlResult();
+        _result = new BtlResult(_flxState);
         _change(State.ResultItem);
 
       case State.ResultItem:

@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import flixel.FlxState;
 import flixel.FlxG;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.btl.types.BtlRange;
@@ -22,11 +23,14 @@ class BtlTargetUI extends FlxSpriteGroup {
   // ■スタティック
   private static var _instance:BtlTargetUI = null;
 
+  private static var _state:FlxState = null;
+
   // 開く
-  public static function open(cbFunc:Int->Void, group:BtlGroup, range:BtlRange) {
+  public static function open(state:FlxState, cbFunc:Int->Void, group:BtlGroup, range:BtlRange) {
     if(_instance == null) {
       _instance = new BtlTargetUI(cbFunc, group, range);
-      FlxG.state.add(_instance);
+      state.add(_instance);
+      _state = state;
     }
   }
 
@@ -118,7 +122,8 @@ class BtlTargetUI extends FlxSpriteGroup {
    **/
   private function _close():Void {
     kill();
-    FlxG.state.remove(this);
+    _state.remove(this);
     _instance = null;
+    _state = null;
   }
 }

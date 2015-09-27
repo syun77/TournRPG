@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import flixel.FlxState;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
@@ -35,12 +36,15 @@ class Dialog extends FlxGroup {
   // インスタンス
   private static var _instance:Dialog = null;
 
+  private static var _state:FlxState = null;
+
   /**
    * 開く
    **/
-  public static function open(type:Int, msg:String, sels:Array<String>, cbFunc:Int->Void):Void {
+  public static function open(state:FlxState, type:Int, msg:String, sels:Array<String>, cbFunc:Int->Void):Void {
     _instance = new Dialog(type, msg, sels, cbFunc);
-    FlxG.state.add(_instance);
+    state.add(_instance);
+    _state = state;
   }
 
   // ■メンバ変数
@@ -129,6 +133,7 @@ class Dialog extends FlxGroup {
 
     // ウィンドウを消す
     _instance.kill();
-    FlxG.state.remove(_instance);
+    _state.remove(_instance);
+    _state = null;
   }
 }

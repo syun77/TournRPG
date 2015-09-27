@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.FlxState;
 import flixel.FlxSprite;
 import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
@@ -15,14 +16,14 @@ class BtlUI extends FlxSpriteGroup {
   static var _instance:BtlUI = null;
 
   // 開く
-  public static function open():Void {
+  public static function open(state:FlxState):Void {
     _instance = new BtlUI();
-    FlxG.state.add(_instance);
+    state.add(_instance);
   }
 
   // 閉じる
-  public static function close():Void {
-    FlxG.state.remove(_instance);
+  public static function close(state:FlxState):Void {
+    state.remove(_instance);
     _instance = null;
   }
 
