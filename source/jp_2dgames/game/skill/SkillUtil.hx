@@ -1,5 +1,6 @@
 package jp_2dgames.game.skill;
 
+import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.skill.SkillRange;
 import jp_2dgames.lib.CsvLoader;
@@ -159,6 +160,23 @@ class SkillUtil {
    **/
   public static function getCostMp(skillID:Int):Int {
     return getParam(skillID, "mp");
+  }
+
+  /**
+   * 指定のスキルを使える稼働かチェックする
+   * @return 使用可能であれば true
+   **/
+  public static function checkCost(skillID:Int, actor:Actor):Bool {
+    var hp = getCostHp(skillID);
+    if(hp > 0) {
+      // HPコスト
+      return hp < actor.hp;
+    }
+    else {
+      // MPコスト
+      var mp = getCostMp(skillID);
+      return mp <= actor.mp;
+    }
   }
 
   /**

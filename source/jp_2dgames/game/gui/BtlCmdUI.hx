@@ -81,6 +81,8 @@ class BtlCmdUI extends FlxSpriteGroup {
       var btn = new MyButton(0, 0, name, function() {
         _skill(actor, cbFunc, skill);
       });
+      // コストチェック
+      btn.enable = SkillUtil.checkCost(skill.id, actor);
       // スキル説明
       btn.detail = SkillUtil.getDetail2(skill.id);
       _btnList.add(btn);
