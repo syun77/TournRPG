@@ -2,10 +2,7 @@ package jp_2dgames.game.particle;
 
 import jp_2dgames.lib.SprFont;
 import flixel.FlxState;
-import flash.geom.Rectangle;
-import flash.geom.Point;
 import flixel.util.FlxColor;
-import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.group.FlxTypedGroup;
 
@@ -14,8 +11,6 @@ import flixel.group.FlxTypedGroup;
  **/
 private enum State {
   Main;  // メイン
-  Wait;  // ちょっと待つ
-  Blink; // 点滅
   Fade;  // フェードで消える
 }
 
@@ -29,12 +24,7 @@ class ParticleDamage extends FlxSprite {
 
   // ■速度関連
   // 開始速度
-  private static inline var SPEED_Y_INIT:Float = -200;
-  private static inline var SPEED_Y_INIT_MISS:Float = -20;
-  // 重力加速度
-  private static inline var GRAVITY:Float = 15;
-  // 床との反発係数
-  private static inline var FRICTION:Float = 0.5;
+  private static inline var SPEED_Y_INIT:Float = -20;
 
   // パーティクル管理
   public static var parent:FlxTypedGroup<ParticleDamage> = null;
@@ -92,18 +82,16 @@ class ParticleDamage extends FlxSprite {
     if(val >= 0) {
       // 数値フォントを描画する
       w = SprFont.render(this, '${val}');
-      // 移動開始
-      velocity.y = SPEED_Y_INIT;
-      _bMiss = false;
+      _timer = 32;
     }
     else {
       // 攻撃が外れた
       w = SprFont.render(this, 'MISS!');
-      // 移動開始
-      velocity.y = SPEED_Y_INIT_MISS;
-      _bMiss = true;
       _timer = 16;
     }
+    // 移動開始
+    velocity.y = SPEED_Y_INIT;
+    _bMiss = true;
 
     // フォントを中央揃えする
     x = X - (w / 2);
@@ -126,50 +114,15 @@ class ParticleDamage extends FlxSprite {
 
     switch(_state) {
       case State.Main:
-        // 落下中
-        if(_bMiss == false) {
-          // 通常ダメージ
-          velocity.y += GRAVITY;
-          if(y > _ystart) {
-            // 出現位置より下に下がった
-            y = _ystart;
-            // バウンドする
-            velocity.y *= -FRICTION;
-            if(Math.abs(velocity.y) < 30) {
-              // 一定速度以下でバウンド終了
-              velocity.y = 0;
-              _timer = 30;
-              _state = State.Wait;
-            }
-          }
-        }
-        else {
-          // MISS
-          _timer--;
-          if(_timer == 0) {
-            // フェードで消える
-            _state = State.Fade;
-          }
-        }
-
-      case State.Wait:
-        // ちょっと待つ
         _timer--;
-        if(_timer < 1) {
-          _timer = 15;
-          _state = State.Blink;
-        }
-      case State.Blink:
-        // 点滅して消える
-        visible = (_timer % 4 >= 2);
-        _timer--;
-        if(_timer < 1) {
-          kill();
+        if(_timer == 0) {
+          // フェードで消える
+          _state = State.Fade;
         }
 
       case State.Fade:
         // フェードで消える
-        alpha -= 1.0 / 30;
+        alpha -= 1.0 / 8;
         if(alpha < 0) {
           kill();
         }
