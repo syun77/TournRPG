@@ -261,6 +261,21 @@ class BtlLogicPlayer {
         // ここに来てはいけない
         throw 'Invalid _data.type ${_data.type}';
 
+      case BtlLogic.SkillCost(hp, mp):
+        // スキルコスト消費
+        if(hp > 0) {
+          actor.damage(hp);
+        }
+        else {
+          actor.damageMp(mp);
+        }
+        // 一時停止無効
+        bWait = false;
+
+      case BtlLogic.Message(msgID):
+        // メッセージ表示
+        Message.push2(msgID);
+
       case BtlLogic.HpDamage(val, bSeq):
         // HPダメージ
         _damage(target, val, bSeq);

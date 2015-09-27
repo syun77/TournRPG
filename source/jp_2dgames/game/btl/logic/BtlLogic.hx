@@ -17,6 +17,8 @@ enum BtlLogic {
   // 行動終了
   EndAction;
 
+  SkillCost(hp:Int, mp:Int);    // コスト消費
+  Message(msgID:Int);           // メッセージ表示
   HpDamage(val:Int, bSeq:Bool); // HPダメージ
   ChanceRoll(b:Bool);           // 成功 or 失敗
   Badstatus(bst:BadStatus);     // バッドステータス

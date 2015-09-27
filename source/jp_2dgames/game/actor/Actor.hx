@@ -192,6 +192,18 @@ class Actor extends FlxSprite {
   }
 
   /**
+   * MPが最大値・最小値を超えないように丸める
+   **/
+  private function _clampMp():Void {
+    if(mp < 0) {
+      _param.mp = 0;
+    }
+    if(mp > mpmax) {
+      _param.mp = mpmax;
+    }
+  }
+
+  /**
    * HP回復
    * @param val 回復する値
    **/
@@ -368,6 +380,11 @@ class Actor extends FlxSprite {
     _clampHp();
 
     return isDead();
+  }
+
+  public function damageMp(v:Int):Void {
+    _param.mp -= v;
+    _clampMp();
   }
 
   /**

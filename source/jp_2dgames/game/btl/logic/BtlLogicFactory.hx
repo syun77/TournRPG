@@ -39,13 +39,25 @@ class BtlLogicFactory {
 
       case BtlCmd.Skill(skillID, range, targetID):
         // スキル演出の作成
+        // コストチェック
+        var eftCost = _createSkillCost(skillID, actor);
+        if(eftCost != null) {
+          ret.add(eftCost);
+        }
+
         // 開始
         ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.BeginSkill(skillID)));
 
-        // 発動
-        var efts = _createSkill(skillID, actor, range, targetID);
-        for(eft in efts) {
-          ret.add(eft);
+        if(eftCost != null) {
+          // 発動
+          var efts = _createSkill(skillID, actor, range, targetID);
+          for(eft in efts) {
+            ret.add(eft);
+          }
+        }
+        else {
+          // 発動できない
+          ret.add(_createSkillCostNotEnough(skillID, actor));
         }
 
         // 終了
@@ -88,6 +100,57 @@ class BtlLogicFactory {
     var eft = _createDamage(actor, target, val, false);
 
     return eft;
+  }
+
+  /**
+   * スキルコスト消費
+   **/
+  private static function _createSkillCost(skillID:Int, actor:Actor):BtlLogicData {
+    var hp = SkillUtil.getCostHp(skillID);
+    if(hp > 0) {
+      // HP消費
+      if(hp >= actor.hp) {
+        // 足りない
+        return null;
+      }
+
+      // 足りている
+      var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.SkillCost(hp, 0));
+      // HPを減らす
+      actor.damage(hp);
+
+      return eft;
+    }
+    else {
+      // MP消費
+      var mp = SkillUtil.getCostMp(skillID);
+      if(mp > actor.mp) {
+        // 足りない
+        return null;
+      }
+
+      // 足りている
+      var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.SkillCost(0, mp));
+      // MPを減らす
+      actor.damage(mp);
+
+      return eft;
+    }
+  }
+
+  /**
+   * スキルコスト足りないメッセージ
+   **/
+  private static function _createSkillCostNotEnough(skillID:Int, actor:Actor):BtlLogicData {
+    var hp = SkillUtil.getCostHp(skillID);
+    if(hp > 0) {
+      // HP不足
+      return new BtlLogicData(actor.ID, actor.group, BtlLogic.Message(Msg.NOT_ENOUGH_HP));
+    }
+    else {
+      // MP不足
+      return new BtlLogicData(actor.ID, actor.group, BtlLogic.Message(Msg.NOT_ENOUGH_TP));
+    }
   }
 
   /**
@@ -197,6 +260,9 @@ class BtlLogicFactory {
     return eft;
   }
 
+  /**
+   * バットステータス付着
+   **/
   private static function _createBadstatus(actor:Actor, skillID:Int, group:BtlGroup, target:Actor):BtlLogicData {
     var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
     eft.setTarget(target.ID);

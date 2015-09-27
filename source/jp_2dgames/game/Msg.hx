@@ -30,4 +30,6 @@ class Msg {
   public static inline var BST_BLIND:Int      = 28; // バステ: 盲目
   public static inline var BST_CURSE:Int      = 29; // バステ: 呪い
   public static inline var BST_WEAK:Int       = 30; // バステ: 衰弱
+  public static inline var NOT_ENOUGH_HP:Int  = 31; // HP不足
+  public static inline var NOT_ENOUGH_TP:Int  = 32; // TP不足
 }

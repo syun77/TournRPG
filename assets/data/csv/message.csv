@@ -30,3 +30,5 @@ int,str,str
 28,<val1>は盲目になった,yellow
 29,<val1>は呪われた,yellow
 30,<val1>は衰弱した,yellow
+31,HPが足りない,yellow
+32,TPが足りない,yellow
