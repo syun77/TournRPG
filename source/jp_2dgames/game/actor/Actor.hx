@@ -148,11 +148,11 @@ class Actor extends FlxSprite {
   // 中心座標を取得する
   public var xcenter(get, never):Float;
   private function get_xcenter() {
-    return x + width/2;
+    return x + origin.x;
   }
   public var ycenter(get, never):Float;
   private function get_ycenter() {
-    return y + height/2;
+    return y + origin.y;
   }
   // 一番上の座標を取得する
   public var top(get, never):Float;

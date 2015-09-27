@@ -40,11 +40,25 @@ class FieldNode extends FlxSprite {
     _parent.forEachAlive(func);
   }
 
+  // 中心座標
+  public var xcenter(get, never):Float;
+  private function get_xcenter() {
+    return x + origin.x;
+  }
+  public var ycenter(get, never):Float;
+  private function get_ycenter() {
+    return y + origin.y;
+  }
+
   // イベント種別
   private var _evType:FieldEvent;
   public var evType(get, never):FieldEvent;
   private function get_evType() {
     return _evType;
+  }
+  public function setEventType(ev:FieldEvent):Void {
+    _evType = ev;
+    _setColor();
   }
 
   // 到達可能かどうか
@@ -79,17 +93,19 @@ class FieldNode extends FlxSprite {
    * 初期化
    **/
   public function init(X:Float, Y:Float, evType:FieldEvent) {
-
     x = X;
     y = Y;
     _evType = evType;
+    _setColor();
+  }
 
+  private function _setColor():Void {
     var col:Int = FlxColor.WHITE;
     switch(_evType) {
       case FieldEvent.None:
         col = FlxColor.WHITE;
       case FieldEvent.Start:
-        col = FlxColor.AZURE;
+        col = MyColor.ASE_LIGHTCYAN;
       case FieldEvent.Goal:
         col = FlxColor.CHARTREUSE;
       case FieldEvent.Enemy:

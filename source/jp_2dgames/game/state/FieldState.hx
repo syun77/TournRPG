@@ -1,4 +1,10 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.gui.Dialog;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxColor;
+import flixel.FlxSprite;
+import flixel.group.FlxSpriteGroup;
 import flixel.util.FlxPoint;
 import haxe.ds.ArraySort;
 import jp_2dgames.game.field.FieldNode;
@@ -7,12 +13,62 @@ import flixel.util.FlxRandom;
 import flixel.FlxState;
 
 /**
+ * 線の描画
+ **/
+private class _Line extends FlxSpriteGroup {
+  public function new() {
+    super();
+    for(i in 0...8) {
+      var spr = new FlxSprite(0, 0).makeGraphic(2, 2, FlxColor.WHITE);
+      this.add(spr);
+    }
+    visible = false;
+  }
+  public function drawLine(x1:Float, y1:Float, x2:Float, y2:Float):Void {
+
+    var dx = (x2 - x1) / members.length;
+    var dy = (y2 - y1) / members.length;
+
+    var px = x1;
+    var py = y1;
+    for(spr in members) {
+      spr.x = px;
+      spr.y = py;
+      px += dx;
+      py += dy;
+    }
+
+    visible = true;
+  }
+}
+
+/**
+ * 状態
+ **/
+private enum State {
+  Main;   // メイン
+  Moving; // 移動中
+  Goal;   // ゴールにたどり着いた
+}
+
+/**
  * フィールドシーン
  **/
 class FieldState extends FlxState {
 
+  static inline var SIZE:Int = 32;
+
+  // 状態
+  var _state:State = State.Main;
+
   // 現在いるノード
   var _nowNode:FieldNode;
+
+  // 経路描画
+  var _line:_Line;
+
+  // プレイヤートークン
+  var _token:FlxSprite;
 
   /**
    * 生成
@@ -26,15 +82,14 @@ class FieldState extends FlxState {
     // ゴール
     FieldNode.add(FlxG.width/2, 32, FieldEvent.Goal);
 
-    var size:Int = 32;
-    var imax:Int = Std.int(FlxG.width/size);
-    var jmax:Int = Std.int(FlxG.height/size)-1;
+    var imax:Int = Std.int(FlxG.width/SIZE);
+    var jmax:Int = Std.int(FlxG.height/SIZE)-1;
     var rnd:Int = 10;
     for(j in 2...jmax) {
       for(i in 1...imax) {
         if(FlxRandom.intRanged(0, rnd) == 0) {
-          var px = size * i;
-          var py = size * j;
+          var px = SIZE * i;
+          var py = SIZE * j;
           var ev:FieldEvent = FieldEvent.None;
           var rnd2 = FlxRandom.intRanged(0, 10);
           if(rnd2 < 5) {
@@ -49,7 +104,7 @@ class FieldState extends FlxState {
             ev = FieldEvent.Item;
           }
           FieldNode.add(px, py, ev);
-          rnd += 4;
+          rnd += 3;
         }
         else {
           rnd--;
@@ -60,7 +115,33 @@ class FieldState extends FlxState {
     // スタート地点
     _nowNode = FieldNode.add(FlxG.width/2, FlxG.height-32, FieldEvent.Start);
 
+    // プレイヤー
+    _token = new FlxSprite();
+    _token.loadGraphic("assets/images/field/token.png", true);
+    _token.animation.add("play", [0, 1, 2, 3], 2);
+    _token.animation.play("play");
+    this.add(_token);
+
+    // 経路描画
+    _line = new _Line();
+    this.add(_line);
+
     // 到達可能な地点を検索
+    _checkReachable();
+  }
+
+  /**
+   * 破棄
+   */
+  override public function destroy():Void {
+    super.destroy();
+  }
+
+  /**
+   * 到達可能な地点を検索
+   **/
+  private function _checkReachable():Void {
+
     var nodeList = new Array<FieldNode>();
     FieldNode.forEachAlive(function(node:FieldNode) {
       nodeList.push(node);
@@ -88,17 +169,35 @@ class FieldState extends FlxState {
   }
 
   /**
-   * 破棄
-   */
-  override public function destroy():Void {
-    super.destroy();
-  }
-
-  /**
    * 更新
    */
   override public function update():Void {
     super.update();
+
+    switch(_state) {
+      case State.Main:
+        _updateMain();
+      case State.Moving:
+        _updateMoving();
+      case State.Goal:
+        _updateGoal();
+    }
+
+    #if neko
+    if(FlxG.keys.justPressed.R) {
+      FlxG.resetState();
+    }
+    #end
+  }
+
+  /**
+   * 更新・メイン
+   **/
+  private function _updateMain():Void {
+
+    // プレイヤーの位置を設定
+    _token.x = _nowNode.x;
+    _token.y = _nowNode.y - _token.height/2;
 
     var pt = FlxPoint.get(FlxG.mouse.x, FlxG.mouse.y);
     var selNode:FieldNode = null;
@@ -114,15 +213,72 @@ class FieldState extends FlxState {
       }
 
       if(node.overlapsPoint(pt)) {
+        // 選択した
         selNode = node;
-        node.scale.set(1.5, 1.5);
       }
     });
 
-    #if neko
-    if(FlxG.keys.justPressed.R) {
-      FlxG.resetState();
+    if(selNode != null) {
+      selNode.scale.set(1.5, 1.5);
+      // 経路描画
+      var x1 = _nowNode.xcenter;
+      var y1 = _nowNode.ycenter;
+      var x2 = selNode.xcenter;
+      var y2 = selNode.ycenter;
+      _line.drawLine(x1, y1, x2, y2);
     }
-    #end
+    else {
+      _line.visible = false;
+    }
+
+    if(selNode != null) {
+      if(FlxG.mouse.justPressed) {
+
+        // 移動先を選択した
+        FieldNode.forEachAlive(function(node:FieldNode) {
+          if(node.reachable && node.evType != FieldEvent.Goal) {
+            node.kill();
+          }
+        });
+        selNode.revive();
+
+        selNode.scale.set(1, 1);
+        _line.visible = false;
+        _state = State.Moving;
+        FlxTween.tween(_token, {x:selNode.x, y:selNode.y-_token.height/2}, 1, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {
+          // 移動完了
+          if(selNode.evType == FieldEvent.Goal) {
+            // ゴールにたどり着いた
+            _state = State.Goal;
+          }
+          else {
+
+            Dialog.open(Dialog.OK, '${selNode.evType} アイテムを見つけた', null, function(btnID:Int) {
+              // メイン処理に戻る
+              selNode.setEventType(FieldEvent.Start);
+              _nowNode = selNode;
+
+              _checkReachable();
+              _state = State.Main;
+            });
+          }
+        }});
+
+      }
+    }
+
+  }
+
+  /**
+   * 更新・移動中
+   **/
+  private function _updateMoving():Void {
+  }
+
+  /**
+   * 更新・ゴール
+   **/
+  private function _updateGoal():Void {
+
   }
 }
