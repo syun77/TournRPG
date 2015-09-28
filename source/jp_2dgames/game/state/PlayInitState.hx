@@ -37,7 +37,7 @@ class PlayInitState extends FlxState {
     super.update();
 
     // ゲーム開始
-//    FlxG.switchState(new PlayState());
+//    FlxG.switchState(new BattleState());
     FlxG.switchState(new FieldState());
   }
 }

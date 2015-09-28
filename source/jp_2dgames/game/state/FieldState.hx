@@ -1,4 +1,6 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.btl.logic.BtlLogicPlayer;
+import jp_2dgames.game.btl.BtlMgr;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.item.ItemData;
@@ -75,6 +77,9 @@ class FieldState extends FlxState {
 
   // プレイヤートークン
   var _token:FlxSprite;
+
+  // リザルトフラグ
+  var _retBattle:Int = 0;
 
   /**
    * 生成
@@ -189,7 +194,7 @@ class FieldState extends FlxState {
         _updateGoal();
       case State.Battle:
       case State.BattleEnd:
-        _updateBattle();
+        _updateBattleEnd();
     }
 
     #if neko
@@ -278,12 +283,14 @@ class FieldState extends FlxState {
       case FieldEvent.Enemy:
         // バトル
         _state = State.Battle;
-        Dialog.open(this, Dialog.OK, 'モンスターに接触した！', null, function(btnID:Int) {
+        // 戻り値初期化
+        _retBattle = BtlLogicPlayer.BTL_END_NONE;
+        Dialog.open(this, Dialog.OK, 'モンスターが出現した！', null, function(btnID:Int) {
           // バトル開始
           _state = State.BattleEnd;
           selNode.setEventType(FieldEvent.Start);
           _nowNode = selNode;
-          openSubState(new PlayState());
+          openSubState(new BattleState());
         });
 
       case FieldEvent.Item:
@@ -329,11 +336,28 @@ class FieldState extends FlxState {
   /**
    * 更新・バトル
    **/
-  private function _updateBattle():Void {
+  private function _updateBattleEnd():Void {
 
-    // メイン処理に戻る
-    _checkReachable();
-    _state = State.Main;
+    switch(_retBattle) {
+      case BtlLogicPlayer.BTL_END_NONE:
+        // バトル実行中
+
+      case BtlLogicPlayer.BTL_END_LOSE:
+        // ゲームオーバー
+        FlxG.switchState(new ResultState());
+
+      default:
+        // メイン処理に戻る
+        _checkReachable();
+        _state = State.Main;
+    }
+  }
+
+  /**
+   * バトル結果フラグの設定
+   **/
+  public function setBattleResult(ret:Int):Void {
+    _retBattle = ret;
   }
 }
 

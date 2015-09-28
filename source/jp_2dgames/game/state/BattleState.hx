@@ -19,7 +19,7 @@ import jp_2dgames.lib.CsvLoader;
 /**
  * メインゲーム
  */
-class PlayState extends FlxSubState {
+class BattleState extends FlxSubState {
 
   // バトル管理
   var _btlMgr:BtlMgr;
@@ -104,7 +104,7 @@ class PlayState extends FlxSubState {
             FlxG.switchState(new ResultState());
           }
           else {
-            FlxG.switchState(new PlayState());
+            FlxG.switchState(new BattleState());
           }
       }
     }
@@ -112,6 +112,10 @@ class PlayState extends FlxSubState {
 
     if(_btlMgr.isEnd()) {
       // 戦闘終了
+      // バトル終了フラグを設定
+      var parent = cast(_parentState, FieldState);
+      parent.setBattleResult(_btlMgr.btlEnd);
+
       close();
     }
 
