@@ -302,7 +302,7 @@ class FieldState extends FlxState {
           ItemConst.POTION01,
           ItemConst.POTION01,
           ItemConst.POTION01,
-          ItemConst.POTION01,
+          ItemConst.POTION02,
           ItemConst.WEAPON01,
           ItemConst.WEAPON02,
           ItemConst.WEAPON03,
@@ -325,12 +325,19 @@ class FieldState extends FlxState {
         });
 
       case FieldEvent.None:
-        // メイン処理に戻る
-        selNode.setEventType(FieldEvent.Start);
-        _nowNode = selNode;
+        // お金を拾う
+        var money = FlxRandom.intRanged(1, 5);
+        Global.addMoney(money);
 
-        _checkReachable();
-        _state = State.Main;
+        Dialog.open(this, Dialog.OK, '${money}G拾った', null, function(btnID:Int) {
+
+          // メイン処理に戻る
+          selNode.setEventType(FieldEvent.Start);
+          _nowNode = selNode;
+
+          _checkReachable();
+          _state = State.Main;
+        });
 
       case FieldEvent.Start:
         throw '不正なイベントタイプ ${selNode.evType}';
