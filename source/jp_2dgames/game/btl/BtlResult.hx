@@ -89,9 +89,9 @@ class BtlResult {
 
         // アイテム
         // TODO:
-        var item = new ItemData(ItemConst.POTION01);
-        var info = new ItemDropInfo(actor.name, item);
-        _infos.push(info);
+//        var item = new ItemData(ItemConst.POTION01);
+//        var info = new ItemDropInfo(actor.name, item);
+//        _infos.push(info);
       }
     });
 
