@@ -89,33 +89,13 @@ class BattleState extends FlxSubState {
     // バトル更新
     _btlMgr.proc();
 
-    /*
-    if(_btlMgr.isEnd()) {
-      switch(_btlMgr.btlEnd) {
-        case BtlLogicPlayer.BTL_END_LOSE:
-          // ゲームオーバー
-        FlxG.switchState(new ResultState());
-
-        default:
-          // 次のステージへ
-          Global.nextStage();
-          if(Global.isStageMax()) {
-            // ゲームクリア
-            FlxG.switchState(new ResultState());
-          }
-          else {
-            FlxG.switchState(new BattleState());
-          }
-      }
-    }
-    */
-
     if(_btlMgr.isEnd()) {
       // 戦闘終了
       // バトル終了フラグを設定
       var parent = cast(_parentState, FieldState);
       parent.setBattleResult(_btlMgr.btlEnd);
 
+      // おしまい
       close();
     }
 

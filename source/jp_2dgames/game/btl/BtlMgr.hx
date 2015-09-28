@@ -40,6 +40,7 @@ private enum State {
   Result;       // リザルト
   ResultItem;   // アイテムの取捨選択
   ResultWait;   // リザルト・ボタン入力待ち
+  EndWait;      // 終了待ち
   End;          // おしまい
 }
 
@@ -262,11 +263,21 @@ class BtlMgr {
         }
 
       case State.ResultWait:
-        if(Input.press.A) {
+
+        var px = FlxG.width/2 - MyButton.WIDTH/2;
+        var py = FlxG.height/2 - MyButton.HEIGHT/2;
+        var btn = new MyButton(px, py, "NEXT", function() {
           // プレイヤーパラメータをグローバルに戻しておく
           Global.setPlayerParam(_player.param);
           _change(State.End);
-        }
+        });
+        _flxState.add(btn);
+
+        _change(State.EndWait);
+
+
+      case State.EndWait:
+        // 終了待ち
 
       case State.End:
     }
