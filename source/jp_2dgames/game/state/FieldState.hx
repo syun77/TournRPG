@@ -285,8 +285,10 @@ class FieldState extends FlxState {
         _state = State.Battle;
         // 戻り値初期化
         _retBattle = BtlLogicPlayer.BTL_END_NONE;
-        Dialog.open(this, Dialog.OK, 'モンスターが出現した！', null, function(btnID:Int) {
+        Dialog.open(this, Dialog.OK, 'モンスターに遭遇した！', null, function(btnID:Int) {
           // バトル開始
+          var nBtl = FlxRandom.intRanged(1, 4);
+          Global.setStage(nBtl);
           _state = State.BattleEnd;
           selNode.setEventType(FieldEvent.Start);
           _nowNode = selNode;

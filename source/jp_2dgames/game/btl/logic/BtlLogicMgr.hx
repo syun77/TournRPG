@@ -65,7 +65,7 @@ class BtlLogicMgr {
     var actorList = TempActorMgr.getAlive();
     ArraySort.sort(actorList, function(a:Actor, b:Actor) {
       // 移動速度で降順ソート
-      return a.agi - b.agi;
+      return b.agi - a.agi;
     });
 
 

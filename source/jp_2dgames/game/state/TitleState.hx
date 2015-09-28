@@ -16,7 +16,7 @@ class TitleState extends FlxState {
   override public function create():Void {
     super.create();
 
-    var txt = new FlxText(0, FlxG.height/2, FlxG.width, "Title", 24);
+    var txt = new FlxText(0, FlxG.height/2, FlxG.width, "S.N.P.", 24);
     txt.alignment = "center";
     this.add(txt);
 

@@ -265,7 +265,7 @@ class BtlMgr {
       case State.ResultWait:
 
         var px = FlxG.width/2 - MyButton.WIDTH/2;
-        var py = FlxG.height/2 - MyButton.HEIGHT/2;
+        var py = FlxG.height -128;
         var btn = new MyButton(px, py, "NEXT", function() {
           // プレイヤーパラメータをグローバルに戻しておく
           Global.setPlayerParam(_player.param);

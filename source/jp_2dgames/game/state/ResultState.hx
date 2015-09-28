@@ -32,8 +32,8 @@ class ResultState extends FlxState {
 
     _txtTbl = new Array<FlxText>();
 
-    var exp = 123;
-    var money = 234;
+    var exp = Global.getPlayerParam().xp;
+    var money = Global.getMoney();
     var score = exp + money;
     _addText('EXP: ${exp}');
     _addText('MONEY: ${money}');
