@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import flixel.util.FlxArrayUtil;
 import jp_2dgames.game.btl.logic.BtlLogicPlayer;
 import jp_2dgames.game.btl.BtlMgr;
 import jp_2dgames.game.item.ItemUtil;
@@ -297,7 +298,20 @@ class FieldState extends FlxState {
 
       case FieldEvent.Item:
         // アイテム入手
-        var item = new ItemData(ItemConst.ARMOR01);
+        var tbl = [
+          ItemConst.POTION01,
+          ItemConst.POTION01,
+          ItemConst.POTION01,
+          ItemConst.POTION01,
+          ItemConst.WEAPON01,
+          ItemConst.WEAPON02,
+          ItemConst.WEAPON03,
+          ItemConst.ARMOR01,
+          ItemConst.ARMOR02,
+          ItemConst.ARMOR03,
+        ];
+        FlxArrayUtil.shuffle(tbl, 5);
+        var item = new ItemData(tbl[0]);
         Inventory.push(item);
         var name = ItemUtil.getName(item);
 

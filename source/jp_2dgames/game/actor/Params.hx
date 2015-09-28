@@ -16,7 +16,7 @@ class Params {
   public var agi:Int   = 5;   // 素早さ
   public var mag:Int   = 5;   // 魔力
   public var xp:Int    = 0;   // 経験値
-  public var money:Int = 100; // 所持金
+  public var money:Int = 0;   // 所持金
 
   public function new() {
   }

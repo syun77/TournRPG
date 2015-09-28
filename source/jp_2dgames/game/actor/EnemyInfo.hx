@@ -31,5 +31,7 @@ class EnemyInfo {
     param.str   = get(id, "str");
     param.vit   = get(id, "vit");
     param.agi   = get(id, "agi");
+    param.xp    = get(id, "xp");
+    param.money = get(id, "money");
   }
 }
