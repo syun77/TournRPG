@@ -1,6 +1,5 @@
 package jp_2dgames.game.state;
 
-import flash.text.TextFormatAlign;
 import jp_2dgames.lib.Input;
 import flixel.FlxG;
 import flixel.text.FlxText;
@@ -20,6 +19,13 @@ class TitleState extends FlxState {
     var txt = new FlxText(0, FlxG.height/2, FlxG.width, "Title", 24);
     txt.alignment = "center";
     this.add(txt);
+
+    var px = FlxG.width/2 - MyButton.WIDTH/2;
+    var py = FlxG.height - 128;
+    var btn = new MyButton(px, py, "CLICK TO START", function() {
+      FlxG.switchState(new PlayInitState());
+    });
+    this.add(btn);
   }
 
   /**
@@ -35,8 +41,5 @@ class TitleState extends FlxState {
   override public function update():Void {
     super.update();
     
-    if(Input.press.A) {
-      FlxG.switchState(new PlayInitState());
-    }
   }
 }
