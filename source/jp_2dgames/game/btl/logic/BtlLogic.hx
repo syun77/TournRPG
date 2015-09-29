@@ -18,13 +18,15 @@ enum BtlLogic {
   EndAction;
 
   SkillCost(hp:Int, mp:Int);    // コスト消費
+  UseItem(item:ItemData);       // アイテム消費
+
   Message(msgID:Int);           // メッセージ表示
   HpDamage(val:Int, bSeq:Bool); // HPダメージ
+  HpRecover(val:Int);           // HP回復
   ChanceRoll(b:Bool);           // 成功 or 失敗
   Badstatus(bst:BadStatus);     // バッドステータス
 
 
-  Item(item:ItemData);   // アイテム
   Escape(bSuccess:Bool); // 逃走
 
   Dead; // 死亡

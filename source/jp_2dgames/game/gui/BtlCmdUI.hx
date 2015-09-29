@@ -54,12 +54,13 @@ class BtlCmdUI extends FlxSpriteGroup {
     _state = state;
 
     // アイテム選択のコール関数を登録しておく
-    _cbItem = function(btnID:Int) {
+    _cbItem = function(uid:Int) {
 
       // アイテム取得
-      var item = Inventory.getItem(btnID);
-      // インベントリから削除
-      Inventory.delItem(btnID);
+      var item = Inventory.getItem(uid);
+
+      // 使用を予約
+      item.bReserved = true;
 
       // ここでは使うアイテムのみ登録
       cbFunc(actor, BtlCmd.Item(item, null, 0));

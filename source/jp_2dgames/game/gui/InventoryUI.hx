@@ -157,14 +157,15 @@ class InventoryUI extends FlxSpriteGroup {
 
     for(idx in ofs...max) {
 
-      var item = Inventory.getItem(idx);
+      var uid  = Inventory.idxToUID(idx);
+      var item = Inventory.getItem(uid);
       var idx2 = idx - ofs;
       // 座標
       var px = BTN_X + BTN_DX * (idx2%3);
       var py = BTN_Y + BTN_DY * Math.floor(idx2/3);
       // アイテム名
       var name = ItemUtil.getName(item);
-      var btnID = idx;
+      var btnID = uid;
       var btn = new MyButton(px, py, name, function() {
 
         // ボタンを押した
@@ -188,7 +189,7 @@ class InventoryUI extends FlxSpriteGroup {
         }
       });
       // 要素番号を入れておく
-      btn.ID = idx2;
+      btn.ID = btnID;
       _btnList.push(btn);
 
     }
@@ -294,7 +295,8 @@ class InventoryUI extends FlxSpriteGroup {
     var max = _getPageOffsetMax();
 
     for(idx in ofs...max) {
-      var item = Inventory.getItem(idx);
+      var uid  = Inventory.idxToUID(idx);
+      var item = Inventory.getItem(uid);
 
       // ボタンを取得
       var btnIdx = idx - ofs;
@@ -361,7 +363,7 @@ class InventoryUI extends FlxSpriteGroup {
 
           idx += _getPageOffset();
           // 表示情報を更新
-          var item = Inventory.getItem(idx);
+          var item = Inventory.getItem(btn.ID);
           var detail = ItemUtil.getDetail(item);
           _detailUI.setText(detail);
           return;

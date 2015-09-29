@@ -1,22 +1,23 @@
 package jp_2dgames.game.btl.logic;
 
-import jp_2dgames.game.btl.logic.BtlLogic.BtlLogicUtil;
-import jp_2dgames.game.actor.BadStatusUtil;
-import jp_2dgames.game.skill.SkillUtil;
-import jp_2dgames.game.gui.BtlUI;
-import jp_2dgames.game.particle.ParticleDamage;
-import flixel.util.FlxColor;
-import jp_2dgames.game.particle.Particle;
-import flixel.util.FlxRandom;
-import flixel.FlxObject;
-import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
+import jp_2dgames.game.item.Inventory;
 import flixel.FlxG;
 import flixel.FlxCamera;
-import jp_2dgames.lib.Input;
+import flixel.FlxObject;
+import flixel.util.FlxColor;
+import flixel.util.FlxRandom;
 import jp_2dgames.game.actor.Actor;
-import jp_2dgames.game.btl.logic.BtlLogicData;
-import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.actor.ActorMgr;
+import jp_2dgames.game.actor.BadStatusUtil;
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
+import jp_2dgames.game.btl.logic.BtlLogicData;
+import jp_2dgames.game.btl.logic.BtlLogic.BtlLogicUtil;
+import jp_2dgames.game.gui.BtlUI;
+import jp_2dgames.game.item.ItemUtil;
+import jp_2dgames.game.particle.ParticleDamage;
+import jp_2dgames.game.particle.Particle;
+import jp_2dgames.game.skill.SkillUtil;
+import jp_2dgames.lib.Input;
 
 /**
  * 状態
@@ -186,6 +187,14 @@ class BtlLogicPlayer {
   }
 
   /**
+   * HP回復
+   **/
+  private function _recoverHp(target:Actor, v:Int):Void {
+    target.recoverHp(v);
+    Message.push2(Msg.RECOVER_HP, [target.name, v]);
+  }
+
+  /**
    * 更新・メイン・開始演出
    **/
   private function _updateMainBegin():Void {
@@ -272,6 +281,12 @@ class BtlLogicPlayer {
         // 一時停止無効
         bWait = false;
 
+      case BtlLogic.UseItem(item):
+        // インベントリから削除
+        Inventory.delItem(item.uid);
+        // 一時停止無効
+        bWait = false;
+
       case BtlLogic.Message(msgID):
         // メッセージ表示
         Message.push2(msgID);
@@ -279,6 +294,10 @@ class BtlLogicPlayer {
       case BtlLogic.HpDamage(val, bSeq):
         // HPダメージ
         _damage(target, val, bSeq);
+
+      case BtlLogic.HpRecover(val):
+        // HP回復
+        _recoverHp(target, val);
 
       case BtlLogic.ChanceRoll(b):
         // 成功 or 失敗
@@ -288,10 +307,6 @@ class BtlLogicPlayer {
         // バステ付着
         target.adhereBadStatus(bst);
         BadStatusUtil.pushMessage(bst, target.name);
-
-      case BtlLogic.Item(item):
-        // アイテムを使う
-        ItemUtil.use(actor, item);
 
       case BtlLogic.Escape:
         Message.push2(Msg.ESCAPE, [actor.name]);

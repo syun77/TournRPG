@@ -1,8 +1,9 @@
 package jp_2dgames.game.state;
+
+import flixel.FlxG;
 import flixel.FlxState;
 import jp_2dgames.game.skill.SkillConst;
 import jp_2dgames.game.skill.SkillData;
-import flixel.FlxG;
 
 /**
  * ゲーム開始シーン
@@ -21,6 +22,8 @@ class PlayInitState extends FlxState {
     var skills = Global.getSkillSlot();
     skills.push(new SkillData(SkillConst.SKILL001));
     skills.push(new SkillData(SkillConst.SKILL003));
+
+//    openSubState(new BattleState());
   }
 
   /**
@@ -37,7 +40,6 @@ class PlayInitState extends FlxState {
     super.update();
 
     // ゲーム開始
-//    FlxG.switchState(new BattleState());
     FlxG.switchState(new FieldState());
   }
 }

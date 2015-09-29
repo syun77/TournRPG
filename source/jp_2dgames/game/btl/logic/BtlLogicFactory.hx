@@ -1,4 +1,5 @@
 package jp_2dgames.game.btl.logic;
+import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.btl.logic.BtlLogicData;
 import flixel.FlxG;
@@ -69,7 +70,13 @@ class BtlLogicFactory {
         ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.BeginItem(item)));
 
         // 使う
+        ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.UseItem(item)));
+
+        // アイテム効果
         var eft = _createItem(item, actor, range, targetID);
+        if(eft == null) {
+          throw '未実装のアイテム ID(${item.id})';
+        }
         ret.add(eft);
 
         // 終了
@@ -282,9 +289,18 @@ class BtlLogicFactory {
    **/
   private static function _createItem(item:ItemData, actor:Actor, range:BtlRange, targetID:Int):BtlLogicData {
 
-    // TODO: アイテム効果反映
-    var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.Item(item));
-    return eft;
+    var hp = ItemUtil.getParam(item.id, "hp");
+    if(hp > 0) {
+      // HP回復
+      var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.HpRecover(hp));
+      eft.setTarget(actor.ID);
+
+      // 回復しておく
+      actor.recoverHp(hp);
+
+      return eft;
+    }
+    return null;
   }
 
   /**

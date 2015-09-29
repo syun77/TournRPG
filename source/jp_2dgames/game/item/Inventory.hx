@@ -72,24 +72,24 @@ class Inventory {
   }
 
   /**
-   * アイテムを取得する
+   * インデックスをUIDに変換する
    **/
-  public static function getItem(idx:Int):ItemData {
-    return getItemList()[idx];
+  public static function idxToUID(idx:Int):Int {
+    return _instance._idxToUID(idx);
   }
 
   /**
-   * アイテムを使う
+   * アイテムを取得する
    **/
-  public static function useItem(actor:Actor, idx:Int):Void {
-    _instance._useItem(actor, idx);
+  public static function getItem(uid:Int):ItemData {
+    return _instance._getItem(uid);
   }
 
   /**
    * アイテムを削除する
    **/
-  public static function delItem(idx:Int):Void {
-    _instance._delItem(idx);
+  public static function delItem(uid:Int):Void {
+    _instance._delItem(uid);
   }
 
   /**
@@ -128,8 +128,8 @@ class Inventory {
   /**
    * 指定のアイテムを装備する
    **/
-  public static function equip(idx:Int):Void {
-    _instance._equip(idx);
+  public static function equip(uid:Int):Void {
+    _instance._equip(uid);
   }
 
   /**
@@ -213,6 +213,17 @@ class Inventory {
   }
 
   /**
+   * UIDを更新する
+   **/
+  private function _refreshUID():Void {
+    var idx = 0;
+    for(item in _itemList) {
+      item.uid = 1000 + idx;
+      idx++;
+    }
+  }
+
+  /**
    * アイテムを追加
    * ※複製コピーする
    **/
@@ -225,38 +236,45 @@ class Inventory {
     // 複製して追加する
     _itemList.push(itemData.clone());
     _dirty = true;
-  }
 
-  /**
-   * アイテムを使う
-   **/
-  private function _useItem(actor:Actor, idx:Int):Void {
-
-    // アイテムを使う
-    var item = getItem(idx);
-    ItemUtil.use(actor, item);
-
-    // アイテムを削除する
-    _delItem(idx);
+    // UIDを更新
+    _refreshUID();
   }
 
   /**
    * アイテムを削除する
    **/
-  private function _delItem(idx:Int):Void {
+  private function _delItem(uid:Int):Void {
 
     // アイテムリストから削除
-    itemList.splice(idx, 1);
+    var item = _getItem(uid);
+    itemList.remove(item);
+//    itemList.splice(idx, 1);
 
     _dirty = true;
+  }
+
+  private function _idxToUID(idx:Int):Int {
+    return itemList[idx].uid;
+  }
+
+  private function _getItem(uid:Int):ItemData {
+
+    for(item in itemList) {
+      if(uid == item.uid) {
+        return item;
+      }
+    }
+
+    return null;
   }
 
   /**
    * アイテムを装備する
    **/
-  private function _equip(idx:Int):Void {
+  private function _equip(uid:Int):Void {
 
-    var item = getItem(idx);
+    var item = getItem(uid);
     if(item.isEquip) {
       // すでに装備済みであれば何もしない
       return;

@@ -10,6 +10,8 @@ class ItemData {
   public var id:Int         = ItemUtil.NONE; // アイテムID
   public var type:IType     = IType.None;    // アイテム種別
   public var isEquip:Bool   = false;         // 装備しているかどうか
+  public var uid:Int        = 0;             // ユニーク番号 (インベントリ内での管理に使用)
+  public var bReserved      = false;         // 使用を予約 (複数人が使えないようにするためのもの)
 
   /**
    * コンストラクタ
