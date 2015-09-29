@@ -1,4 +1,7 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.skill.SkillData;
+import jp_2dgames.game.skill.SkillUtil;
+import jp_2dgames.game.skill.SkillConst;
 import flixel.util.FlxArrayUtil;
 import jp_2dgames.game.btl.logic.BtlLogicPlayer;
 import jp_2dgames.game.btl.BtlMgr;
@@ -297,25 +300,50 @@ class FieldState extends FlxState {
         });
 
       case FieldEvent.Item:
-        // アイテム入手
-        var tbl = [
-          ItemConst.POTION01,
-          ItemConst.POTION01,
-          ItemConst.POTION01,
-          ItemConst.POTION02,
-          ItemConst.WEAPON01,
-          ItemConst.WEAPON02,
-          ItemConst.WEAPON03,
-          ItemConst.ARMOR01,
-          ItemConst.ARMOR02,
-          ItemConst.ARMOR03,
-        ];
-        FlxArrayUtil.shuffle(tbl, 5);
-        var item = new ItemData(tbl[0]);
-        Inventory.push(item);
-        var name = ItemUtil.getName(item);
 
-        Dialog.open(this, Dialog.OK, '${name}を見つけた', null, function(btnID:Int) {
+        var msg:String = "";
+
+        // スキル入手
+        var getSkill = function() {
+          var skills = Global.getSkillSlot();
+          if(skills.length == 0) {
+            // スキルを持っていない
+            if(FlxRandom.chanceRoll(30)) {
+              var skillID = SkillConst.SKILL001 + FlxRandom.intRanged(0, 1);
+              var skill = new SkillData(skillID);
+              skills.push(skill);
+              var name = SkillUtil.getName(skillID);
+              msg = 'スキル「${name}」を覚えた';
+              return true;
+            }
+          }
+          // スキルを取得しなかった
+          return false;
+        };
+
+        if(getSkill() == false) {
+
+          // アイテム入手
+          var tbl = [
+            ItemConst.POTION01,
+            ItemConst.POTION01,
+            ItemConst.POTION01,
+            ItemConst.POTION02,
+            ItemConst.WEAPON01,
+            ItemConst.WEAPON02,
+            ItemConst.WEAPON03,
+            ItemConst.ARMOR01,
+            ItemConst.ARMOR02,
+            ItemConst.ARMOR03,
+          ];
+          FlxArrayUtil.shuffle(tbl, 5);
+          var item = new ItemData(tbl[0]);
+          Inventory.push(item);
+          var name = ItemUtil.getName(item);
+          msg = '${name}を見つけた';
+        }
+
+        Dialog.open(this, Dialog.OK, msg, null, function(btnID:Int) {
           // メイン処理に戻る
           selNode.setEventType(FieldEvent.Start);
           _nowNode = selNode;
