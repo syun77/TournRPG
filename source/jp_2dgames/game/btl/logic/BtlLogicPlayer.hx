@@ -291,6 +291,10 @@ class BtlLogicPlayer {
         // メッセージ表示
         Message.push2(msgID);
 
+      case BtlLogic.Message2(msgID, args):
+        // メッセージ表示
+        Message.push2(msgID, args);
+
       case BtlLogic.HpDamage(val, bSeq):
         // HPダメージ
         _damage(target, val, bSeq);
@@ -309,7 +313,7 @@ class BtlLogicPlayer {
         BadStatusUtil.pushMessage(bst, target.name);
 
       case BtlLogic.Escape:
-        Message.push2(Msg.ESCAPE, [actor.name]);
+        // 逃走実行
 
       case BtlLogic.Dead:
         ActorMgr.moveGrave(actor);
@@ -435,11 +439,9 @@ class BtlLogicPlayer {
    **/
   public function getBtlEnd():Int {
     switch(_data.type) {
-      case BtlLogic.Escape(bSuccess):
-        if(bSuccess) {
-          // 逃走成功
-          return BTL_END_ESCAPE;
-        }
+      case BtlLogic.Escape:
+        // 逃走成功
+        return BTL_END_ESCAPE;
 
       case BtlLogic.BtlEnd(bWin):
         if(bWin) {

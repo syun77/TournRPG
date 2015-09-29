@@ -158,4 +158,17 @@ class Calc {
 
     return _clamp(val);
   }
+
+  /**
+   * 逃走チェック
+   **/
+  public static function isEscape(playerAGI:Int, enemyAGI:Int):Bool {
+
+    var agi_ratio = Math.pow(1.02, playerAGI - enemyAGI);
+    var rnd = 70 * agi_ratio;
+    if(rnd > 99) {
+      rnd = 99;
+    }
+    return FlxRandom.chanceRoll(rnd);
+  }
 }

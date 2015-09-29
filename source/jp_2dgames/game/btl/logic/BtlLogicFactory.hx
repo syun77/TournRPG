@@ -84,6 +84,10 @@ class BtlLogicFactory {
 
       case BtlCmd.Escape:
         // 逃走演出の作成
+        // 開始
+        ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.Message2(Msg.ESCAPE, [actor.name])));
+
+        // 実行
         var eft = _createEscape(actor);
         ret.add(eft);
 
@@ -307,10 +311,24 @@ class BtlLogicFactory {
    * 逃走をする
    **/
   private static function _createEscape(actor:Actor):BtlLogicData {
-    // TODO: 逃走確率チェック
-    var bSuccess:Bool = true;
-    var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.Escape(bSuccess));
-    return eft;
+
+    // 相手からAGI値の一番高いActorを選出
+    var enemyAGI:Int = 0;
+    TempActorMgr.forEachAliveGroup(BtlGroupUtil.getAgaint(actor.group), function(act:Actor) {
+      if(enemyAGI < act.agi) {
+        enemyAGI = act.agi;
+      }
+    });
+
+    if(Calc.isEscape(actor.agi, enemyAGI)) {
+      // 逃走成功
+      return new BtlLogicData(actor.ID, actor.group, BtlLogic.Escape);
+    }
+    else {
+      // 失敗
+      return new BtlLogicData(actor.ID, actor.group, BtlLogic.Message(Msg.ESCAPE_FAILED));
+    }
+
   }
 
   /**

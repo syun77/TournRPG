@@ -32,4 +32,5 @@ class Msg {
   public static inline var BST_WEAK:Int       = 30; // バステ: 衰弱
   public static inline var NOT_ENOUGH_HP:Int  = 31; // HP不足
   public static inline var NOT_ENOUGH_TP:Int  = 32; // TP不足
+  public static inline var ESCAPE_FAILED:Int  = 33; // 逃走失敗
 }

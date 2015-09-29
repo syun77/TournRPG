@@ -259,6 +259,7 @@ class Actor extends FlxSprite {
   public function copy(actor:Actor):Void {
     _idx = actor._idx;
     _cmd = actor.cmd;
+    _name = actor.name;
     init(actor.group, actor.param, false);
     _badstatus = actor.badstatus;
   }
