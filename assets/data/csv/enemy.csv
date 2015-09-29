@@ -1,7 +1,7 @@
 id,name,ai,image,hp,xp,str,vit,agi,money
 int,str,str,str,int,int,int,int,int,int
-1,コウモリ,bat,e001.png,15,3,5,2,3,10
-2,レッドコウモリ,bat_2,e001a.png,30,5,6,3,7,8
+1,コウモリ,bat,e001.png,15,3,2,2,3,10
+2,レッドコウモリ,bat_2,e001a.png,30,5,4,3,7,8
 3,ゴールデンコウモリ,bat_3,e001b.png,35,,,,,
 4,オオカミ,wolf,e002.png,35,10,10,2,3,15
 5,ウルフ,wolf_2,e002a.png,35,6,5,4,3,15

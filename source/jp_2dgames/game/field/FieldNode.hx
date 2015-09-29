@@ -109,9 +109,9 @@ class FieldNode extends FlxSprite {
       case FieldEvent.Goal:
         col = FlxColor.CHARTREUSE;
       case FieldEvent.Enemy:
-        col = FlxColor.SALMON;
+//        col = FlxColor.SALMON;
       case FieldEvent.Item:
-        col = FlxColor.GOLDENROD;
+//        col = FlxColor.GOLDENROD;
     }
     makeGraphic(16, 16, col);
   }

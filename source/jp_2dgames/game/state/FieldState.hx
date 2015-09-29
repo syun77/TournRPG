@@ -173,7 +173,7 @@ class FieldState extends FlxState {
 
     var cnt:Int = 0;
     for(node in nodeList) {
-      if(cnt < 5) {
+      if(cnt < 3) {
         node.reachable = true;
         cnt++;
 
@@ -361,7 +361,7 @@ class FieldState extends FlxState {
         var money = FlxRandom.intRanged(1, 5);
         Global.addMoney(money);
         // SE再生
-        Snd.playSe("money");
+        Snd.playSe("coin");
 
         Dialog.open(this, Dialog.OK, '${money}G拾った', null, function(btnID:Int) {
 
