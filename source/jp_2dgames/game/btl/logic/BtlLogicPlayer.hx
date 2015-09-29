@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.item.Inventory;
 import flixel.FlxG;
 import flixel.FlxCamera;
@@ -174,6 +175,9 @@ class BtlLogicPlayer {
     // パーティクル発生
     Particle.start(PType.Circle, px, py, FlxColor.RED, bScroll);
 
+    // SE再生
+    Snd.playSe("hit");
+
     // ダメージ数値
     if(bRandom) {
       px += Reg.getContinuousAttackRandom();
@@ -192,6 +196,8 @@ class BtlLogicPlayer {
   private function _recoverHp(target:Actor, v:Int):Void {
     target.recoverHp(v);
     Message.push2(Msg.RECOVER_HP, [target.name, v]);
+    // SE再生
+    Snd.playSe("recover");
   }
 
   /**
@@ -324,6 +330,8 @@ class BtlLogicPlayer {
           var py = actor.ycenter;
           Particle.start(PType.Ring, px, py, FlxColor.YELLOW);
         }
+        // SE再生
+        Snd.playSe("destroy");
 
       case BtlLogic.BtlEnd(bWin):
         if(bWin) {

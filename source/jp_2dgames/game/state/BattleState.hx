@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.lib.Snd;
 import flixel.FlxSubState;
 import flixel.FlxG;
 import jp_2dgames.game.particle.ParticleDamage;
@@ -45,6 +46,8 @@ class BattleState extends FlxSubState {
 
     // バトル管理生成
     _btlMgr = new BtlMgr(this);
+
+    Snd.playSe("enemy");
 
     // バトル演出キュー
     BtlLogicMgr.create();

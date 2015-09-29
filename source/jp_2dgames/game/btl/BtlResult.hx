@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.lib.Snd;
 import flixel.FlxState;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.item.ItemData;
@@ -131,6 +132,7 @@ class BtlResult {
       case State.Money:
         // お金
         Global.addMoney(_money);
+        Snd.playSe("coin");
         var str = '${_money}G';
         Message.push2(Msg.ITEM_GET, [str]);
         _tWait = Reg.TIMER_WAIT;
@@ -157,6 +159,8 @@ class BtlResult {
             // HP全回復
             actor.recoverHp(9999);
             Message.push2(Msg.RECOVER_HP_ALL, [actor.name]);
+
+            Snd.playSe("levelup");
           }
         });
         if(bLevelup) {

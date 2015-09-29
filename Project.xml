@@ -34,6 +34,37 @@
 	<classpath name="source" />
 	<assets path="assets" />
 
+	<assets path="assets" include="*.tmx|*.png|*.csv|*.ttf" />
+	<!-- BGM -->
+	<assets path="assets/music" if="flash" include="*.mp3">
+	</assets>
+	<assets path="assets/music" unless="flash" include="*.ogg">
+	</assets>
+	<!-- SE -->
+	<assets path="assets/sounds" if="flash" include="*.mp3">
+        <sound path="coin.mp3" id="coin" />
+		<sound path="destroy.mp3" id="destroy" />
+        <sound path="enemy.mp3" id="enemy" />
+        <sound path="equip.mp3" id="equip" />
+		<sound path="hit.mp3" id="hit" />
+        <sound path="levelup.mp3" id="levelup" />
+        <sound path="recover.mp3" id="recover" />
+        <sound path="powerup.mp3" id="powerup" />
+        <sound path="roar.mp3" id="roar" />
+	</assets>
+	<assets path="assets/sounds" unless="flash" include="*.ogg">
+        <sound path="coin.ogg" id="coin" />
+        <sound path="destroy.ogg" id="destroy" />
+        <sound path="enemy.ogg" id="enemy" />
+        <sound path="equip.ogg" id="equip" />
+        <sound path="hit.ogg" id="hit" />
+        <sound path="levelup.ogg" id="levelup" />
+        <sound path="recover.ogg" id="recover" />
+        <sound path="powerup.ogg" id="powerup" />
+        <sound path="roar.ogg" id="roar" />
+	</assets>
+
+
 	<!--------------------------------LIBRARIES------------------------------------->
 
 	<haxelib name="flixel"/>

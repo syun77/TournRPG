@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.lib.Snd;
 import flixel.FlxState;
 import flixel.FlxState;
 import flixel.ui.FlxButton;
@@ -283,6 +284,8 @@ class InventoryUI extends FlxSpriteGroup {
 
     // 装備UIを更新
     _equipUI.setText();
+
+    Snd.playSe("equip");
   }
 
   /**

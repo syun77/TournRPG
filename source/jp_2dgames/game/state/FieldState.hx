@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.skill.SkillData;
 import jp_2dgames.game.skill.SkillUtil;
 import jp_2dgames.game.skill.SkillConst;
@@ -287,6 +288,7 @@ class FieldState extends FlxState {
       case FieldEvent.Enemy:
         // バトル
         _state = State.Battle;
+        Snd.playSe("roar");
         // 戻り値初期化
         _retBattle = BtlLogicPlayer.BTL_END_NONE;
         Dialog.open(this, Dialog.OK, 'モンスターに遭遇した！', null, function(btnID:Int) {
@@ -343,6 +345,8 @@ class FieldState extends FlxState {
           msg = '${name}を見つけた';
         }
 
+        Snd.playSe("powerup");
+
         Dialog.open(this, Dialog.OK, msg, null, function(btnID:Int) {
           // メイン処理に戻る
           selNode.setEventType(FieldEvent.Start);
@@ -356,6 +360,8 @@ class FieldState extends FlxState {
         // お金を拾う
         var money = FlxRandom.intRanged(1, 5);
         Global.addMoney(money);
+        // SE再生
+        Snd.playSe("money");
 
         Dialog.open(this, Dialog.OK, '${money}G拾った', null, function(btnID:Int) {
 
