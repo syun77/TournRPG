@@ -93,6 +93,7 @@ class FieldState extends FlxState {
     super.create();
 
     var bg = new FlxSprite().loadGraphic("assets/images/field/field.png");
+    bg.color = FlxColor.SILVER;
     this.add(bg);
 
     // ノード作成
