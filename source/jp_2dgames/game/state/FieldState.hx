@@ -92,11 +92,14 @@ class FieldState extends FlxState {
   override public function create():Void {
     super.create();
 
+    var bg = new FlxSprite().loadGraphic("assets/images/field/field.png");
+    this.add(bg);
+
     // ノード作成
     FieldNode.createParent(this);
 
     // ゴール
-    FieldNode.add(FlxG.width/2, 32, FieldEvent.Goal);
+    FieldNode.add(SIZE*4, SIZE, FieldEvent.Goal);
 
     var imax:Int = Std.int(FlxG.width/SIZE);
     var jmax:Int = Std.int(FlxG.height/SIZE)-1;

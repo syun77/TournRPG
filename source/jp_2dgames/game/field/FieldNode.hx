@@ -113,7 +113,8 @@ class FieldNode extends FlxSprite {
       case FieldEvent.Item:
 //        col = FlxColor.GOLDENROD;
     }
-    makeGraphic(16, 16, col);
+
+    loadGraphic("assets/images/field/node.png");
   }
 }
 
