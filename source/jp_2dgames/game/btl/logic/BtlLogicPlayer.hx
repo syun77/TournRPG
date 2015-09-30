@@ -323,8 +323,13 @@ class BtlLogicPlayer {
 
       case BtlLogic.Dead:
         ActorMgr.moveGrave(actor);
-        Message.push2(Msg.DEFEAT_ENEMY, [actor.name]);
+        if(actor.group == BtlGroup.Player) {
+          // 味方の場合
+          Message.push2(Msg.PLAYER_DEAD, [actor.name]);
+        }
         if(actor.group == BtlGroup.Enemy) {
+          // 敵の場合
+          Message.push2(Msg.DEFEAT_ENEMY, [actor.name]);
           // 消滅エフェクト再生
           var px = actor.xcenter;
           var py = actor.ycenter;
