@@ -30,12 +30,19 @@ class Reg {
   public static inline var TIMER_WAIT:Int = 30; // 0.5秒
   public static inline var TIMER_WAIT_SEQUENCE:Int = 15; // 0.25秒
 
+  // ■画像データ
   // メッセージウィンドウ
   public static inline var PATH_MSG = "assets/images/ui/message.png";
   // メッセージテキスト背景
   public static inline var PATH_MSG_TEXT = "assets/images/ui/messagetext.png";
   // バッドステータスアイコン
   public static inline var PATH_BADSTATUS = "assets/images/ui/badstatus.png";
+  // フィールド画像
+  public static inline var PATH_FIELD_MAP = "assets/images/field/field.png";
+  // フィールドのプレイヤーアイコン
+  public static inline var PATH_FIELD_PLAYER_ICON = "assets/images/field/token.png";
+  // フィールドのノード
+  public static inline var PATH_FIELD_NODE = "assets/images/field/node.png";
 
   // CSV
   public static inline var PATH_CSV_MESSAGE         = "assets/data/csv/message.csv";

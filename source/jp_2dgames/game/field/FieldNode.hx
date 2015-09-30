@@ -6,22 +6,19 @@ import flixel.util.FlxColor;
 import flixel.FlxSprite;
 
 /**
- * イベントの種類
- **/
-enum FieldEvent {
-  None;  // 何もなし
-  Start; // スタート地点
-  Goal;  // ゴール地点
-  Enemy; // 敵
-  Item;  // アイテム
-}
-
-/**
  * フィールドノード
  **/
 class FieldNode extends FlxSprite {
 
+  // ■定数
+  public static inline var SIZE:Int = 32;
+
+  // ■管理オブジェクト
   static var _parent:FlxTypedGroup<FieldNode> = null;
+
+  /**
+   * 生成
+   **/
   public static function createParent(state:FlxState):Void {
     _parent = new FlxTypedGroup<FieldNode>(64);
     for(i in 0..._parent.maxSize) {
@@ -30,6 +27,17 @@ class FieldNode extends FlxSprite {
     state.add(_parent);
   }
 
+  /**
+   * 破棄
+   **/
+  public static function destroyParent(state:FlxState):Void {
+    state.remove(_parent);
+    _parent = null;
+  }
+
+  /**
+   * 追加
+   **/
   public static function add(X:Float, Y:Float, evType:FieldEvent):FieldNode {
     var node:FieldNode = _parent.recycle();
     node.init(X, Y, evType);
@@ -56,6 +64,10 @@ class FieldNode extends FlxSprite {
   private function get_evType() {
     return _evType;
   }
+
+  /**
+   * イベントを設定
+   **/
   public function setEventType(ev:FieldEvent):Void {
     _evType = ev;
     _setColor();
@@ -99,6 +111,9 @@ class FieldNode extends FlxSprite {
     _setColor();
   }
 
+  /**
+   * 色を設定
+   **/
   private function _setColor():Void {
     var col:Int = FlxColor.WHITE;
     switch(_evType) {
@@ -114,7 +129,7 @@ class FieldNode extends FlxSprite {
 //        col = FlxColor.GOLDENROD;
     }
 
-    loadGraphic("assets/images/field/node.png");
+    loadGraphic(Reg.PATH_FIELD_NODE);
   }
 }
 

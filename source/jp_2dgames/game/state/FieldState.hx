@@ -1,57 +1,27 @@
 package jp_2dgames.game.state;
+
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.FlxState;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
+import flixel.util.FlxArrayUtil;
+import flixel.util.FlxPoint;
+import flixel.util.FlxRandom;
+import haxe.ds.ArraySort;
+import jp_2dgames.lib.RectLine;
 import jp_2dgames.lib.Snd;
+import jp_2dgames.game.field.FieldEvent;
 import jp_2dgames.game.skill.SkillData;
 import jp_2dgames.game.skill.SkillUtil;
 import jp_2dgames.game.skill.SkillConst;
-import flixel.util.FlxArrayUtil;
 import jp_2dgames.game.btl.logic.BtlLogicPlayer;
-import jp_2dgames.game.btl.BtlMgr;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.gui.Dialog;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
-import flixel.util.FlxColor;
-import flixel.FlxSprite;
-import flixel.group.FlxSpriteGroup;
-import flixel.util.FlxPoint;
-import haxe.ds.ArraySort;
 import jp_2dgames.game.field.FieldNode;
-import flixel.FlxG;
-import flixel.util.FlxRandom;
-import flixel.FlxState;
-
-/**
- * 線の描画
- **/
-private class _Line extends FlxSpriteGroup {
-  public function new() {
-    super();
-    for(i in 0...8) {
-      var spr = new FlxSprite(0, 0).makeGraphic(2, 2, FlxColor.WHITE);
-      this.add(spr);
-    }
-    visible = false;
-  }
-  public function drawLine(x1:Float, y1:Float, x2:Float, y2:Float):Void {
-
-    var dx = (x2 - x1) / members.length;
-    var dy = (y2 - y1) / members.length;
-
-    var px = x1;
-    var py = y1;
-    for(spr in members) {
-      spr.x = px;
-      spr.y = py;
-      px += dx;
-      py += dy;
-    }
-
-    visible = true;
-  }
-}
 
 /**
  * 状態
@@ -69,8 +39,6 @@ private enum State {
  **/
 class FieldState extends FlxState {
 
-  static inline var SIZE:Int = 32;
-
   // 状態
   var _state:State = State.Main;
 
@@ -78,7 +46,7 @@ class FieldState extends FlxState {
   var _nowNode:FieldNode;
 
   // 経路描画
-  var _line:_Line;
+  var _line:RectLine;
 
   // プレイヤートークン
   var _token:FlxSprite;
@@ -92,24 +60,25 @@ class FieldState extends FlxState {
   override public function create():Void {
     super.create();
 
-    var bg = new FlxSprite().loadGraphic("assets/images/field/field.png");
-    bg.color = FlxColor.SILVER;
+    // 背景
+    var bg = new FlxSprite().loadGraphic(Reg.PATH_FIELD_MAP);
     this.add(bg);
 
     // ノード作成
     FieldNode.createParent(this);
 
     // ゴール
-    FieldNode.add(SIZE*4, SIZE, FieldEvent.Goal);
+    var size = FieldNode.SIZE;
+    FieldNode.add(size*4, size, FieldEvent.Goal);
 
-    var imax:Int = Std.int(FlxG.width/SIZE);
-    var jmax:Int = Std.int(FlxG.height/SIZE)-1;
+    var imax:Int = Std.int(FlxG.width/size);
+    var jmax:Int = Std.int(FlxG.height/size)-1;
     var rnd:Int = 10;
     for(j in 2...jmax) {
       for(i in 1...imax) {
         if(FlxRandom.intRanged(0, rnd) == 0) {
-          var px = SIZE * i;
-          var py = SIZE * j;
+          var px = size * i;
+          var py = size * j;
           var ev:FieldEvent = FieldEvent.None;
           var rnd2 = FlxRandom.intRanged(0, 10);
           if(rnd2 < 3) {
@@ -137,13 +106,13 @@ class FieldState extends FlxState {
 
     // プレイヤー
     _token = new FlxSprite();
-    _token.loadGraphic("assets/images/field/token.png", true);
+    _token.loadGraphic(Reg.PATH_FIELD_PLAYER_ICON, true);
     _token.animation.add("play", [0, 1], 2);
     _token.animation.play("play");
     this.add(_token);
 
     // 経路描画
-    _line = new _Line();
+    _line = new RectLine(8);
     this.add(_line);
 
     // 到達可能な地点を検索
@@ -154,6 +123,8 @@ class FieldState extends FlxState {
    * 破棄
    */
   override public function destroy():Void {
+    FieldNode.destroyParent(this);
+
     super.destroy();
   }
 
@@ -167,6 +138,7 @@ class FieldState extends FlxState {
       nodeList.push(node);
     });
 
+    // 近い順にソート
     ArraySort.sort(nodeList, function(a:FieldNode, b:FieldNode) {
       var y = Std.int(b.y - a.y) * 100;
       var ax = Math.abs(a.x - _nowNode.x);
@@ -242,6 +214,7 @@ class FieldState extends FlxState {
     });
 
     if(selNode != null) {
+      // 選択しているノードがある
       selNode.scale.set(1.5, 1.5);
       // 経路描画
       var x1 = _nowNode.xcenter;
@@ -340,7 +313,7 @@ class FieldState extends FlxState {
             ItemConst.WEAPON03,
             ItemConst.ARMOR01,
             ItemConst.ARMOR02,
-            ItemConst.ARMOR03,
+            ItemConst.ARMOR03
           ];
           FlxArrayUtil.shuffle(tbl, 5);
           var item = new ItemData(tbl[0]);
