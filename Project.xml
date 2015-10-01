@@ -2,7 +2,14 @@
 <project>
 	<!------------------------------APPLICATION SETTINGS---------------------------->
 
-	<app title="TournRPG" file="TournRPG" main="Main" version="0.0.1" company="HaxeFlixel" />
+	<app title="TournRPG" file="TournRPG" main="Main" version="0.0.1" company="2dgames.jp" />
+
+	<!-- For iOS -->
+	<meta title="TournRPG" package="jp.2dgames.test" version="1.0.0" company="2dgames.jp" />
+	<ios deployment="5" binaries="arm7" devices="iphone" />
+	<ios linker-flags="" prerenderd-icon="false" />
+	<window  hardware="true" allow-shaders="true" require-shaders="true" if="cpp" />
+	<window vsync="true" antialiasing="4" if="cpp" />
 
 	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
 	<!--or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"!-->
