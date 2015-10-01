@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import flixel.util.FlxMath;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -103,6 +104,9 @@ class FieldState extends FlxState {
 
     // スタート地点
     _nowNode = FieldNode.add(FlxG.width/2, FlxG.height-32, FieldEvent.Start);
+    // 到達可能な地点を検索
+    _checkReachableNode(_nowNode);
+    _nowNode.openNodes();
 
     // プレイヤー
     _token = new FlxSprite();
@@ -115,8 +119,37 @@ class FieldState extends FlxState {
     _line = new RectLine(8);
     this.add(_line);
 
-    // 到達可能な地点を検索
-    _checkReachable();
+  }
+
+  private function _checkReachableNode(node:FieldNode):Void {
+    var cnt:Int = 0;
+    FieldNode.forEachAlive(function(n:FieldNode) {
+      if(node.ID == n.ID) {
+        // 同一ノード
+        return;
+      }
+      var distance = FlxMath.distanceBetween(node, n);
+      if(distance < 64) {
+        if(node.addReachableNodes(n)) {
+          // 追加できた
+          cnt++;
+        }
+      }
+    });
+
+    if(cnt > 1) {
+      // 接続ノードが2つ以上存在したのでおしまい
+      return;
+    }
+
+    var nodes = FieldNode.getNearestSortedList(node);
+    for(n in nodes) {
+      node.addReachableNodes(n);
+      cnt++;
+      if(cnt >= 2) {
+        break;
+      }
+    }
   }
 
   /**
@@ -126,38 +159,6 @@ class FieldState extends FlxState {
     FieldNode.destroyParent(this);
 
     super.destroy();
-  }
-
-  /**
-   * 到達可能な地点を検索
-   **/
-  private function _checkReachable():Void {
-
-    var nodeList = new Array<FieldNode>();
-    FieldNode.forEachAlive(function(node:FieldNode) {
-      nodeList.push(node);
-    });
-
-    // 近い順にソート
-    ArraySort.sort(nodeList, function(a:FieldNode, b:FieldNode) {
-      var y = Std.int(b.y - a.y) * 100;
-      var ax = Math.abs(a.x - _nowNode.x);
-      var bx = Math.abs(b.x - _nowNode.x);
-
-      return y + Std.int(ax - bx);
-    });
-
-    var cnt:Int = 0;
-    for(node in nodeList) {
-      if(cnt < 3) {
-        node.reachable = true;
-        cnt++;
-
-      }
-      else {
-        node.reachable = false;
-      }
-    }
   }
 
   /**
@@ -329,7 +330,10 @@ class FieldState extends FlxState {
           selNode.setEventType(FieldEvent.Start);
           _nowNode = selNode;
 
-          _checkReachable();
+          // 到達可能な地点を検索
+          _checkReachableNode(_nowNode);
+          _nowNode.openNodes();
+
           _state = State.Main;
         });
 
@@ -346,7 +350,10 @@ class FieldState extends FlxState {
           selNode.setEventType(FieldEvent.Start);
           _nowNode = selNode;
 
-          _checkReachable();
+          // 到達可能な地点を検索
+          _checkReachableNode(_nowNode);
+          _nowNode.openNodes();
+
           _state = State.Main;
         });
 
@@ -382,7 +389,10 @@ class FieldState extends FlxState {
 
       default:
         // メイン処理に戻る
-        _checkReachable();
+        // 到達可能な地点を検索
+        _checkReachableNode(_nowNode);
+        _nowNode.openNodes();
+
         _state = State.Main;
     }
   }

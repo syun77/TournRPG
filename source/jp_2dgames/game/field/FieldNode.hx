@@ -1,5 +1,8 @@
 package jp_2dgames.game.field;
 
+import haxe.ds.ArraySort;
+import flixel.util.FlxMath;
+import haxe.macro.Expr.Field;
 import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
 import flixel.util.FlxColor;
@@ -22,7 +25,7 @@ class FieldNode extends FlxSprite {
   public static function createParent(state:FlxState):Void {
     _parent = new FlxTypedGroup<FieldNode>(64);
     for(i in 0..._parent.maxSize) {
-      _parent.add(new FieldNode());
+      _parent.add(new FieldNode(i));
     }
     state.add(_parent);
   }
@@ -48,6 +51,25 @@ class FieldNode extends FlxSprite {
     _parent.forEachAlive(func);
   }
 
+  public static function getNearestSortedList(node:FieldNode):Array<FieldNode> {
+    var ret = new Array<FieldNode>();
+    _parent.forEachAlive(function(n:FieldNode) {
+      if(node.ID == n.ID) {
+        // 同一
+        return;
+      }
+
+      n.distance = FlxMath.distanceBetween(node, n);
+      ret.push(n);
+    });
+
+    ArraySort.sort(ret, function(a:FieldNode, b:FieldNode) {
+      return Std.int(a.distance - b.distance);
+    });
+
+    return ret;
+  }
+
   // 中心座標
   public var xcenter(get, never):Float;
   private function get_xcenter() {
@@ -56,6 +78,15 @@ class FieldNode extends FlxSprite {
   public var ycenter(get, never):Float;
   private function get_ycenter() {
     return y + origin.y;
+  }
+  private var _distance:Float = 0;
+  public var distance(get, set):Float;
+  private function get_distance() {
+    return _distance;
+  }
+  private function set_distance(d:Float):Float {
+    _distance = d;
+    return d;
   }
 
   // イベント種別
@@ -92,12 +123,42 @@ class FieldNode extends FlxSprite {
     return b;
   }
 
+  // 移動可能なノード
+  public var _reachableNodes:List<FieldNode>;
+
+  /**
+   * 移動可能なノードを追加
+   * @param node 追加するノード
+   * @return 追加できたら true
+   **/
+  public function addReachableNodes(node:FieldNode):Bool {
+    for(n in _reachableNodes) {
+      if(n.ID == node.ID) {
+        // すでに追加済み
+        return false;
+      }
+    }
+
+    _reachableNodes.add(node);
+    // 追加できた
+    return true;
+  }
+
+  /**
+   * 移動可能なノードをすべて到達可能にする
+   **/
+  public function openNodes():Void {
+    for(node in _reachableNodes) {
+      node.reachable = true;
+    }
+  }
 
   /**
    * コンストラクタ
    **/
-  public function new() {
+  public function new(idx:Int) {
     super();
+    ID = idx;
     kill();
   }
 
@@ -109,6 +170,9 @@ class FieldNode extends FlxSprite {
     y = Y;
     _evType = evType;
     _setColor();
+
+    reachable = false;
+    _reachableNodes = new List<FieldNode>();
   }
 
   /**
