@@ -2,7 +2,6 @@ package jp_2dgames.game.field;
 
 import haxe.ds.ArraySort;
 import flixel.util.FlxMath;
-import haxe.macro.Expr.Field;
 import flixel.FlxState;
 import flixel.group.FlxTypedGroup;
 import flixel.util.FlxColor;
@@ -47,22 +46,33 @@ class FieldNode extends FlxSprite {
     return node;
   }
 
+  /**
+   * 生存しているノードをすべて実行
+   **/
   public static function forEachAlive(func:FieldNode->Void):Void {
     _parent.forEachAlive(func);
   }
 
+  /**
+   * 指定のノードの近くにあるノードのリストを返す
+   **/
   public static function getNearestSortedList(node:FieldNode):Array<FieldNode> {
+
     var ret = new Array<FieldNode>();
+
+    // 対象となるノードへの距離を求める
     _parent.forEachAlive(function(n:FieldNode) {
       if(node.ID == n.ID) {
-        // 同一
+        // 同一なので対象外
         return;
       }
 
+      // 距離を求める
       n.distance = FlxMath.distanceBetween(node, n);
       ret.push(n);
     });
 
+    // 近い順にソートする
     ArraySort.sort(ret, function(a:FieldNode, b:FieldNode) {
       return Std.int(a.distance - b.distance);
     });
@@ -79,6 +89,8 @@ class FieldNode extends FlxSprite {
   private function get_ycenter() {
     return y + origin.y;
   }
+
+  // 距離 (距離でのソート時に使用)
   private var _distance:Float = 0;
   public var distance(get, set):Float;
   private function get_distance() {
@@ -124,7 +136,11 @@ class FieldNode extends FlxSprite {
   }
 
   // 移動可能なノード
-  public var _reachableNodes:List<FieldNode>;
+  private var _reachableNodes:List<FieldNode>;
+  public var reachableNodes(get, never):List<FieldNode>;
+  private function get_reachableNodes() {
+    return _reachableNodes;
+  }
 
   /**
    * 移動可能なノードを追加

@@ -10,3 +10,7 @@ enum FieldEvent {
   Enemy; // 敵
   Item;  // アイテム
 }
+
+class FieldEventUtil {
+
+}
