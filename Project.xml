@@ -53,9 +53,10 @@
         <sound path="equip.mp3" id="equip" />
 		<sound path="hit.mp3" id="hit" />
         <sound path="levelup.mp3" id="levelup" />
+		<sound path="miss.mp3" id="miss" />
         <sound path="recover.mp3" id="recover" />
+		<sound path="roar.mp3" id="roar" />
         <sound path="powerup.mp3" id="powerup" />
-        <sound path="roar.mp3" id="roar" />
 	</assets>
 	<assets path="assets/sounds" unless="flash" include="*.ogg">
         <sound path="coin.ogg" id="coin" />
@@ -64,9 +65,10 @@
         <sound path="equip.ogg" id="equip" />
         <sound path="hit.ogg" id="hit" />
         <sound path="levelup.ogg" id="levelup" />
+		<sound path="miss.ogg" id="miss" />
         <sound path="recover.ogg" id="recover" />
+		<sound path="roar.ogg" id="roar" />
         <sound path="powerup.ogg" id="powerup" />
-        <sound path="roar.ogg" id="roar" />
 	</assets>
 
 

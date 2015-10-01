@@ -1,0 +1,10 @@
+- coin: coin
+- destroy: destroy
+- enemy: enemy
+- equip: equip
+- hit: hit
+- levelup: levelup
+- miss: miss
+- powerup: powerup
+- recover: recover
+- roar: roar

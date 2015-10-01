@@ -132,6 +132,7 @@ class BtlLogicPlayer {
         p.color = MyColor.NUM_MISS;
       }
       Message.push2(Msg.ATTACK_MISS, [target.name]);
+      Snd.playSe("miss");
     }
   }
 
