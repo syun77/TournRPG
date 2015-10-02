@@ -2,6 +2,10 @@ package jp_2dgames.game.field;
 import flixel.util.FlxMath;
 import flixel.FlxG;
 import flixel.util.FlxRandom;
+
+/**
+ * フィールドのノード操作ユーティリティ
+ **/
 class FieldNodeUtil {
 
   /**

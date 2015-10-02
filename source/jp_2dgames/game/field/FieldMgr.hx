@@ -28,6 +28,7 @@ import jp_2dgames.lib.Snd;
 private enum State {
   Main;   // メイン
   Moving; // 移動中
+  Event;  // イベント実行中
   Battle; // バトル
   BattleEnd; // バトル終了
   Goal;   // ゴールにたどり着いた
@@ -60,6 +61,9 @@ class FieldMgr {
   // プレイヤートークン
   var _player:FieldPlayer;
 
+  // イベント管理
+  var _eventMgr:FieldEventMgr;
+
   // 戻り値
   var _resultCode:Int = RET_NONE;
   public var resultCode(get, never):Int;
@@ -80,6 +84,9 @@ class FieldMgr {
     _player = new FieldPlayer();
     _flxState.add(_player);
 
+    // イベント管理
+    _eventMgr = new FieldEventMgr(_flxState);
+
     // 経路描画
     _line = new RectLine(8);
     flxState.add(_line);
@@ -94,10 +101,16 @@ class FieldMgr {
     switch(_state) {
       case State.Main:
         _updateMain();
+
       case State.Moving:
         _updateMoving();
+
+      case State.Event:
+        _updateEvent();
+
       case State.Goal:
         _updateGoal();
+
       case State.Battle:
       case State.BattleEnd:
         _updateBattleEnd();
@@ -162,7 +175,12 @@ class FieldMgr {
         _state = State.Moving;
         _player.moveTowardNode(selNode, function() {
           // 移動完了
-          _event(selNode.evType, selNode);
+//          _event(selNode.evType, selNode);
+          // イベント実行
+          _state = State.Event;
+          _eventMgr.start(selNode.evType);
+          selNode.setEventType(FieldEvent.Start);
+          _nowNode = selNode;
         });
       }
     }
@@ -285,6 +303,37 @@ class FieldMgr {
    * 更新・移動中
    **/
   private function _updateMoving():Void {
+  }
+
+  /**
+   * 更新・イベント
+   **/
+  private function _updateEvent():Void {
+    _eventMgr.proc();
+    if(_eventMgr.isEnd() == false) {
+      return;
+    }
+
+    switch(_eventMgr.resultCode) {
+      case FieldEventMgr.RET_NONE:
+        // 探索を続ける
+        // 到達可能な地点を検索
+        FieldNodeUtil.addReachableNode(_nowNode);
+        _nowNode.openNodes();
+
+        // メイン処理に戻る
+        _state = State.Main;
+
+      case FieldEventMgr.RET_GAMEOVER:
+        // ゲームオーバー
+        _resultCode = RET_GAMEOVER;
+        _state = State.End;
+
+      case FieldEventMgr.RET_NEXTSTAGE:
+        // 次のステージに進む
+        _resultCode = RET_NEXTSTAGE;
+        _state = State.End;
+    }
   }
 
   /**
