@@ -1,26 +1,9 @@
 package jp_2dgames.game.field;
 
 import flixel.FlxG;
-import flixel.FlxSprite;
-import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
 import flixel.util.FlxPoint;
-import flixel.util.FlxArrayUtil;
-import flixel.util.FlxRandom;
 import jp_2dgames.game.state.FieldState;
-import jp_2dgames.game.state.BattleState;
-import jp_2dgames.game.item.ItemData;
-import jp_2dgames.game.item.ItemUtil;
-import jp_2dgames.game.state.ResultState;
-import jp_2dgames.game.item.Inventory;
-import jp_2dgames.game.skill.SkillData;
-import jp_2dgames.game.skill.SkillConst;
-import jp_2dgames.game.skill.SkillUtil;
-import jp_2dgames.game.gui.Dialog;
-import jp_2dgames.game.btl.logic.BtlLogicPlayer;
-import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.lib.RectLine;
-import jp_2dgames.lib.Snd;
 
 /**
  * 状態
@@ -29,9 +12,6 @@ private enum State {
   Main;   // メイン
   Moving; // 移動中
   Event;  // イベント実行中
-  Battle; // バトル
-  BattleEnd; // バトル終了
-  Goal;   // ゴールにたどり着いた
 
   End;    // 終了
 }
@@ -108,13 +88,6 @@ class FieldMgr {
       case State.Event:
         _updateEvent();
 
-      case State.Goal:
-        _updateGoal();
-
-      case State.Battle:
-      case State.BattleEnd:
-        _updateBattleEnd();
-
       case State.End:
         // おしまい
     }
@@ -174,8 +147,6 @@ class FieldMgr {
         // 選択したノードに向かって移動する
         _state = State.Moving;
         _player.moveTowardNode(selNode, function() {
-          // 移動完了
-//          _event(selNode.evType, selNode);
           // イベント実行
           _state = State.Event;
           _eventMgr.start(selNode.evType);
@@ -183,119 +154,6 @@ class FieldMgr {
           _nowNode = selNode;
         });
       }
-    }
-  }
-
-  /**
-   * イベント処理
-   **/
-  private function _event(event:FieldEvent, selNode:FieldNode):Void {
-
-    switch(selNode.evType) {
-      case FieldEvent.Goal:
-        // ゴールにたどり着いた
-        _state = State.Goal;
-        Dialog.open(_flxState, Dialog.OK, 'ゲームクリア！', null, function(btnID:Int) {
-          _state = State.End;
-          _resultCode = RET_NEXTSTAGE;
-        });
-
-      case FieldEvent.Enemy:
-        // バトル
-        _state = State.Battle;
-        Snd.playSe("roar");
-        // 戻り値初期化
-        _flxState.setBattleResult(BtlLogicPlayer.BTL_END_NONE);
-        Dialog.open(_flxState, Dialog.OK, 'モンスターに遭遇した！', null, function(btnID:Int) {
-          // バトル開始
-          var nBtl = FlxRandom.intRanged(1, 4);
-          Global.setStage(nBtl);
-          _state = State.BattleEnd;
-          selNode.setEventType(FieldEvent.Start);
-          _nowNode = selNode;
-          _flxState.openSubState(new BattleState());
-        });
-
-      case FieldEvent.Item:
-
-        var msg:String = "";
-
-        // スキル入手
-        var getSkill = function() {
-          var skills = Global.getSkillSlot();
-          if(skills.length == 0) {
-            // スキルを持っていない
-            if(FlxRandom.chanceRoll(30)) {
-              var skillID = SkillConst.SKILL001 + FlxRandom.intRanged(0, 1);
-              var skill = new SkillData(skillID);
-              skills.push(skill);
-              var name = SkillUtil.getName(skillID);
-              msg = 'スキル「${name}」を覚えた';
-              return true;
-            }
-          }
-          // スキルを取得しなかった
-          return false;
-        };
-
-        if(getSkill() == false) {
-
-          // アイテム入手
-          var tbl = [
-            ItemConst.POTION01,
-            ItemConst.POTION01,
-            ItemConst.POTION01,
-            ItemConst.POTION02,
-            ItemConst.WEAPON01,
-            ItemConst.WEAPON02,
-            ItemConst.WEAPON03,
-            ItemConst.ARMOR01,
-            ItemConst.ARMOR02,
-            ItemConst.ARMOR03
-          ];
-          FlxArrayUtil.shuffle(tbl, 5);
-          var item = new ItemData(tbl[0]);
-          Inventory.push(item);
-          var name = ItemUtil.getName(item);
-          msg = '${name}を見つけた';
-        }
-
-        Snd.playSe("powerup");
-
-        Dialog.open(_flxState, Dialog.OK, msg, null, function(btnID:Int) {
-          // メイン処理に戻る
-          selNode.setEventType(FieldEvent.Start);
-          _nowNode = selNode;
-
-          // 到達可能な地点を検索
-          FieldNodeUtil.addReachableNode(_nowNode);
-          _nowNode.openNodes();
-
-          _state = State.Main;
-        });
-
-      case FieldEvent.None:
-        // お金を拾う
-        var money = FlxRandom.intRanged(1, 5);
-        Global.addMoney(money);
-        // SE再生
-        Snd.playSe("coin");
-
-        Dialog.open(_flxState, Dialog.OK, '${money}G拾った', null, function(btnID:Int) {
-
-          // メイン処理に戻る
-          selNode.setEventType(FieldEvent.Start);
-          _nowNode = selNode;
-
-          // 到達可能な地点を検索
-          FieldNodeUtil.addReachableNode(_nowNode);
-          _nowNode.openNodes();
-
-          _state = State.Main;
-        });
-
-      case FieldEvent.Start:
-        throw '不正なイベントタイプ ${selNode.evType}';
     }
   }
 
@@ -333,36 +191,6 @@ class FieldMgr {
         // 次のステージに進む
         _resultCode = RET_NEXTSTAGE;
         _state = State.End;
-    }
-  }
-
-  /**
-   * 更新・ゴール
-   **/
-  private function _updateGoal():Void {
-  }
-
-  /**
-   * 更新・バトル
-   **/
-  private function _updateBattleEnd():Void {
-
-    switch(_flxState.retBattle) {
-      case BtlLogicPlayer.BTL_END_NONE:
-        // バトル実行中
-
-      case BtlLogicPlayer.BTL_END_LOSE:
-        // ゲームオーバー
-        _state = State.End;
-        _resultCode = RET_GAMEOVER;
-
-      default:
-        // メイン処理に戻る
-        // 到達可能な地点を検索
-        FieldNodeUtil.addReachableNode(_nowNode);
-        _nowNode.openNodes();
-
-        _state = State.Main;
     }
   }
 
