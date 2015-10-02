@@ -58,7 +58,7 @@ class FieldMgr {
   var _line:RectLine;
 
   // プレイヤートークン
-  var _token:FlxSprite;
+  var _player:FieldPlayer;
 
   // 戻り値
   var _resultCode:Int = RET_NONE;
@@ -77,11 +77,8 @@ class FieldMgr {
     _nowNode = FieldNodeUtil.create();
 
     // プレイヤー
-    _token = new FlxSprite();
-    _token.loadGraphic(Reg.PATH_FIELD_PLAYER_ICON, true);
-    _token.animation.add("play", [0, 1], 2);
-    _token.animation.play("play");
-    _flxState.add(_token);
+    _player = new FieldPlayer();
+    _flxState.add(_player);
 
     // 経路描画
     _line = new RectLine(8);
@@ -116,8 +113,7 @@ class FieldMgr {
   private function _updateMain():Void {
 
     // プレイヤーの位置を設定
-    _token.x = _nowNode.x;
-    _token.y = _nowNode.y - _token.height/2;
+    _player.setPositionFromNode(_nowNode);
 
     var pt = FlxPoint.get(FlxG.mouse.x, FlxG.mouse.y);
     var selNode:FieldNode = null;
@@ -156,20 +152,18 @@ class FieldMgr {
       if(FlxG.mouse.justPressed) {
 
         // 移動先を選択した
-        FieldNode.forEachAlive(function(node:FieldNode) {
-          if(node.reachable && node.evType != FieldEvent.Goal) {
-            node.kill();
-          }
-        });
-        selNode.revive();
+        // 移動可能なノードを消しておく
+        FieldNode.killReachable(selNode);
 
         selNode.scale.set(1, 1);
         _line.visible = false;
+
+        // 選択したノードに向かって移動する
         _state = State.Moving;
-        FlxTween.tween(_token, {x:selNode.x, y:selNode.y-_token.height/2}, 1, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {
+        _player.moveTowardNode(selNode, function() {
           // 移動完了
           _event(selNode.evType, selNode);
-        }});
+        });
       }
     }
   }

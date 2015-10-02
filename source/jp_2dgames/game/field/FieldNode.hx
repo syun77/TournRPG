@@ -80,6 +80,29 @@ class FieldNode extends FlxSprite {
     return ret;
   }
 
+  /**
+   * 移動可能なノードを削除する
+   **/
+  public static function killReachable(node:FieldNode):Void {
+
+    forEachAlive(function(n:FieldNode) {
+      if(n.evType == FieldEvent.Goal) {
+        // ゴールは対象外
+        return;
+      }
+
+      if(n.ID == node.ID) {
+        // 選択したノードも対象外
+        return;
+      }
+
+      if(n.reachable) {
+        // 移動可能なノードを削除
+        n.kill();
+      }
+    });
+  }
+
   // 中心座標
   public var xcenter(get, never):Float;
   private function get_xcenter() {

@@ -8,23 +8,9 @@ import jp_2dgames.game.field.FieldNode;
 import jp_2dgames.lib.RectLine;
 
 /**
- * 状態
- **/
-private enum State {
-  Main;   // メイン
-  Moving; // 移動中
-  Battle; // バトル
-  BattleEnd; // バトル終了
-  Goal;   // ゴールにたどり着いた
-}
-
-/**
  * フィールドシーン
  **/
 class FieldState extends FlxState {
-
-  // 状態
-  var _state:State = State.Main;
 
   // 現在いるノード
   var _nowNode:FieldNode;
@@ -92,11 +78,8 @@ class FieldState extends FlxState {
       }
     }
 
-    #if neko
-    if(FlxG.keys.justPressed.R) {
-      FlxG.resetState();
-    }
-    #end
+    // デバッグ機能の更新
+    _updateDebug();
   }
 
   /**
@@ -104,6 +87,18 @@ class FieldState extends FlxState {
    **/
   public function setBattleResult(ret:Int):Void {
     _retBattle = ret;
+  }
+
+  private function _updateDebug():Void {
+    #if neko
+    if(FlxG.keys.justPressed.R) {
+      FlxG.resetState();
+    }
+    if(FlxG.keys.justPressed.ESCAPE) {
+      throw "Terminate.";
+    }
+    #end
+
   }
 }
 
