@@ -14,6 +14,8 @@ python xls2csv.py message.xlsx ../assets/data/csv
 python xls2csv.py item.xlsx ../assets/data/csv header_item.txt
 # スキル
 python xls2csv.py skill.xlsx ../assets/data/csv header_skill.txt
+# 出現アイテム
+python xls2csv.py field.xlsx ../assets/data/csv header_item.txt
 # イベントメッセージ
 #python xls2csv.py event.xlsx ../assets/events
 # 実績

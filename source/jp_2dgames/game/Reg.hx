@@ -54,6 +54,7 @@ class Reg {
   public static inline var PATH_CSV_UI_MSG          = "assets/data/csv/ui.csv";
   public static inline var PATH_CSV_SKILL_NORMAL    = "assets/data/csv/skill.csv";
   public static inline var PATH_CSV_SKILL_AUTO      = "assets/data/csv/skill_auto.csv";
+  public static inline var PATH_CSV_FIELD_ITEM      = "assets/data/csv/field_item.csv";
 
   // セーブデータ保存先
   public static inline var PATH_SAVE = "/Users/syun/Desktop/TournRPG/save.txt";
