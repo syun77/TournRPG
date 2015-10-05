@@ -1,7 +1,6 @@
 package jp_2dgames.game.gui;
 import jp_2dgames.lib.Snd;
 import flixel.FlxState;
-import flixel.FlxState;
 import flixel.ui.FlxButton;
 import flixel.text.FlxText;
 import jp_2dgames.game.MyColor;

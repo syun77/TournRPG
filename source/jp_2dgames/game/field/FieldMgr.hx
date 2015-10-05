@@ -2,9 +2,6 @@ package jp_2dgames.game.field;
 
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.state.FieldSubState;
-import jp_2dgames.game.gui.InventoryUI;
-import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
-import jp_2dgames.game.actor.Actor;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
 import jp_2dgames.game.state.FieldState;
