@@ -2,8 +2,6 @@ package jp_2dgames.game.state;
 
 import flixel.FlxG;
 import flixel.FlxState;
-import jp_2dgames.game.skill.SkillConst;
-import jp_2dgames.game.skill.SkillData;
 
 /**
  * ゲーム開始シーン

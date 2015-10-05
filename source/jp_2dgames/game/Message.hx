@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.FlxState;
 import jp_2dgames.lib.CsvLoader;
 import flixel.group.FlxGroup;
 import flixel.util.FlxTimer;
@@ -96,7 +97,22 @@ class Message extends FlxGroup {
   private static inline var TIMER_DISAPPEAR:Float = 5;
 
   // インスタンス
+  private static var _instancePrev:Message = null;
   public static var instance:Message = null;
+  public static function createInstance(csv:CsvLoader, state:FlxState):Void {
+    instance = new Message(csv);
+    state.add(instance);
+  }
+  public static function destroyInstance(state:FlxState):Void {
+    state.remove(instance);
+    instance = _instancePrev;
+  }
+  public static function createInstancePush(csv:CsvLoader, state:FlxState):Void {
+    // 現在のインスタンスをテンポラリに移動
+    _instancePrev = instance;
+    instance = new Message(csv);
+    state.add(instance);
+  }
 
   // メッセージの追加
   public static function push(msg:String, color:Int=FlxColor.WHITE) {

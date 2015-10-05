@@ -1,5 +1,10 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.lib.CsvLoader;
+import jp_2dgames.game.state.FieldSubState;
+import jp_2dgames.game.gui.InventoryUI;
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
+import jp_2dgames.game.actor.Actor;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
 import jp_2dgames.game.state.FieldState;
@@ -71,6 +76,16 @@ class FieldMgr {
     _line = new RectLine(8);
     flxState.add(_line);
 
+    // メッセージ
+    var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
+    Message.createInstance(csv, _flxState);
+
+    // アイテムメニュー
+    // TODO:
+    var btnItem = new MyButton(0, 0, "Item", function() {
+      _flxState.openSubState(new FieldSubState());
+    });
+    flxState.add(btnItem);
   }
 
   /**

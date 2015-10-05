@@ -145,6 +145,7 @@ class ItemUtil {
    * @param bMsg  使用メッセージを表示するかどうか
    **/
   public static function use(actor:Actor, item:ItemData, bMsg:Bool=true):Void {
+
     switch(item.type) {
       case IType.Potion:
         // 薬

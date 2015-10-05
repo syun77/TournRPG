@@ -59,8 +59,7 @@ class BattleState extends FlxSubState {
 
     // メッセージウィンドウ登録
     var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
-    Message.instance = new Message(csv);
-    this.add(Message.instance);
+    Message.createInstancePush(csv, this);
 
 
     // デバッグ機能
@@ -78,7 +77,7 @@ class BattleState extends FlxSubState {
     ActorMgr.destroy();
     BtlUI.close(this);
     TempActorMgr.destroy();
-    Message.instance = null;
+    Message.destroyInstance(this);
 
     super.destroy();
   }

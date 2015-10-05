@@ -1,7 +1,6 @@
 package jp_2dgames.game.item;
 
-import jp_2dgames.game.item.ItemUtil.IType;
-import jp_2dgames.game.actor.Actor;
+import jp_2dgames.game.item.ItemUtil;
 
 /**
  * インベントリ
