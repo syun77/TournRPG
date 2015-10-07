@@ -1,21 +1,21 @@
 package jp_2dgames.game.state;
 
-import jp_2dgames.lib.Snd;
 import flixel.FlxSubState;
 import flixel.FlxG;
-import jp_2dgames.game.particle.ParticleDamage;
-import jp_2dgames.game.particle.Particle;
-import jp_2dgames.game.actor.TempActorMgr;
-import jp_2dgames.game.save.Save;
-import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.Actor;
-import jp_2dgames.game.btl.logic.BtlLogicMgr;
-import jp_2dgames.game.btl.BtlBg;
-import jp_2dgames.game.btl.BtlMgr;
-import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.DebugActor;
+import jp_2dgames.game.actor.TempActorMgr;
+import jp_2dgames.game.btl.BtlBg;
+import jp_2dgames.game.btl.BtlGroupUtil;
+import jp_2dgames.game.btl.BtlMgr;
+import jp_2dgames.game.gui.BtlUI;
+import jp_2dgames.game.btl.logic.BtlLogicMgr;
+import jp_2dgames.game.particle.ParticleDamage;
+import jp_2dgames.game.particle.Particle;
+import jp_2dgames.game.save.Save;
 import jp_2dgames.lib.CsvLoader;
+import jp_2dgames.lib.Snd;
 
 /**
  * メインゲーム

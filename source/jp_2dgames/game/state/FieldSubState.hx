@@ -40,6 +40,8 @@ class FieldSubState extends FlxSubState {
         var item = Inventory.getItem(btnID);
         ItemUtil.use(actor, item);
         Inventory.delItem(btnID);
+        // プレイヤーパラメータをグローバルに戻しておく
+        Global.setPlayerParam(actor.param);
       }
       // おしまい
       close();
