@@ -81,9 +81,9 @@ class BtlMgr {
 
     _flxState = flxState;
 
+    // プレイヤーの生成
     _player = ActorMgr.recycle(BtlGroup.Player, Global.getPlayerParam());
-    // TODO:
-    _player.setName("プレイヤー");
+    _player.setName(Global.getPlayerName());
 
     // 敵の生成
     BtlUtil.createEnemyGroup(Global.getStage());

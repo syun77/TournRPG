@@ -17,6 +17,7 @@ class Global {
 
   // ■スタティック変数
   static var _playerParam:Params = null;
+  static var _playerName:String = "プレイヤー";
   static var _stage:Int = 0;
   static var _itemList:Array<ItemData> = null;
   static var _money:Int = 0;
@@ -57,6 +58,10 @@ class Global {
   // プレイヤーパラメータの設定
   public static function setPlayerParam(param:Params):Void {
     _playerParam.copy(param);
+  }
+  // プレイヤー名の取得
+  public static function getPlayerName():String {
+    return _playerName;
   }
 
   // スキルスロットの取得

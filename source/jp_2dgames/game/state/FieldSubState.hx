@@ -1,16 +1,17 @@
 package jp_2dgames.game.state;
-import jp_2dgames.game.item.ItemData;
-import jp_2dgames.game.item.ItemUtil;
-import jp_2dgames.game.item.Inventory;
+
+import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.FlxSubState;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
-import flixel.FlxG;
-import flixel.FlxSprite;
+import jp_2dgames.game.item.ItemData;
+import jp_2dgames.game.item.ItemUtil;
+import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.gui.InventoryUI;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.Actor;
-import flixel.FlxSubState;
 
 /**
  * フィールドのサブメニュー
@@ -32,6 +33,7 @@ class FieldSubState extends FlxSubState {
 
     var actor = new Actor(0);
     actor.init(BtlGroup.Player, Global.getPlayerParam());
+    actor.setName(Global.getPlayerName());
     var cbFunc = function(btnID:Int) {
       if(btnID != InventoryUI.CMD_CANCEL) {
         // アイテムを使う
