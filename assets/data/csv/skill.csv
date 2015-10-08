@@ -6,3 +6,4 @@ int,str,str,int,int,str,str,int,int,int,int,str,int,int,int,int,int,int,int,str
 4,毒の粉,ATK_BST,,3,ENEMY_ALL,AT_POISON,1,1,,,poison,60,25,,,,,,敵全体に一定確率で毒
 5,HP回復,RECOVER,,5,FRIEND_ONE,,,,,,,,,40,,,,,HPを小回復
 6,攻撃アップ,BUFF,,7,FRIEND_ALL,,,,,,,,,,,1,,,攻撃力アップ
+7,子守歌,ATK_BST,,5,ENEMY_ALL,AT_SLEEP,1,1,,,sleep,60,,,,,,,敵全体を一定確率で眠らせる

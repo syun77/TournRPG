@@ -1,5 +1,7 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.skill.SkillData;
+import jp_2dgames.game.skill.SkillConst;
 import flixel.FlxG;
 import flixel.FlxState;
 
@@ -18,8 +20,10 @@ class PlayInitState extends FlxState {
 
     // 初期スキルを設定
     var skills = Global.getSkillSlot();
+    var skill = new SkillData(SkillConst.SKILL007);
+    skills.push(skill);
 
-//    openSubState(new BattleState());
+    openSubState(new BattleState());
   }
 
   /**
@@ -36,6 +40,6 @@ class PlayInitState extends FlxState {
     super.update();
 
     // ゲーム開始
-    FlxG.switchState(new FieldState());
+//    FlxG.switchState(new FieldState());
   }
 }

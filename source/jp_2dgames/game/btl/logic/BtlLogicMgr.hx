@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.ActorMgr;
 import haxe.ds.ArraySort;
@@ -77,6 +78,11 @@ class BtlLogicMgr {
       // 死亡チェック
       if(actor.isDead()) {
         // 死亡しているので何もしない
+        continue;
+      }
+      // バステチェック
+      if(BadStatusUtil.isActiveActor(actor) == false) {
+        // 行動不可
         continue;
       }
 

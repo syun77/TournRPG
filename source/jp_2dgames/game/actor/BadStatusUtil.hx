@@ -164,4 +164,20 @@ class BadStatusUtil {
 
     return tbl[bst];
   }
+
+  /**
+   * Actorが行動可能かどうか
+   * @return 行動可能であればtrue
+   **/
+  public static function isActiveActor(actor:Actor):Bool {
+    switch(actor.badstatus) {
+      case BadStatus.Dead, BadStatus.Sleep:
+        // 行動不可
+        return false;
+
+      default:
+        // 行動可能
+        return true;
+    }
+  }
 }
