@@ -334,6 +334,7 @@ class Actor extends FlxSprite {
     if(group == BtlGroup.Enemy) {
       // バステアイコン非表示
       _bstIcon.set(BadStatus.None);
+      trace("cure badstatus.");
     }
   }
 

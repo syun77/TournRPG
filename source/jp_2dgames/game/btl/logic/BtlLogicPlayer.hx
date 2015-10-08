@@ -316,8 +316,15 @@ class BtlLogicPlayer {
 
       case BtlLogic.Badstatus(bst):
         // バステ付着
-        target.adhereBadStatus(bst);
-        BadStatusUtil.pushMessage(bst, target.name);
+        if(bst == BadStatus.None) {
+          // 回復
+          target.cureBadStatus();
+        }
+        else {
+          // 付着
+          target.adhereBadStatus(bst);
+          BadStatusUtil.pushMessage(bst, target.name);
+        }
 
       case BtlLogic.Escape:
         // 逃走実行

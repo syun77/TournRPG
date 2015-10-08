@@ -368,7 +368,11 @@ class BtlLogicFactory {
     // 自然回復チェック
     if(Calc.cureBadstatus(actor)) {
       // バステ回復
-      actor.cureBadStatus();
+      var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
+      // 自分自身が対象
+      eft.setTarget(actor.ID);
+      eft.type = BtlLogic.Badstatus(BadStatus.None);
+      ret.add(eft);
     }
 
   return ret;
