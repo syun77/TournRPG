@@ -108,8 +108,8 @@ class BtlLogicMgr {
     // ターン終了処理
     if(bEnd == false) {
       for(actor in TempActorMgr.getAlive()) {
-        var eft = BtlLogicFactory.createTurnEnd(actor);
-        if(eft != null) {
+        var eftList = BtlLogicFactory.createTurnEnd(actor);
+        for(eft in eftList) {
           push(eft);
         }
 

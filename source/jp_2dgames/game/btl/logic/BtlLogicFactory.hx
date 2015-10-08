@@ -348,28 +348,29 @@ class BtlLogicFactory {
   /**
    * ターン終了演出の生成
    **/
-  public static function createTurnEnd(actor:Actor):BtlLogicData {
+  public static function createTurnEnd(actor:Actor):List<BtlLogicData> {
 
-    switch(actor.badstatus) {
-      case BadStatus.None:
-        // 何もしない
-        return null;
+    var ret = new List<BtlLogicData>();
 
-      case BadStatus.Poison:
-        // TODO: 10ダメージ固定
-        var val = 10;
-        var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
-        // 自分自身が対象
-        eft.setTarget(actor.ID);
-        eft.type = BtlLogic.HpDamage(val, false);
-        eft.bWaitQuick = true;
-        actor.damage(val);
-
-        return eft;
-
-      default:
-        // 何もしない
-        return null;
+    // 毒ダメージ
+    if(actor.badstatus == BadStatus.Poison) {
+      // TODO: 10ダメージ固定
+      var val = 10;
+      var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
+      // 自分自身が対象
+      eft.setTarget(actor.ID);
+      eft.type = BtlLogic.HpDamage(val, false);
+      eft.bWaitQuick = true;
+      actor.damage(val);
+      ret.add(eft);
     }
+
+    // 自然回復チェック
+    if(Calc.cureBadstatus(actor)) {
+      // バステ回復
+      actor.cureBadStatus();
+    }
+
+  return ret;
   }
 }

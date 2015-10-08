@@ -180,4 +180,23 @@ class BadStatusUtil {
         return true;
     }
   }
+
+  /**
+   * バステ自然回復の基本確率を取得
+   **/
+  public static function getCureBaseRatio(bst:BadStatus):Int {
+
+    switch(bst) {
+      case BadStatus.Dead:      return 0;  // 回復しない
+      case BadStatus.Curse:     return 40;
+      case BadStatus.Poison:    return 25;
+      case BadStatus.Paralyze:  return 30;
+      case BadStatus.Confusion: return 30;
+      case BadStatus.Weak:      return 30;
+      case BadStatus.Close:     return 30;
+      case BadStatus.Sleep:     return 40;
+      case BadStatus.Blind:     return 30;
+      case BadStatus.None:      return 0; // 回復しない
+    }
+  }
 }

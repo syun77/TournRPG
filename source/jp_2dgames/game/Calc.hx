@@ -3,6 +3,7 @@ package jp_2dgames.game;
 /**
  * 計算式
  **/
+import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.skill.SkillType;
 import jp_2dgames.game.skill.SkillUtil;
@@ -169,6 +170,20 @@ class Calc {
     if(rnd > 99) {
       rnd = 99;
     }
+    return FlxRandom.chanceRoll(rnd);
+  }
+
+  /**
+   * バステ回復チェック
+   **/
+  public static function cureBadstatus(actor:Actor):Bool {
+    var base = BadStatusUtil.getCureBaseRatio(actor.badstatus);
+    if(base == 0) {
+      // 回復しない
+      return false;
+    }
+
+    var rnd = base + (10 * actor.badstatusTurn);
     return FlxRandom.chanceRoll(rnd);
   }
 }

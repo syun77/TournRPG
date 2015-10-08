@@ -240,6 +240,9 @@ class BtlMgr {
 
       case State.TurnEnd:
         // ターン終了
+        ActorMgr.forEachAlive(function(act:Actor) {
+          act.turnEnd();
+        });
         _change(State.TurnStart);
 
       case State.BtlWin:

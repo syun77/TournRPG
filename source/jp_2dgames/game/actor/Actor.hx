@@ -144,6 +144,12 @@ class Actor extends FlxSprite {
   private function get_badstatus() {
     return _badstatus;
   }
+  // バッドステータスになってからの経過ターン数
+  private var _badstatusTurn:Int = 0;
+  public var badstatusTurn(get, never):Int;
+  private function get_badstatusTurn() {
+    return _badstatusTurn;
+  }
 
   // 中心座標を取得する
   public var xcenter(get, never):Float;
@@ -262,6 +268,7 @@ class Actor extends FlxSprite {
     _name = actor.name;
     init(actor.group, actor.param, false);
     _badstatus = actor.badstatus;
+    _badstatusTurn = actor.badstatusTurn;
   }
 
   /**
@@ -306,6 +313,8 @@ class Actor extends FlxSprite {
     if(bForce || BadStatusUtil.isAdhere(badstatus, bst)) {
       // 付着できる
       _badstatus = bst;
+      // 付着開始ターン数
+      _badstatusTurn = 0;
       if(group == BtlGroup.Enemy) {
         // バステアイコン表示
         _bstIcon.set(bst);
@@ -314,6 +323,18 @@ class Actor extends FlxSprite {
     }
 
     return false;
+  }
+
+  /**
+   * バステ回復
+   **/
+  public function cureBadStatus():Void {
+    _badstatus = BadStatus.None;
+    _badstatusTurn = 0;
+    if(group == BtlGroup.Enemy) {
+      // バステアイコン非表示
+      _bstIcon.set(BadStatus.None);
+    }
   }
 
   /**
@@ -473,5 +494,18 @@ class Actor extends FlxSprite {
     return bLevelup;
   }
 
+  /**
+   * ターン終了
+   **/
+  public function turnEnd():Void {
 
+    switch(badstatus) {
+      case BadStatus.None:
+      case BadStatus.Dead:
+        // 回復しない
+      default:
+        // バッドステータス経過ターンを進める
+        _badstatusTurn++;
+    }
+  }
 }
