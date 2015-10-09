@@ -28,7 +28,23 @@ class Calc {
    * @return 回避できたらtrue
    **/
   public static function checkHit(act:Actor, target:Actor):Bool {
-    if(FlxRandom.chanceRoll(93.7)) {
+
+    // 基本命中率
+    var base:Float = 93.7;
+    var rnd:Float  = 0;
+    if(act.badstatus == BadStatus.Blind) {
+      // 攻撃側が暗闇状態なので命中率低下
+      rnd = base - 50;
+    }
+
+    if(rnd < 1) {
+      rnd = 1;
+    }
+    if(rnd > 99) {
+      rnd = 99;
+    }
+
+    if(FlxRandom.chanceRoll(rnd)) {
       // 命中した
       return true;
     }
