@@ -8,3 +8,4 @@ int,str,str,int,int,str,str,int,int,int,int,str,int,int,int,int,int,int,int,str
 6,攻撃アップ,BUFF,,7,FRIEND_ALL,,,,,,,,,,,1,,,攻撃力アップ
 7,子守歌,ATK_BST,,5,ENEMY_ALL,AT_SLEEP,1,1,,,sleep,60,,,,,,,敵全体を一定確率で眠らせる
 8,目つぶし,ATK_BST,,5,ENEMY_ONE,AT_BLIND,1,1,,,blind,60,,,,,,,相手を暗闇状態にする
+9,サイレント,ATK_BST,,5,ENEMY_ONE,AT_CLOSE,1,1,,,close,60,,,,,,,相手のスキルを封印する
