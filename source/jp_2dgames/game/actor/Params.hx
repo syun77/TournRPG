@@ -17,6 +17,12 @@ class Params {
   public var mag:Int   = 5;   // 魔力
   public var xp:Int    = 0;   // 経験値
   public var money:Int = 0;   // 所持金
+  public var buffAtk:Int = 0; // バフ・攻撃力
+  public var buffDef:Int = 0; // バフ・守備力
+  public var buffHit:Int = 0; // バフ・命中率
+  public var debuffAtk:Int = 0; // デバフ・攻撃力
+  public var debuffDef:Int = 0; // デバフ・守備力
+  public var debuffHit:Int = 0; // デバフ・命中率
 
   public function new() {
   }
@@ -34,5 +40,12 @@ class Params {
     mag   = p.mag;
     xp    = p.xp;
     money = p.money;
+
+    buffAtk = p.buffAtk;
+    buffDef = p.buffDef;
+    buffHit = p.buffHit;
+    debuffAtk = p.debuffAtk;
+    debuffDef = p.debuffDef;
+    debuffHit = p.debuffHit;
   }
 }
