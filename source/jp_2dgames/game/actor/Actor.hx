@@ -122,6 +122,11 @@ class Actor extends FlxSprite {
   private function get_agi() {
     return _param.agi;
   }
+  // 魔力
+  public var mag(get, never):Int;
+  private function get_mag() {
+    return _param.mag;
+  }
 
   // 所持金
   public var money(get, never):Int;

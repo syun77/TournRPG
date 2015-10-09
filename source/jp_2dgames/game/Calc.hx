@@ -31,7 +31,7 @@ class Calc {
 
     // 基本命中率
     var base:Float = 93.7;
-    var rnd:Float  = 0;
+    var rnd:Float  = base;
     if(act.badstatus == BadStatus.Blind) {
       // 攻撃側が暗闇状態なので命中率低下
       rnd = base - 50;
@@ -130,6 +130,9 @@ class Calc {
     return _clamp(val);
   }
 
+  /**
+   * スキルによるダメージ値を計算する
+   **/
   public static function damageSkill(skillID:Int, act:Actor, target:Actor):Int {
 
     var val:Float = 0;
@@ -169,6 +172,38 @@ class Calc {
 
         // ダメージ量を計算
         val = (power * str_rate * power_rate);
+
+      case SkillType.AtkMagical:
+        // 魔法攻撃
+        if(checkHit(act, target) == false) {
+          // 外れ
+          return MISS_DAMAGE;
+        }
+
+        // 攻撃側の魔力
+        var mag1 = act.mag;
+        // 対象側の魔力
+        var mag2 = target.mag;
+        // 攻撃力
+        var atk = SkillUtil.getParam(skillID, "pow") * 0.2;
+        // 防御力
+        var def = 0;
+        if(target.group == BtlGroup.Enemy) {
+          def = _getEnemyDef(target);
+        }
+
+        // 威力
+        var power = atk + (mag1 * 0.4) + BASE_ATK;
+        // 真係数
+        var mag_rate = Math.pow(1.02, mag1 - mag2);
+        // 威力係数
+        var power_rate = Math.pow(1.015, atk - mag2 - def);
+
+        trace('power: ${power} mag_rate:${mag_rate} pow_rate:${power_rate}');
+
+        // ダメージ量を計算
+        val = (power * mag_rate * power_rate);
+
       default:
         throw "未実装のスキル種別: " + type;
     }
