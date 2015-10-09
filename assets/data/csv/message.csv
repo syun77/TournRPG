@@ -33,3 +33,6 @@ int,str,str
 31,HPが足りない,yellow
 32,TPが足りない,yellow
 33,しかし逃げることはできなかった,yellow
+34,<val1>は眠っている,white
+35,<val1>のスキルは封印されている,white
+36,<val1>は痺れて動けない,white

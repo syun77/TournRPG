@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.gui.BtlCharaUI;
+import jp_2dgames.game.btl.types.BtlCmd;
 import jp_2dgames.game.skill.SkillAttr;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 enum BadStatus {
@@ -174,6 +176,16 @@ class BadStatusUtil {
       case BadStatus.Dead, BadStatus.Sleep:
         // 行動不可
         return false;
+
+      case BadStatus.Close:
+        switch(actor.cmd) {
+          case BtlCmd.Skill:
+            // 封印状態ではスキルが使えない
+            return false;
+
+          default:
+            return true;
+        }
 
       default:
         // 行動可能

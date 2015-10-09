@@ -83,6 +83,8 @@ class BtlLogicMgr {
       // バステチェック
       if(BadStatusUtil.isActiveActor(actor) == false) {
         // 行動不可
+        var eft = BtlLogicFactory.createDeactive(actor);
+        push(eft);
         continue;
       }
 
