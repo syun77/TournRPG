@@ -3,6 +3,8 @@ package jp_2dgames.game;
 /**
  * 計算式
  **/
+import jp_2dgames.game.item.ItemUtil;
+import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.skill.SkillType;
@@ -80,11 +82,23 @@ class Calc {
     return Math.ceil(ret);
   }
 
-  private static function _getEnemyAtk(act:Actor):Int {
-    return act.str * 2;
+  private static function _getAtk(act:Actor):Int {
+    if(act.group == BtlGroup.Player) {
+      var weapon = Inventory.getWeapon();
+      return ItemUtil.getAtk(weapon);
+    }
+    else {
+      return act.str * 2;
+    }
   }
-  private static function _getEnemyDef(act:Actor):Int {
-    return act.vit * 2;
+  private static function _getDef(act:Actor):Int {
+    if(act.group == BtlGroup.Player) {
+      var armor = Inventory.getArmor();
+      return ItemUtil.getDef(armor);
+    }
+    else {
+      return act.vit * 2;
+    }
   }
 
   /**
@@ -103,15 +117,9 @@ class Calc {
     // 耐久力
     var vit = target.vit;
     // 攻撃力
-    var atk = 0;
-    if(act.group == BtlGroup.Enemy) {
-      atk = _getEnemyAtk(act);
-    }
+    var atk = _getAtk(act);
     // 防御力
-    var def = 0;
-    if(target.group == BtlGroup.Enemy) {
-      def = _getEnemyDef(target);
-    }
+    var def = _getDef(target);
 
     // 威力
     var power = str + (atk * 0.4) + BASE_ATK;
@@ -122,7 +130,7 @@ class Calc {
     // 威力係数 (装備アイテムの差)
     var power_rate = Math.pow(1.015, atk - def);
 
-    //    trace('power: ${power} str_rate:${str_rate} pow_rate:${power_rate}');
+//    trace('power: ${power} str_rate:${str_rate} pow_rate:${power_rate}');
 
     // ダメージ量を計算
     var val:Float = (power * str_rate * power_rate);
@@ -153,10 +161,7 @@ class Calc {
         // 攻撃力
         var atk = SkillUtil.getParam(skillID, "pow") * 0.2;
         // 防御力
-        var def = 0;
-        if(target.group == BtlGroup.Enemy) {
-          def = _getEnemyDef(target);
-        }
+        var def = _getDef(target);
 
         // 威力
         //var power = str + (atk * 0.4) + BASE_ATK;
@@ -187,10 +192,7 @@ class Calc {
         // 攻撃力
         var atk = SkillUtil.getParam(skillID, "pow") * 0.2;
         // 防御力
-        var def = 0;
-        if(target.group == BtlGroup.Enemy) {
-          def = _getEnemyDef(target);
-        }
+        var def = _getDef(target);
 
         // 威力
         var power = atk + (mag1 * 0.4) + BASE_ATK;
@@ -199,7 +201,7 @@ class Calc {
         // 威力係数
         var power_rate = Math.pow(1.015, atk - mag2 - def);
 
-        trace('power: ${power} mag_rate:${mag_rate} pow_rate:${power_rate}');
+//        trace('power: ${power} mag_rate:${mag_rate} pow_rate:${power_rate}');
 
         // ダメージ量を計算
         val = (power * mag_rate * power_rate);
