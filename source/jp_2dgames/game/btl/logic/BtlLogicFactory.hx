@@ -375,6 +375,28 @@ class BtlLogicFactory {
       ret.add(eft);
     }
 
-  return ret;
+    return ret;
+  }
+
+  /**
+   * 行動不能演出の生成
+   **/
+  public static function createDeactive(actor:Actor):BtlLogicData {
+    var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
+    switch(actor.badstatus) {
+      case BadStatus.Sleep:
+        eft.type = BtlLogic.Message2(Msg.SLEEPING, [actor.name]);
+
+      case BadStatus.Close:
+        eft.type = BtlLogic.Message2(Msg.CLOSING, [actor.name]);
+
+      case BadStatus.Paralyze:
+        eft.type = BtlLogic.Message2(Msg.PARALYZING, [actor.name]);
+
+      default:
+        throw 'この状態で行動不能になることはない ${actor.name}, ${actor.badstatus}';
+    }
+
+    return eft;
   }
 }
