@@ -19,15 +19,17 @@ def main():
 
     # 関数定義
     funcs = args[1]
+    # 定数定義
+    defines = args[2]
     # 入力ファイル
-    infile = args[2]
+    infile = args[3]
     # 出力ファイル
-    outfile = args[3]
+    outfile = args[4]
 
     # 字句解析する
     parser = MyParser(
         Lexer(LexerReader(infile)),
-        funcs)
+        funcs, defines)
     # 構文解析する
     parser.parse(outfile)
 

@@ -7,13 +7,15 @@ cd `dirname $0`
 tool=../tools/adv/gmadv.py
 # 関数定義
 funcDef=define_functions.h
+# 定数定義
+defines=../header_skill.txt
 # 入力フォルダ
 inputDir=./
 # 出力フォルダ
 outDir=../../assets/data/ai/
 
 # コンバート実行
-python conv_ai.py $tool $funcDef $inputDir $outDir
+python conv_ai.py $tool $funcDef $defines $inputDir $outDir
 
 #read Wait
 

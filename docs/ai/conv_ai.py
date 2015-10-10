@@ -6,9 +6,9 @@ import sys
 import glob
 
 def usage():
-	print "Usage: conv_ai.py [gmadv.py] [define_functions.h] [input_dir] [output_dir]"
+	print "Usage: conv_ai.py [gmadv.py] [define_functions.h] [define_consts.txt] [input_dir] [output_dir]"
 
-def main(tool, fFuncDef, inputDir, outDir):
+def main(tool, fFuncDef, fDefines, inputDir, outDir):
 	# *.txtを取得
 	txtList = glob.glob("%s*.txt"%inputDir)
 
@@ -16,8 +16,8 @@ def main(tool, fFuncDef, inputDir, outDir):
 		fInput = txt
 		fOut   = outDir + txt.replace(inputDir, "").replace(".txt", ".csv")
 
-		cmd = "python %s %s %s %s"%(
-			tool, fFuncDef, fInput, fOut)
+		cmd = "python %s %s %s %s %s"%(
+			tool, fFuncDef, fDefines, fInput, fOut)
 		print cmd
 		os.system(cmd)
 
@@ -33,9 +33,11 @@ if __name__ == '__main__':
 	tool = args[1]
 	# 関数定義
 	fFuncDef = args[2]
+	# 定数定義
+	fDefines = args[3]
 	# 入力フォルダ
-	inputDir = args[3]
+	inputDir = args[4]
 	# 出力フォルダ
-	outDir = args[4]
+	outDir = args[5]
 
-	main(tool, fFuncDef, inputDir, outDir)
+	main(tool, fFuncDef, fDefines, inputDir, outDir)

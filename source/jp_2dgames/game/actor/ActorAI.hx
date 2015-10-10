@@ -48,6 +48,7 @@ class ActorAI {
 
     var tbl = [
       "ACT_ATTACK" => _ACT_ATTACK,
+      "ACT_SKILL"  => _ACT_SKILL,
       "SEL_RND"    => _SEL_RND,
       "LOG"        => _LOG,
     ];
@@ -73,6 +74,9 @@ class ActorAI {
     }
   }
 
+  /**
+   * 通常攻撃
+   **/
   private function _ACT_ATTACK(param:Array<String>):Int {
     if(_bLog) {
       trace("[AI] Action Attack");
@@ -87,6 +91,31 @@ class ActorAI {
 
     return AdvScript.RET_CONTINUE;
   }
+
+  /**
+   * スキル発動
+   **/
+  private function _ACT_SKILL(param:Array<String>):Int {
+    var p0 = _script.popStack();
+
+    var skillID = p0;
+    if(_bLog) {
+      trace('[AI] Action Skill(${skillID})');
+    }
+
+    switch(_target) {
+      case AITarget.Random:
+        var group = BtlGroupUtil.getAgaint(_actor.group);
+        var target = ActorMgr.random(group);
+        _cmd = BtlCmd.Skill(skillID, BtlRange.One, target.ID);
+    }
+
+    return AdvScript.RET_CONTINUE;
+  }
+
+  /**
+   * ランダム選択
+   **/
   private function _SEL_RND(param:Array<String>):Int {
     if(_bLog) {
       trace("[AI] Target Random");

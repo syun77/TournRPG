@@ -9,6 +9,7 @@ Created on 2014/01/18
 import re
 import shlex
 import string
+import yaml
 
 from lexer     import *
 from writer    import Writer
@@ -42,7 +43,7 @@ from node.primitive.primitive import parsePrivitiveSettings, Primitive
 
 class MyParser:
     """ 構文解析クラス """
-    def __init__(self, lexer, funcfile):
+    def __init__(self, lexer, funcfile, defines):
         self.nLevel = 0 # ノードの深さ
         self.lexer = lexer
         # グローバルシンボルをロードする
@@ -63,6 +64,12 @@ class MyParser:
             "EF_SEPIA"     : Code.EF_SEPIA,
             "EF_NEGA"      : Code.EF_NEGA
         }
+        for fDefine in defines.split(","):
+            f = open(fDefine)
+            data = yaml.load(f)["data"]
+            self.defines.update(data)
+            f.close
+
         # 特殊キーワード
         self.keywords = {
             "stat": "STAT",
