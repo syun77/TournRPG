@@ -236,6 +236,11 @@ class Calc {
       return false;
     }
 
+    if(actor.badstatusTurn == 0) {
+      // 初回ターンでは回復しない
+      return false;
+    }
+
     var rnd = base + (10 * actor.badstatusTurn);
     return FlxRandom.chanceRoll(rnd);
   }
