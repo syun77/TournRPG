@@ -151,7 +151,10 @@ class FieldMgr {
 
         // 移動先を選択した
         // 移動可能なノードを消しておく
-        FieldNode.killReachable(selNode);
+//        FieldNode.killReachable(selNode);
+        // 元のノードは何もない状態にする
+        _nowNode.setEventType(FieldEvent.None);
+        _nowNode.kill();
 
         selNode.scale.set(1, 1);
         _line.visible = false;

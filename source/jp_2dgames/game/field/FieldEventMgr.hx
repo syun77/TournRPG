@@ -121,9 +121,13 @@ class FieldEventMgr {
         // アイテム
         _change(State.Item);
 
-      case FieldEvent.None:
+      case FieldEvent.Random:
         // お金を拾う
         _change(State.Money);
+
+      case FieldEvent.None:
+        // 何も起こらない
+        _change(State.End);
 
       case FieldEvent.Start:
         throw '不正なイベントタイプ ${_evType}';

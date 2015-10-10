@@ -148,7 +148,8 @@ class FieldNode extends FlxSprite {
   private function set_reachable(b:Bool) {
     if(b) {
       // 到達できる
-      color = FlxColor.WHITE;
+//      color = FlxColor.WHITE;
+      _setColor();
     }
     else {
       // 到達できない
@@ -221,18 +222,21 @@ class FieldNode extends FlxSprite {
     var col:Int = FlxColor.WHITE;
     switch(_evType) {
       case FieldEvent.None:
+        col = FlxColor.SILVER;
+      case FieldEvent.Random:
         col = FlxColor.WHITE;
       case FieldEvent.Start:
         col = MyColor.ASE_LIGHTCYAN;
       case FieldEvent.Goal:
         col = FlxColor.CHARTREUSE;
       case FieldEvent.Enemy:
-//        col = FlxColor.SALMON;
+        col = FlxColor.SALMON;
       case FieldEvent.Item:
-//        col = FlxColor.GOLDENROD;
+        col = FlxColor.GOLDENROD;
     }
 
     loadGraphic(Reg.PATH_FIELD_NODE);
+    color = col;
   }
 }
 
