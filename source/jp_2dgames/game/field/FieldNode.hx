@@ -54,6 +54,21 @@ class FieldNode extends FlxSprite {
   }
 
   /**
+   * 条件に一致するノードを返す
+   * @return 一致するノードがなければ null
+   **/
+  public static function search(func:FieldNode->Bool):FieldNode {
+    for(n in _parent.members) {
+      if(func(n)) {
+        return n;
+      }
+    }
+
+    // 一致するノードなし
+    return null;
+  }
+
+  /**
    * 指定のノードの近くにあるノードのリストを返す
    **/
   public static function getNearestSortedList(node:FieldNode):Array<FieldNode> {
