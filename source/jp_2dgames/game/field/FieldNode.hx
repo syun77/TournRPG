@@ -69,6 +69,20 @@ class FieldNode extends FlxSprite {
   }
 
   /**
+   * ノードの存在数を計算する
+   **/
+  public static function countLiving():Int {
+    return _parent.countLiving();
+  }
+
+  /**
+   * ノードをすべて消す
+   **/
+  public static function killAll():Void {
+    _parent.forEachAlive(function(n:FieldNode) { n.kill(); });
+  }
+
+  /**
    * 指定のノードの近くにあるノードのリストを返す
    **/
   public static function getNearestSortedList(node:FieldNode):Array<FieldNode> {

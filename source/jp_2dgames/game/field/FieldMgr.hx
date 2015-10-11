@@ -105,6 +105,8 @@ class FieldMgr {
     }
   }
 
+  static var count:Int = 1;
+
   /**
    * 更新・メイン
    **/
@@ -150,11 +152,8 @@ class FieldMgr {
       if(FlxG.mouse.justPressed) {
 
         // 移動先を選択した
-        // 移動可能なノードを消しておく
-//        FieldNode.killReachable(selNode);
         // 元のノードは何もない状態にする
         _nowNode.setEventType(FieldEvent.None);
-        _nowNode.kill();
 
         selNode.scale.set(1, 1);
         _line.visible = false;
@@ -190,6 +189,11 @@ class FieldMgr {
     switch(_eventMgr.resultCode) {
       case FieldEventMgr.RET_NONE:
         // 探索を続ける
+
+        // すべてを移動不可にする
+        FieldNode.forEachAlive(function(n:FieldNode) {
+          n.reachable = false;
+        });
         // 到達可能な地点を検索
         FieldNodeUtil.addReachableNode(_nowNode);
         _nowNode.openNodes();

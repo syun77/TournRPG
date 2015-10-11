@@ -35,6 +35,9 @@ class BootState extends FlxState {
     // スキルパラメータロード
     SkillUtil.load();
 
+
+    // デバッグ有効
+    FlxG.debugger.toggleKeys = ["ALT"];
   }
 
   /**
