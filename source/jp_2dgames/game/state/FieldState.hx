@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -39,6 +40,7 @@ class FieldState extends FlxState {
 
     // 背景
     var bg = new FlxSprite().loadGraphic(Reg.PATH_FIELD_MAP);
+    bg.color = FlxColor.SILVER;
     this.add(bg);
 
     // ノード管理作成

@@ -1,5 +1,8 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.util.LineMgr;
+import flixel.util.FlxColor;
+import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.state.FieldSubState;
 import flixel.FlxG;
@@ -28,6 +31,9 @@ class FieldMgr {
   public static inline var RET_NEXTSTAGE:Int = 1;
   public static inline var RET_GAMEOVER:Int  = 2;
 
+  // 点線の最大数
+  static inline var LINE_MAX:Int = 8;
+
   // 状態
   var _state:State = State.Main;
 
@@ -38,7 +44,8 @@ class FieldMgr {
   var _nowNode:FieldNode;
 
   // 経路描画
-  var _line:RectLine;
+  var _lines:LineMgr;
+  var _lines2:LineMgr;
 
   // プレイヤートークン
   var _player:FieldPlayer;
@@ -70,16 +77,16 @@ class FieldMgr {
     _eventMgr = new FieldEventMgr(_flxState);
 
     // 経路描画
-    _line = new RectLine(8);
-    flxState.add(_line);
+    _lines2 = new LineMgr(_flxState, LINE_MAX, MyColor.ASE_PINK);
+    _lines = new LineMgr(_flxState, LINE_MAX, MyColor.ASE_LIME);
 
     // メッセージ
     var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
     Message.createInstance(csv, _flxState);
 
     // アイテムメニュー
-    // TODO:
-    var btnItem = new MyButton(0, 0, "Item", function() {
+    var label = UIMsg.get(UIMsg.CMD_ITEM);
+    var btnItem = new MyButton(0, 0, label, function() {
       _flxState.openSubState(new FieldSubState());
     });
     flxState.add(btnItem);
@@ -134,21 +141,24 @@ class FieldMgr {
       }
     });
 
-    if(selNode != null) {
-      // 選択しているノードがある
-      selNode.scale.set(1.5, 1.5);
-      // 経路描画
-      var x1 = _nowNode.xcenter;
-      var y1 = _nowNode.ycenter;
-      var x2 = selNode.xcenter;
-      var y2 = selNode.ycenter;
-      _line.drawLine(x1, y1, x2, y2);
-    }
-    else {
-      _line.visible = false;
+
+    // いったん非表示
+    _lines.visible = false;
+    _lines2.visible = false;
+
+    // 経路描画
+    for(n in _nowNode.reachableNodes) {
+      _lines.drawFromNode(_nowNode, n);
     }
 
     if(selNode != null) {
+
+      // 選択しているノードがある
+      selNode.scale.set(1.5, 1.5);
+      for(n in selNode.reachableNodes) {
+        _lines2.drawFromNode(selNode, n);
+      }
+
       if(FlxG.mouse.justPressed) {
 
         // 移動先を選択した
@@ -156,7 +166,6 @@ class FieldMgr {
         _nowNode.setEventType(FieldEvent.None);
 
         selNode.scale.set(1, 1);
-        _line.visible = false;
 
         // 選択したノードに向かって移動する
         _state = State.Moving;
@@ -194,8 +203,6 @@ class FieldMgr {
         FieldNode.forEachAlive(function(n:FieldNode) {
           n.reachable = false;
         });
-        // 到達可能な地点を検索
-        FieldNodeUtil.addReachableNode(_nowNode);
         _nowNode.openNodes();
 
         // メイン処理に戻る

@@ -1,6 +1,5 @@
 package jp_2dgames.lib;
 
-import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.group.FlxSpriteGroup;
 
@@ -8,10 +7,10 @@ import flixel.group.FlxSpriteGroup;
  * 線の描画
  **/
 class RectLine extends FlxSpriteGroup {
-  public function new(size:Int) {
+  public function new(size:Int, color:Int) {
     super();
     for(i in 0...size) {
-      var spr = new FlxSprite(0, 0).makeGraphic(2, 2, FlxColor.WHITE);
+      var spr = new FlxSprite(0, 0).makeGraphic(2, 2, color);
       this.add(spr);
     }
     visible = false;

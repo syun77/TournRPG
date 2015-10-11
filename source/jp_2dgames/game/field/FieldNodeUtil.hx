@@ -70,7 +70,9 @@ class FieldNodeUtil {
     });
 
     // 到達可能な地点を検索
-    addReachableNode(nodeStart);
+    FieldNode.forEachAlive(function(n:FieldNode) {
+      addReachableNode(n);
+    });
     nodeStart.openNodes();
 
     return nodeStart;
@@ -183,37 +185,17 @@ class FieldNodeUtil {
     // 到達可能地点をクリア
     node.reachableNodes.clear();
 
-    // 見つけたノードの数
-    var cnt:Int = 0;
-
     FieldNode.forEachAlive(function(n:FieldNode) {
       if(node.ID == n.ID) {
         // 同一ノード
         return;
       }
       var distance = FlxMath.distanceBetween(node, n);
-      if(distance < REACHABLE_DISTANCE) {
+      if(distance <= REACHABLE_DISTANCE) {
         if(node.addReachableNodes(n)) {
           // 追加できた
-          cnt++;
         }
       }
     });
-
-    if(cnt > 1) {
-      // 接続ノードが2つ以上存在したのでおしまい
-      return;
-    }
-
-    var nodes = FieldNode.getNearestSortedList(node);
-    for(n in nodes) {
-      if(node.addReachableNodes(n)) {
-        // 追加できた
-        cnt++;
-        if(cnt >= 2) {
-          break;
-        }
-      }
-    }
   }
 }
