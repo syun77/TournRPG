@@ -224,6 +224,12 @@ class BtlLogicPlayer {
         // スキル
         var name = SkillUtil.getName(id);
         Message.push2(Msg.SKILL_BEGIN, [actor.name, name]);
+        if(actor.group == BtlGroup.Enemy) {
+          // 攻撃開始エフェクト再生
+          var px = actor.xcenter;
+          var py = actor.ycenter;
+          Particle.start(PType.Ring3, px, py, FlxColor.RED);
+        }
 
       case BtlLogic.BeginItem(item):
         // アイテム
