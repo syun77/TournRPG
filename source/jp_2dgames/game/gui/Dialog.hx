@@ -63,6 +63,7 @@ class Dialog extends FlxGroup {
       // 広げる
       height = SELECT3_OFS_Y;
     }
+    var width = Std.int(FlxG.width/3); // ウィンドウサイズを固定
 
     // ウィンドウ
     var frame = new FlxSprite(px-FRAME_SIZE, py - height - FRAME_SIZE);
@@ -73,12 +74,11 @@ class Dialog extends FlxGroup {
     this.add(spr);
 
     // メッセージ
-    var text = new FlxText(px, py - 48, 0, 96);
+    var text = new FlxText(px-width, py - 48, width*2);
     text.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-    text.text = msg;
     // 中央揃え
-    var width = text.textField.textWidth;
-    text.x = px - width / 2;
+    text.alignment = "center";
+    text.text = msg;
     text.scrollFactor.set(0, 0);
     this.add(text);
 
