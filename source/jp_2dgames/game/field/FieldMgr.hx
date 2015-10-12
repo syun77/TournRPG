@@ -165,7 +165,7 @@ class FieldMgr {
         _lines2.drawFromNode(selNode, n);
       }
 
-      if(FlxG.mouse.justReleased) {
+      if(FlxG.mouse.justPressed) {
 
         // 移動先を選択した
         // 元のノードは何もない状態にする
