@@ -126,6 +126,14 @@ class FieldMgr {
     var selNode:FieldNode = null;
     FieldNode.forEachAlive(function(node:FieldNode) {
       node.scale.set(1, 1);
+
+      #if mobile
+      if(FlxG.mouse.pressed == false) {
+        // タップしていない場合は判定不要
+        return;
+      }
+      #end
+
       if(node.reachable == false) {
         // 移動できないところは選べない
         return;
@@ -159,7 +167,7 @@ class FieldMgr {
         _lines2.drawFromNode(selNode, n);
       }
 
-      if(FlxG.mouse.justPressed) {
+      if(FlxG.mouse.justReleased) {
 
         // 移動先を選択した
         // 元のノードは何もない状態にする
