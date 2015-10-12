@@ -242,6 +242,52 @@ class BtlLogicFactory {
             // TODO:
             throw 'Not implements range(${range})';
         }
+
+      case SkillType.Recover:
+        // 回復
+        switch(range) {
+          case BtlRange.Self:
+            // 自分自身
+            ret.add(_createRecover(actor, skillID, actor.group, actor));
+
+          case BtlRange.One:
+            // 単体
+            ret.add(_createRecover(actor, skillID, actor.group, target));
+
+          case BtlRange.Group:
+            // グループ
+            TempActorMgr.forEachAliveGroup(target.group, function(act:Actor) {
+              ret.add(_createRecover(actor, skillID, actor.group, act));
+            });
+
+          default:
+            // TODO:
+            throw 'Not implements range(${range})';
+        }
+
+      case SkillType.Buff:
+        // バフ
+        switch(range) {
+          case BtlRange.Self:
+            // 自分自身
+            ret.add(_createBuff(actor, skillID, actor.group, actor));
+
+          case BtlRange.One:
+            // 単体
+            ret.add(_createBuff(actor, skillID, actor.group, target));
+
+          case BtlRange.Group:
+            // グループ
+            TempActorMgr.forEachAliveGroup(target.group, function(act:Actor) {
+              ret.add(_createBuff(actor, skillID, actor.group, act));
+            });
+
+          default:
+            // TODO:
+            throw 'Not implements range(${range})';
+        }
+
+
       default:
         FlxG.log.warn('Invalid SkillType "${SkillType}"');
     }
@@ -284,6 +330,43 @@ class BtlLogicFactory {
 
     // バステ付着
     target.adhereBadStatus(bst);
+
+    return eft;
+  }
+
+  /**
+   * 回復
+   **/
+  private static function _createRecover(actor:Actor, skillID:Int, group:BtlGroup, target:Actor):BtlLogicData {
+    var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
+    eft.setTarget(target.ID);
+    var hp = SkillUtil.getParam(skillID, "rec");
+    if(hp > 0) {
+      var v = Calc.recoverHp(actor, hp);
+      eft.type = BtlLogic.HpRecover(v);
+
+      // HP回復
+      target.recoverHp(v);
+    }
+
+    return eft;
+  }
+
+  /**
+   * バフ
+   **/
+  private static function _createBuff(actor:Actor, skillID:Int, group:BtlGroup, target:Actor):BtlLogicData {
+    var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
+    eft.setTarget(target.ID);
+    var atk = SkillUtil.getParam(skillID, "buff_atk");
+    var def = SkillUtil.getParam(skillID, "buff_def");
+    var spd = SkillUtil.getParam(skillID, "buff_spd");
+    eft.type = BtlLogic.Buff(atk, def, spd);
+
+    // バフ・デバフ
+    target.addBuffAtk(atk);
+    target.addBuffDef(def);
+    target.addBuffSpd(spd);
 
     return eft;
   }

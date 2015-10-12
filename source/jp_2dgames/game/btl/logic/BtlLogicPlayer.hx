@@ -332,6 +332,12 @@ class BtlLogicPlayer {
           BadStatusUtil.pushMessage(bst, target.name);
         }
 
+      case BtlLogic.Buff(atk, def, spd):
+        // バフ
+        target.addBuffAtk(atk);
+        target.addBuffDef(def);
+        target.addBuffSpd(spd);
+
       case BtlLogic.Escape:
         // 逃走実行
 

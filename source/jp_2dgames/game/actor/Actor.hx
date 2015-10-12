@@ -155,6 +155,28 @@ class Actor extends FlxSprite {
   private function get_badstatusTurn() {
     return _badstatusTurn;
   }
+  // バフ
+  public var buffAtk(get, never):Int;
+  private function get_buffAtk() {
+    return _param.buffAtk;
+  }
+  public var buffDef(get, never):Int;
+  private function get_buffDef() {
+    return _param.buffDef;
+  }
+  public var buffSpd(get, never):Int;
+  private function get_buffSpd() {
+    return _param.buffSpd;
+  }
+  public function addBuffAtk(v:Int):Void {
+    _param.buffAtk += v;
+  }
+  public function addBuffDef(v:Int):Void {
+    _param.buffDef += v;
+  }
+  public function addBuffSpd(v:Int):Void {
+    _param.buffSpd += v;
+  }
 
   // 中心座標を取得する
   public var xcenter(get, never):Float;

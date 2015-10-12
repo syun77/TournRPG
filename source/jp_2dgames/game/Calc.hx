@@ -105,7 +105,7 @@ class Calc {
    * ダメージ計算式
    * @return ダメージ量。回避された場合は「-1」
    **/
-  public static function damage(act:Actor, target:Actor):Int {
+  public static function damage(act:Actor, target:Actor, power_skill:Int=0):Int {
 
     if(checkHit(act, target) == false) {
       // 外れ
@@ -123,6 +123,9 @@ class Calc {
 
     // 威力
     var power = str + (atk * 0.4) + BASE_ATK;
+    if(power_skill > 0) {
+      power = power_skill;
+    }
 
     // 力係数 (基礎体力の差)
     var str_rate = Math.pow(1.02, str - vit);
@@ -130,10 +133,15 @@ class Calc {
     // 威力係数 (装備アイテムの差)
     var power_rate = Math.pow(1.015, atk - def);
 
+    // 攻撃力アップ係数
+    var buffAtk_rate = Math.pow(1.5, act.buffAtk);
+    // 守備力アップ係数
+    var buffDef_rate = Math.pow(0.5, act.buffDef);
+
 //    trace('power: ${power} str_rate:${str_rate} pow_rate:${power_rate}');
 
     // ダメージ量を計算
-    var val:Float = (power * str_rate * power_rate);
+    var val:Float = (power * str_rate * power_rate) * buffAtk_rate * buffDef_rate;
 
     return _clamp(val);
   }
@@ -154,29 +162,9 @@ class Calc {
           return MISS_DAMAGE;
         }
 
-        // 力
-        var str = act.str;
-        // 耐久力
-        var vit = target.vit;
-        // 攻撃力
-        var atk = SkillUtil.getParam(skillID, "pow") * 0.2;
-        // 防御力
-        var def = _getDef(target);
-
         // 威力
-        //var power = str + (atk * 0.4) + BASE_ATK;
-        var power = str + atk + BASE_ATK;
-
-        // 力係数 (基礎体力の差)
-        var str_rate = Math.pow(1.02, str - vit);
-
-        // 威力係数 (装備アイテムの差)
-        var power_rate = Math.pow(1.015, atk - def);
-
-//        trace('power: ${power} str_rate:${str_rate} pow_rate:${power_rate}');
-
-        // ダメージ量を計算
-        val = (power * str_rate * power_rate);
+        var power = SkillUtil.getParam(skillID, "pow") * 0.2;
+        val = damage(act, target, Std.int(power));
 
       case SkillType.AtkMagical:
         // 魔法攻撃
@@ -243,5 +231,15 @@ class Calc {
 
     var rnd = base + (10 * actor.badstatusTurn);
     return FlxRandom.chanceRoll(rnd);
+  }
+
+  /**
+   * HP回復値
+   **/
+  public static function recoverHp(actor:Actor, val:Int):Int {
+    var base:Int = 10;
+    var ret = base + (val * actor.mag * 0.2);
+
+    return Std.int(ret);
   }
 }

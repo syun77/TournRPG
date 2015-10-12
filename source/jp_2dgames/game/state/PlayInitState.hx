@@ -19,11 +19,11 @@ class PlayInitState extends FlxState {
     Global.init();
 
     // 初期スキルを設定
-//    var skills = Global.getSkillSlot();
-//    var skill = new SkillData(SkillConst.SKILL008);
-//    skills.push(skill);
+    var skills = Global.getSkillSlot();
+    var skill = new SkillData(SkillConst.SKILL002);
+    skills.push(skill);
 
-//    openSubState(new BattleState());
+    openSubState(new BattleState());
   }
 
   /**
@@ -40,6 +40,6 @@ class PlayInitState extends FlxState {
     super.update();
 
     // ゲーム開始
-    FlxG.switchState(new FieldState());
+//    FlxG.switchState(new FieldState());
   }
 }

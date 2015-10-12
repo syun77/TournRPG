@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.skill.SkillRange;
 import flixel.FlxState;
 import flixel.ui.FlxButton;
 import jp_2dgames.game.skill.SkillData;
@@ -184,6 +185,37 @@ class BtlCmdUI extends FlxSpriteGroup {
    **/
   private function _skill(actor:Actor, cbFunc:Actor->BtlCmd->Void, skill:SkillData):Void {
 
+    // 攻撃対象範囲
+    var range = SkillUtil.toRange(skill.id);
+
+    // 自分自身が対象かどうかチェック
+    var bSelf = false;
+    switch(range) {
+      case SkillRange.Self, SkillRange.FriendOne, SkillRange.FriendAll:
+        // 自分自身
+        bSelf = true;
+
+      default:
+        // 敵が対象
+        bSelf = false;
+    }
+
+    if(bSelf) {
+      // 自分自身
+      // バトル用の範囲
+      var btlRange = SkillUtil.rangeToBtlRange(range);
+      cbFunc(actor, BtlCmd.Skill(skill.id, btlRange, actor.ID));
+    }
+    else {
+      // 敵が対象
+      _skillTargetEnemy(actor, cbFunc, skill);
+    }
+
+    visible = false;
+  }
+
+  private function _skillTargetEnemy(actor:Actor, cbFunc:Actor->BtlCmd->Void, skill:SkillData):Void {
+
     // 対象グループ取得
     var group = BtlGroupUtil.getAgaint(actor.group);
     // 攻撃対象範囲
@@ -203,7 +235,6 @@ class BtlCmdUI extends FlxSpriteGroup {
       cbFunc(actor, BtlCmd.Skill(skill.id, btlRange, targetID));
     }, group, btlRange);
 
-    visible = false;
   }
 
   /**
