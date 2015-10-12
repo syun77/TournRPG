@@ -1,5 +1,7 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.BtlUI;
+import jp_2dgames.game.gui.BtlCharaUI;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -25,7 +27,7 @@ class FieldSubState extends FlxSubState {
     super.create();
 
     // 黒色の背景
-    var bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+    var bg = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.CHARCOAL);
     bg.alpha = 0;
     bg.scrollFactor.set();
     this.add(bg);
@@ -46,6 +48,10 @@ class FieldSubState extends FlxSubState {
       // おしまい
       close();
     };
+
+    // UI表示
+    var charUI = new BtlCharaUI(0, BtlUI.CHARA_Y, actor);
+    this.add(charUI);
 
     // インベントリを開く
     InventoryUI.open(this, cbFunc, actor);

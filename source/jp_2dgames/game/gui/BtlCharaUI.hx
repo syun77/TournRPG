@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.game.particle.Particle;
 import flixel.util.FlxColorUtil;
@@ -140,6 +141,9 @@ class BtlCharaUI extends FlxSpriteGroup {
     return _actorID;
   }
 
+  // Actor
+  var _actor:Actor = null;
+
   // 中心座標
   public var xcenter(get, never):Float;
   private function get_xcenter() {
@@ -153,10 +157,11 @@ class BtlCharaUI extends FlxSpriteGroup {
   /**
    * コンストラクタ
    **/
-  public function new(X:Float, Y:Float) {
+  public function new(X:Float, Y:Float, actor:Actor=null) {
     super(X, Y);
     _xstart = X;
     _ystart = Y;
+    _actor  = actor;
 
     // 背景
     _bg = new FlxSprite(0, 0).makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
@@ -300,6 +305,18 @@ class BtlCharaUI extends FlxSpriteGroup {
   }
 
   /**
+   * Actorを取得する
+   **/
+  private function _getActor():Actor {
+    if(_actor != null) {
+      // Actorのポインタを使う
+      return _actor;
+    }
+    // ActorIDから取得
+    return ActorMgr.searchAll(_actorID);
+  }
+
+  /**
    * 更新
    **/
   override public function update():Void {
@@ -313,7 +330,7 @@ class BtlCharaUI extends FlxSpriteGroup {
     // 枠の色更新
     _updateBgColor();
 
-    var actor = ActorMgr.searchAll(_actorID);
+    var actor = _getActor();
     if(actor == null) {
       return;
     }

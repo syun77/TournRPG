@@ -10,7 +10,7 @@ import flixel.group.FlxSpriteGroup;
 class BtlUI extends FlxSpriteGroup {
 
   // ■定数
-  private static inline var CHARA_Y:Int = 16;
+  public static inline var CHARA_Y:Int = 16;
 
   // ■スタティック
   static var _instance:BtlUI = null;

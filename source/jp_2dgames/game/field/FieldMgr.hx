@@ -1,14 +1,12 @@
 package jp_2dgames.game.field;
 
+import flixel.FlxG;
+import flixel.util.FlxPoint;
 import jp_2dgames.game.util.LineMgr;
-import flixel.util.FlxColor;
 import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.state.FieldSubState;
-import flixel.FlxG;
-import flixel.util.FlxPoint;
 import jp_2dgames.game.state.FieldState;
-import jp_2dgames.lib.RectLine;
 
 /**
  * 状態
