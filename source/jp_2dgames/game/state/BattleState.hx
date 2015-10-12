@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import flixel.FlxCamera;
 import flixel.FlxSubState;
 import flixel.FlxG;
 import jp_2dgames.game.actor.Actor;
@@ -80,6 +81,9 @@ class BattleState extends FlxSubState {
     Message.destroyInstance(this);
 
     super.destroy();
+
+    // カメラズームをデフォルト値に戻す
+    FlxG.camera.zoom = FlxCamera.defaultZoom;
   }
 
   /**
