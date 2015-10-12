@@ -86,7 +86,7 @@ class FieldMgr {
 
     // アイテムメニュー
     var label = UIMsg.get(UIMsg.CMD_ITEM);
-    var btnItem = new MyButton(0, 0, label, function() {
+    var btnItem = new MyButton(0, FlxG.height-MyButton.HEIGHT, label, function() {
       _flxState.openSubState(new FieldSubState());
     });
     flxState.add(btnItem);
