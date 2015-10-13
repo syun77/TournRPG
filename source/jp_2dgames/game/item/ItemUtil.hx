@@ -1,5 +1,6 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.lib.CsvLoader;
 
@@ -152,7 +153,10 @@ class ItemUtil {
         var val = ItemUtil.getParam(item.id, "hp");
         if(val > 0) {
           actor.recoverHp(val);
-          Message.push2(Msg.RECOVER_HP, [actor.name, val]);
+          if(bMsg) {
+            Message.push2(Msg.RECOVER_HP, [actor.name, val]);
+            Snd.playSe("recover");
+          }
         }
 
       default:
