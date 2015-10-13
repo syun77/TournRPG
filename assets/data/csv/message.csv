@@ -36,3 +36,9 @@ int,str,str
 34,<val1>は眠っている,white
 35,<val1>のスキルは封印されている,white
 36,<val1>は痺れて動けない,white
+37,<val1>の攻撃力がアップした,yellow
+38,<val1>の防御力力がアップした,yellow
+39,<val1>の素早さがアップした,yellow
+40,<val1>の攻撃力がダウンした,yellow
+41,<val1>の防御力力がダウンした,yellow
+42,<val1>の素早さがダウンした,yellow

@@ -1,5 +1,7 @@
 package jp_2dgames.game.field;
 
+import flixel.util.FlxColor;
+import flixel.FlxG;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.util.Generator;
 import flixel.util.FlxRandom;
@@ -59,6 +61,9 @@ class FieldEventMgr {
   // 出現アイテム
   var _csvFieldItem:CsvLoader;
 
+  // バトル終了後かどうか
+  var _bBtlEnd:Bool = false;
+
   /**
    * コンストラクタ
    **/
@@ -76,6 +81,10 @@ class FieldEventMgr {
     return _state == State.End;
   }
 
+  public function isBtlEnd():Bool {
+    return _bBtlEnd;
+  }
+
   /**
    * 状態遷移
    **/
@@ -90,6 +99,7 @@ class FieldEventMgr {
 
     _resultCode = RET_NONE;
     _evType = ev;
+    _bBtlEnd = false;
 
     switch(_evType) {
       case FieldEvent.Goal:
@@ -114,7 +124,11 @@ class FieldEventMgr {
 
           var nBtl = FlxRandom.intRanged(1, 4);
           Global.setStage(nBtl);
-          _flxState.openSubState(new BattleState());
+          FlxG.camera.fade(FlxColor.WHITE, 0.3, false, function() {
+            // フェードしてからバトル開始
+            FlxG.camera.fade(FlxColor.WHITE, 0.1, true, null, true);
+            _flxState.openSubState(new BattleState());
+          });
         });
 
       case FieldEvent.Item:
@@ -168,11 +182,13 @@ class FieldEventMgr {
 
       case BtlLogicPlayer.BTL_END_LOSE:
         // ゲームオーバー
-        _change(State.End);
         _resultCode = RET_GAMEOVER;
+        _bBtlEnd = true;
+        _change(State.End);
 
       default:
         // バトル勝利
+        _bBtlEnd = true;
         _change(State.End);
     }
   }

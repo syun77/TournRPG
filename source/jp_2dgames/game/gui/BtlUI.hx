@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import flixel.tweens.FlxTween;
+import flixel.tweens.FlxEase;
 import flixel.FlxState;
 import flixel.FlxSprite;
 import flixel.FlxG;
@@ -75,6 +77,8 @@ class BtlUI extends FlxSpriteGroup {
       var px = FlxG.width/3 * i;
       var ui = new BtlCharaUI(px, CHARA_Y);
       _charaUIList.push(ui);
+      ui.y = -48;
+      FlxTween.tween(ui, {y:CHARA_Y}, 0.5, {ease:FlxEase.expoOut});
       this.add(ui);
     }
   }

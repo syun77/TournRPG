@@ -36,4 +36,10 @@ class Msg {
   public static inline var SLEEPING:Int       = 34; // 眠っている
   public static inline var CLOSING:Int        = 35; // 封印されている
   public static inline var PARALYZING:Int     = 36; // 麻痺で動けない
+  public static inline var BUFF_ATK_UP:Int    = 37; // 攻撃力アップ
+  public static inline var BUFF_DEF_UP:Int    = 38; // 防御力アップ
+  public static inline var BUFF_SPD_UP:Int    = 39; // 素早さアップ
+  public static inline var BUFF_ATK_DOWN:Int  = 40; // 攻撃力ダウン
+  public static inline var BUFF_DEF_DOWN:Int  = 41; // 防御力ダウン
+  public static inline var BUFF_SPD_DOWN:Int  = 42; // 素早さダウン
 }

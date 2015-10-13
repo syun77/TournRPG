@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import flixel.FlxSubState;
 import flixel.FlxG;
@@ -102,7 +103,11 @@ class BattleState extends FlxSubState {
       parent.setBattleResult(_btlMgr.btlEnd);
 
       // おしまい
-      close();
+      active = false;
+      FlxG.camera.fade(FlxColor.WHITE, 0.3, false, function() {
+        FlxG.camera.fade(FlxColor.WHITE, 0.1, true, null, true);
+        close();
+      });
     }
 
     // デバッグ機能

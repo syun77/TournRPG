@@ -270,16 +270,19 @@ class BtlLogicFactory {
         switch(range) {
           case BtlRange.Self:
             // 自分自身
-            ret.add(_createBuff(actor, skillID, actor));
+            var efts = _createBuff(actor, skillID, actor);
+            for(eft in efts) { ret.add(eft); }
 
           case BtlRange.One:
             // 単体
-            ret.add(_createBuff(actor, skillID, target));
+            var efts = _createBuff(actor, skillID, target);
+            for(eft in efts) { ret.add(eft); }
 
           case BtlRange.Group:
             // グループ
             TempActorMgr.forEachAliveGroup(target.group, function(act:Actor) {
-              ret.add(_createBuff(actor, skillID, act));
+              var efts = _createBuff(actor, skillID, act);
+              for(eft in efts) { ret.add(eft); }
             });
 
           default:
@@ -355,9 +358,14 @@ class BtlLogicFactory {
   /**
    * バフ
    **/
-  private static function _createBuff(actor:Actor, skillID:Int, target:Actor):BtlLogicData {
+  private static function _createBuff(actor:Actor, skillID:Int, target:Actor):List<BtlLogicData> {
+
+    var ret = new List<BtlLogicData>();
+
+    // 効果
     var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
     eft.setTarget(target.ID);
+    eft.bWaitQuick = true;
     var atk = SkillUtil.getParam(skillID, "buff_atk");
     var def = SkillUtil.getParam(skillID, "buff_def");
     var spd = SkillUtil.getParam(skillID, "buff_spd");
@@ -368,7 +376,28 @@ class BtlLogicFactory {
     target.addBuffDef(def);
     target.addBuffSpd(spd);
 
-    return eft;
+    ret.add(eft);
+
+    if(atk > 0) {
+      ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.Message2(Msg.BUFF_ATK_UP, [target.name])));
+    }
+    if(atk < 0) {
+      ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.Message2(Msg.BUFF_ATK_DOWN, [target.name])));
+    }
+    if(def > 0) {
+      ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.Message2(Msg.BUFF_DEF_UP, [target.name])));
+    }
+    if(def < 0) {
+      ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.Message2(Msg.BUFF_DEF_DOWN, [target.name])));
+    }
+    if(spd > 0) {
+      ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.Message2(Msg.BUFF_SPD_UP, [target.name])));
+    }
+    if(spd < 0) {
+      ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.Message2(Msg.BUFF_SPD_DOWN, [target.name])));
+    }
+
+    return ret;
   }
 
   /**

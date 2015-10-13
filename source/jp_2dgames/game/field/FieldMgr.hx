@@ -1,5 +1,9 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.gui.BtlUI;
+import jp_2dgames.game.gui.BtlCharaUI;
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
+import jp_2dgames.game.actor.Actor;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxG;
@@ -57,6 +61,12 @@ class FieldMgr {
   // メニューボタン
   var _btnMenu:MyButton;
 
+  // Actor情報
+  var _actor:Actor;
+
+  // キャラUI
+  var _charaUI:BtlCharaUI;
+
   // 戻り値
   var _resultCode:Int = RET_NONE;
   public var resultCode(get, never):Int;
@@ -77,12 +87,22 @@ class FieldMgr {
     _player = new FieldPlayer();
     _flxState.add(_player);
 
+    // Actor情報を生成
+    _actor = new Actor(0);
+    _actor.init(BtlGroup.Player, Global.getPlayerParam());
+    _actor.setName(Global.getPlayerName());
+
     // イベント管理
     _eventMgr = new FieldEventMgr(_flxState);
 
     // 経路描画
     _lines2 = new LineMgr(_flxState, LINE_MAX, MyColor.ASE_PINK);
     _lines = new LineMgr(_flxState, LINE_MAX, MyColor.ASE_LIME);
+
+    // UI表示
+    _charaUI = new BtlCharaUI(0, BtlUI.CHARA_Y, _actor);
+    _flxState.add(_charaUI);
+    _appearUI();
 
     // メッセージ
     var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
@@ -94,7 +114,7 @@ class FieldMgr {
     var py = InventoryUI.BTN_CANCEL_Y + InventoryUI.BASE_OFS_Y + FlxG.height;
     _btnMenu = new MyButton(px, FlxG.height, label, function() {
       _btnMenu.visible = false;
-      _flxState.openSubState(new FieldSubState(function() {
+      _flxState.openSubState(new FieldSubState(_actor, _charaUI, function() {
         // サブメニューを閉じたときに呼び出す関数
         _btnMenu.y = FlxG.height;
         _btnMenu.visible = true;
@@ -103,6 +123,15 @@ class FieldMgr {
     });
     FlxTween.tween(_btnMenu, {y:py}, 0.5, {ease:FlxEase.expoOut});
     flxState.add(_btnMenu);
+  }
+
+  /**
+   * UI出現
+   **/
+  private function _appearUI():Void {
+    var py = BtlUI.CHARA_Y;
+    _charaUI.y = -48;
+    FlxTween.tween(_charaUI, {y:py}, 0.5, {ease:FlxEase.expoOut});
   }
 
   /**
@@ -233,6 +262,13 @@ class FieldMgr {
           n.reachable = false;
         });
         _nowNode.openNodes();
+
+        if(_eventMgr.isBtlEnd()) {
+          // バトル後のパラメータを反映
+          _actor.init(BtlGroup.Player, Global.getPlayerParam());
+          // UI表示
+          _appearUI();
+        }
 
         // メイン処理に戻る
         _state = State.Main;
