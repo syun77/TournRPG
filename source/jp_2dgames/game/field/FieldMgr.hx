@@ -109,7 +109,6 @@ class FieldMgr {
     // UI表示
     _charaUI = new BtlCharaUI(0, BtlUI.CHARA_Y, _actor);
     _flxState.add(_charaUI);
-    _appearUI();
 
     // メッセージ
     var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
@@ -118,27 +117,38 @@ class FieldMgr {
     // サブメニュー呼び出しボタン
     var label = UIMsg.get(UIMsg.MENU);
     var px = InventoryUI.BTN_CANCEL_X;
-    var py = InventoryUI.BTN_CANCEL_Y + InventoryUI.BASE_OFS_Y + FlxG.height;
-    _btnMenu = new MyButton(px, FlxG.height, label, function() {
+    _btnMenu = new MyButton(px, 0, label, function() {
       _btnMenu.visible = false;
       _flxState.openSubState(new FieldSubState(_actor, _charaUI, function() {
         // サブメニューを閉じたときに呼び出す関数
-        _btnMenu.y = FlxG.height;
-        _btnMenu.visible = true;
-        FlxTween.tween(_btnMenu, {y:py}, 0.5, {ease:FlxEase.expoOut});
+        _appearUI();
       }));
     });
-    FlxTween.tween(_btnMenu, {y:py}, 0.5, {ease:FlxEase.expoOut});
     flxState.add(_btnMenu);
+
+    // UI出現
+    _appearUI();
   }
 
   /**
    * UI出現
    **/
   private function _appearUI():Void {
-    var py = BtlUI.CHARA_Y;
-    _charaUI.y = -48;
-    FlxTween.tween(_charaUI, {y:py}, 0.5, {ease:FlxEase.expoOut});
+
+    // キャラUI
+    {
+      var py = BtlUI.CHARA_Y;
+      _charaUI.y = -48;
+      FlxTween.tween(_charaUI, {y:py}, 0.5, {ease:FlxEase.expoOut});
+    }
+
+    // サブメニューボタン
+    {
+      var py = InventoryUI.BTN_CANCEL_Y + InventoryUI.BASE_OFS_Y + FlxG.height;
+      _btnMenu.y = FlxG.height;
+      _btnMenu.visible = true;
+      FlxTween.tween(_btnMenu, {y:py}, 0.5, {ease:FlxEase.expoOut});
+    }
   }
 
   /**

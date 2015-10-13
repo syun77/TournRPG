@@ -165,7 +165,6 @@ class FieldNode extends FlxSprite {
    **/
   public function setEventType(ev:FieldEvent):Void {
     _evType = ev;
-    _setColor();
   }
 
   // 到達可能かどうか
@@ -179,11 +178,19 @@ class FieldNode extends FlxSprite {
       // 到達できる
 //      color = FlxColor.WHITE;
       _setColor();
+      alpha = 1;
     }
     else {
       // 到達できない
-      color = FlxColor.GRAY;
+      color = FlxColor.WHITE;
+      alpha = 0.5;
     }
+
+    if(evType == FieldEvent.Goal) {
+      // ゴールは常に表示
+      _setColor();
+    }
+
     _reachable = b;
     return b;
   }
@@ -228,6 +235,7 @@ class FieldNode extends FlxSprite {
   public function new(idx:Int) {
     super();
     ID = idx;
+    loadGraphic(Reg.PATH_FIELD_NODE);
     kill();
   }
 
@@ -238,7 +246,6 @@ class FieldNode extends FlxSprite {
     x = X;
     y = Y;
     _evType = evType;
-    _setColor();
 
     reachable = false;
     _reachableNodes = new List<FieldNode>();
@@ -264,7 +271,6 @@ class FieldNode extends FlxSprite {
         col = FlxColor.GOLDENROD;
     }
 
-    loadGraphic(Reg.PATH_FIELD_NODE);
     color = col;
   }
 }
