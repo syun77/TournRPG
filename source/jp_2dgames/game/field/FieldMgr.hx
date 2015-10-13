@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.lib.RectLine;
 import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.gui.BtlCharaUI;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
@@ -50,7 +51,6 @@ class FieldMgr {
 
   // 経路描画
   var _lines:LineMgr;
-  var _lines2:LineMgr;
 
   // プレイヤートークン
   var _player:FieldPlayer;
@@ -83,6 +83,14 @@ class FieldMgr {
     // マップの作成
     _nowNode = FieldNodeUtil.create();
 
+    // 経路描画
+    FieldNodeUtil.drawReachableWay(function(n1:FieldNode, n2:FieldNode) {
+      var line = new RectLine(LINE_MAX, MyColor.ASE_WHITE);
+      line.drawLine(n1.xcenter, n1.ycenter, n2.xcenter, n2.ycenter);
+      line.alpha = 0.2;
+      _flxState.add(line);
+    });
+
     // プレイヤー
     _player = new FieldPlayer();
     _flxState.add(_player);
@@ -96,7 +104,6 @@ class FieldMgr {
     _eventMgr = new FieldEventMgr(_flxState);
 
     // 経路描画
-    _lines2 = new LineMgr(_flxState, LINE_MAX, MyColor.ASE_PINK);
     _lines = new LineMgr(_flxState, LINE_MAX, MyColor.ASE_LIME);
 
     // UI表示
@@ -202,7 +209,6 @@ class FieldMgr {
 
     // いったん非表示
     _lines.visible = false;
-    _lines2.visible = false;
 
     // 経路描画
     for(n in _nowNode.reachableNodes) {
@@ -213,9 +219,6 @@ class FieldMgr {
 
       // 選択しているノードがある
       selNode.scale.set(1.5, 1.5);
-      for(n in selNode.reachableNodes) {
-        _lines2.drawFromNode(selNode, n);
-      }
 
       if(FlxG.mouse.justPressed) {
 

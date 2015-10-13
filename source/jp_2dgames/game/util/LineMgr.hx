@@ -17,6 +17,13 @@ class LineMgr {
     }
     return b;
   }
+  public var alpha(never, set):Float;
+  private function set_alpha(a:Float) {
+    for(line in _lines) {
+      line.alpha = a;
+    }
+    return a;
+  }
 
   public function new(state:FlxState, count:Int, color:Int) {
     _lines = new List<RectLine>();

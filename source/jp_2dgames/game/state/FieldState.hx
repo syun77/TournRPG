@@ -6,21 +6,11 @@ import flixel.FlxSprite;
 import flixel.FlxState;
 import jp_2dgames.game.field.FieldMgr;
 import jp_2dgames.game.field.FieldNode;
-import jp_2dgames.lib.RectLine;
 
 /**
  * フィールドシーン
  **/
 class FieldState extends FlxState {
-
-  // 現在いるノード
-  var _nowNode:FieldNode;
-
-  // 経路描画
-  var _line:RectLine;
-
-  // プレイヤートークン
-  var _token:FlxSprite;
 
   // リザルトフラグ
   var _retBattle:Int = 0;

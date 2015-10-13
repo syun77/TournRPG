@@ -1,5 +1,4 @@
 package jp_2dgames.game.field;
-import jp_2dgames.lib.Array2D;
 import flixel.util.FlxAngle;
 import flixel.util.FlxMath;
 import flixel.FlxG;
@@ -78,18 +77,6 @@ class FieldNodeUtil {
     return nodeStart;
   }
 
-  private static function createWay(layer:Array2D, xstart:Int, ystart:Int):Void {
-    var px = xstart + FlxRandom.intRanged(-2, 2);
-    var py = ystart + FlxRandom.intRanged(-2, 0);
-    if(layer.get(px, py) != 0) {
-      // すでに埋まっている
-      return;
-    }
-    layer.set(px, py, 1);
-    createWay(layer, px, py);
-
-  }
-
   /**
    * リトライが必要かどうか
    **/
@@ -126,6 +113,9 @@ class FieldNodeUtil {
     return false;
   }
 
+  /**
+   * 道を作る
+   **/
   private static function _createWay(nodeStart:FieldNode):FieldNode {
 
     var node:FieldNode = nodeStart;
@@ -195,6 +185,41 @@ class FieldNodeUtil {
         if(node.addReachableNodes(n)) {
           // 追加できた
         }
+      }
+    });
+  }
+
+  /**
+   * 移動経路の描画
+   **/
+  public static function drawReachableWay(fnDraw:FieldNode->FieldNode->Void):Void {
+
+    var map = new Map<Int, Int>();
+    FieldNode.forEachAlive(function(n1:FieldNode) {
+
+      for(n2 in n1.reachableNodes) {
+        var check = function() {
+          if(map.exists(n1.ID)) {
+            return map[n2.ID] == n2.ID;
+          }
+          if(map.exists(n2.ID)) {
+            return map[n1.ID] == n1.ID;
+          }
+
+          // 存在しない組み合わせ
+          return false;
+        }
+
+        if(check()) {
+          // すでに存在している
+          return;
+        }
+
+        // 存在していないので描画する
+        fnDraw(n1, n2);
+
+        // 描画済み
+        map[n1.ID] = n2.ID;
       }
     });
   }
