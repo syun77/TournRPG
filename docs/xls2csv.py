@@ -11,7 +11,7 @@ def conv(sheet, outFile, const):
 	print " [sheet] %s ... "%(sheet.name)
 
 	# 数値判定用正規表現オブジェクト
-	regex_num = re.compile("^\d+\.?\d*\Z")
+	regex_num = re.compile("^-?\d+\.?\d*\Z")
 
 	ROW_KEY  = 0 # 0行目はキー
 	ROW_TYPE = 1 # 1行目は型

@@ -14,7 +14,7 @@ class DebugActor extends FlxSubState {
 
   // 背景のサイズ
   static inline var BG_WIDTH:Int = 128;
-  static inline var BG_HEIGHT:Int = 12 * 12;
+  static inline var BG_HEIGHT:Int = TEXT_DY * (13 + 2);
 
   // テキストの座標
   static inline var TEXT_X:Int = 16;
@@ -32,11 +32,14 @@ class DebugActor extends FlxSubState {
   static inline var ITEM_AGI:Int   = 7;
   static inline var ITEM_XP:Int    = 8;
   static inline var ITEM_MONEY:Int = 9;
+  static inline var ITEM_BUFF_ATK:Int = 10;
+  static inline var ITEM_BUFF_DEF:Int = 11;
+  static inline var ITEM_BUFF_SPD:Int = 12;
 
   // 開始番号
   static inline var ITEM_FIRST:Int = ITEM_ID;
   // 終端番号
-  static inline var ITEM_LAST:Int  = ITEM_MONEY;
+  static inline var ITEM_LAST:Int  = ITEM_BUFF_SPD;
 
   // ページ情報
   var _nPage:Int;
@@ -62,6 +65,9 @@ class DebugActor extends FlxSubState {
   var _txtAgi:FlxText;   // 素早さ
   var _txtXp:FlxText;    // 経験値
   var _txtMoney:FlxText; // 所持金
+  var _txtBuffAtk:FlxText; // バフ・攻撃力
+  var _txtBuffDef:FlxText; // バフ・守備力
+  var _txtBuffSpd:FlxText; // バフ・素早さ
 
   /**
    * 生成
@@ -119,6 +125,16 @@ class DebugActor extends FlxSubState {
     py += TEXT_DY;
     _txtMoney = new FlxText(px, py);
     txtList.add(_txtMoney);
+    py += TEXT_DY;
+    _txtBuffAtk = new FlxText(px, py);
+    txtList.add(_txtBuffAtk);
+    py += TEXT_DY;
+    _txtBuffDef = new FlxText(px, py);
+    txtList.add(_txtBuffDef);
+    py += TEXT_DY;
+    _txtBuffSpd = new FlxText(px, py);
+    txtList.add(_txtBuffSpd);
+    py += TEXT_DY;
 
     for(txt in txtList) {
       this.add(txt);
@@ -150,6 +166,9 @@ class DebugActor extends FlxSubState {
     _txtAgi.text   = 'AGI: ${act.agi}';
     _txtXp.text    = 'XP: ${act.xp}';
     _txtMoney.text = 'MONEY: ${act.money}';
+    _txtBuffAtk.text = 'BUFF ATK: ${act.buffAtk}';
+    _txtBuffDef.text = 'BUFF DEF: ${act.buffDef}';
+    _txtBuffSpd.text = 'BUFF SPD: ${act.buffSpd}';
   }
 
   /**
@@ -275,6 +294,12 @@ class DebugActor extends FlxSubState {
         _actor.param.xp += val;
       case ITEM_MONEY:
         _actor.param.money += val;
+      case ITEM_BUFF_ATK:
+        _actor.param.buffAtk += val;
+      case ITEM_BUFF_DEF:
+        _actor.param.buffDef += val;
+      case ITEM_BUFF_SPD:
+        _actor.param.buffSpd += val;
     }
 
     // テキスト更新

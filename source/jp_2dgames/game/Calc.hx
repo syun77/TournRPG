@@ -136,9 +136,9 @@ class Calc {
     // 攻撃力アップ係数
     var buffAtk_rate = Math.pow(1.5, act.buffAtk);
     // 守備力アップ係数
-    var buffDef_rate = Math.pow(0.5, act.buffDef);
+    var buffDef_rate = Math.pow(0.5, target.buffDef);
 
-//    trace('power: ${power} str_rate:${str_rate} pow_rate:${power_rate}');
+//    trace('power: ${power} str_rate:${str_rate} pow_rate:${power_rate} buffAtk_rate:${buffAtk_rate} buffDef_rate:${buffDef_rate}');
 
     // ダメージ量を計算
     var val:Float = (power * str_rate * power_rate) * buffAtk_rate * buffDef_rate;

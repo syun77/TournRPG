@@ -113,6 +113,7 @@ class FieldEventMgr {
           _change(State.Battle);
 
           var nBtl = FlxRandom.intRanged(1, 4);
+          nBtl = 4;
           Global.setStage(nBtl);
           _flxState.openSubState(new BattleState());
         });

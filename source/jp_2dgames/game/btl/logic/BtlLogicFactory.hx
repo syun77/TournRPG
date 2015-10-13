@@ -143,7 +143,7 @@ class BtlLogicFactory {
       // 足りている
       var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.SkillCost(0, mp));
       // MPを減らす
-      actor.damage(mp);
+      actor.damageMp(mp);
 
       return eft;
     }
@@ -226,14 +226,14 @@ class BtlLogicFactory {
         switch(range) {
           case BtlRange.One:
             // 単体
-            var eft = _createBadstatus(actor, skillID, actor.group, target);
+            var eft = _createBadstatus(actor, skillID, target);
             // 演出データを追加
             ret.add(eft);
 
           case BtlRange.Group:
             // グループ
             TempActorMgr.forEachAliveGroup(target.group, function(act:Actor) {
-              var eft = _createBadstatus(actor, skillID, actor.group, act);
+              var eft = _createBadstatus(actor, skillID, act);
               // 演出データを追加
               ret.add(eft);
             });
@@ -248,16 +248,16 @@ class BtlLogicFactory {
         switch(range) {
           case BtlRange.Self:
             // 自分自身
-            ret.add(_createRecover(actor, skillID, actor.group, actor));
+            ret.add(_createRecover(actor, skillID, actor));
 
           case BtlRange.One:
             // 単体
-            ret.add(_createRecover(actor, skillID, actor.group, target));
+            ret.add(_createRecover(actor, skillID, target));
 
           case BtlRange.Group:
             // グループ
             TempActorMgr.forEachAliveGroup(target.group, function(act:Actor) {
-              ret.add(_createRecover(actor, skillID, actor.group, act));
+              ret.add(_createRecover(actor, skillID, act));
             });
 
           default:
@@ -270,16 +270,16 @@ class BtlLogicFactory {
         switch(range) {
           case BtlRange.Self:
             // 自分自身
-            ret.add(_createBuff(actor, skillID, actor.group, actor));
+            ret.add(_createBuff(actor, skillID, actor));
 
           case BtlRange.One:
             // 単体
-            ret.add(_createBuff(actor, skillID, actor.group, target));
+            ret.add(_createBuff(actor, skillID, target));
 
           case BtlRange.Group:
             // グループ
             TempActorMgr.forEachAliveGroup(target.group, function(act:Actor) {
-              ret.add(_createBuff(actor, skillID, actor.group, act));
+              ret.add(_createBuff(actor, skillID, act));
             });
 
           default:
@@ -320,7 +320,7 @@ class BtlLogicFactory {
   /**
    * バットステータス付着
    **/
-  private static function _createBadstatus(actor:Actor, skillID:Int, group:BtlGroup, target:Actor):BtlLogicData {
+  private static function _createBadstatus(actor:Actor, skillID:Int, target:Actor):BtlLogicData {
     var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
     eft.setTarget(target.ID);
     var attr = SkillUtil.toAttribute(skillID);
@@ -337,7 +337,7 @@ class BtlLogicFactory {
   /**
    * 回復
    **/
-  private static function _createRecover(actor:Actor, skillID:Int, group:BtlGroup, target:Actor):BtlLogicData {
+  private static function _createRecover(actor:Actor, skillID:Int, target:Actor):BtlLogicData {
     var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
     eft.setTarget(target.ID);
     var hp = SkillUtil.getParam(skillID, "rec");
@@ -355,7 +355,7 @@ class BtlLogicFactory {
   /**
    * バフ
    **/
-  private static function _createBuff(actor:Actor, skillID:Int, group:BtlGroup, target:Actor):BtlLogicData {
+  private static function _createBuff(actor:Actor, skillID:Int, target:Actor):BtlLogicData {
     var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
     eft.setTarget(target.ID);
     var atk = SkillUtil.getParam(skillID, "buff_atk");

@@ -19,9 +19,9 @@ class PlayInitState extends FlxState {
     Global.init();
 
     // 初期スキルを設定
-//    var skills = Global.getSkillSlot();
-//    var skill = new SkillData(SkillConst.SKILL002);
-//    skills.push(skill);
+    var skills = Global.getSkillSlot();
+    var skill = new SkillData(SkillConst.SKILL010);
+    skills.push(skill);
 
 //    openSubState(new BattleState());
   }
