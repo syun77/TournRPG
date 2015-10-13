@@ -183,12 +183,13 @@ class FieldNode extends FlxSprite {
     else {
       // 到達できない
       color = FlxColor.WHITE;
-      alpha = 0.5;
+      alpha = 0.3;
     }
 
     if(evType == FieldEvent.Goal) {
       // ゴールは常に表示
       _setColor();
+      alpha = 0.5;
     }
 
     _reachable = b;

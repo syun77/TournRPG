@@ -45,10 +45,12 @@ class FieldNodeUtil {
       var idx = FlxRandom.intRanged(0, length-1);
       var node = nodeList[idx];
       node.setEventType(FieldEvent.Goal);
+      node.reachable = false;
     }
     else {
       // 念のため
       tmpNode.setEventType(FieldEvent.Goal);
+      tmpNode.reachable = false;
     }
 
     // 0〜2:  None
