@@ -1,14 +1,15 @@
 package jp_2dgames.game.field;
 
-import jp_2dgames.game.item.Inventory;
-import jp_2dgames.game.gui.InventoryUI;
+import flixel.tweens.FlxEase;
+import flixel.tweens.FlxTween;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
-import jp_2dgames.game.util.LineMgr;
+import jp_2dgames.game.gui.InventoryUI;
 import jp_2dgames.game.gui.UIMsg;
-import jp_2dgames.lib.CsvLoader;
+import jp_2dgames.game.util.LineMgr;
 import jp_2dgames.game.state.FieldSubState;
 import jp_2dgames.game.state.FieldState;
+import jp_2dgames.lib.CsvLoader;
 
 /**
  * 状態
@@ -53,6 +54,9 @@ class FieldMgr {
   // イベント管理
   var _eventMgr:FieldEventMgr;
 
+  // メニューボタン
+  var _btnMenu:MyButton;
+
   // 戻り値
   var _resultCode:Int = RET_NONE;
   public var resultCode(get, never):Int;
@@ -84,16 +88,21 @@ class FieldMgr {
     var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
     Message.createInstance(csv, _flxState);
 
-    // アイテムメニュー
-    var label = UIMsg.get(UIMsg.CMD_ITEM);
+    // サブメニュー呼び出しボタン
+    var label = UIMsg.get(UIMsg.MENU);
     var px = InventoryUI.BTN_CANCEL_X;
     var py = InventoryUI.BTN_CANCEL_Y + InventoryUI.BASE_OFS_Y + FlxG.height;
-    var btnItem = new MyButton(px, py, label, function() {
-      _flxState.openSubState(new FieldSubState());
+    _btnMenu = new MyButton(px, FlxG.height, label, function() {
+      _btnMenu.visible = false;
+      _flxState.openSubState(new FieldSubState(function() {
+        // サブメニューを閉じたときに呼び出す関数
+        _btnMenu.y = FlxG.height;
+        _btnMenu.visible = true;
+        FlxTween.tween(_btnMenu, {y:py}, 0.5, {ease:FlxEase.expoOut});
+      }));
     });
-    trace(btnItem.x, btnItem.y);
-    trace(InventoryUI.BTN_CANCEL_X, InventoryUI.BTN_CANCEL_Y);
-    flxState.add(btnItem);
+    FlxTween.tween(_btnMenu, {y:py}, 0.5, {ease:FlxEase.expoOut});
+    flxState.add(_btnMenu);
   }
 
   /**
@@ -113,6 +122,14 @@ class FieldMgr {
 
       case State.End:
         // おしまい
+    }
+
+    // メニューボタンの更新
+    switch(_state) {
+      case State.Main:
+        _btnMenu.enable = true;
+      default:
+        _btnMenu.enable = false;
     }
   }
 

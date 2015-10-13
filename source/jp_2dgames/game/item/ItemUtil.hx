@@ -155,8 +155,8 @@ class ItemUtil {
           actor.recoverHp(val);
           if(bMsg) {
             Message.push2(Msg.RECOVER_HP, [actor.name, val]);
-            Snd.playSe("recover");
           }
+          Snd.playSe("recover");
         }
 
       default:

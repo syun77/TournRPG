@@ -28,14 +28,14 @@ class InventoryUI extends FlxSpriteGroup {
   public static inline var MODE_DROP:Int   = 1; // 捨てる
 
   // 座標
-  private static inline var BASE_X = 0;
+  public static inline var BASE_X = 0;
   public static inline var BASE_OFS_Y = -(BTN_DY*3.5)-BTN_Y;
 
   // ボタン
-  private static inline var BTN_X = Reg.BTN_OFS_X;
-  private static inline var BTN_Y = BTN_PAGE_Y + 48;
-  private static inline var BTN_DX = MyButton.WIDTH + Reg.BTN_OFS_DX;
-  private static inline var BTN_DY = MyButton.HEIGHT + Reg.BTN_OFS_DY;
+  public static inline var BTN_X = Reg.BTN_OFS_X;
+  public static inline var BTN_Y = BTN_PAGE_Y + 48;
+  public static inline var BTN_DX = MyButton.WIDTH + Reg.BTN_OFS_DX;
+  public static inline var BTN_DY = MyButton.HEIGHT + Reg.BTN_OFS_DY;
 
   // ページ切り替えボタン
   private static inline var BTN_PREV_X = Reg.BTN_OFS_X;

@@ -11,7 +11,7 @@ import flixel.util.FlxRandom;
 class FieldNodeUtil {
 
   private static inline var REACHABLE_DISTANCE:Int = 80;
-  private static inline var GOAL_Y:Int = 128;
+  private static inline var LIMIT_Y:Int = 128;
   private static inline var NEAR_DISTANCE:Int = 32;
 
   // 配置できなかったときのリトライ回数
@@ -24,7 +24,7 @@ class FieldNodeUtil {
   public static function create():FieldNode {
 
     // スタート地点
-    var nodeStart = FieldNode.add(FlxG.width/2, FlxG.height-32, FieldEvent.Start);
+    var nodeStart = FieldNode.add(FlxG.width/2, FlxG.height-60, FieldEvent.Start);
 
     var tmpNode = _createWay(nodeStart);
     _createWay(nodeStart);
@@ -169,7 +169,7 @@ class FieldNodeUtil {
       break;
     }
 
-    if(node.y > GOAL_Y) {
+    if(node.y > LIMIT_Y) {
       return _createWay(node);
     }
     else {
