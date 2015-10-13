@@ -20,13 +20,16 @@ class InventoryUI extends FlxSpriteGroup {
   // ■定数
   public static inline var CMD_CANCEL:Int = -1;
 
+  public static inline var BTN_CANCEL_X = BTN_X + (BTN_DX*2);
+  public static inline var BTN_CANCEL_Y = BTN_Y + (BTN_DY*2);
+
   // 起動モード
   public static inline var MODE_NORMAL:Int = 0; // 通常
   public static inline var MODE_DROP:Int   = 1; // 捨てる
 
   // 座標
   private static inline var BASE_X = 0;
-  private static inline var BASE_OFS_Y = -(BTN_DY*3.5)-BTN_Y;
+  public static inline var BASE_OFS_Y = -(BTN_DY*3.5)-BTN_Y;
 
   // ボタン
   private static inline var BTN_X = Reg.BTN_OFS_X;
@@ -196,8 +199,8 @@ class InventoryUI extends FlxSpriteGroup {
 
     // キャンセルボタン
     {
-      var px = BTN_X + BTN_DX*2;
-      var py = BTN_Y + BTN_DY*2;
+      var px = BTN_CANCEL_X;
+      var py = BTN_CANCEL_Y;
       var label = UIMsg.get(UIMsg.CANCEL);
       var btn = new MyButton(px, py, label, function() {
         cbFunc(CMD_CANCEL);

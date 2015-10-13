@@ -1,5 +1,7 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.item.Inventory;
+import jp_2dgames.game.gui.InventoryUI;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
 import jp_2dgames.game.util.LineMgr;
@@ -84,9 +86,13 @@ class FieldMgr {
 
     // アイテムメニュー
     var label = UIMsg.get(UIMsg.CMD_ITEM);
-    var btnItem = new MyButton(0, FlxG.height-MyButton.HEIGHT, label, function() {
+    var px = InventoryUI.BTN_CANCEL_X;
+    var py = InventoryUI.BTN_CANCEL_Y + InventoryUI.BASE_OFS_Y + FlxG.height;
+    var btnItem = new MyButton(px, py, label, function() {
       _flxState.openSubState(new FieldSubState());
     });
+    trace(btnItem.x, btnItem.y);
+    trace(InventoryUI.BTN_CANCEL_X, InventoryUI.BTN_CANCEL_Y);
     flxState.add(btnItem);
   }
 
