@@ -40,6 +40,6 @@ class PlayInitState extends FlxState {
     super.update();
 
     // ゲーム開始
-//    FlxG.switchState(new FieldState());
+    FlxG.switchState(new FieldState());
   }
 }
