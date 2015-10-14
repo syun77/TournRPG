@@ -131,7 +131,7 @@ class Global {
   }
 
   // フロア数を進める
-  public static function nextFloor(v:Int):Bool {
+  public static function nextFloor():Bool {
     if(isFloorMax()) {
       return false;
     }

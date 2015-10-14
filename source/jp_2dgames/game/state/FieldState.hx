@@ -65,8 +65,15 @@ class FieldState extends FlxState {
           FlxG.switchState(new ResultState());
 
         case FieldMgr.RET_NEXTSTAGE:
-          // TODO: 次のステージに進む
-          FlxG.switchState(new ResultState());
+          // 次のフロアに進む
+          if(Global.nextFloor()) {
+            // 次のフロアに進む
+            FlxG.switchState(new FieldState());
+          }
+          else {
+            // ゲームクリア
+            FlxG.switchState(new ResultState());
+          }
       }
     }
 
