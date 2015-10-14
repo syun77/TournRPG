@@ -12,18 +12,18 @@ import haxe.Json;
 
 // グローバル
 private class _Global {
-  public var stage:Int; // ステージ番号
-  public var money:Int; // 所持金
+  public var enemyGroup:Int; // 敵グループ番号
+  public var money:Int;      // 所持金
   public function new() {
   }
   // セーブ
   public function save() {
-    stage = Global.getStage();
-    money = Global.getMoney();
+    enemyGroup = Global.getEnemyGroup();
+    money      = Global.getMoney();
   }
   // ロード
   public function load(data:Dynamic) {
-    Global.setStage(data.stage);
+    Global.setEnemyGroup(data.enemyGroup);
     Global.setMoney(data.money);
   }
 }

@@ -86,7 +86,7 @@ class BtlMgr {
     _player.setName(Global.getPlayerName());
 
     // 敵の生成
-    BtlUtil.createEnemyGroup(Global.getStage());
+    BtlUtil.createEnemyGroup(Global.getEnemyGroup());
 
     BtlUI.setPlayerID(0, _player.ID);
 

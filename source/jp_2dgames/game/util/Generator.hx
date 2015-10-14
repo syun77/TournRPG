@@ -21,7 +21,7 @@ private class GenerateInfo {
     _sum    = 0;
 
     // アイテムの情報
-    var floor = Global.getStage();
+    var floor = Global.getEnemyGroup();
     csv.foreach(function(v:Map<String,String>) {
       var start = Std.parseInt(v.get("start"));
       var end = Std.parseInt(v.get("end"));

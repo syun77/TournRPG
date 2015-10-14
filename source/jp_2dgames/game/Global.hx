@@ -18,7 +18,7 @@ class Global {
   // ■スタティック変数
   static var _playerParam:Params = null;
   static var _playerName:String = "プレイヤー";
-  static var _stage:Int = 0;
+  static var _enemyGroup:Int = 0;
   static var _itemList:Array<ItemData> = null;
   static var _money:Int = 0;
   static var _skillList:Array<SkillData> = null;
@@ -31,8 +31,8 @@ class Global {
     // インベントリの初期化
     _initInventory();
 
-    // ステージ初期化
-    _stage = STAGE_FIRST;
+    // 敵グループ番号初期化
+    _enemyGroup = 1;
 
     // 所持金を初期化
     _money = MONEY_FIRST;
@@ -74,25 +74,13 @@ class Global {
     _skillList = slot;
   }
 
-  // ステージ番号の取得
-  public static function getStage():Int {
-    return _stage;
+  // 敵グループ番号の取得
+  public static function getEnemyGroup():Int {
+    return _enemyGroup;
   }
-  // 次のステージに進める
-  public static function nextStage():Void {
-    _stage++;
-  }
-  // 1つ前のステージに戻る
-  public static function prevStage():Void {
-    _stage--;
-  }
-  // ステージ番号の設定
-  public static function setStage(val:Int):Void {
-    _stage = val;
-  }
-  // 最大ステージかどうか
-  public static function isStageMax():Bool {
-    return _stage > 5;
+  // 敵グループ番号の設定
+  public static function setEnemyGroup(val:Int):Void {
+    _enemyGroup = val;
   }
 
   // インベントリの初期化

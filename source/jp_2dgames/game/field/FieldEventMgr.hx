@@ -123,7 +123,7 @@ class FieldEventMgr {
           _change(State.Battle);
 
           var nBtl = FlxRandom.intRanged(1, 4);
-          Global.setStage(nBtl);
+          Global.setEnemyGroup(nBtl);
           FlxG.camera.fade(FlxColor.WHITE, 0.3, false, function() {
             // フェードしてからバトル開始
             FlxG.camera.fade(FlxColor.WHITE, 0.1, true, null, true);
