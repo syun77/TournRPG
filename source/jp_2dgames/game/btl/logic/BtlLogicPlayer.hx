@@ -153,6 +153,9 @@ class BtlLogicPlayer {
       // UI全体を揺らす
       BtlUI.shake();
 
+      // ダメージ演出
+      BtlUI.damage();
+
       // パーティクルの座標取得
       px = BtlUI.getPlayerX(target.ID);
       py = BtlUI.getPlayerY(target.ID);

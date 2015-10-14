@@ -42,10 +42,6 @@ class BtlUI extends FlxSpriteGroup {
   public static function missPlayer(actorID):Void {
     _instance._missPlayer(actorID);
   }
-  // ダメージ
-  public static function damagePlayer(actorID:Int, val:Int):Void {
-    _instance._damagePlayer(actorID, val);
-  }
   // 座標取得
   public static function getPlayerX(actorID:Int):Float {
     return _instance._getPlayerX(actorID);
@@ -56,6 +52,10 @@ class BtlUI extends FlxSpriteGroup {
   // 揺らす
   public static function shake():Void {
     _instance._shake();
+  }
+  // ダメージ
+  public static function damage():Void {
+    _instance._damage();
   }
   // アクティブ
   public static function setActivePlayer(actorID:Int, b:Bool):Void {
@@ -151,22 +151,13 @@ class BtlUI extends FlxSpriteGroup {
       ui.shake();
     }
   }
+
   /**
-   * ダメージ演出開始
+   * ダメージ
    **/
-  private function _damagePlayer(actorID:Int, val:Int):Void {
-
-    // ダメージ演出
-    {
-      var ui = _getCharaUI(actorID);
-      if(ui != null) {
-        ui.damage(val);
-      }
-    }
-
-    // 全部揺らす
+  private function _damage():Void {
     for(ui in _charaUIList) {
-      ui.shake();
+      ui.damage();
     }
   }
 

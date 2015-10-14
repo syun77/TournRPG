@@ -1,8 +1,6 @@
 package jp_2dgames.game.gui;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
-import jp_2dgames.game.particle.Particle;
-import flixel.util.FlxColorUtil;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.actor.ActorMgr;
 import flixel.util.FlxColor;
@@ -20,7 +18,7 @@ class BtlCharaUI extends FlxSpriteGroup {
   // 揺れ時間
   static inline var TIMER_SHAKE:Int = 120;
   // 背景枠の色変化の時間
-  static inline var TIMER_BG_COLOR:Int = 60;
+  static inline var TIMER_BG_COLOR:Int = 45;
 
   // 全体のサイズ
   public static inline var WIDTH  = 80;
@@ -255,22 +253,7 @@ class BtlCharaUI extends FlxSpriteGroup {
   /**
    * ダメージ
    **/
-  public function damage(v:Int):Void {
-
-    // パーティクル発生
-    var px = xcenter;
-    var py = ycenter;
-    var bScroll = false;
-    Particle.start(PType.Circle, px, py, FlxColor.RED, bScroll);
-
-    // ダメージ数値
-    var px = xcenter;
-    var py = ycenter;
-    var p = ParticleDamage.start(px, py, v);
-    // スクロール無効
-    p.scrollFactor.set(0, 0);
-    // 色を変える
-    p.color = MyColor.NUM_DAMAGE;
+  public function damage():Void {
 
     // 枠を赤くする
     _changeBgColor(MyColor.PANEL_DAMAGE);
@@ -367,7 +350,11 @@ class BtlCharaUI extends FlxSpriteGroup {
   private function _updateBgColor():Void {
     if(_tBgColor > 0) {
       _tBgColor--;
-      _bg.color = FlxColorUtil.interpolateColor(_bgColor, MyColor.PANEL_NON_ACTIVE, TIMER_BG_COLOR, (TIMER_BG_COLOR - _tBgColor));
+      _bg.color = _bgColor;
+//      _bg.color = FlxColorUtil.interpolateColor(_bgColor, MyColor.PANEL_NON_ACTIVE, TIMER_BG_COLOR, (TIMER_BG_COLOR - _tBgColor));
+      if(_tBgColor == 0) {
+        _bg.color = MyColor.PANEL_NON_ACTIVE;
+      }
     }
   }
 
