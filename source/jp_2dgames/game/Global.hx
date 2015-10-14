@@ -21,6 +21,7 @@ class Global {
   static var _enemyGroup:Int = 0;
   static var _itemList:Array<ItemData> = null;
   static var _money:Int = 0;
+  static var _floor:Int = 0;
   static var _skillList:Array<SkillData> = null;
 
   public static function init():Void {
@@ -36,6 +37,9 @@ class Global {
 
     // 所持金を初期化
     _money = MONEY_FIRST;
+
+    // フロア番号を初期化
+    _floor = 1;
   }
 
   // プレイヤー情報の初期化
@@ -114,5 +118,31 @@ class Global {
   // 所持金の設定
   public static function setMoney(val:Int):Void {
     _money = val;
+  }
+
+  // フロア数を取得する
+  public static function getFloor():Int {
+    return _floor;
+  }
+
+  // フロア数を設定する
+  public static function setFloor(v:Int):Void {
+    _floor = v;
+  }
+
+  // フロア数を進める
+  public static function nextFloor(v:Int):Bool {
+    if(isFloorMax()) {
+      return false;
+    }
+
+    _floor++;
+
+    return true;
+  }
+
+  // フロア数が最大かどうか
+  public static function isFloorMax():Bool {
+    return false;
   }
 }
