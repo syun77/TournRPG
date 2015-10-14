@@ -60,6 +60,8 @@ class MyColor {
   // ■数値
   // ダメージ
   public static inline var NUM_DAMAGE = FlxColor.SILVER;
+  // 回復
+  public static inline var NUM_RECOVER = FlxColor.LIME;
   // MISS
   public static inline var NUM_MISS   = FlxColor.AQUAMARINE;
 

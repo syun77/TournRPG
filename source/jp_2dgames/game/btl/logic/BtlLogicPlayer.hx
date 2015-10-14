@@ -202,6 +202,25 @@ class BtlLogicPlayer {
     Message.push2(Msg.RECOVER_HP, [target.name, v]);
     // SE再生
     Snd.playSe("recover");
+
+    // 数値表示
+    var px:Float = 0;
+    var py:Float = 0;
+    if(target.group == BtlGroup.Player) {
+      px = BtlUI.getPlayerX(target.ID);
+      py = BtlUI.getPlayerY(target.ID);
+    }
+    else {
+      px = target.xcenter;
+      py = target.ycenter;
+    }
+    var p = ParticleDamage.start(px, py, v);
+    p.color = MyColor.NUM_RECOVER;
+    // スクロール有効・無効
+    var bScroll = (target.group == BtlGroup.Enemy);
+    if(bScroll == false) {
+      p.scrollFactor.set(0, 0);
+    }
   }
 
   /**
