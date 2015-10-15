@@ -1,5 +1,9 @@
 package jp_2dgames.game.save;
 
+import jp_2dgames.game.field.TmpFieldNode;
+import jp_2dgames.game.field.FieldNodeUtil;
+import jp_2dgames.game.field.FieldNode;
+import jp_2dgames.game.field.FieldEvent;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.ActorMgr;
@@ -14,17 +18,20 @@ import haxe.Json;
 private class _Global {
   public var enemyGroup:Int; // 敵グループ番号
   public var money:Int;      // 所持金
+  public var floor:Int;      // フロア数
   public function new() {
   }
   // セーブ
   public function save() {
     enemyGroup = Global.getEnemyGroup();
     money      = Global.getMoney();
+    floor      = Global.getFloor();
   }
   // ロード
   public function load(data:Dynamic) {
     Global.setEnemyGroup(data.enemyGroup);
     Global.setMoney(data.money);
+    Global.setFloor(data.floor);
   }
 }
 
@@ -42,9 +49,6 @@ private class _Player {
     var prms = new Params();
     prms.copy(data.params);
     Global.setPlayerParam(prms);
-    ActorMgr.forEachAliveGroup(BtlGroup.Player, function(actor:Actor) {
-      actor.param.copy(prms);
-    });
   }
 }
 
@@ -71,6 +75,50 @@ private class _Inventory {
   }
 }
 
+// ノード情報
+private class _Node {
+  public var x:Float;
+  public var y:Float;
+  public var ev:String;
+
+  public function new() {
+  }
+}
+
+// フィールド情報
+private class _Field {
+  public var array:Array<_Node>;
+
+  public function new() {
+  }
+
+  // セーブ
+  public function save() {
+    this.array = new Array<_Node>();
+    FieldNode.forEachAlive(function(node:FieldNode) {
+      var n = new _Node();
+      n.x = node.x;
+      n.y = node.y;
+      n.ev = FieldEventUtil.toString(node.evType);
+      this.array.push(n);
+    });
+  }
+  // ロード
+  public function load(data:Dynamic) {
+
+    // テンポラリに保持する
+    TmpFieldNode.create();
+
+    for(idx in 0...data.array.length) {
+      var node = data.array[idx];
+      var x:Float   = node.x;
+      var y:Float   = node.y;
+      var ev:String = node.ev;
+      TmpFieldNode.add(x, y, ev);
+    }
+  }
+}
+
 /**
  * セーブデータ
  **/
@@ -78,11 +126,13 @@ private class SaveData {
   public var global:_Global;
   public var player:_Player;
   public var inventory:_Inventory;
+  public var field:_Field;
 
   public function new() {
     global = new _Global();
     player = new _Player();
     inventory = new _Inventory();
+    field = new _Field();
   }
 
   // セーブ
@@ -90,6 +140,7 @@ private class SaveData {
     global.save();
     player.save();
     inventory.save();
+    field.save();
   }
 
   // ロード
@@ -97,6 +148,7 @@ private class SaveData {
     global.load(data.global);
     player.load(data.player);
     inventory.load(data.inventory);
+    field.load(data.field);
   }
 }
 

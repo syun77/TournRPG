@@ -69,6 +69,18 @@ class FieldNode extends FlxSprite {
   }
 
   /**
+   * スタート地点のノードを取得する
+   **/
+  public static function getStartNode():FieldNode {
+    return search(function(n:FieldNode) {
+      if(n.evType == FieldEvent.Start) {
+        return true;
+      }
+      return false;
+    });
+  }
+
+  /**
    * ノードの存在数を計算する
    **/
   public static function countLiving():Int {

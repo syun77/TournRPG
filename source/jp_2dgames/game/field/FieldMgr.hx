@@ -74,6 +74,9 @@ class FieldMgr {
     return _resultCode;
   }
 
+  // 経路の線
+  var _lineList:List<RectLine>;
+
   /**
    * コンストラクタ
    **/
@@ -81,15 +84,23 @@ class FieldMgr {
     _flxState = flxState;
 
     // マップの作成
-    _nowNode = FieldNodeUtil.create();
+    if(Global.isLoad()) {
+      // ロードしたデータを使う
+      TmpFieldNode.copyToFieldNode();
+      TmpFieldNode.destroy();
+      _nowNode = FieldNode.getStartNode();
+      _nowNode.openNodes();
+      // ロード終了
+      Global.setLoadFlag(false);
+    }
+    else {
+      // 新規作成
+      _nowNode = FieldNodeUtil.create();
+    }
 
     // 経路描画
-    FieldNodeUtil.drawReachableWay(function(n1:FieldNode, n2:FieldNode) {
-      var line = new RectLine(LINE_MAX, MyColor.ASE_WHITE);
-      line.drawLine(n1.xcenter, n1.ycenter, n2.xcenter, n2.ycenter);
-      line.alpha = 0.2;
-      _flxState.add(line);
-    });
+    _lineList = new List<RectLine>();
+    createWayLine();
 
     // プレイヤー
     _player = new FieldPlayer();
@@ -128,6 +139,29 @@ class FieldMgr {
 
     // UI出現
     _appearUI();
+  }
+
+  /**
+   * 経路の線を生成する
+   **/
+  public function createWayLine():Void {
+
+    // 登録済みの線を消す
+    for(line in _lineList) {
+      _flxState.remove(line);
+    }
+    _lineList.clear();
+
+    FieldNodeUtil.drawReachableWay(function(n1:FieldNode, n2:FieldNode) {
+      var line = new RectLine(LINE_MAX, MyColor.ASE_WHITE);
+      line.drawLine(n1.xcenter, n1.ycenter, n2.xcenter, n2.ycenter);
+      line.alpha = 0.2;
+      _lineList.add(line);
+    });
+
+    for(line in _lineList) {
+      _flxState.add(line);
+    }
   }
 
   /**

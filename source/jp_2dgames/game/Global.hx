@@ -16,6 +16,7 @@ class Global {
   static inline var MONEY_FIRST:Int = 0;
 
   // ■スタティック変数
+  static var _bLoad:Bool = false;
   static var _playerParam:Params = null;
   static var _playerName:String = "プレイヤー";
   static var _enemyGroup:Int = 0;
@@ -24,7 +25,13 @@ class Global {
   static var _floor:Int = 0;
   static var _skillList:Array<SkillData> = null;
 
+  /**
+   * 初期化
+   **/
   public static function init():Void {
+
+    // ロードフラグ初期化
+    _bLoad = false;
 
     // プレイヤー情報の初期化
     _initPlayer();
@@ -40,6 +47,17 @@ class Global {
 
     // フロア番号を初期化
     _floor = 1;
+  }
+
+  /**
+   * ロードフラグを立てる
+   **/
+  public static function setLoadFlag(b:Bool):Void {
+    _bLoad = true;
+  }
+  // ロードフラグが立っているかどうか
+  public static function isLoad():Bool {
+    return _bLoad;
   }
 
   // プレイヤー情報の初期化

@@ -15,7 +15,6 @@ import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.btl.logic.BtlLogicMgr;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.particle.Particle;
-import jp_2dgames.game.save.Save;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.lib.Snd;
 
@@ -146,14 +145,6 @@ class BattleState extends FlxSubState {
       ActorMgr.forEachAliveGroup(BtlGroup.Player, function(actor:Actor) {
         actor.recoverHp(9999);
       });
-    }
-    if(FlxG.keys.justPressed.S) {
-      // セーブ
-      Save.save(true, true);
-    }
-    if(FlxG.keys.justPressed.A) {
-      // ロード
-      Save.load(true, true);
     }
     #end
   }

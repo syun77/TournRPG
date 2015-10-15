@@ -1,11 +1,13 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.field.TmpFieldNode;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
 import jp_2dgames.game.field.FieldMgr;
 import jp_2dgames.game.field.FieldNode;
+import jp_2dgames.game.save.Save;
 
 /**
  * フィールドシーン
@@ -95,6 +97,18 @@ class FieldState extends FlxState {
     }
     if(FlxG.keys.justPressed.ESCAPE) {
       throw "Terminate.";
+    }
+    if(FlxG.keys.justPressed.S) {
+      // セーブ
+      Save.save(true, true);
+    }
+    if(FlxG.keys.justPressed.A) {
+      // ロード
+      Save.load(true, true);
+      // ロードフラグを立てる
+      Global.setLoadFlag(true);
+      // シーンをやり直し
+      FlxG.resetState();
     }
     #end
 
