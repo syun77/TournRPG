@@ -160,5 +160,8 @@ class FieldSubState extends FlxSubState {
 
     // アイテムボタンを押せるかどうかチェック
     _btnItem.enable = (Inventory.isEmpty() == false);
+
+    // メッセージ更新
+    Message.forceUpdate();
   }
 }

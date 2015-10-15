@@ -140,6 +140,11 @@ class Message extends FlxGroup {
     Message.instance._window.color = color;
   }
 
+  // 強制的に更新処理を呼び出す
+  public static function forceUpdate():Void {
+    Message.instance.update();
+  }
+
   private var _window:FlxSprite;
   private var _msgList:List<MessageText>;
 
