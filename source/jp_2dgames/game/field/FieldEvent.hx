@@ -6,7 +6,6 @@ package jp_2dgames.game.field;
 enum FieldEvent {
   None;   // 何もなし
   Random; // ランダム
-  Start;  // スタート地点
   Goal;   // ゴール地点
   Enemy;  // 敵
   Item;   // アイテム
@@ -28,7 +27,6 @@ class FieldEventUtil {
     switch(str) {
       case 'None':   return FieldEvent.None;
       case 'Random': return FieldEvent.Random;
-      case 'Start':  return FieldEvent.Start;
       case 'Goal':   return FieldEvent.Goal;
       case 'Enemy':  return FieldEvent.Enemy;
       case 'Item':   return FieldEvent.Item;

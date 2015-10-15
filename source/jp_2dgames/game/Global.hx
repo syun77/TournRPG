@@ -53,7 +53,7 @@ class Global {
    * ロードフラグを立てる
    **/
   public static function setLoadFlag(b:Bool):Void {
-    _bLoad = true;
+    _bLoad = b;
   }
   // ロードフラグが立っているかどうか
   public static function isLoad():Bool {

@@ -1,6 +1,5 @@
 package jp_2dgames.game.state;
 
-import jp_2dgames.game.field.TmpFieldNode;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -31,7 +30,7 @@ class FieldState extends FlxState {
     super.create();
 
     // 背景
-    var bg = new FlxSprite().loadGraphic(Reg.PATH_FIELD_MAP);
+    var bg = new FlxSprite().loadGraphic(Reg.getBackImagePath(1));
     bg.color = FlxColor.SILVER;
     this.add(bg);
 

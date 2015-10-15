@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.item.Inventory;
 import flixel.text.FlxText;
 import jp_2dgames.lib.RectLine;
 import jp_2dgames.game.gui.BtlUI;
@@ -66,6 +67,9 @@ class FieldMgr {
   // メニューボタン
   var _btnMenu:MyButton;
 
+  // 次のフロアに進むボタン
+  var _btnNextFloor:MyButton;
+
   // Actor情報
   var _actor:Actor;
 
@@ -108,7 +112,7 @@ class FieldMgr {
 
     // 経路描画
     _lineList = new List<RectLine>();
-    createWayLine();
+    _createWayLine();
 
     // プレイヤー
     _player = new FieldPlayer();
@@ -140,16 +144,30 @@ class FieldMgr {
     Message.createInstance(csv, _flxState);
 
     // サブメニュー呼び出しボタン
-    var label = UIMsg.get(UIMsg.MENU);
-    var px = InventoryUI.BTN_CANCEL_X;
-    _btnMenu = new MyButton(px, 0, label, function() {
-      _btnMenu.visible = false;
-      _flxState.openSubState(new FieldSubState(_actor, _charaUI, function() {
-        // サブメニューを閉じたときに呼び出す関数
-        _appearUI();
-      }));
-    });
-    flxState.add(_btnMenu);
+    {
+      var label = UIMsg.get(UIMsg.MENU);
+      var px = InventoryUI.BTN_CANCEL_X;
+      _btnMenu = new MyButton(px, 0, label, function() {
+        _hideUI();
+        _flxState.openSubState(new FieldSubState(_actor, _charaUI, function() {
+          // サブメニューを閉じたときに呼び出す関数
+          _appearUI();
+        }));
+      });
+      flxState.add(_btnMenu);
+    }
+
+    // 次のフロアに進むボタン
+    {
+      var label = UIMsg.get(UIMsg.NEXT_FLOOR);
+      var px = InventoryUI.BTN_NEXTFLOOR_X;
+      _btnNextFloor = new MyButton(px, 0, label, function() {
+        _hideUI();
+        // 次のフロアに進む
+        _gotoNextFloor();
+      });
+      flxState.add(_btnNextFloor);
+    }
 
     // UI出現
     _appearUI();
@@ -158,7 +176,7 @@ class FieldMgr {
   /**
    * 経路の線を生成する
    **/
-  public function createWayLine():Void {
+  private function _createWayLine():Void {
 
     // 登録済みの線を消す
     for(line in _lineList) {
@@ -176,6 +194,14 @@ class FieldMgr {
     for(line in _lineList) {
       _flxState.add(line);
     }
+  }
+
+  /**
+   * UI非表示
+   **/
+  private function _hideUI():Void {
+    _btnMenu.visible = false;
+    _btnNextFloor.visible = false;
   }
 
   /**
@@ -197,6 +223,22 @@ class FieldMgr {
       _btnMenu.visible = true;
       FlxTween.tween(_btnMenu, {y:py}, 0.5, {ease:FlxEase.expoOut});
     }
+
+    // 次のフロアに進むボタン
+    _appearUINextFloor();
+  }
+
+  /**
+   * 次のフロアへ進むUIを表示する
+   **/
+  private function _appearUINextFloor():Void {
+    var py = InventoryUI.BTN_CANCEL_Y + InventoryUI.BASE_OFS_Y + FlxG.height;
+    _btnNextFloor.y = FlxG.height;
+    _btnNextFloor.visible = true;
+    FlxTween.tween(_btnNextFloor, {y:py}, 0.5, {ease:FlxEase.expoOut});
+
+    // ゴールにいるときだけ表示
+    _btnNextFloor.visible = _nowNode.isGoal();
   }
 
   /**
@@ -224,6 +266,7 @@ class FieldMgr {
         _btnMenu.enable = true;
       default:
         _btnMenu.enable = false;
+        _btnNextFloor.visible = false;
     }
   }
 
@@ -253,7 +296,7 @@ class FieldMgr {
         // 移動できないところは選べない
         return;
       }
-      if(node.evType == FieldEvent.Start) {
+      if(node.isStartFlag()) {
         // スタート地点は選べない
         return;
       }
@@ -292,7 +335,8 @@ class FieldMgr {
           // イベント実行
           _state = State.Event;
           _eventMgr.start(selNode.evType);
-          selNode.setEventType(FieldEvent.Start);
+          // 開始ノードに設定
+          FieldNode.setStartNode(selNode);
           _nowNode = selNode;
         });
       }
@@ -318,11 +362,8 @@ class FieldMgr {
       case FieldEventMgr.RET_NONE:
         // 探索を続ける
 
-        // すべてを移動不可にする
-        FieldNode.forEachAlive(function(n:FieldNode) {
-          n.reachable = false;
-        });
-        _nowNode.openNodes();
+        // 移動可能なノードを開く
+        _openNodes();
 
         if(_eventMgr.isBtlEnd()) {
           // バトル後のパラメータを反映
@@ -339,11 +380,31 @@ class FieldMgr {
         _resultCode = RET_GAMEOVER;
         _state = State.End;
 
-      case FieldEventMgr.RET_NEXTSTAGE:
-        // 次のステージに進む
-        _resultCode = RET_NEXTSTAGE;
-        _state = State.End;
+      case FieldEventMgr.RET_GOAL:
+        // ゴール
+        _openNodes();
+        // 次のフロアに進むボタンを表示
+        _appearUINextFloor();
+        // メイン処理に戻る
+        _state = State.Main;
     }
+  }
+
+  private function _openNodes():Void {
+    // すべてを移動不可にする
+    FieldNode.forEachAlive(function(n:FieldNode) {
+      n.reachable = false;
+    });
+    _nowNode.openNodes();
+  }
+
+  /**
+   * 次のフロアに進む
+   **/
+  private function _gotoNextFloor():Void {
+    // 次のステージに進む
+    _resultCode = RET_NEXTSTAGE;
+    _state = State.End;
   }
 
   /**

@@ -23,7 +23,8 @@ class FieldNodeUtil {
   public static function create():FieldNode {
 
     // スタート地点
-    var nodeStart = FieldNode.add(FlxG.width/2, FlxG.height-60, FieldEvent.Start);
+    var nodeStart = FieldNode.add(FlxG.width/2, FlxG.height-60, FieldEvent.None);
+    nodeStart.setStartFlag(true);
 
     var tmpNode = _createWay(nodeStart);
     _createWay(nodeStart);

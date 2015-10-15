@@ -39,7 +39,7 @@ class FieldEventMgr {
   // ■定数
   // 返却コード
   public static inline var RET_NONE:Int      = 0;
-  public static inline var RET_NEXTSTAGE:Int = 1;
+  public static inline var RET_GOAL:Int = 1;
   public static inline var RET_GAMEOVER:Int  = 2;
 
   // 状態
@@ -104,11 +104,8 @@ class FieldEventMgr {
     switch(_evType) {
       case FieldEvent.Goal:
         // ゴールにたどり着いた
-        _change(State.OpenDialog);
-        Dialog.open(_flxState, Dialog.OK, 'ゲームクリア！', null, function(btnID) {
-          _resultCode = RET_NEXTSTAGE;
-          _change(State.End);
-        });
+        _resultCode = RET_GOAL;
+        _change(State.End);
 
       case FieldEvent.Enemy:
         // バトル
@@ -143,8 +140,6 @@ class FieldEventMgr {
         // 何も起こらない
         _change(State.End);
 
-      case FieldEvent.Start:
-        throw '不正なイベントタイプ ${_evType}';
     }
   }
 
