@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import flixel.text.FlxText;
 import jp_2dgames.lib.RectLine;
 import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.gui.BtlCharaUI;
@@ -40,6 +41,10 @@ class FieldMgr {
   // 点線の最大数
   static inline var LINE_MAX:Int = 8;
 
+  // 座標
+  static inline var TXT_FLOOR_X:Int = 8;
+  static inline var TXT_FLOOR_Y:Int = BtlUI.CHARA_Y + BtlCharaUI.HEIGHT + 4;
+
   // 状態
   var _state:State = State.Main;
 
@@ -66,6 +71,9 @@ class FieldMgr {
 
   // キャラUI
   var _charaUI:BtlCharaUI;
+
+  // フロア数
+  var _txtFloor:FlxText;
 
   // 戻り値
   var _resultCode:Int = RET_NONE;
@@ -120,6 +128,12 @@ class FieldMgr {
     // UI表示
     _charaUI = new BtlCharaUI(0, BtlUI.CHARA_Y, _actor);
     _flxState.add(_charaUI);
+
+    // フロア数
+    _txtFloor = new FlxText(TXT_FLOOR_X, TXT_FLOOR_Y);
+    _txtFloor.text = 'Floor: ${Global.getFloor()}';
+    _txtFloor.setBorderStyle(FlxText.BORDER_SHADOW);
+    _flxState.add(_txtFloor);
 
     // メッセージ
     var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
