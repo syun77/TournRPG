@@ -43,6 +43,8 @@ class Reg {
   public static inline var PATH_FIELD_PLAYER_ICON = "assets/images/field/token.png";
   // フィールドのノード
   public static inline var PATH_FIELD_NODE = "assets/images/field/node.png";
+  // メニューの背景
+  public static inline var PATH_MENU_BG = "assets/images/ui/menu_bg.png";
 
   // CSV
   public static inline var PATH_CSV_MESSAGE         = "assets/data/csv/message.csv";
