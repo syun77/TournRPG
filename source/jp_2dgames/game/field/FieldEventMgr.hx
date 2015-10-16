@@ -61,6 +61,9 @@ class FieldEventMgr {
   // 出現アイテム
   var _csvFieldItem:CsvLoader;
 
+  // 敵グループ
+  var _csvEnemyGroup:CsvLoader;
+
   // バトル終了後かどうか
   var _bBtlEnd:Bool = false;
 
@@ -71,7 +74,8 @@ class FieldEventMgr {
     _flxState = flxState;
 
     // CSV読み込み
-    _csvFieldItem = new CsvLoader(Reg.PATH_CSV_FIELD_ITEM);
+    _csvFieldItem  = new CsvLoader(Reg.PATH_CSV_FIELD_ITEM);
+    _csvEnemyGroup = new CsvLoader(Reg.PATH_CSV_ENEMY_GROUP);
   }
 
   /**
@@ -119,7 +123,7 @@ class FieldEventMgr {
           // バトル開始
           _change(State.Battle);
 
-          var nBtl = FlxRandom.intRanged(1, 4);
+          var nBtl = Generator.getEnemyGroup(_csvEnemyGroup);
           Global.setEnemyGroup(nBtl);
           FlxG.camera.fade(FlxColor.WHITE, 0.3, false, function() {
             // フェードしてからバトル開始

@@ -14,18 +14,17 @@ private class GenerateInfo {
   /**
    * コンストラクタ
    **/
-  public function new(csv:CsvLoader) {
+  public function new(csv:CsvLoader, keyForID:String) {
     // 変数初期化
     _idxs   = new Array<Int>();
     _ratios = new Array<Int>();
     _sum    = 0;
 
-    // アイテムの情報
-    var floor = Global.getEnemyGroup();
+    var floor = Global.getFloor();
     csv.foreach(function(v:Map<String,String>) {
       var start = Std.parseInt(v.get("start"));
       var end = Std.parseInt(v.get("end"));
-      var id = Std.parseInt(v.get("itemid"));
+      var id = Std.parseInt(v.get(keyForID));
       var ratio = Std.parseInt(v.get("ratio"));
       if(start <= floor && floor <= end) {
         _idxs.push(id);
@@ -65,7 +64,15 @@ class Generator {
    * アイテムを生成
    **/
   public static function getItem(csv:CsvLoader):Int {
-    var gen = new GenerateInfo(csv);
+    var gen = new GenerateInfo(csv, "itemid");
+    return gen.generate();
+  }
+
+  /**
+   * 敵グループを生成
+   **/
+  public static function getEnemyGroup(csv:CsvLoader):Int {
+    var gen = new GenerateInfo(csv, "id");
     return gen.generate();
   }
 }
