@@ -280,7 +280,6 @@ class FieldMgr {
     // プレイヤーの位置を設定
     _player.setPositionFromNode(_nowNode);
 
-    var pt = FlxPoint.get(FlxG.mouse.x, FlxG.mouse.y);
     var selNode:FieldNode = null;
     FieldNode.forEachAlive(function(node:FieldNode) {
       node.scale.set(1, 1);
@@ -301,7 +300,7 @@ class FieldMgr {
         return;
       }
 
-      if(node.overlapsPoint(pt)) {
+      if(node.overlapsMouse()) {
         // 選択した
         selNode = node;
       }

@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import flixel.FlxG;
 import haxe.ds.ArraySort;
 import flixel.util.FlxMath;
 import flixel.FlxState;
@@ -13,7 +14,8 @@ import flixel.FlxSprite;
 class FieldNode extends FlxSprite {
 
   // ■定数
-  public static inline var SIZE:Int = 32;
+  // ノードの半径
+  public static inline var RADIUS:Int = 16;
 
   // ■管理オブジェクト
   static var _parent:FlxTypedGroup<FieldNode> = null;
@@ -278,6 +280,21 @@ class FieldNode extends FlxSprite {
 
     reachable = false;
     _reachableNodes = new List<FieldNode>();
+  }
+
+  /**
+   * マウスが上に乗っているかどうか
+   **/
+  public function overlapsMouse():Bool {
+    var dx = xcenter - FlxG.mouse.x;
+    var dy = ycenter - FlxG.mouse.y;
+    if(dx*dx + dy*dy < RADIUS*RADIUS) {
+      // 乗っている
+      return true;
+    }
+
+    // 乗っていない
+    return false;
   }
 
   /**
