@@ -18,10 +18,10 @@ class EnemyInfo {
   }
 
   public static function get(id:Int, key:String):Int {
-    return _csv.getInt(id, key);
+    return _csv.searchItemInt("id", '${id}', key);
   }
   public static function getString(id:Int, key:String):String {
-    return _csv.getString(id, key);
+    return _csv.searchItem("id", '${id}', key);
   }
 
   public static function setParam(param:Params, id:Int):Void {

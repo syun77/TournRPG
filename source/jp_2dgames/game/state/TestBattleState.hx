@@ -86,7 +86,7 @@ class TestBattleState extends FlxState {
 
     for(i in 0...5) {
       var id = _csvGroup.getInt(_nEnemyGroup, 'enemy0${i+1}');
-      var name = _csvEnemy.getString(id, "name");
+      var name = _csvEnemy.searchItem("id", '${id}', "name", false);
       name = '${i+1}: ' + name;
       if(id == 0) {
         name = "";

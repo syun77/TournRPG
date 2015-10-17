@@ -1,8 +1,5 @@
 package jp_2dgames.game;
 
-/**
- * 計算式
- **/
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.actor.BadStatusUtil;
@@ -11,6 +8,10 @@ import jp_2dgames.game.skill.SkillType;
 import jp_2dgames.game.skill.SkillUtil;
 import jp_2dgames.game.actor.Actor;
 import flixel.util.FlxRandom;
+
+/**
+ * 計算式
+ **/
 class Calc {
 
   // 最大ダメージ
@@ -20,7 +21,7 @@ class Calc {
   public static inline var MISS_DAMAGE:Int = -1;
 
   // 基本攻撃力
-  static inline var BASE_ATK:Int = 2;
+  static inline var BASE_ATK:Int = 0;
 
   // ダメージのランダム補正係数
   static inline var DAMAGE_RATIO = 0.125;
