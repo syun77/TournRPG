@@ -109,6 +109,10 @@ class FieldState extends FlxState {
       // シーンをやり直し
       FlxG.resetState();
     }
+    if(FlxG.keys.justPressed.B) {
+      // バトルテストシーン
+      FlxG.switchState(new TestBattleState());
+    }
     #end
 
   }

@@ -23,7 +23,6 @@ class PlayInitState extends FlxState {
 //    var skill = new SkillData(SkillConst.SKILL010);
 //    skills.push(skill);
 
-//    openSubState(new BattleState());
   }
 
   /**

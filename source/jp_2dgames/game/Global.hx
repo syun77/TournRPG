@@ -25,6 +25,9 @@ class Global {
   static var _floor:Int = 0;
   static var _skillList:Array<SkillData> = null;
 
+  // デバッグ用
+  static var _bTestBattle:Bool = false;
+
   /**
    * 初期化
    **/
@@ -47,6 +50,9 @@ class Global {
 
     // フロア番号を初期化
     _floor = 1;
+
+    // デバッグフラグ
+    _bTestBattle = false;
   }
 
   /**
@@ -162,5 +168,15 @@ class Global {
   // フロア数が最大かどうか
   public static function isFloorMax():Bool {
     return false;
+  }
+
+
+  // ------------------------------------------
+  // ■デバッグ用
+  public static function isTestBattle():Bool {
+    return _bTestBattle;
+  }
+  public static function setTestBattle(b:Bool):Void {
+    _bTestBattle = b;
   }
 }

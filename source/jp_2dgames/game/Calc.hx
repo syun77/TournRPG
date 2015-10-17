@@ -20,7 +20,7 @@ class Calc {
   public static inline var MISS_DAMAGE:Int = -1;
 
   // 基本攻撃力
-  static inline var BASE_ATK:Int = 5;
+  static inline var BASE_ATK:Int = 2;
 
   // ダメージのランダム補正係数
   static inline var DAMAGE_RATIO = 0.125;

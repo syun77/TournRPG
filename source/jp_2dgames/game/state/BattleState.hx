@@ -98,8 +98,10 @@ class BattleState extends FlxSubState {
     if(_btlMgr.isEnd()) {
       // 戦闘終了
       // バトル終了フラグを設定
-      var parent = cast(_parentState, FieldState);
-      parent.setBattleResult(_btlMgr.btlEnd);
+      if(Global.isTestBattle() == false) {
+        var parent = cast(_parentState, FieldState);
+        parent.setBattleResult(_btlMgr.btlEnd);
+      }
 
       // おしまい
       active = false;
