@@ -135,6 +135,13 @@ class FieldNode extends FlxSprite {
     return ret;
   }
 
+  /**
+   * 表示フラグを設定する
+   **/
+  public static function setVisible(b:Bool):Void {
+    _parent.visible = b;
+  }
+
   // 中心座標
   public var xcenter(get, never):Float;
   private function get_xcenter() {

@@ -38,7 +38,7 @@ class FieldState extends FlxState {
     FieldNode.createParent(this);
 
     // フィールド管理の生成
-    _fieldMgr = new FieldMgr(this);
+    _fieldMgr = new FieldMgr(this, bg);
 
   }
 

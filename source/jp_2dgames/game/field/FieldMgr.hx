@@ -1,6 +1,8 @@
 package jp_2dgames.game.field;
 
-import jp_2dgames.game.item.Inventory;
+import flixel.util.FlxColor;
+import flixel.util.FlxSpriteUtil;
+import flixel.FlxSprite;
 import flixel.text.FlxText;
 import jp_2dgames.lib.RectLine;
 import jp_2dgames.game.gui.BtlUI;
@@ -92,7 +94,7 @@ class FieldMgr {
   /**
    * コンストラクタ
    **/
-  public function new(flxState:FieldState) {
+  public function new(flxState:FieldState, bg:FlxSprite) {
     _flxState = flxState;
 
     // マップの作成
@@ -112,7 +114,7 @@ class FieldMgr {
 
     // 経路描画
     _lineList = new List<RectLine>();
-    _createWayLine();
+    _createWayLine(bg);
 
     // プレイヤー
     _player = new FieldPlayer();
@@ -176,24 +178,12 @@ class FieldMgr {
   /**
    * 経路の線を生成する
    **/
-  private function _createWayLine():Void {
+  private function _createWayLine(bg:FlxSprite):Void {
 
-    // 登録済みの線を消す
-    for(line in _lineList) {
-      _flxState.remove(line);
-    }
-    _lineList.clear();
-
+    var ls:LineStyle = {color:0x40FFFFFF, thickness:0};
     FieldNodeUtil.drawReachableWay(function(n1:FieldNode, n2:FieldNode) {
-      var line = new RectLine(LINE_MAX, MyColor.ASE_WHITE);
-      line.drawLine(n1.xcenter, n1.ycenter, n2.xcenter, n2.ycenter);
-      line.alpha = 0.2;
-      _lineList.add(line);
+      FlxSpriteUtil.drawLine(bg, n1.xcenter, n1.ycenter, n2.xcenter, n2.ycenter, ls);
     });
-
-    for(line in _lineList) {
-      _flxState.add(line);
-    }
   }
 
   /**
@@ -202,6 +192,7 @@ class FieldMgr {
   private function _hideUI():Void {
     _btnMenu.visible = false;
     _btnNextFloor.visible = false;
+    FieldNode.setVisible(false);
   }
 
   /**
@@ -226,6 +217,8 @@ class FieldMgr {
 
     // 次のフロアに進むボタン
     _appearUINextFloor();
+
+    FieldNode.setVisible(true);
   }
 
   /**
