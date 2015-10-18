@@ -1,18 +1,19 @@
 package jp_2dgames.game.save;
 
+import jp_2dgames.game.field.TmpFieldFoe;
+import flixel.util.FlxSave;
+import jp_2dgames.game.actor.Params;
+import jp_2dgames.game.field.FieldFoe;
 import jp_2dgames.game.field.TmpFieldNode;
-import jp_2dgames.game.field.FieldNodeUtil;
 import jp_2dgames.game.field.FieldNode;
 import jp_2dgames.game.field.FieldEvent;
-import jp_2dgames.game.actor.Actor;
-import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
-import jp_2dgames.game.actor.ActorMgr;
-import flixel.util.FlxSave;
-import jp_2dgames.game.Reg;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.item.ItemData;
-import jp_2dgames.game.actor.Params;
+import jp_2dgames.game.Reg;
+
+#if neko
 import haxe.Json;
+#end
 
 // グローバル
 private class _Global {
@@ -125,6 +126,46 @@ private class _Field {
   }
 }
 
+private class _Foe {
+  public var nodeID:Int;
+  public var groupID:Int;
+  public function new() {
+  }
+}
+
+/**
+ * F.O.E.
+ **/
+private class _FoeInfo {
+  public var array:Array<_Foe>;
+
+  public function new() {
+  }
+  // セーブ
+  public function save() {
+    array = new Array<_Foe>();
+    FieldFoe.forEachAlive(function(foe:FieldFoe) {
+      var e = new _Foe();
+      e.nodeID  = foe.nodeID;
+      e.groupID = foe.groupID;
+      array.push(e);
+    });
+  }
+  // ロード
+  public function load(data:Dynamic) {
+
+    // テンポラリに保持する
+    TmpFieldFoe.create();
+
+    for(idx in 0...data.array.length) {
+      var foe = data.array[idx];
+      var nodeID:Int = foe.nodeID;
+      var groupID:Int = foe.groupID;
+      TmpFieldFoe.add(nodeID, groupID);
+    }
+  }
+}
+
 /**
  * セーブデータ
  **/
@@ -133,12 +174,14 @@ private class SaveData {
   public var player:_Player;
   public var inventory:_Inventory;
   public var field:_Field;
+  public var foe:_FoeInfo;
 
   public function new() {
     global = new _Global();
     player = new _Player();
     inventory = new _Inventory();
     field = new _Field();
+    foe = new _FoeInfo();
   }
 
   // セーブ
@@ -147,6 +190,7 @@ private class SaveData {
     player.save();
     inventory.save();
     field.save();
+    foe.save();
   }
 
   // ロード
@@ -155,6 +199,7 @@ private class SaveData {
     player.load(data.player);
     inventory.load(data.inventory);
     field.load(data.field);
+    foe.load(data.foe);
   }
 }
 

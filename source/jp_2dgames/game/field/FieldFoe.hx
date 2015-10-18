@@ -39,6 +39,13 @@ class FieldFoe extends FlxSprite {
   }
 
   /**
+   * 生存しているF.O.E.を全走査
+   **/
+  public static function forEachAlive(func:FieldFoe->Void):Void {
+    _parent.forEachAlive(func);
+  }
+
+  /**
    * 条件に一致するF.O.E.を検索
    **/
   public static function search(func:FieldFoe->Bool):FieldFoe {

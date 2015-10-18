@@ -105,13 +105,23 @@ class FieldMgr {
     // ノード管理作成
     FieldNode.createParent(_flxState);
 
+    // F.O.E.
+    FieldFoe.createParent(_flxState);
+
     // マップの作成
     if(Global.isLoad()) {
       // ロードしたデータを使う
+
+      // ノードをロード
       TmpFieldNode.copyToFieldNode();
       TmpFieldNode.destroy();
       _nowNode = FieldNode.getStartNode();
       _nowNode.openNodes();
+
+      // F.O.E.をロード
+      TmpFieldFoe.copyToFieldFoe();
+      TmpFieldFoe.destroy();
+
       // ロード終了
       Global.setLoadFlag(false);
     }
@@ -124,13 +134,10 @@ class FieldMgr {
     _lineList = new List<RectLine>();
     _createWayLine(bg);
 
-    // F.O.E.
-    FieldFoe.createParent(_flxState);
-
     // TODO: F.O.E.をひとまず出してみる
     FieldNode.forEachAlive(function(n:FieldNode) {
       if(n.evType == FieldEvent.None) {
-        FieldFoe.add(n.ID, 1);
+//        FieldFoe.add(n.ID, 1);
       }
     });
 
