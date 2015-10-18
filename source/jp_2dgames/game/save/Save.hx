@@ -10,10 +10,7 @@ import jp_2dgames.game.field.FieldEvent;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.Reg;
-
-#if neko
 import haxe.Json;
-#end
 
 // グローバル
 private class _Global {
