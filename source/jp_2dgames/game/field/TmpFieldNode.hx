@@ -8,12 +8,14 @@ private class _FieldNode {
   public var y:Float;
   public var evType:FieldEvent;
   public var bStart:Bool;
+  public var bFoot:Bool;
 
-  public function new(X:Float, Y:Float, ev:String, bStart:Bool) {
+  public function new(X:Float, Y:Float, ev:String, bStart:Bool, bFoot:Bool) {
     x = X;
     y = Y;
     evType = FieldEventUtil.fromString(ev);
     this.bStart = bStart;
+    this.bFoot  = bFoot;
   }
 }
 
@@ -42,8 +44,8 @@ class TmpFieldNode {
   /**
    * 追加
    **/
-  public static function add(x:Float, y:Float, ev:String, bStart:Bool):Void {
-    var node = new _FieldNode(x, y, ev, bStart);
+  public static function add(x:Float, y:Float, ev:String, bStart:Bool, bFoot):Void {
+    var node = new _FieldNode(x, y, ev, bStart, bFoot);
     _list.add(node);
   }
 
@@ -54,6 +56,7 @@ class TmpFieldNode {
     for(n in _list) {
       var node = FieldNode.add(n.x, n.y, n.evType);
       node.setStartFlag(n.bStart);
+      node.setFoot(n.bFoot);
     }
 
     // 到達可能な地点を検索

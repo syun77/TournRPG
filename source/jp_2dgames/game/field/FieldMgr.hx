@@ -130,7 +130,7 @@ class FieldMgr {
     // TODO: F.O.E.をひとまず出してみる
     FieldNode.forEachAlive(function(n:FieldNode) {
       if(n.evType == FieldEvent.None) {
-        FieldFoe.add(n.ID, 6);
+        FieldFoe.add(n.ID, 1);
       }
     });
 
@@ -357,6 +357,9 @@ class FieldMgr {
           // 開始ノードに設定
           FieldNode.setStartNode(selNode);
           _nowNode = selNode;
+
+          // 踏破した
+          _nowNode.setFoot(true);
         });
       }
     }

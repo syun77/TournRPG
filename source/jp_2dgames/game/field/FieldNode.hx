@@ -17,6 +17,11 @@ class FieldNode extends FlxSprite {
   // ノードの半径
   public static inline var RADIUS:Int = 16;
 
+  private static inline var ANIME_REACHABLE_NOFOOT    = "1"; // 到達可能 / 未踏破
+  private static inline var ANIME_NONREACHABLE_NOFOOT = "2"; // 到達不可 / 未踏破
+  private static inline var ANIME_REACHABLE_FOOT      = "3"; // 到達可能 / 踏破済み
+  private static inline var ANIME_NONREACHABLE_FOOT   = "4"; // 到達不可 / 踏破済み
+
   // ■管理オブジェクト
   static var _parent:FlxTypedGroup<FieldNode> = null;
 
@@ -223,21 +228,21 @@ class FieldNode extends FlxSprite {
     if(b) {
       // 到達できる
       _setColor();
-      alpha = 1;
     }
     else {
       // 到達できない
       color = FlxColor.WHITE;
-      alpha = 0.3;
     }
 
     if(isGoal()) {
       // ゴールは常に表示
       _setColor();
-      alpha = 0.5;
     }
 
     _reachable = b;
+
+    _playAnime(_reachable, _bFoot);
+
     return b;
   }
 
@@ -246,6 +251,17 @@ class FieldNode extends FlxSprite {
   public var reachableNodes(get, never):List<FieldNode>;
   private function get_reachableNodes() {
     return _reachableNodes;
+  }
+
+  // 踏破済みかどうか
+  private var _bFoot:Bool;
+  public var bFoot(get, never):Bool;
+  private function get_bFoot() {
+    return _bFoot;
+  }
+  public function setFoot(b:Bool):Void {
+    _bFoot = b;
+    _playAnime(reachable, _bFoot);
   }
 
   /**
@@ -281,8 +297,46 @@ class FieldNode extends FlxSprite {
   public function new(idx:Int) {
     super();
     ID = idx;
-    loadGraphic(Reg.PATH_FIELD_NODE);
+    loadGraphic(Reg.PATH_FIELD_NODE, true);
+    animation.add(ANIME_REACHABLE_NOFOOT,    [0], 1);
+    animation.add(ANIME_NONREACHABLE_NOFOOT, [1], 1);
+    animation.add(ANIME_REACHABLE_FOOT,      [2], 1);
+    animation.add(ANIME_NONREACHABLE_FOOT,   [3], 1);
     kill();
+
+    alpha = 0.8;
+  }
+
+  /**
+   * アニメ再生
+   * @param bReachable 到達可能かどうか
+   * @param bFoot      踏破済みかどうか
+   **/
+  public function _playAnime(bReachable:Bool, bFoot:Bool):Void {
+
+    var name:String = "";
+
+    if(bReachable) {
+      // 到達可能
+      if(bFoot) {
+        name = ANIME_REACHABLE_FOOT;
+      }
+      else {
+        name = ANIME_REACHABLE_NOFOOT;
+      }
+    }
+    else {
+      // 到達不可
+      if(bFoot) {
+        name = ANIME_NONREACHABLE_FOOT;
+      }
+      else {
+        name = ANIME_NONREACHABLE_NOFOOT;
+      }
+    }
+
+    // アニメ再生
+    animation.play(name);
   }
 
   /**
@@ -295,6 +349,7 @@ class FieldNode extends FlxSprite {
     // イベント種別を設定する
     setEventType(evType);
 
+    _bFoot = false;
     reachable = false;
     _reachableNodes = new List<FieldNode>();
   }
