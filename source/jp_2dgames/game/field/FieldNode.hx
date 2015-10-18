@@ -175,9 +175,6 @@ class FieldNode extends FlxSprite {
    **/
   public function setEventType(ev:FieldEvent):Void {
     if(_evType == FieldEvent.Goal) {
-      trace("from", _evType, "to", ev);
-    }
-    if(_evType == FieldEvent.Goal) {
       // ゴールは上書きしない
       return;
     }

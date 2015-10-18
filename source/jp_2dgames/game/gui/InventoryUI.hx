@@ -23,7 +23,7 @@ class InventoryUI extends FlxSpriteGroup {
   // 座標
   // キャンセルボタン
   public static inline var BTN_CANCEL_X = BTN_X + (BTN_DX*2);
-  public static inline var BTN_CANCEL_Y = BTN_Y + (BTN_DY*2);
+  public static inline var BTN_CANCEL_Y = BTN_Y + (BTN_DY*2) + BTN_DY/4;
   // 次のフロアに進むボタン
   public static inline var BTN_NEXTFLOOR_X = BTN_X;
   public static inline var BTN_NEXTFLOOR_Y = BTN_CANCEL_Y;
