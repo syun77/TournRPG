@@ -41,6 +41,8 @@ class Reg {
   public static inline var PATH_FIELD_MAP = "assets/images/field/field.png";
   // フィールドのプレイヤーアイコン
   public static inline var PATH_FIELD_PLAYER_ICON = "assets/images/field/token.png";
+  // フィールドのF.O.E.アイコン
+  public static inline var PATH_FIELD_FOE_ICON = "assets/images/field/foe.png";
   // フィールドのノード
   public static inline var PATH_FIELD_NODE = "assets/images/field/node.png";
   // メニューの背景

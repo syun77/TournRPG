@@ -71,6 +71,15 @@ class FieldNode extends FlxSprite {
   }
 
   /**
+   * 指定のノードIDに一致するノードを返す
+   **/
+  public static function searchFromID(nodeID:Int):FieldNode {
+    return search(function(n:FieldNode) {
+      return (n.ID == nodeID);
+    });
+  }
+
+  /**
    * スタート地点のノードを取得する
    **/
   public static function getStartNode():FieldNode {

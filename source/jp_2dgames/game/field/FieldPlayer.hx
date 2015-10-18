@@ -34,7 +34,7 @@ class FieldPlayer extends FlxSprite {
 
     var px = node.x;
     var py = node.y - height/2;
-    FlxTween.tween(this, {x:px, y:py}, 1, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {
+    FlxTween.tween(this, {x:px, y:py}, 0.5, {ease:FlxEase.sineOut, complete:function(tween:FlxTween) {
       // 移動完了
       complete();
     }});

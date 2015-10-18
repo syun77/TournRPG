@@ -94,8 +94,16 @@ class FieldMgr {
   /**
    * コンストラクタ
    **/
-  public function new(flxState:FieldState, bg:FlxSprite) {
+  public function new(flxState:FieldState) {
     _flxState = flxState;
+
+    // 背景
+    var bg = new FlxSprite().loadGraphic(Reg.getBackImagePath(1));
+    bg.color = FlxColor.SILVER;
+    _flxState.add(bg);
+
+    // ノード管理作成
+    FieldNode.createParent(_flxState);
 
     // マップの作成
     if(Global.isLoad()) {
@@ -115,6 +123,16 @@ class FieldMgr {
     // 経路描画
     _lineList = new List<RectLine>();
     _createWayLine(bg);
+
+    // F.O.E.
+    FieldFoe.createParent(_flxState);
+
+    // TODO: ひとまず出してみる
+    FieldNode.forEachAlive(function(n:FieldNode) {
+      if(n.evType == FieldEvent.None) {
+        FieldFoe.add(n.ID, 1);
+      }
+    });
 
     // プレイヤー
     _player = new FieldPlayer();

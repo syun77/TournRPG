@@ -1,8 +1,7 @@
 package jp_2dgames.game.state;
 
-import flixel.util.FlxColor;
+import jp_2dgames.game.field.FieldFoe;
 import flixel.FlxG;
-import flixel.FlxSprite;
 import flixel.FlxState;
 import jp_2dgames.game.field.FieldMgr;
 import jp_2dgames.game.field.FieldNode;
@@ -29,16 +28,8 @@ class FieldState extends FlxState {
   override public function create():Void {
     super.create();
 
-    // 背景
-    var bg = new FlxSprite().loadGraphic(Reg.getBackImagePath(1));
-    bg.color = FlxColor.SILVER;
-    this.add(bg);
-
-    // ノード管理作成
-    FieldNode.createParent(this);
-
     // フィールド管理の生成
-    _fieldMgr = new FieldMgr(this, bg);
+    _fieldMgr = new FieldMgr(this);
 
   }
 
@@ -47,6 +38,7 @@ class FieldState extends FlxState {
    */
   override public function destroy():Void {
     FieldNode.destroyParent(this);
+    FieldFoe.destroyParent(this);
 
     super.destroy();
   }

@@ -78,7 +78,7 @@ class MyButton extends FlxTypedButton<FlxText> {
   }
 
   /**
-	 * Creates a new FlxButton object with a gray background
+	 * Creates a FieldFoe FlxButton object with a gray background
 	 * and a callback function on the UI thread.
 	 *
 	 * @param	X				The X position of the button.
