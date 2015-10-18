@@ -38,6 +38,30 @@ class FieldFoe extends FlxSprite {
     return foe;
   }
 
+  /**
+   * 条件に一致するF.O.E.を検索
+   **/
+  public static function search(func:FieldFoe->Bool):FieldFoe {
+    for(foe in _parent.members) {
+      if(func(foe)) {
+        // 条件に一致
+        return foe;
+      }
+    }
+
+    // 見つからなかった
+    return null;
+  }
+
+  /**
+   * ノードIDに一致するF.O.E.を検索する
+   **/
+  public static function searchFromNodeID(nodeID:Int):FieldFoe {
+    return search(function(foe:FieldFoe) {
+      return foe.nodeID == nodeID;
+    });
+  }
+
   // ■メンバ変数
   // 現在いるノード
   private var _nodeID:Int;

@@ -67,6 +67,9 @@ class FieldEventMgr {
   // バトル終了後かどうか
   var _bBtlEnd:Bool = false;
 
+  // F.O.E.
+  var _foe:FieldFoe = null;
+
   /**
    * コンストラクタ
    **/
@@ -96,14 +99,20 @@ class FieldEventMgr {
     _state = s;
   }
 
+  private function _init(ev:FieldEvent):Void {
+    _resultCode = RET_NONE;
+    _evType = ev;
+    _bBtlEnd = false;
+
+  }
+
   /**
    * イベント開始
    **/
   public function start(ev:FieldEvent):Void {
 
-    _resultCode = RET_NONE;
-    _evType = ev;
-    _bBtlEnd = false;
+    // 初期化
+    _init(ev);
 
     switch(_evType) {
       case FieldEvent.Goal:
@@ -113,24 +122,7 @@ class FieldEventMgr {
 
       case FieldEvent.Enemy:
         // バトル
-        _change(State.OpenDialog);
-        Snd.playSe("roar");
-        // 戻り値初期化
-        _flxState.setBattleResult(BtlLogicPlayer.BTL_END_NONE);
-
-        // ダイアログを開く
-        Dialog.open(_flxState, Dialog.OK, 'モンスターに遭遇した！', null, function(btnID) {
-          // バトル開始
-          _change(State.Battle);
-
-          var nBtl = Generator.getEnemyGroup(_csvEnemyGroup);
-          Global.setEnemyGroup(nBtl);
-          FlxG.camera.fade(FlxColor.WHITE, 0.3, false, function() {
-            // フェードしてからバトル開始
-            FlxG.camera.fade(FlxColor.WHITE, 0.1, true, null, true);
-            _flxState.openSubState(new BattleState());
-          });
-        });
+        startBattle(null);
 
       case FieldEvent.Item:
         // アイテム
@@ -145,6 +137,44 @@ class FieldEventMgr {
         _change(State.End);
 
     }
+  }
+
+  /**
+   * バトル開始
+   * @param foe F.O.E.とのバトルの場合
+   **/
+  public function startBattle(foe:FieldFoe=null):Void {
+
+    // 初期化
+    _init(FieldEvent.Enemy);
+    _foe = foe;
+
+    _change(State.OpenDialog);
+    Snd.playSe("roar");
+    // 戻り値初期化
+    _flxState.setBattleResult(BtlLogicPlayer.BTL_END_NONE);
+
+    // ダイアログを開く
+    Dialog.open(_flxState, Dialog.OK, 'モンスターに遭遇した！', null, function(btnID) {
+      // バトル開始
+      _change(State.Battle);
+
+      var nBtl = 1;
+      if(_foe != null) {
+        // F.O.E.バトル
+        nBtl = _foe.groupID;
+      }
+      else {
+        // 通常バトル
+        nBtl = Generator.getEnemyGroup(_csvEnemyGroup);
+      }
+      Global.setEnemyGroup(nBtl);
+      FlxG.camera.fade(FlxColor.WHITE, 0.3, false, function() {
+        // フェードしてからバトル開始
+        FlxG.camera.fade(FlxColor.WHITE, 0.1, true, null, true);
+        _flxState.openSubState(new BattleState());
+      });
+    });
   }
 
   /**

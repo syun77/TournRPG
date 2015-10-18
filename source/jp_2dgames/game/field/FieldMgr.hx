@@ -127,10 +127,10 @@ class FieldMgr {
     // F.O.E.
     FieldFoe.createParent(_flxState);
 
-    // TODO: ひとまず出してみる
+    // TODO: F.O.E.をひとまず出してみる
     FieldNode.forEachAlive(function(n:FieldNode) {
       if(n.evType == FieldEvent.None) {
-        FieldFoe.add(n.ID, 1);
+        FieldFoe.add(n.ID, 6);
       }
     });
 
@@ -344,7 +344,16 @@ class FieldMgr {
         _player.moveTowardNode(selNode, function() {
           // イベント実行
           _state = State.Event;
-          _eventMgr.start(selNode.evType);
+
+          // F.O.E.との接触チェック
+          var foe = FieldFoe.searchFromNodeID(selNode.ID);
+          if(foe != null) {
+            // F.O.E.とのバトル開始
+            _eventMgr.startBattle(foe);
+          }
+          else {
+            _eventMgr.start(selNode.evType);
+          }
           // 開始ノードに設定
           FieldNode.setStartNode(selNode);
           _nowNode = selNode;
