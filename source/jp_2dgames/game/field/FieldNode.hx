@@ -61,6 +61,10 @@ class FieldNode extends FlxSprite {
    **/
   public static function search(func:FieldNode->Bool):FieldNode {
     for(n in _parent.members) {
+      if(n.alive == false) {
+        continue;
+      }
+
       if(func(n)) {
         return n;
       }

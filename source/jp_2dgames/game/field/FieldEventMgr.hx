@@ -209,16 +209,28 @@ class FieldEventMgr {
       case BtlLogicPlayer.BTL_END_NONE:
         // バトル実行中
 
+      case BtlLogicPlayer.BTL_END_WIN:
+        // バトル勝利
+        if(_foe != null) {
+          // F.O.E.バトルの場合は消しておく
+          _foe.kill();
+        }
+        _bBtlEnd = true;
+        _change(State.End);
+
       case BtlLogicPlayer.BTL_END_LOSE:
         // ゲームオーバー
         _resultCode = RET_GAMEOVER;
         _bBtlEnd = true;
         _change(State.End);
 
-      default:
-        // バトル勝利
+      case BtlLogicPlayer.BTL_END_ESCAPE:
+        // 逃走
         _bBtlEnd = true;
         _change(State.End);
+
+      default:
+        throw 'Error: 不正なバトル終了戻り値 ${_flxState.retBattle}';
     }
   }
 

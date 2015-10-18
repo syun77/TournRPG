@@ -43,6 +43,10 @@ class FieldFoe extends FlxSprite {
    **/
   public static function search(func:FieldFoe->Bool):FieldFoe {
     for(foe in _parent.members) {
+      if(foe.alive == false) {
+        continue;
+      }
+
       if(func(foe)) {
         // 条件に一致
         return foe;
