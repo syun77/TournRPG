@@ -143,6 +143,13 @@ class FieldMgr {
       }
     });
 
+    // TODO: ショップをひとまず配置
+    FieldNode.forEachAlive(function(n:FieldNode) {
+      if(n.evType == FieldEvent.Enemy) {
+//        n.setEventType(FieldEvent.Shop);
+      }
+    });
+
     // プレイヤー
     _player = new FieldPlayer();
     _flxState.add(_player);

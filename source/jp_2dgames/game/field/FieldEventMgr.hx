@@ -26,6 +26,7 @@ private enum State {
   Battle;     // バトル実行中
   Item;       // アイテム
   Money;      // お金を拾う
+  Shop;       // ショップ
 
   // 終了
   End;
@@ -132,6 +133,10 @@ class FieldEventMgr {
         // お金を拾う
         _change(State.Money);
 
+      case FieldEvent.Shop:
+        // ショップ
+        _change(State.Shop);
+
       case FieldEvent.None:
         // 何も起こらない
         _change(State.End);
@@ -195,6 +200,9 @@ class FieldEventMgr {
 
       case State.Money:
         _procMoney();
+
+      case State.Shop:
+        _procShop();
 
       case State.End:
     }
@@ -293,5 +301,14 @@ class FieldEventMgr {
 
       _change(State.End);
     });
+  }
+
+  /**
+   * ショップ
+   **/
+  private function _procShop():Void {
+
+    // TODO: 未実装
+    _change(State.End);
   }
 }

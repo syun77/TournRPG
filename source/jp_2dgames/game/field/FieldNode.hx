@@ -196,6 +196,11 @@ class FieldNode extends FlxSprite {
       // ゴールは上書きしない
       return;
     }
+    if(_evType == FieldEvent.Shop) {
+      // ショップは上書きしない
+      return;
+    }
+
     _evType = ev;
   }
 
@@ -385,6 +390,8 @@ class FieldNode extends FlxSprite {
         col = FlxColor.SALMON;
       case FieldEvent.Item:
         col = FlxColor.GOLDENROD;
+      case FieldEvent.Shop:
+        col = FlxColor.AZURE;
     }
 
     color = col;

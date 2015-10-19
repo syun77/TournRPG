@@ -9,6 +9,7 @@ enum FieldEvent {
   Goal;   // ゴール地点
   Enemy;  // 敵
   Item;   // アイテム
+  Shop;   // ショップ
 }
 
 class FieldEventUtil {
@@ -30,6 +31,7 @@ class FieldEventUtil {
       case 'Goal':   return FieldEvent.Goal;
       case 'Enemy':  return FieldEvent.Enemy;
       case 'Item':   return FieldEvent.Item;
+      case 'Shop':   return FieldEvent.Shop;
       default:
         throw 'Invalid FieleEvent type: ${str}';
         return FieldEvent.None;
