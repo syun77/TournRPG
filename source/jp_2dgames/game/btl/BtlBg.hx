@@ -7,7 +7,8 @@ import flixel.FlxSprite;
  **/
 class BtlBg extends FlxSprite {
   public function new() {
-    super(0, 0, Reg.getBackImagePath(1));
+    super();
+    loadGraphic(Reg.getBackImagePath(1), false, 0, 0, true);
 
     x = FlxG.width/2 - width/2;
     y = FlxG.height/2 - height/2;

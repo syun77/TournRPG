@@ -4,7 +4,6 @@ import flixel.util.FlxColor;
 import flixel.util.FlxSpriteUtil;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
-import jp_2dgames.lib.RectLine;
 import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.gui.BtlCharaUI;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
@@ -88,9 +87,6 @@ class FieldMgr {
     return _resultCode;
   }
 
-  // 経路の線
-  var _lineList:List<RectLine>;
-
   /**
    * コンストラクタ
    **/
@@ -116,7 +112,6 @@ class FieldMgr {
       TmpFieldNode.copyToFieldNode();
       TmpFieldNode.destroy();
       _nowNode = FieldNode.getStartNode();
-      _nowNode.openNodes();
 
       // F.O.E.をロード
       TmpFieldFoe.copyToFieldFoe();
@@ -133,7 +128,6 @@ class FieldMgr {
     }
 
     // 経路描画
-    _lineList = new List<RectLine>();
     _createWayLine(bg);
 
     // TODO: F.O.E.をひとまず出してみる
@@ -159,11 +153,12 @@ class FieldMgr {
     _actor.init(BtlGroup.Player, Global.getPlayerParam());
     _actor.setName(Global.getPlayerName());
 
+    // 移動可能な経路を表示
+    _lines = new LineMgr(_flxState, LINE_MAX, MyColor.ASE_LIME);
+    _openNodes();
+
     // イベント管理
     _eventMgr = new FieldEventMgr(_flxState);
-
-    // 経路描画
-    _lines = new LineMgr(_flxState, LINE_MAX, MyColor.ASE_LIME);
 
     // UI表示
     _charaUI = new BtlCharaUI(0, BtlUI.CHARA_Y, _actor);
@@ -227,6 +222,7 @@ class FieldMgr {
     _btnMenu.visible = false;
     _btnNextFloor.visible = false;
     FieldNode.setVisible(false);
+    _lines.visible = false;
   }
 
   /**
@@ -253,6 +249,7 @@ class FieldMgr {
     _appearUINextFloor();
 
     FieldNode.setVisible(true);
+    _lines.visible = true;
   }
 
   /**
@@ -334,14 +331,6 @@ class FieldMgr {
     });
 
 
-    // いったん非表示
-    _lines.visible = false;
-
-    // 経路描画
-    for(n in _nowNode.reachableNodes) {
-      _lines.drawFromNode(_nowNode, n);
-    }
-
     if(selNode != null) {
 
       // 選択しているノードがある
@@ -354,6 +343,9 @@ class FieldMgr {
         _nowNode.setEventType(FieldEvent.None);
 
         selNode.scale.set(1, 1);
+
+        // 経路をいったん消す
+        _lines.visible = false;
 
         // 選択したノードに向かって移動する
         _state = State.Moving;
@@ -428,12 +420,22 @@ class FieldMgr {
     }
   }
 
+  /**
+   * ノードを開く
+   **/
   private function _openNodes():Void {
     // すべてを移動不可にする
     FieldNode.forEachAlive(function(n:FieldNode) {
       n.reachable = false;
     });
     _nowNode.openNodes();
+
+    // 経路描画
+    // いったん非表示
+    _lines.visible = false;
+    for(n in _nowNode.reachableNodes) {
+      _lines.drawFromNode(_nowNode, n);
+    }
   }
 
   /**

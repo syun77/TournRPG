@@ -75,7 +75,6 @@ class FieldNodeUtil {
     FieldNode.forEachAlive(function(n:FieldNode) {
       addReachableNode(n);
     });
-    nodeStart.openNodes();
 
     return nodeStart;
   }
