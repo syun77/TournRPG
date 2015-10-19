@@ -128,6 +128,8 @@ class FieldMgr {
     else {
       // 新規作成
       _nowNode = FieldNodeUtil.create();
+      // 開始地点を踏破済みにしておく
+      _nowNode.setFoot(true);
     }
 
     // 経路描画
