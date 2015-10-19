@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import flixel.util.FlxAngle;
+import flixel.util.FlxColorUtil;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.game.particle.ParticleDamage;
@@ -178,7 +180,8 @@ class BtlCharaUI extends FlxSpriteGroup {
 
     // HPMP背景
     _bgHpMp = new FlxSprite(BG_HPMP_OFS_X, BG_HPMP_OFS_Y);
-    _bgHpMp.makeGraphic(BG_HPMP_WIDTH, BG_HPMP_HEIGHT, FlxColor.NAVY_BLUE);
+    _bgHpMp.makeGraphic(BG_HPMP_WIDTH, BG_HPMP_HEIGHT, FlxColor.WHITE);
+    _bgHpMp.color = FlxColor.NAVY_BLUE;
     this.add(_bgHpMp);
 
     // ■テキスト
@@ -325,9 +328,35 @@ class BtlCharaUI extends FlxSpriteGroup {
     _txtMp.text   = '${actor.mp}';
     _barMp.setPercent(100 * actor.mpratio);
 
+    // 危険状態の判定
+    _updateDanger(actor);
+
     // バステアイコン更新
     _icon.set(actor.badstatus);
 
+  }
+
+  /**
+   * 危険状態の更新
+   **/
+  private function _updateDanger(actor:Actor):Void {
+    var col1:Int = FlxColor.NAVY_BLUE;
+    var col2:Int = FlxColor.NAVY_BLUE;
+    switch(actor.getDanger()) {
+      case Actor.HP_WARN:
+        col2 = FlxColor.GOLDEN;
+      case Actor.HP_DANGER:
+        col2 = FlxColor.RED;
+      default:
+        // アニメーション不要
+        _bgHpMp.color = col1;
+        return;
+    }
+
+    var cycle:Int = 60;
+    var rad = (Std.int(_tAnime) % 180) * FlxAngle.TO_RAD;
+    var t = 0.3 * Math.sin(rad);
+    _bgHpMp.color = FlxColorUtil.darken(col2, t);
   }
 
   /**

@@ -139,7 +139,7 @@ class FieldMgr {
     // TODO: F.O.E.をひとまず出してみる
     FieldNode.forEachAlive(function(n:FieldNode) {
       if(n.evType == FieldEvent.None) {
-//        FieldFoe.add(n.ID, 1);
+        FieldFoe.add(n.ID, 6);
       }
     });
 

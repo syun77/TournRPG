@@ -24,6 +24,11 @@ class Actor extends FlxSprite {
   // 揺れタイマー
   static inline var TIMER_SHAKE:Int = 120;
 
+  // 危険状態
+  public static inline var HP_NONE:Int = 0; // 通常
+  public static inline var HP_WARN:Int = 1; // 警告
+  public static inline var HP_DANGER:Int = 2; // 危険
+
   // ■メンバ変数
   // 状態
   var _state:State     = State.None;
@@ -243,6 +248,23 @@ class Actor extends FlxSprite {
   public function recoverHp(val:Int):Void {
     _param.hp += val;
     _clampHp();
+  }
+
+  /**
+   * 危険状態の取得
+   **/
+  public function getDanger():Int {
+    var ratio = hpratio;
+    if(ratio < 0.3) {
+      // 30%以下は危険
+      return HP_DANGER;
+    }
+    if(ratio < 0.5) {
+      // 50%以下は警告
+      return HP_WARN;
+    }
+    // 問題なし
+    return HP_NONE;
   }
 
   /**
