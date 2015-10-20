@@ -214,7 +214,7 @@ class FieldMgr {
       _btnShop = new MyButton(px, 0, label, function() {
         _hideUI();
         // ショップを表示
-        _flxState.openSubState(new ShopState());
+        _flxState.openSubState(new ShopState(_cbShopEnd));
         _state = State.Shop;
       });
       flxState.add(_btnShop);
@@ -316,7 +316,6 @@ class FieldMgr {
         _updateEvent();
 
       case State.Shop:
-        _updateShop();
 
       case State.End:
         // おしまい
@@ -468,16 +467,14 @@ class FieldMgr {
   }
 
   /**
-   * 更新・ショップ
+   * ショップ終了時に呼び出す関数
    **/
-  private function _updateShop():Void {
-    if(_flxState.subState == null) {
-      // ショップ終わり
-      _state = State.Main;
+  private function _cbShopEnd():Void {
+    // ショップ終わり
+    _state = State.Main;
 
-      // UI表示
-      _appearUI();
-    }
+    // UI表示
+    _appearUI();
   }
 
   /**

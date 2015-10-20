@@ -19,6 +19,8 @@ class UIMsg {
   public static inline var MENU:Int          = 11; // メニュー
   public static inline var NEXT_FLOOR:Int    = 12; // 次のフロアに進む
   public static inline var SHOP:Int          = 13; // ショップ
+  public static inline var SHOP_BUY:Int      = 14; // ショップ (購入)
+  public static inline var SHOP_SELL:Int     = 15; // ショップ (売却)
 
 
   private static var _csv:CsvLoader = null;

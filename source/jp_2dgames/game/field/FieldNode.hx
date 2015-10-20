@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.lib.MyMath;
 import flixel.text.FlxText;
 import flixel.FlxG;
 import haxe.ds.ArraySort;
@@ -318,6 +319,8 @@ class FieldNode extends FlxSprite {
     return _txtDetail;
   }
 
+  // 詳細テキスト点滅アニメ
+  private var _tAnim:Int = 0;
 
   // ---------------------------------------------
   // ■ここからメンバ関数
@@ -435,6 +438,21 @@ class FieldNode extends FlxSprite {
     }
 
     color = col;
+  }
+
+  /**
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
+
+    _tAnim++;
+
+    // 詳細テキスト更新
+    {
+      var deg = _tAnim % 180;
+      _txtDetail.alpha = 0.3 + (0.7 * MyMath.sinEx(deg));
+    }
   }
 }
 

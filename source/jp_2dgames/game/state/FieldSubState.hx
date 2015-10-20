@@ -1,6 +1,5 @@
 package jp_2dgames.game.state;
 
-import flixel.util.FlxColor;
 import jp_2dgames.game.gui.BtlCharaUI;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -103,6 +102,7 @@ class FieldSubState extends FlxSubState {
       _group.add(_btnItem);
     }
 
+    px += InventoryUI.BTN_DX;
     py += InventoryUI.BTN_DY;
     {
       // 他にボタンを追加する場合はここに追加
