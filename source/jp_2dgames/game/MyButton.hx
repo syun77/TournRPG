@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxColor;
 import openfl.display.BitmapData;
 import jp_2dgames.game.MyColor;
 import flixel.text.FlxText;
@@ -121,8 +122,11 @@ class MyButton extends FlxTypedButton<FlxText> {
   {
     label = new FlxText(x + labelOffsets[NORMAL].x, y + labelOffsets[NORMAL].y, WIDTH, Text);
     // ここでフォントを設定
-    label.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S, 0x333333, "center");
+//    label.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S, 0x333333, "center");
+    label.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S, MyColor.BTN_DEFAULT_LABEL, "center");
     label.alpha = labelAlphas[status];
+//    label.setBorderStyle(FlxText.BORDER_OUTLINE, 0xFFFFFF);
+    label.setBorderStyle(FlxText.BORDER_SHADOW, FlxColor.WHITE);
   }
 
   private inline function get_text():String

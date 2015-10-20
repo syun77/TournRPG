@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import flixel.text.FlxText;
 import flixel.FlxG;
 import haxe.ds.ArraySort;
 import flixel.util.FlxMath;
@@ -30,10 +31,12 @@ class FieldNode extends FlxSprite {
    **/
   public static function createParent(state:FlxState):Void {
     _parent = new FlxTypedGroup<FieldNode>(64);
-    for(i in 0..._parent.maxSize) {
-      _parent.add(new FieldNode(i));
-    }
     state.add(_parent);
+    for(i in 0..._parent.maxSize) {
+      var node = new FieldNode(i);
+      state.add(node.txtDetail);
+      _parent.add(node);
+    }
   }
 
   /**
@@ -160,6 +163,9 @@ class FieldNode extends FlxSprite {
     _parent.visible = b;
   }
 
+
+  // ---------------------------------------------
+  // ■ここからメンバ変数
   // 中心座標
   public var xcenter(get, never):Float;
   private function get_xcenter() {
@@ -297,6 +303,18 @@ class FieldNode extends FlxSprite {
   }
 
   /**
+   * 詳細説明テキスト
+   **/
+  private var _txtDetail:FlxText;
+  public var txtDetail(get, never):FlxText;
+  private function get_txtDetail() {
+    return _txtDetail;
+  }
+
+
+  // ---------------------------------------------
+  // ■ここからメンバ関数
+  /**
    * コンストラクタ
    **/
   public function new(idx:Int) {
@@ -310,6 +328,12 @@ class FieldNode extends FlxSprite {
     kill();
 
     alpha = 0.8;
+
+    // 詳細テキスト
+    _txtDetail = new FlxText();
+    _txtDetail.visible = false;
+//    _txtDetail.setBorderStyle(FlxText.BORDER_SHADOW);
+    _txtDetail.setBorderStyle(FlxText.BORDER_OUTLINE);
   }
 
   /**
@@ -351,6 +375,9 @@ class FieldNode extends FlxSprite {
     x = X;
     y = Y;
 
+    _txtDetail.x = x+8;
+    _txtDetail.y = y-8;
+
     // イベント種別を設定する
     setEventType(evType);
 
@@ -378,6 +405,9 @@ class FieldNode extends FlxSprite {
    * 色を設定
    **/
   private function _setColor():Void {
+
+    _txtDetail.visible = false;
+
     var col:Int = FlxColor.WHITE;
     switch(_evType) {
       case FieldEvent.None:
@@ -386,6 +416,9 @@ class FieldNode extends FlxSprite {
         col = FlxColor.WHITE;
       case FieldEvent.Goal:
         col = FlxColor.CHARTREUSE;
+        _txtDetail.text = "Next";
+        _txtDetail.visible = true;
+        _txtDetail.color = col;
       case FieldEvent.Enemy:
         col = FlxColor.SALMON;
       case FieldEvent.Item:
