@@ -71,6 +71,9 @@ class FieldMgr {
   // 次のフロアに進むボタン
   var _btnNextFloor:MyButton;
 
+  // ショップボタン
+  var _btnShop:MyButton;
+
   // Actor情報
   var _actor:Actor;
 
@@ -140,7 +143,7 @@ class FieldMgr {
     // TODO: ショップをひとまず配置
     FieldNode.forEachAlive(function(n:FieldNode) {
       if(n.evType == FieldEvent.Enemy) {
-//        n.setEventType(FieldEvent.Shop);
+        n.setEventType(FieldEvent.Shop);
       }
     });
 
@@ -200,6 +203,17 @@ class FieldMgr {
       flxState.add(_btnNextFloor);
     }
 
+    // ショップボタン
+    {
+      var label = UIMsg.get(UIMsg.SHOP);
+      var px = InventoryUI.BTN_SHOP_X;
+      _btnShop = new MyButton(px, 0, label, function() {
+        //_hideUI();
+        // ショップを表示
+      });
+      flxState.add(_btnShop);
+    }
+
     // UI出現
     _appearUI();
   }
@@ -219,8 +233,9 @@ class FieldMgr {
    * UI非表示
    **/
   private function _hideUI():Void {
-    _btnMenu.visible = false;
+    _btnMenu.visible      = false;
     _btnNextFloor.visible = false;
+    _btnShop.visible      = false;
     FieldNode.setVisible(false);
     _lines.visible = false;
   }
@@ -248,6 +263,9 @@ class FieldMgr {
     // 次のフロアに進むボタン
     _appearUINextFloor();
 
+    // ショップボタン
+    _appearUIShop();
+
     FieldNode.setVisible(true);
     _lines.visible = true;
   }
@@ -258,11 +276,22 @@ class FieldMgr {
   private function _appearUINextFloor():Void {
     var py = InventoryUI.BTN_CANCEL_Y + InventoryUI.BASE_OFS_Y + FlxG.height;
     _btnNextFloor.y = FlxG.height;
-    _btnNextFloor.visible = true;
     FlxTween.tween(_btnNextFloor, {y:py}, 0.5, {ease:FlxEase.expoOut});
 
     // ゴールにいるときだけ表示
     _btnNextFloor.visible = _nowNode.isGoal();
+  }
+
+  /**
+   * ショップUIを表示する
+   **/
+  private function _appearUIShop():Void {
+    var py = InventoryUI.BTN_CANCEL_Y + InventoryUI.BASE_OFS_Y + FlxG.height;
+    _btnShop.y = FlxG.height;
+    FlxTween.tween(_btnShop, {y:py}, 0.5, {ease:FlxEase.expoOut});
+
+    // ショップにいるときだけ表示
+    _btnShop.visible = _nowNode.isShop();
   }
 
   /**
@@ -291,6 +320,7 @@ class FieldMgr {
       default:
         _btnMenu.enable = false;
         _btnNextFloor.visible = false;
+        _btnShop.visible = false;
     }
   }
 
@@ -415,6 +445,14 @@ class FieldMgr {
         _openNodes();
         // 次のフロアに進むボタンを表示
         _appearUINextFloor();
+        // メイン処理に戻る
+        _state = State.Main;
+
+      case FieldEventMgr.RET_SHOP:
+        // ショップ
+        _openNodes();
+        // ショップボタンを表示
+        _appearUIShop();
         // メイン処理に戻る
         _state = State.Main;
     }

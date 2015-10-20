@@ -161,8 +161,10 @@ class FieldNode extends FlxSprite {
    **/
   public static function setVisible(b:Bool):Void {
     _parent.visible = b;
+    forEachAlive(function(n:FieldNode) {
+      n.txtDetail.visible = b;
+    });
   }
-
 
   // ---------------------------------------------
   // ■ここからメンバ変数
@@ -227,6 +229,11 @@ class FieldNode extends FlxSprite {
   // ゴールかどうか
   public function isGoal():Bool {
     return _evType == FieldEvent.Goal;
+  }
+
+  // ショップかどうか
+  public function isShop():Bool {
+    return _evType == FieldEvent.Shop;
   }
 
   // 到達可能かどうか
@@ -331,9 +338,8 @@ class FieldNode extends FlxSprite {
 
     // 詳細テキスト
     _txtDetail = new FlxText();
-    _txtDetail.visible = false;
-//    _txtDetail.setBorderStyle(FlxText.BORDER_SHADOW);
     _txtDetail.setBorderStyle(FlxText.BORDER_OUTLINE);
+    _txtDetail.text = "";
   }
 
   /**
@@ -406,7 +412,7 @@ class FieldNode extends FlxSprite {
    **/
   private function _setColor():Void {
 
-    _txtDetail.visible = false;
+    _txtDetail.text = "";
 
     var col:Int = FlxColor.WHITE;
     switch(_evType) {
@@ -417,14 +423,15 @@ class FieldNode extends FlxSprite {
       case FieldEvent.Goal:
         col = FlxColor.CHARTREUSE;
         _txtDetail.text = "Next";
-        _txtDetail.visible = true;
         _txtDetail.color = col;
       case FieldEvent.Enemy:
         col = FlxColor.SALMON;
       case FieldEvent.Item:
         col = FlxColor.GOLDENROD;
       case FieldEvent.Shop:
-        col = FlxColor.AZURE;
+        col = FlxColor.AQUAMARINE;
+        _txtDetail.text = "Shop";
+        _txtDetail.color = col;
     }
 
     color = col;

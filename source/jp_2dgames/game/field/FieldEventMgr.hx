@@ -39,9 +39,10 @@ class FieldEventMgr {
 
   // ■定数
   // 返却コード
-  public static inline var RET_NONE:Int      = 0;
-  public static inline var RET_GOAL:Int = 1;
-  public static inline var RET_GAMEOVER:Int  = 2;
+  public static inline var RET_NONE:Int     = 0;
+  public static inline var RET_GOAL:Int     = 1; // ゴール
+  public static inline var RET_GAMEOVER:Int = 2; // ゲームオーバー
+  public static inline var RET_SHOP:Int     = 3; // ショップ
 
   // 状態
   var _state:State = State.None;
@@ -135,6 +136,7 @@ class FieldEventMgr {
 
       case FieldEvent.Shop:
         // ショップ
+        _resultCode = RET_SHOP;
         _change(State.Shop);
 
       case FieldEvent.None:

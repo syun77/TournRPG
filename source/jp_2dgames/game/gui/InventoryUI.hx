@@ -28,6 +28,10 @@ class InventoryUI extends FlxSpriteGroup {
   public static inline var BTN_NEXTFLOOR_X = BTN_X;
   public static inline var BTN_NEXTFLOOR_Y = BTN_CANCEL_Y;
 
+  // ショップボタン
+  public static inline var BTN_SHOP_X = BTN_X;
+  public static inline var BTN_SHOP_Y = BTN_CANCEL_Y;
+
   // 起動モード
   public static inline var MODE_NORMAL:Int = 0; // 通常
   public static inline var MODE_DROP:Int   = 1; // 捨てる

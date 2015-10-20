@@ -18,6 +18,7 @@ class UIMsg {
   public static inline var CMD_ENEMY_ALL:Int = 10; // コマンド・敵全体
   public static inline var MENU:Int          = 11; // メニュー
   public static inline var NEXT_FLOOR:Int    = 12; // 次のフロアに進む
+  public static inline var SHOP:Int          = 13; // ショップ
 
 
   private static var _csv:CsvLoader = null;
