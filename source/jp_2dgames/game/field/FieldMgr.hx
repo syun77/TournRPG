@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.state.ShopState;
 import flixel.util.FlxColor;
 import flixel.util.FlxSpriteUtil;
 import flixel.FlxSprite;
@@ -26,6 +27,7 @@ private enum State {
   Main;   // メイン
   Moving; // 移動中
   Event;  // イベント実行中
+  Shop;   // ショップ表示中
 
   End;    // 終了
 }
@@ -95,6 +97,8 @@ class FieldMgr {
    **/
   public function new(flxState:FieldState) {
     _flxState = flxState;
+
+    FlxG.watch.add(this, "_state");
 
     // 背景
     var bg = new FlxSprite().loadGraphic(Reg.getBackImagePath(1));
@@ -208,8 +212,10 @@ class FieldMgr {
       var label = UIMsg.get(UIMsg.SHOP);
       var px = InventoryUI.BTN_SHOP_X;
       _btnShop = new MyButton(px, 0, label, function() {
-        //_hideUI();
+        _hideUI();
         // ショップを表示
+        _flxState.openSubState(new ShopState());
+        _state = State.Shop;
       });
       flxState.add(_btnShop);
     }
@@ -308,6 +314,9 @@ class FieldMgr {
 
       case State.Event:
         _updateEvent();
+
+      case State.Shop:
+        _updateShop();
 
       case State.End:
         // おしまい
@@ -455,6 +464,19 @@ class FieldMgr {
         _appearUIShop();
         // メイン処理に戻る
         _state = State.Main;
+    }
+  }
+
+  /**
+   * 更新・ショップ
+   **/
+  private function _updateShop():Void {
+    if(_flxState.subState == null) {
+      // ショップ終わり
+      _state = State.Main;
+
+      // UI表示
+      _appearUI();
     }
   }
 
