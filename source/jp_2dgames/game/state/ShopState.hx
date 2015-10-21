@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.gui.ShopBuyUI;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.Inventory;
 import flixel.FlxSprite;
@@ -129,12 +130,27 @@ class ShopState extends FlxSubState {
     }
   }
 
+  /**
+   * 購入ボタン
+   **/
   private function _addBuyButton(px:Float, py:Float):MyButton {
+
+    var cbFunc = function(btnID:Int) {
+
+      if(btnID != InventoryUI.CMD_CANCEL) {
+        // アイテム購入
+      }
+
+      // ボタン出現
+      _appearBtn();
+    }
 
     var label = UIMsg.get(UIMsg.SHOP_BUY);
     var btn = new MyButton(px, py, label, function() {
+      // 購入メニューを開く
+      ShopBuyUI.open(this, cbFunc, null);
       // メニュー非表示
-      //_group.visible = false;
+      _group.visible = false;
     });
 
     return btn;
