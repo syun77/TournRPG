@@ -19,7 +19,7 @@ import jp_2dgames.game.actor.Actor;
  **/
 class FieldSubState extends FlxSubState {
 
-  private static var BG_OFS_Y:Int = 0;
+  static inline var BG_OFS_Y:Int = 0;
 
   // Actor情報
   var _actor:Actor;

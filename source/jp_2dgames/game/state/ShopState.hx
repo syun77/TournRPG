@@ -1,4 +1,7 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.item.ItemUtil;
+import jp_2dgames.game.item.Inventory;
+import flixel.FlxSprite;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxG;
@@ -13,11 +16,22 @@ import flixel.FlxSubState;
  **/
 class ShopState extends FlxSubState {
 
+  static inline var BG_OFS_Y:Int = 0;
+
   // 終了時のコールバック
   var _cbClose:Void->Void;
 
   // ■各種UI
   var _group:FlxSpriteGroup;
+
+  // 背景
+  var _bg:FlxSprite;
+
+  // 購入ボタン
+  var _btnBuy:MyButton;
+
+  // 売却ボタン
+  var _btnSell:MyButton;
 
   /**
    * コンストラクタ
@@ -42,6 +56,15 @@ class ShopState extends FlxSubState {
       this.add(_group);
     }
 
+    // 背景
+    {
+      var height = FlxG.height + InventoryUI.BASE_OFS_Y;
+      _bg = new FlxSprite(0, BG_OFS_Y);
+      _bg.loadGraphic(Reg.PATH_MENU_BG);
+      _bg.alpha = 0.5;
+      _group.add(_bg);
+    }
+
     // 各ボタンを配置
     _displayButton();
 
@@ -64,6 +87,9 @@ class ShopState extends FlxSubState {
     var py = FlxG.height + InventoryUI.BASE_OFS_Y;
     _group.y = FlxG.height;
     FlxTween.tween(_group, {y:py}, 0.5, {ease:FlxEase.expoOut});
+
+    // アイテムを所持していない場合は売却できない
+    _btnSell.enable = (Inventory.isEmpty() == false);
   }
 
   /**
@@ -75,15 +101,15 @@ class ShopState extends FlxSubState {
 
     // 購入ボタン
     {
-      var btn = _addBuyButton(px, py);
-      _group.add(btn);
+      _btnBuy = _addBuyButton(px, py);
+      _group.add(_btnBuy);
     }
 
     px += InventoryUI.BTN_DX;
     // 売却ボタン
     {
-      var btn = _addSellButton(px, py);
-      _group.add(btn);
+      _btnSell = _addSellButton(px, py);
+      _group.add(_btnSell);
     }
 
     // キャンセルボタン
@@ -114,12 +140,32 @@ class ShopState extends FlxSubState {
     return btn;
   }
 
+  /**
+   * 売却ボタン
+   **/
   private function _addSellButton(px:Float, py:Float):MyButton {
+
+    var cbFunc = function(btnID:Int) {
+      if(btnID != InventoryUI.CMD_CANCEL) {
+        // アイテム売却
+        var item = Inventory.getItem(btnID);
+        // お金に換算
+        var money = ItemUtil.getParam(item.id, "sell");
+        Global.addMoney(money);
+        // アイテム削除
+        Inventory.delItem(btnID);
+      }
+
+      // ボタン出現
+      _appearBtn();
+    }
 
     var label = UIMsg.get(UIMsg.SHOP_SELL);
     var btn = new MyButton(px, py, label, function() {
+      // インベントリを開く
+      InventoryUI.open(this, cbFunc, null);
       // メニュー非表示
-      //_group.visible = false;
+      _group.visible = false;
     });
 
     return btn;
