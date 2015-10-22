@@ -1,6 +1,5 @@
 package jp_2dgames.game.gui;
 
-import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import jp_2dgames.game.skill.SkillUtil;
@@ -80,7 +79,7 @@ class ShopBuyUI extends FlxSpriteGroup {
     _category = CATEGORY_ITEM;
 
     // ボタンの表示
-    _displayButton(cbFunc, actor);
+    _displayButton(cbFunc, actor, true);
 
     // 装備情報
     _equipUI = new EquipUI();
@@ -209,7 +208,7 @@ class ShopBuyUI extends FlxSpriteGroup {
   /**
    * ボタンの表示
    **/
-  private function _displayButton(cbFunc:Int->Int->Void, actor:Actor):Void {
+  private function _displayButton(cbFunc:Int->Int->Void, actor:Actor, bAnim:Bool):Void {
 
     // コマンドボタンの配置
     _btnList = new Array<MyButton>();
@@ -233,15 +232,8 @@ class ShopBuyUI extends FlxSpriteGroup {
       this.add(btn);
 
       // 購入価格の表示
-      var bg = new FlxSprite(px, py+24);
-      bg.makeGraphic(MyButton.WIDTH, 12, MyColor.ASE_NAVY);
-      bg.alpha = 0.5;
-      this.add(bg);
-      var txt = new FlxText(px, py+24, MyButton.WIDTH);
-      txt.text ='${_getItemBuy(btnID)}G';
-      txt.alignment = "center";
-      txt.color = MyColor.ASE_YELLOW;
-      txt.setBorderStyle(FlxText.BORDER_SHADOW);
+      this.add(UIUtil.createPriceBG(px, py));
+      var txt = UIUtil.createPriceText(px, py, '${_getItemBuy(btnID)}');
       this.add(txt);
 
       px += InventoryUI.BTN_DX;
@@ -266,11 +258,13 @@ class ShopBuyUI extends FlxSpriteGroup {
     // カテゴリボタン
     _addCategoryButton(cbFunc, actor);
 
-    // 出現アニメーション
-    if(_tween != null) {
-      _tween.cancel();
-    }
-    {
+    if(bAnim) {
+
+      // 出現アニメーション
+      if(_tween != null) {
+        // いったんキャンセル
+        _tween.cancel();
+      }
       var py2 = FlxG.height + InventoryUI.BASE_OFS_Y;
       y = FlxG.height;
       _tween = FlxTween.tween(this, {y:py2}, 0.5, {ease:FlxEase.expoOut});
@@ -308,7 +302,7 @@ class ShopBuyUI extends FlxSpriteGroup {
           this.remove(obj);
         }
         _category = type;
-        _displayButton(cbFunc, actor);
+        _displayButton(cbFunc, actor, false);
       }
       var btn = new FlxButton(px, py, "", func);
       btn.loadGraphic(fnImage(type), true);

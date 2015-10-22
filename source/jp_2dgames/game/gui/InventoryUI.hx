@@ -211,15 +211,9 @@ class InventoryUI extends FlxSpriteGroup {
       if(_mode == MODE_SELL) {
 
         // 売却価格
-        var bg = new FlxSprite(px, py+24);
-        bg.makeGraphic(MyButton.WIDTH, 12, MyColor.ASE_NAVY);
-        bg.alpha = 0.5;
-        bgList.add(bg);
-        var txt = new FlxText(px, py+24, MyButton.WIDTH);
-        txt.text ='${ItemUtil.getSell(item)}G';
-        txt.alignment = "center";
-        txt.color = MyColor.ASE_YELLOW;
-        txt.setBorderStyle(FlxText.BORDER_SHADOW);
+        bgList.add(UIUtil.createPriceBG(px, py));
+        var label = '${ItemUtil.getSell(item)}G';
+        var txt = UIUtil.createPriceText(px, py, label);
         txtList.add(txt);
       }
     }

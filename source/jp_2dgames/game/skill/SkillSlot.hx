@@ -42,6 +42,13 @@ class SkillSlot {
   }
 
   /**
+   * スキルを所持していないかどうか
+   **/
+  public static function isEmpty():Bool {
+    return count() <= 0;
+  }
+
+  /**
    * 指定の番号のスキルを取得する
    **/
   public static function getSkill(idx:Int):SkillData {
@@ -53,6 +60,13 @@ class SkillSlot {
    **/
   public static function addSkill(skill:SkillData):Void {
     return _instance._addSkill(skill);
+  }
+
+  /**
+   * スキルを削除
+   **/
+  public static function delSkill(idx:Int):Void {
+    return _instance._delSkill(idx);
   }
 
 
@@ -101,4 +115,10 @@ class SkillSlot {
     skillList.push(skill);
   }
 
+  /**
+   * スキルを削除
+   **/
+  private function _delSkill(idx:Int):Void {
+    skillList.splice(idx, 1);
+  }
 }

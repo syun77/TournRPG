@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.gui.SkillUI;
 import jp_2dgames.game.gui.FieldUI;
 import jp_2dgames.game.gui.EquipUI;
 import jp_2dgames.game.skill.SkillUtil;
@@ -31,14 +32,14 @@ class ShopState extends FlxSubState {
   // 背景
   var _bg:FlxSprite;
 
-  // 購入ボタン
-  var _btnBuy:MyButton;
-
-  // 売却ボタン
-  var _btnSell:MyButton;
-
   // フィールドUI
   var _fieldUI:FieldUI;
+
+  // アイテム売却ボタン
+  var _btnItemSell:MyButton;
+
+  // スキル売却ボタン
+  var _btnSkillSell:MyButton;
 
   /**
    * コンストラクタ
@@ -97,7 +98,9 @@ class ShopState extends FlxSubState {
     FlxTween.tween(_group, {y:py}, 0.5, {ease:FlxEase.expoOut});
 
     // アイテムを所持していない場合は売却できない
-    _btnSell.enable = (Inventory.isEmpty() == false);
+    _btnItemSell.enable = (Inventory.isEmpty() == false);
+    // スキルを所持していない場合は売却できない
+    _btnSkillSell.enable = (SkillSlot.isEmpty() == false);
   }
 
   /**
@@ -109,18 +112,25 @@ class ShopState extends FlxSubState {
 
     // 購入ボタン
     {
-      _btnBuy = _addBuyButton(px, py);
-      _group.add(_btnBuy);
+      var btn = _addBuyButton(px, py);
+      _group.add(btn);
     }
 
     px += InventoryUI.BTN_DX;
-    // 売却ボタン
+    // アイテム売却ボタン
     {
-      _btnSell = _addSellButton(px, py);
-      _group.add(_btnSell);
+      _btnItemSell = _addItemSellButton(px, py);
+      _group.add(_btnItemSell);
     }
 
+    px += InventoryUI.BTN_DX;
+    // スキル売却ボタン
+    {
+      _btnSkillSell = _addSkillSellButton(px, py);
+      _group.add(_btnSkillSell);
+    }
     // キャンセルボタン
+
     {
       var px = InventoryUI.BTN_CANCEL_X;
       var py = InventoryUI.BTN_CANCEL_Y;
@@ -210,16 +220,16 @@ class ShopState extends FlxSubState {
   }
 
   /**
-   * 売却ボタン
+   * アイテム売却ボタン
    **/
-  private function _addSellButton(px:Float, py:Float):MyButton {
+  private function _addItemSellButton(px:Float, py:Float):MyButton {
 
     var cbFunc = function(btnID:Int) {
       if(btnID != InventoryUI.CMD_CANCEL) {
         // アイテム売却
         var item = Inventory.getItem(btnID);
         // お金に換算
-        var money = ItemUtil.getParam(item.id, "sell");
+        var money = ItemUtil.getSell(item);
         Global.addMoney(money);
         // アイテム削除
         Inventory.delItem(btnID);
@@ -229,10 +239,41 @@ class ShopState extends FlxSubState {
       _appearBtn();
     }
 
-    var label = UIMsg.get(UIMsg.SHOP_SELL);
+    var label = UIMsg.get(UIMsg.SHOP_ITEM_SELL);
     var btn = new MyButton(px, py, label, function() {
       // インベントリを開く
       InventoryUI.open(this, cbFunc, null, InventoryUI.MODE_SELL);
+      // メニュー非表示
+      _group.visible = false;
+    });
+
+    return btn;
+  }
+
+  /**
+   * スキル売却
+   **/
+  private function _addSkillSellButton(px:Float, py:Float):MyButton {
+
+    var cbFunc = function(btnID:Int) {
+      if(btnID != SkillUI.BTN_ID_CANCEL) {
+        // スキル売却
+        var skill = SkillSlot.getSkill(btnID);
+        // お金に換算
+        var money = SkillUtil.getSell(skill.id);
+        Global.addMoney(money);
+        // スキル削除
+        SkillSlot.delSkill(btnID);
+      }
+
+      // ボタン出現
+      _appearBtn();
+    }
+
+    var label = UIMsg.get(UIMsg.SHOP_SKILL_SELL);
+    var btn = new MyButton(px, py, label, function() {
+      // スキルUIを開く
+      SkillUI.open(this, cbFunc, null, SkillUI.MODE_SELL);
       // メニュー非表示
       _group.visible = false;
     });
