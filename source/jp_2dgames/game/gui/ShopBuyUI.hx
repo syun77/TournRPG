@@ -1,5 +1,8 @@
 package jp_2dgames.game.gui;
 
+import flixel.util.FlxColor;
+import flixel.FlxSprite;
+import flixel.text.FlxText;
 import jp_2dgames.game.skill.SkillUtil;
 import flixel.ui.FlxButton;
 import jp_2dgames.game.item.ItemUtil;
@@ -168,6 +171,42 @@ class ShopBuyUI extends FlxSpriteGroup {
   }
 
   /**
+   * アイテムの購入価格を取得する
+   **/
+  private function _getItemBuy(idx:Int):Int {
+    var shop = Global.getShopData();
+
+    switch(_category) {
+      case CATEGORY_ITEM:
+        return ItemUtil.getBuy(shop.itemList[idx]);
+      case CATEGORY_EQUIP:
+        return ItemUtil.getBuy(shop.equipList[idx]);
+      case CATEGORY_SKILL:
+        return SkillUtil.getBuy(shop.skillList[idx].id);
+    }
+
+    return 0;
+  }
+
+  /**
+   * アイテムの売却価格を取得する
+   **/
+  private function _getItemSell(idx:Int):Int {
+    var shop = Global.getShopData();
+
+    switch(_category) {
+      case CATEGORY_ITEM:
+        return ItemUtil.getSell(shop.itemList[idx]);
+      case CATEGORY_EQUIP:
+        return ItemUtil.getSell(shop.equipList[idx]);
+      case CATEGORY_SKILL:
+        return SkillUtil.getSell(shop.skillList[idx].id);
+    }
+
+    return 0;
+  }
+
+  /**
    * ボタンの表示
    **/
   private function _displayButton(cbFunc:Int->Int->Void, actor:Actor):Void {
@@ -191,6 +230,19 @@ class ShopBuyUI extends FlxSpriteGroup {
       // 要素番号を入れておく
       btn.ID = btnID;
       _btnList.push(btn);
+      this.add(btn);
+
+      // 購入価格の表示
+      var bg = new FlxSprite(px, py+24);
+      bg.makeGraphic(MyButton.WIDTH, 12, MyColor.ASE_NAVY);
+      bg.alpha = 0.5;
+      this.add(bg);
+      var txt = new FlxText(px, py+24, MyButton.WIDTH);
+      txt.text ='${_getItemBuy(btnID)}G';
+      txt.alignment = "center";
+      txt.color = MyColor.ASE_YELLOW;
+      txt.setBorderStyle(FlxText.BORDER_SHADOW);
+      this.add(txt);
 
       px += InventoryUI.BTN_DX;
     }
@@ -208,12 +260,7 @@ class ShopBuyUI extends FlxSpriteGroup {
       btn.ID = BTN_ID_CANCEL;
       btn.color       = MyColor.BTN_CANCEL;
       btn.label.color = MyColor.BTN_CANCEL_LABEL;
-      _btnList.push(btn);
-    }
-
-    for(btn in _btnList) {
       this.add(btn);
-      btn.scrollFactor.set(0, 0);
     }
 
     // カテゴリボタン

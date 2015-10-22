@@ -148,6 +148,15 @@ class SkillUtil {
     }
   }
 
+  // 購入価格
+  public static function getBuy(skillID:Int):Int {
+    return getParam(skillID, "buy");
+  }
+  // 売却価格
+  public static function getSell(skillID:Int):Int {
+    return getParam(skillID, "sell");
+  }
+
   /**
    * スキルコスト(HP)を取得する
    **/

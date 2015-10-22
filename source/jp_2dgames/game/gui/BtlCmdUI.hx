@@ -251,7 +251,7 @@ class BtlCmdUI extends FlxSpriteGroup {
    * インベントリUIを表示する
    **/
   private function _displayInventoryUI(actor:Actor):Void {
-    InventoryUI.open(_state, _cbItemSelect, actor);
+    InventoryUI.open(_state, _cbItemSelect, actor, InventoryUI.MODE_NORMAL);
     // 自身は非表示
     visible = false;
   }

@@ -243,7 +243,7 @@ class BtlResult {
 
           // 次のアイテムを見る
           _state = State.Pickup;
-        }, null);
+        }, null, InventoryUI.MODE_DROP);
         _flxState.add(ui);
 
         _state = State.ItemDelUI;

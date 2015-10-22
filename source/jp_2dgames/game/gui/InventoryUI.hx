@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.FlxSprite;
 import jp_2dgames.lib.Snd;
 import flixel.FlxState;
 import flixel.ui.FlxButton;
@@ -35,6 +36,7 @@ class InventoryUI extends FlxSpriteGroup {
   // 起動モード
   public static inline var MODE_NORMAL:Int = 0; // 通常
   public static inline var MODE_DROP:Int   = 1; // 捨てる
+  public static inline var MODE_SELL:Int   = 2; // 売却
 
   // 座標
   public static inline var BASE_X = 0;
@@ -66,9 +68,9 @@ class InventoryUI extends FlxSpriteGroup {
   private static var _state:FlxState = null;
 
   // 開く
-  public static function open(state:FlxState, cbFunc:Int->Void, actor:Actor):Void {
+  public static function open(state:FlxState, cbFunc:Int->Void, actor:Actor, mode:Int):Void {
     _state = state;
-    _instance = new InventoryUI(cbFunc, actor);
+    _instance = new InventoryUI(cbFunc, actor, mode);
     state.add(_instance);
   }
 
@@ -96,8 +98,9 @@ class InventoryUI extends FlxSpriteGroup {
    * コンストラクタ
    * @param cbFunc アイテム選択コールバック
    * @param actor  行動主体者
+   * @param mode   起動モード
    **/
-  public function new(cbFunc:Int->Void, actor:Actor) {
+  public function new(cbFunc:Int->Void, actor:Actor, mode) {
 
     // 基準座標を設定
     {
@@ -107,11 +110,7 @@ class InventoryUI extends FlxSpriteGroup {
     }
 
     // モード判定
-    _mode = MODE_NORMAL;
-    if(actor == null) {
-      // 捨てるモード
-      _mode = MODE_DROP;
-    }
+    _mode = mode;
 
     // 最大ページ数
     _nPageMax = Math.ceil(Inventory.lengthItemList()/PAGE_DISP_NUM);
@@ -164,6 +163,11 @@ class InventoryUI extends FlxSpriteGroup {
     // コマンドボタンの配置
     _btnList = new Array<MyButton>();
 
+    // 背景
+    var bgList = new List<FlxSprite>();
+    // テキスト
+    var txtList = new List<FlxText>();
+
     var ofs = _getPageOffset();
     var max = _getPageOffsetMax();
 
@@ -204,6 +208,20 @@ class InventoryUI extends FlxSpriteGroup {
       btn.ID = btnID;
       _btnList.push(btn);
 
+      if(_mode == MODE_SELL) {
+
+        // 売却価格
+        var bg = new FlxSprite(px, py+24);
+        bg.makeGraphic(MyButton.WIDTH, 12, MyColor.ASE_NAVY);
+        bg.alpha = 0.5;
+        bgList.add(bg);
+        var txt = new FlxText(px, py+24, MyButton.WIDTH);
+        txt.text ='${ItemUtil.getSell(item)}G';
+        txt.alignment = "center";
+        txt.color = MyColor.ASE_YELLOW;
+        txt.setBorderStyle(FlxText.BORDER_SHADOW);
+        txtList.add(txt);
+      }
     }
 
     // キャンセルボタン
@@ -246,7 +264,17 @@ class InventoryUI extends FlxSpriteGroup {
 
     for(btn in _btnList) {
       this.add(btn);
-      btn.scrollFactor.set(0, 0);
+      btn.scrollFactor.set();
+    }
+
+    // 背景・売却価格の表示
+    {
+      for(bg in bgList) {
+        this.add(bg);
+      }
+      for(txt in txtList) {
+        this.add(txt);
+      }
     }
 
     // ボタン色を更新
@@ -371,12 +399,12 @@ class InventoryUI extends FlxSpriteGroup {
     for(btn in _btnList) {
       switch(btn.status) {
         case FlxButton.HIGHLIGHT, FlxButton.PRESSED:
-          _detailUI.visible = true;
           var idx = btn.ID;
           if(idx < 0) {
             continue;
           }
 
+          _detailUI.visible = true;
           idx += _getPageOffset();
           // 表示情報を更新
           var item = Inventory.getItem(btn.ID);

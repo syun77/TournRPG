@@ -216,7 +216,7 @@ class ShopState extends FlxSubState {
     var label = UIMsg.get(UIMsg.SHOP_SELL);
     var btn = new MyButton(px, py, label, function() {
       // インベントリを開く
-      InventoryUI.open(this, cbFunc, null);
+      InventoryUI.open(this, cbFunc, null, InventoryUI.MODE_SELL);
       // メニュー非表示
       _group.visible = false;
     });

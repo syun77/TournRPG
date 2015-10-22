@@ -114,6 +114,14 @@ class ItemUtil {
   public static function getDetail(item:ItemData):String {
     return getParamString(item.id, "detail");
   }
+  // 購入価格
+  public static function getBuy(item:ItemData):Int {
+    return getParam(item.id, "buy");
+  }
+  // 売却価格
+  public static function getSell(item:ItemData):Int {
+    return getParam(item.id, "sell");
+  }
 
   /**
    * アイテム種別変換

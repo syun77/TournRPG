@@ -150,7 +150,7 @@ class FieldSubState extends FlxSubState {
     var label = UIMsg.get(UIMsg.CMD_ITEM);
     btn = new MyButton(px, py, label, function() {
       // インベントリを開く
-      InventoryUI.open(this, cbFunc, _actor);
+      InventoryUI.open(this, cbFunc, _actor, InventoryUI.MODE_NORMAL);
       // メニュー非表示
       _group.visible = false;
     });
