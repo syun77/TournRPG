@@ -1,4 +1,7 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.gui.FieldUI;
+import jp_2dgames.game.gui.EquipUI;
+import jp_2dgames.game.skill.SkillUtil;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.gui.ShopBuyUI;
 import jp_2dgames.game.item.ItemUtil;
@@ -34,13 +37,17 @@ class ShopState extends FlxSubState {
   // 売却ボタン
   var _btnSell:MyButton;
 
+  // フィールドUI
+  var _fieldUI:FieldUI;
+
   /**
    * コンストラクタ
    **/
-  public function new(cbClose:Void->Void) {
+  public function new(cbClose:Void->Void, fieldUI:FieldUI) {
     super();
 
     _cbClose = cbClose;
+    _fieldUI = fieldUI;
   }
 
   /**
@@ -143,6 +150,9 @@ class ShopState extends FlxSubState {
         var item = itemList[idx];
         // インベントリに追加
         Inventory.push(item);
+        // お金を減らす
+        var money = ItemUtil.getBuy(item);
+        Global.useMoney(money);
         // ショップから削除
         itemList.remove(item);
 
@@ -152,6 +162,9 @@ class ShopState extends FlxSubState {
         var equip = equipList[idx];
         // インベントリに追加
         Inventory.push(equip);
+        // お金を減らす
+        var money = ItemUtil.getBuy(equip);
+        Global.useMoney(money);
         // ショップから削除
         equipList.remove(equip);
 
@@ -161,6 +174,9 @@ class ShopState extends FlxSubState {
         var skill = skillList[idx];
         // スキルスロットに追加
         SkillSlot.addSkill(skill);
+        // お金を減らす
+        var money = SkillUtil.getBuy(skill.id);
+        Global.useMoney(money);
         // ショップから削除
         skillList.remove(skill);
     }
@@ -229,5 +245,7 @@ class ShopState extends FlxSubState {
    **/
   override public function update():Void {
     super.update();
+
+    _fieldUI.update();
   }
 }

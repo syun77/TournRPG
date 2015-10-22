@@ -209,7 +209,7 @@ class FieldMgr {
       _btnShop = new MyButton(px, 0, label, function() {
         _hideUI();
         // ショップを表示
-        _flxState.openSubState(new ShopState(_cbShopEnd));
+        _flxState.openSubState(new ShopState(_cbShopEnd, _fieldUI));
         _state = State.Shop;
       });
       flxState.add(_btnShop);

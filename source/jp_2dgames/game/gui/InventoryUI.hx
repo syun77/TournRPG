@@ -197,8 +197,8 @@ class InventoryUI extends FlxSpriteGroup {
               // UIを閉じる
               _close();
             }
-          case MODE_DROP:
-            // 捨てる
+          case MODE_DROP, MODE_SELL:
+            // 捨てる・売却
             cbFunc(btnID);
             // UIを閉じる
             _close();

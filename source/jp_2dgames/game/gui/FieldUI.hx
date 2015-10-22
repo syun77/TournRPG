@@ -48,6 +48,7 @@ class FieldUI extends FlxSpriteGroup {
 
     py += POS_DY;
     _txtMoney = _addText(px, py, "");
+    _txtMoney.alignment = "right";
 
     var px2 = x;
     x -= 128;
@@ -55,7 +56,7 @@ class FieldUI extends FlxSpriteGroup {
   }
 
   private function _addText(px:Float, py:Float, text:String):FlxText {
-    var txt = new FlxText(px, py);
+    var txt = new FlxText(px, py, 48);
     txt.text = text;
     txt.setBorderStyle(FlxText.BORDER_SHADOW);
     var bg = new FlxSprite(px-32, py+2, Reg.PATH_MSG_TEXT);
