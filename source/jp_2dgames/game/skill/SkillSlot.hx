@@ -48,6 +48,13 @@ class SkillSlot {
     return _instance._getSkill(idx);
   }
 
+  /**
+   * スキルを追加
+   **/
+  public static function addSkill(skill:SkillData):Void {
+    return _instance._addSkill(skill);
+  }
+
 
   // ================================================
   // ■以下インスタンス変数
@@ -85,6 +92,13 @@ class SkillSlot {
    **/
   private function _getSkill(idx:Int):SkillData {
     return skillList[idx];
+  }
+
+  /**
+   * スキルを追加
+   **/
+  private function _addSkill(skill:SkillData):Void {
+    skillList.push(skill);
   }
 
 }

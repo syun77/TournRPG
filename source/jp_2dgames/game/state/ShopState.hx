@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.gui.ShopBuyUI;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.Inventory;
@@ -9,7 +10,6 @@ import flixel.FlxG;
 import flixel.group.FlxSpriteGroup;
 import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.gui.InventoryUI;
-import jp_2dgames.lib.Input;
 import flixel.FlxSubState;
 
 /**
@@ -131,20 +131,51 @@ class ShopState extends FlxSubState {
   }
 
   /**
-   * 購入ボタン
+   * アイテム購入
    **/
-  private function _addBuyButton(px:Float, py:Float):MyButton {
+  private function _buyItem(idx:Int, category:Int):Void {
+    var shop = Global.getShopData();
 
-    var cbFunc = function(btnID:Int) {
-
-      if(btnID != ShopBuyUI.BTN_ID_CANCEL) {
-        // アイテム購入
-        var itemList = Global.getShopData().itemList;
-        var item = itemList[btnID];
+    switch(category) {
+      case ShopBuyUI.CATEGORY_ITEM:
+        // ■消費アイテム
+        var itemList = shop.itemList;
+        var item = itemList[idx];
         // インベントリに追加
         Inventory.push(item);
         // ショップから削除
         itemList.remove(item);
+
+      case ShopBuyUI.CATEGORY_EQUIP:
+        // ■装備品
+        var equipList = shop.equipList;
+        var equip = equipList[idx];
+        // インベントリに追加
+        Inventory.push(equip);
+        // ショップから削除
+        equipList.remove(equip);
+
+      case ShopBuyUI.CATEGORY_SKILL:
+        // ■スキル
+        var skillList = shop.skillList;
+        var skill = skillList[idx];
+        // スキルスロットに追加
+        SkillSlot.addSkill(skill);
+        // ショップから削除
+        skillList.remove(skill);
+    }
+  }
+
+  /**
+   * 購入ボタン
+   **/
+  private function _addBuyButton(px:Float, py:Float):MyButton {
+
+    var cbFunc = function(btnID:Int, category:Int) {
+
+      if(btnID != ShopBuyUI.BTN_ID_CANCEL) {
+        // アイテム購入
+        _buyItem(btnID, category);
       }
 
       // ボタン出現

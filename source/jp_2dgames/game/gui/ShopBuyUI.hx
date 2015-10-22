@@ -36,7 +36,7 @@ class ShopBuyUI extends FlxSpriteGroup {
   static var _state:FlxState = null;
 
   // 開く
-  public static function open(state:FlxState, cbFunc:Int->Void, actor:Actor):Void {
+  public static function open(state:FlxState, cbFunc:Int->Int->Void, actor:Actor):Void {
     _state = state;
     _instance = new ShopBuyUI(cbFunc, actor);
     state.add(_instance);
@@ -64,7 +64,7 @@ class ShopBuyUI extends FlxSpriteGroup {
    * @param cbFunc アイテム選択コールバック
    * @param actor  行動主体者
    **/
-  public function new(cbFunc:Int->Void, actor:Actor) {
+  public function new(cbFunc:Int->Int->Void, actor:Actor) {
 
     // 基準座標を設定
     {
@@ -103,12 +103,23 @@ class ShopBuyUI extends FlxSpriteGroup {
   }
 
   /**
+   * アイテムが空かどうか
+   **/
+  private function isItemEmpty(category:Int):Bool {
+    return _getItemLength(category) <= 0;
+  }
+
+  /**
    * アイテムの数を取得する
    **/
-  private function _getItemLength():Int {
+  private function _getItemLength(category:Int=-1):Int {
     var shop = Global.getShopData();
 
-    switch(_category) {
+    if(category == -1) {
+      category = _category;
+    }
+
+    switch(category) {
       case CATEGORY_ITEM:
         return shop.itemList.length;
       case CATEGORY_EQUIP:
@@ -159,7 +170,7 @@ class ShopBuyUI extends FlxSpriteGroup {
   /**
    * ボタンの表示
    **/
-  private function _displayButton(cbFunc:Int->Void, actor:Actor):Void {
+  private function _displayButton(cbFunc:Int->Int->Void, actor:Actor):Void {
 
     // コマンドボタンの配置
     _btnList = new Array<MyButton>();
@@ -173,7 +184,7 @@ class ShopBuyUI extends FlxSpriteGroup {
       var btn = new MyButton(px, py, label, function() {
 
         // ボタンを押した
-        cbFunc(btnID);
+        cbFunc(btnID, _category);
         // UIを閉じる
         _close();
       });
@@ -190,7 +201,7 @@ class ShopBuyUI extends FlxSpriteGroup {
       var py = InventoryUI.BTN_CANCEL_Y;
       var label = UIMsg.get(UIMsg.CANCEL);
       var btn = new MyButton(px, py, label, function() {
-        cbFunc(BTN_ID_CANCEL);
+        cbFunc(BTN_ID_CANCEL, _category);
         // UIを閉じる
         _close();
       });
@@ -206,7 +217,7 @@ class ShopBuyUI extends FlxSpriteGroup {
     }
 
     // カテゴリボタン
-    _addCategoryButton();
+    _addCategoryButton(cbFunc, actor);
 
     // 出現アニメーション
     if(_tween != null) {
@@ -222,32 +233,41 @@ class ShopBuyUI extends FlxSpriteGroup {
   /**
    * カテゴリボタンの追加
    **/
-  private function _addCategoryButton():Void {
+  private function _addCategoryButton(cbFunc:Int->Int->Void, actor:Actor):Void {
     var px = CATEGORY_X;
     var py = CATEGORY_Y;
-    // 消耗品
-    {
-      var btn = new FlxButton(px, py, "", null);
-      btn.loadGraphic(Reg.PATH_SHOP_ITEM, true);
-      this.add(btn);
-    }
-    px += CATEGORY_DX;
 
-    // 装備品
-    {
-      var btn = new FlxButton(px, py, "", null);
-      btn.loadGraphic(Reg.PATH_SHOP_EQUIP, true);
-      this.add(btn);
-    }
-    px += CATEGORY_DX;
+    // カテゴリ種別
+    var tbl = [
+      CATEGORY_ITEM,  // 消耗品
+      CATEGORY_EQUIP, // 装備品
+      CATEGORY_SKILL  // スキル
+    ];
 
-    // スキル
-    {
-      var btn = new FlxButton(px, py, "", null);
-      btn.loadGraphic(Reg.PATH_SHOP_SKILL, true);
+    // アイコン画像
+    var fnImage = function(type:Int) {
+      switch(type) {
+        case CATEGORY_ITEM: return Reg.PATH_SHOP_ITEM;
+        case CATEGORY_EQUIP: return Reg.PATH_SHOP_EQUIP;
+        default: return Reg.PATH_SHOP_SKILL;
+      }
+    };
+
+    // ボタン生成
+    for(type in tbl) {
+      var func = function() {
+        // いったん全部消す
+        for(obj in members) {
+          this.remove(obj);
+        }
+        _category = type;
+        _displayButton(cbFunc, actor);
+      }
+      var btn = new FlxButton(px, py, "", func);
+      btn.loadGraphic(fnImage(type), true);
       this.add(btn);
+      px += CATEGORY_DX;
     }
-    px += CATEGORY_DX;
   }
 
   /**
