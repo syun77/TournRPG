@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.skill.SkillUtil;
 import flixel.ui.FlxButton;
 import jp_2dgames.game.item.ItemUtil;
 import flixel.tweens.FlxEase;
@@ -16,6 +17,11 @@ class ShopBuyUI extends FlxSpriteGroup {
 
   // ■定数
   public static inline var BTN_ID_CANCEL:Int = -1;
+
+  // カテゴリ
+  public static inline var CATEGORY_ITEM:Int  = 0; // 消耗品
+  public static inline var CATEGORY_EQUIP:Int = 1; // 装備品
+  public static inline var CATEGORY_SKILL:Int = 2; // スキル
 
   // カテゴリの座標
   static inline var CATEGORY_X = InventoryUI.BTN_X + 16;
@@ -41,6 +47,9 @@ class ShopBuyUI extends FlxSpriteGroup {
   // ボタンリスト
   var _btnList:Array<MyButton>;
 
+  // カテゴリ
+  var _category:Int;
+
   // 装備品UI
   var _equipUI:EquipUI;
 
@@ -63,6 +72,9 @@ class ShopBuyUI extends FlxSpriteGroup {
       var py = FlxG.height + InventoryUI.BASE_OFS_Y;
       super(px, py);
     }
+
+    // カテゴリ
+    _category = CATEGORY_ITEM;
 
     // ボタンの表示
     _displayButton(cbFunc, actor);
@@ -91,6 +103,60 @@ class ShopBuyUI extends FlxSpriteGroup {
   }
 
   /**
+   * アイテムの数を取得する
+   **/
+  private function _getItemLength():Int {
+    var shop = Global.getShopData();
+
+    switch(_category) {
+      case CATEGORY_ITEM:
+        return shop.itemList.length;
+      case CATEGORY_EQUIP:
+        return shop.equipList.length;
+      case CATEGORY_SKILL:
+        return shop.skillList.length;
+    }
+
+    return 0;
+  }
+
+  /**
+   * アイテムの名前を取得する
+   **/
+  private function _getItemName(idx:Int):String {
+    var shop = Global.getShopData();
+
+    switch(_category) {
+      case CATEGORY_ITEM:
+        return ItemUtil.getName(shop.itemList[idx]);
+      case CATEGORY_EQUIP:
+        return ItemUtil.getName(shop.equipList[idx]);
+      case CATEGORY_SKILL:
+        return SkillUtil.getName(shop.skillList[idx].id);
+    }
+
+    return "";
+  }
+
+  /**
+   * アイテムの詳細を取得する
+   **/
+  private function _getItemDetail(idx:Int):String {
+    var shop = Global.getShopData();
+
+    switch(_category) {
+      case CATEGORY_ITEM:
+        return ItemUtil.getDetail(shop.itemList[idx]);
+      case CATEGORY_EQUIP:
+        return ItemUtil.getDetail(shop.equipList[idx]);
+      case CATEGORY_SKILL:
+        return SkillUtil.getDetail2(shop.skillList[idx].id);
+    }
+
+    return "";
+  }
+
+  /**
    * ボタンの表示
    **/
   private function _displayButton(cbFunc:Int->Void, actor:Actor):Void {
@@ -100,10 +166,10 @@ class ShopBuyUI extends FlxSpriteGroup {
 
     var px = InventoryUI.BTN_X;
     var py = InventoryUI.BTN_Y;
-    var itemList = Global.getShopData().itemList;
-    for(btnID in 0...itemList.length) {
-      var item = itemList[btnID];
-      var label = ItemUtil.getName(item);
+
+    var length = _getItemLength();
+    for(btnID in 0...length) {
+      var label = _getItemName(btnID);
       var btn = new MyButton(px, py, label, function() {
 
         // ボタンを押した
@@ -213,8 +279,7 @@ class ShopBuyUI extends FlxSpriteGroup {
           }
 
           // 表示情報を更新
-          var item = Global.getShopData().itemList[btn.ID];
-          var detail = ItemUtil.getDetail(item);
+          var detail = _getItemDetail(idx);
           _detailUI.setText(detail);
           break;
       }
