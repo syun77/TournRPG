@@ -47,6 +47,13 @@ class Reg {
   public static inline var PATH_FIELD_NODE = "assets/images/field/node.png";
   // メニューの背景
   public static inline var PATH_MENU_BG = "assets/images/ui/menu_bg.png";
+  // ショップ
+  // ・消耗品
+  public static inline var PATH_SHOP_ITEM = "assets/images/ui/shop/potion.png";
+  // ・装備品
+  public static inline var PATH_SHOP_EQUIP = "assets/images/ui/shop/weapon.png";
+  // ・スキル
+  public static inline var PATH_SHOP_SKILL = "assets/images/ui/shop/wand.png";
 
   // CSV
   public static inline var PATH_CSV_MESSAGE         = "assets/data/csv/message.csv";

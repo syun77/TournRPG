@@ -1,6 +1,7 @@
 package jp_2dgames.game.gui;
 
-import jp_2dgames.game.item.Inventory;
+import flixel.ui.FlxButton;
+import jp_2dgames.game.item.ItemUtil;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxState;
@@ -15,6 +16,11 @@ class ShopBuyUI extends FlxSpriteGroup {
 
   // ■定数
   public static inline var BTN_ID_CANCEL:Int = -1;
+
+  // カテゴリの座標
+  static inline var CATEGORY_X = InventoryUI.BTN_X + 16;
+  static inline var CATEGORY_Y = InventoryUI.BTN_Y - 40;
+  static inline var CATEGORY_DX = 48;
 
   // ボタンの最大数
   static inline var BUTTON_MAX:Int = 8;
@@ -92,6 +98,26 @@ class ShopBuyUI extends FlxSpriteGroup {
     // コマンドボタンの配置
     _btnList = new Array<MyButton>();
 
+    var px = InventoryUI.BTN_X;
+    var py = InventoryUI.BTN_Y;
+    var itemList = Global.getShopData().itemList;
+    for(btnID in 0...itemList.length) {
+      var item = itemList[btnID];
+      var label = ItemUtil.getName(item);
+      var btn = new MyButton(px, py, label, function() {
+
+        // ボタンを押した
+        cbFunc(btnID);
+        // UIを閉じる
+        _close();
+      });
+      // 要素番号を入れておく
+      btn.ID = btnID;
+      _btnList.push(btn);
+
+      px += InventoryUI.BTN_DX;
+    }
+
     // キャンセルボタン
     {
       var px = InventoryUI.BTN_CANCEL_X;
@@ -113,6 +139,9 @@ class ShopBuyUI extends FlxSpriteGroup {
       btn.scrollFactor.set(0, 0);
     }
 
+    // カテゴリボタン
+    _addCategoryButton();
+
     // 出現アニメーション
     if(_tween != null) {
       _tween.cancel();
@@ -125,6 +154,37 @@ class ShopBuyUI extends FlxSpriteGroup {
   }
 
   /**
+   * カテゴリボタンの追加
+   **/
+  private function _addCategoryButton():Void {
+    var px = CATEGORY_X;
+    var py = CATEGORY_Y;
+    // 消耗品
+    {
+      var btn = new FlxButton(px, py, "", null);
+      btn.loadGraphic(Reg.PATH_SHOP_ITEM, true);
+      this.add(btn);
+    }
+    px += CATEGORY_DX;
+
+    // 装備品
+    {
+      var btn = new FlxButton(px, py, "", null);
+      btn.loadGraphic(Reg.PATH_SHOP_EQUIP, true);
+      this.add(btn);
+    }
+    px += CATEGORY_DX;
+
+    // スキル
+    {
+      var btn = new FlxButton(px, py, "", null);
+      btn.loadGraphic(Reg.PATH_SHOP_SKILL, true);
+      this.add(btn);
+    }
+    px += CATEGORY_DX;
+  }
+
+  /**
    * UIを閉じる
    **/
   private function _close():Void {
@@ -132,5 +192,32 @@ class ShopBuyUI extends FlxSpriteGroup {
     _state.remove(this);
     _instance = null;
     _state = null;
+  }
+
+  /**
+   * 更新
+   **/
+  override public function update():Void {
+    super.update();
+
+    // いったん非表示
+    _detailUI.visible = false;
+    // ボタンの種類を調べる
+    for(btn in _btnList) {
+      switch(btn.status) {
+        case FlxButton.HIGHLIGHT, FlxButton.PRESSED:
+          _detailUI.visible = true;
+          var idx = btn.ID;
+          if(idx < 0) {
+            continue;
+          }
+
+          // 表示情報を更新
+          var item = Global.getShopData().itemList[btn.ID];
+          var detail = ItemUtil.getDetail(item);
+          _detailUI.setText(detail);
+          break;
+      }
+    }
   }
 }

@@ -137,8 +137,14 @@ class ShopState extends FlxSubState {
 
     var cbFunc = function(btnID:Int) {
 
-      if(btnID != InventoryUI.CMD_CANCEL) {
+      if(btnID != ShopBuyUI.BTN_ID_CANCEL) {
         // アイテム購入
+        var itemList = Global.getShopData().itemList;
+        var item = itemList[btnID];
+        // インベントリに追加
+        Inventory.push(item);
+        // ショップから削除
+        itemList.remove(item);
       }
 
       // ボタン出現
@@ -192,10 +198,5 @@ class ShopState extends FlxSubState {
    **/
   override public function update():Void {
     super.update();
-
-    if(Input.press.B) {
-      // TODO: 閉じる
-      close();
-    }
   }
 }

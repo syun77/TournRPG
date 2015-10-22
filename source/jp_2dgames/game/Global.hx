@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.shop.ShopData;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.skill.SkillData;
 import jp_2dgames.game.item.Inventory;
@@ -24,6 +25,7 @@ class Global {
   static var _money:Int = 0;
   static var _floor:Int = 0;
   static var _skillList:Array<SkillData> = null;
+  static var _shop:ShopData = null;
 
   // デバッグ用
   static var _bTestBattle:Bool = false;
@@ -53,6 +55,9 @@ class Global {
 
     // デバッグフラグ
     _bTestBattle = false;
+
+    // ショップ情報
+    _shop = new ShopData();
   }
 
   /**
@@ -168,6 +173,16 @@ class Global {
   // フロア数が最大かどうか
   public static function isFloorMax():Bool {
     return false;
+  }
+
+  // ショップ情報の取得
+  public static function getShopData():ShopData {
+    return _shop;
+  }
+
+  // ショップ情報の設定
+  public static function setShopData(data:ShopData):Void {
+    _shop = data;
   }
 
 

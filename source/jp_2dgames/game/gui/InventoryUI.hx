@@ -365,6 +365,8 @@ class InventoryUI extends FlxSpriteGroup {
   override public function update():Void {
     super.update();
 
+    // いったん非表示
+    _detailUI.visible = false;
     // ボタンの状態を調べる
     for(btn in _btnList) {
       switch(btn.status) {
@@ -380,12 +382,9 @@ class InventoryUI extends FlxSpriteGroup {
           var item = Inventory.getItem(btn.ID);
           var detail = ItemUtil.getDetail(item);
           _detailUI.setText(detail);
-          return;
+          break;
       }
     }
-
-    // ボタンを選択していないので非表示
-    _detailUI.visible = false;
   }
 
   /**
