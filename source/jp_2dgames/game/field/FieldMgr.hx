@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.gui.FieldUI;
 import jp_2dgames.game.state.ShopState;
 import flixel.util.FlxColor;
 import flixel.util.FlxSpriteUtil;
@@ -45,10 +46,6 @@ class FieldMgr {
   // 点線の最大数
   static inline var LINE_MAX:Int = 8;
 
-  // 座標
-  static inline var TXT_FLOOR_X:Int = 8;
-  static inline var TXT_FLOOR_Y:Int = BtlUI.CHARA_Y + BtlCharaUI.HEIGHT + 4;
-
   // 状態
   var _state:State = State.Main;
 
@@ -82,8 +79,8 @@ class FieldMgr {
   // キャラUI
   var _charaUI:BtlCharaUI;
 
-  // フロア数
-  var _txtFloor:FlxText;
+  // フィールドUI
+  var _fieldUI:FieldUI;
 
   // 戻り値
   var _resultCode:Int = RET_NONE;
@@ -171,11 +168,9 @@ class FieldMgr {
     _charaUI = new BtlCharaUI(0, BtlUI.CHARA_Y, _actor);
     _flxState.add(_charaUI);
 
-    // フロア数
-    _txtFloor = new FlxText(TXT_FLOOR_X, TXT_FLOOR_Y);
-    _txtFloor.text = 'Floor: ${Global.getFloor()}';
-    _txtFloor.setBorderStyle(FlxText.BORDER_SHADOW);
-    _flxState.add(_txtFloor);
+    // フィールドUI
+    _fieldUI = new FieldUI();
+    _flxState.add(_fieldUI);
 
     // メッセージ
     var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
