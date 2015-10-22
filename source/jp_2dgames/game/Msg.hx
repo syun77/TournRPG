@@ -42,4 +42,6 @@ class Msg {
   public static inline var BUFF_ATK_DOWN:Int  = 40; // 攻撃力ダウン
   public static inline var BUFF_DEF_DOWN:Int  = 41; // 防御力ダウン
   public static inline var BUFF_SPD_DOWN:Int  = 42; // 素早さダウン
+  public static inline var ITEM_BUY:Int       = 43; // アイテム購入
+  public static inline var ITEM_SELL:Int      = 44; // アイテム売却
 }

@@ -14,8 +14,9 @@ class FieldUI extends FlxSpriteGroup {
 
   // ■定数
   static inline var BASE_X:Int = 8;
-  static inline var BASE_Y:Int = 60;
+  static inline var BASE_Y:Int = 52;
   static inline var POS_DY:Int = 16;
+  static inline var POS_DX:Int = 48;
 
   // ■スタティック
   static var _instance:FieldUI = null;
@@ -46,9 +47,10 @@ class FieldUI extends FlxSpriteGroup {
     var py:Int = 0;
     _txtFloor = _addText(px, py, 'Floor: ${Global.getFloor()}');
 
-    py += POS_DY;
-    _txtMoney = _addText(px, py, "");
-    _txtMoney.alignment = "right";
+    px += POS_DX;
+    _txtMoney = new FlxText(px, py, "");
+    _txtMoney.setBorderStyle(FlxText.BORDER_SHADOW);
+    this.add(_txtMoney);
 
     var px2 = x;
     x -= 128;
@@ -60,7 +62,7 @@ class FieldUI extends FlxSpriteGroup {
     txt.text = text;
     txt.setBorderStyle(FlxText.BORDER_SHADOW);
     var bg = new FlxSprite(px-32, py+2, Reg.PATH_MSG_TEXT);
-    bg.scale.x = 0.4;
+    bg.scale.x = 0.8;
     bg.scale.y = 1.3;
     bg.x -= bg.width*0.6/2;
     bg.color = MyColor.ASE_NAVY;

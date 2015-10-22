@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.gui.SkillUI;
 import jp_2dgames.game.gui.FieldUI;
 import jp_2dgames.game.gui.EquipUI;
@@ -78,12 +79,18 @@ class ShopState extends FlxSubState {
     _displayButton();
 
     _appearBtn();
+
+    // メッセージウィンドウ登録
+    var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
+    Message.createInstancePush(csv, this);
   }
 
   /**
    * 破棄
    **/
   override public function destroy():Void {
+
+    Message.destroyInstance(this);
 
     super.destroy();
   }
@@ -152,6 +159,8 @@ class ShopState extends FlxSubState {
    **/
   private function _buyItem(idx:Int, category:Int):Void {
     var shop = Global.getShopData();
+    var money:Int = 0;
+    var name:String = "";
 
     switch(category) {
       case ShopBuyUI.CATEGORY_ITEM:
@@ -161,10 +170,12 @@ class ShopState extends FlxSubState {
         // インベントリに追加
         Inventory.push(item);
         // お金を減らす
-        var money = ItemUtil.getBuy(item);
+        money = ItemUtil.getBuy(item);
         Global.useMoney(money);
         // ショップから削除
         itemList.remove(item);
+        // 名前を取得
+        name = ItemUtil.getName(item);
 
       case ShopBuyUI.CATEGORY_EQUIP:
         // ■装備品
@@ -173,10 +184,12 @@ class ShopState extends FlxSubState {
         // インベントリに追加
         Inventory.push(equip);
         // お金を減らす
-        var money = ItemUtil.getBuy(equip);
+        money = ItemUtil.getBuy(equip);
         Global.useMoney(money);
         // ショップから削除
         equipList.remove(equip);
+        // 名前を取得
+        name = ItemUtil.getName(equip);
 
       case ShopBuyUI.CATEGORY_SKILL:
         // ■スキル
@@ -185,11 +198,16 @@ class ShopState extends FlxSubState {
         // スキルスロットに追加
         SkillSlot.addSkill(skill);
         // お金を減らす
-        var money = SkillUtil.getBuy(skill.id);
+        money = SkillUtil.getBuy(skill.id);
         Global.useMoney(money);
         // ショップから削除
         skillList.remove(skill);
+        // 名前を取得
+        name = SkillUtil.getName(skill.id);
     }
+
+    // メッセージ表示　
+    Message.push2(Msg.ITEM_BUY, [name, money]);
   }
 
   /**
@@ -233,6 +251,10 @@ class ShopState extends FlxSubState {
         Global.addMoney(money);
         // アイテム削除
         Inventory.delItem(btnID);
+        // 名前
+        var name = ItemUtil.getName(item);
+        // メッセージ表示
+        Message.push2(Msg.ITEM_SELL, [name, money]);
       }
 
       // ボタン出現
@@ -264,6 +286,10 @@ class ShopState extends FlxSubState {
         Global.addMoney(money);
         // スキル削除
         SkillSlot.delSkill(btnID);
+        // 名前
+        var name = SkillUtil.getName(skill.id);
+        // メッセージ表示
+        Message.push2(Msg.ITEM_SELL, [name, money]);
       }
 
       // ボタン出現

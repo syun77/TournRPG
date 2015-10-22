@@ -14,7 +14,7 @@ import jp_2dgames.game.actor.PlayerInfo;
  **/
 class Global {
   static inline var STAGE_FIRST:Int = 1;
-  static inline var MONEY_FIRST:Int = 50;
+  static inline var MONEY_FIRST:Int = 100;
 
   // ■スタティック変数
   static var _bLoad:Bool = false;

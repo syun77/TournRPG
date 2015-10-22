@@ -42,3 +42,5 @@ int,str,str
 40,<val1>の攻撃力がダウンした,yellow
 41,<val1>の防御力力がダウンした,yellow
 42,<val1>の素早さがダウンした,yellow
+43,<val1>を<val2>Gで購入した,green
+44,<val1>を<val2>Gで売却した,orange
