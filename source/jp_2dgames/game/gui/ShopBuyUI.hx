@@ -233,8 +233,14 @@ class ShopBuyUI extends FlxSpriteGroup {
 
       // 購入価格の表示
       this.add(UIUtil.createPriceBG(px, py));
-      var txt = UIUtil.createPriceText(px, py, '${_getItemBuy(btnID)}');
+      var money = _getItemBuy(btnID);
+      var txt = UIUtil.createPriceText(px, py, '${money}');
       this.add(txt);
+
+      if(Global.getMoney() < money) {
+        // 所持金が足りない
+        btn.enable = false;
+      }
 
       px += InventoryUI.BTN_DX;
     }
