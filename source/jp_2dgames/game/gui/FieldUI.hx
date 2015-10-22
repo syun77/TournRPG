@@ -48,7 +48,7 @@ class FieldUI extends FlxSpriteGroup {
     _txtFloor = _addText(px, py, 'Floor: ${Global.getFloor()}');
 
     px += POS_DX;
-    _txtMoney = new FlxText(px, py, "");
+    _txtMoney = new FlxText(px, py);
     _txtMoney.setBorderStyle(FlxText.BORDER_SHADOW);
     this.add(_txtMoney);
 
