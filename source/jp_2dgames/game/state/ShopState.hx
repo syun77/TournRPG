@@ -1,4 +1,5 @@
 package jp_2dgames.game.state;
+import jp_2dgames.lib.Snd;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.gui.SkillUI;
 import jp_2dgames.game.gui.FieldUI;
@@ -208,6 +209,8 @@ class ShopState extends FlxSubState {
 
     // メッセージ表示　
     Message.push2(Msg.ITEM_BUY, [name, money]);
+
+    Snd.playSe("coin", true);
   }
 
   /**
@@ -255,6 +258,7 @@ class ShopState extends FlxSubState {
         var name = ItemUtil.getName(item);
         // メッセージ表示
         Message.push2(Msg.ITEM_SELL, [name, money]);
+        Snd.playSe("coin", true);
       }
 
       // ボタン出現
@@ -290,6 +294,7 @@ class ShopState extends FlxSubState {
         var name = SkillUtil.getName(skill.id);
         // メッセージ表示
         Message.push2(Msg.ITEM_SELL, [name, money]);
+        Snd.playSe("coin", true);
       }
 
       // ボタン出現
