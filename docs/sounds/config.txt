@@ -8,3 +8,6 @@
 - powerup: powerup
 - recover: recover
 - roar: roar
+- menu: menu
+- push: push
+- foot2: foot2

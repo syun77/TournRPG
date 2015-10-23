@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.lib.Snd;
 import flixel.util.FlxColor;
 import openfl.display.BitmapData;
 import jp_2dgames.game.MyColor;
@@ -102,6 +103,9 @@ class MyButton2 extends FlxTypedButton<FlxText> {
 
     // 有効にしておく
     enabled = true;
+
+    // サウンド設定
+    onUp.sound   = Snd.load("push");
   }
 
   /**

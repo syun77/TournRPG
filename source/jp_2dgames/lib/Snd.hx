@@ -128,9 +128,16 @@ class Snd {
     }
     playMusic(_bgmprev);
   }
+
+  /**
+   * サウンドファイル読み込み
+   **/
+  public static function load(name:String):FlxSound {
+    return FlxG.sound.load(name);
+  }
 }
 
-class SoundInfo {
+private class SoundInfo {
   public var data:FlxSound = null;
   public var time:Float = 0;
 }

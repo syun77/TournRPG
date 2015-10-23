@@ -1,4 +1,6 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.lib.Snd;
+import flixel.ui.FlxTypedButton;
 import flixel.ui.FlxButton;
 
 /**
@@ -30,6 +32,15 @@ class MyButton extends FlxButton {
   public function setDefaultColor():Void {
     color       = MyColor.BTN_DEFAULT;
     label.color = MyColor.BTN_DEFAULT_LABEL;
+  }
+
+  /**
+   * コンストラクタ
+   **/
+  public function new(X:Float = 0, Y:Float = 0, ?Text:String, ?OnClick:Void->Void) {
+    super(X, Y, Text, OnClick);
+
+    onUp.sound   = Snd.load("push");
   }
 
   override private function updateButton():Void {
