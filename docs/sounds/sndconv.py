@@ -11,11 +11,11 @@ def conv(wav, ogg, mp3):
 	opt = "-loglevel error"
 
 	# oggにコンバート
-	cmd = "ffmpeg %s -i %s -vcodec libtheora -acodec libvorbis %s"%(opt, wav, ogg)
+	cmd = "/usr/local/bin/ffmpeg %s -i %s -vcodec libtheora -acodec libvorbis %s"%(opt, wav, ogg)
 	os.system(cmd)
 
 	# mp3にコンバート
-	cmd = "ffmpeg %s -i %s -f mp3 -acodec libmp3lame %s"%(opt, wav, mp3)
+	cmd = "/usr/local/bin/ffmpeg %s -i %s -f mp3 -acodec libmp3lame %s"%(opt, wav, mp3)
 	os.system(cmd)
 
 def main():

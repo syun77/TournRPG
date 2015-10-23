@@ -4,7 +4,7 @@
 cd `dirname $0`
 
 # コンバート実行
-python sndconv.py
+python sndconv_bgm.py
 
 #read Wait
 

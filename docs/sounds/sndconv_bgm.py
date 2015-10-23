@@ -11,7 +11,7 @@ def conv(mp3, ogg):
 	opt = "-loglevel error"
 
 	# oggにコンバート
-	cmd = "ffmpeg %s -i %s -vcodec libtheora -acodec libvorbis %s"%(opt, mp3, ogg)
+	cmd = "/usr/loca/bin/ffmpeg %s -i %s -vcodec libtheora -acodec libvorbis %s"%(opt, mp3, ogg)
 	os.system(cmd)
 
 def main():
