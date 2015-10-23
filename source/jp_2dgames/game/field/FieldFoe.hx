@@ -7,6 +7,11 @@ import flixel.FlxSprite;
  * F.O.E.
  **/
 class FieldFoe extends FlxSprite {
+
+  // ■定数
+  // 描画オフセット(Y)
+  static inline var OFS_Y:Int = -12;
+
   // ■管理オブジェクト
   static var _parent:FlxTypedGroup<FieldFoe> = null;
 
@@ -110,6 +115,6 @@ class FieldFoe extends FlxSprite {
       return;
     }
     x = node.x;
-    y = node.y;
+    y = node.y + OFS_Y;
   }
 }
