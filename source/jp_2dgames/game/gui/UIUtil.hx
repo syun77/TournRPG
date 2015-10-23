@@ -7,6 +7,8 @@ import flixel.FlxSprite;
  **/
 class UIUtil {
 
+  public static var MENU_BG_OFS_Y:Int = 0;
+
   /**
    * 値段の背景を生成
    **/
@@ -29,5 +31,16 @@ class UIUtil {
     txt.setBorderStyle(FlxText.BORDER_SHADOW);
 
     return txt;
+  }
+
+  /**
+   * メニュー背景の生成
+   **/
+  public static function createMenuBG(px:Float, py:Float):FlxSprite {
+    var bg = new FlxSprite(px, py);
+    bg.loadGraphic(Reg.PATH_MENU_BG);
+    bg.alpha = 0.5;
+
+    return bg;
   }
 }

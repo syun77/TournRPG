@@ -75,6 +75,12 @@ class ShopBuyUI extends FlxSpriteGroup {
       super(px, py);
     }
 
+    // 背景
+    {
+      var bg = UIUtil.createMenuBG(0, UIUtil.MENU_BG_OFS_Y);
+      this.add(bg);
+    }
+
     // カテゴリ
     _category = CATEGORY_ITEM;
 

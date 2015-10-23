@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.UIUtil;
 import jp_2dgames.game.gui.BtlCharaUI;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -19,8 +20,6 @@ import jp_2dgames.game.actor.Actor;
  **/
 class FieldSubState extends FlxSubState {
 
-  static inline var BG_OFS_Y:Int = 0;
-
   // Actor情報
   var _actor:Actor;
 
@@ -30,9 +29,6 @@ class FieldSubState extends FlxSubState {
   // ■各種UI
   // メニュー管理
   var _group:FlxSpriteGroup;
-
-  // 背景
-  var _bg:FlxSprite;
 
   // アイテムボタン
   var _btnItem:MyButton;
@@ -66,11 +62,8 @@ class FieldSubState extends FlxSubState {
 
     // 背景
     {
-      var height = FlxG.height + InventoryUI.BASE_OFS_Y;
-      _bg = new FlxSprite(0, BG_OFS_Y);
-      _bg.loadGraphic(Reg.PATH_MENU_BG);
-      _bg.alpha = 0.5;
-      _group.add(_bg);
+      var bg = UIUtil.createMenuBG(0, UIUtil.MENU_BG_OFS_Y);
+      _group.add(bg);
     }
 
     // 各ボタンを配置
