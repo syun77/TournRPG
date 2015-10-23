@@ -1,9 +1,9 @@
 package jp_2dgames.game.state;
+import jp_2dgames.game.gui.MyButton2;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.game.gui.SkillUI;
 import jp_2dgames.game.gui.FieldUI;
-import jp_2dgames.game.gui.EquipUI;
 import jp_2dgames.game.skill.SkillUtil;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.gui.ShopBuyUI;
@@ -38,10 +38,10 @@ class ShopState extends FlxSubState {
   var _fieldUI:FieldUI;
 
   // アイテム売却ボタン
-  var _btnItemSell:MyButton;
+  var _btnItemSell:MyButton2;
 
   // スキル売却ボタン
-  var _btnSkillSell:MyButton;
+  var _btnSkillSell:MyButton2;
 
   /**
    * コンストラクタ
@@ -106,9 +106,9 @@ class ShopState extends FlxSubState {
     FlxTween.tween(_group, {y:py}, 0.5, {ease:FlxEase.expoOut});
 
     // アイテムを所持していない場合は売却できない
-    _btnItemSell.enable = (Inventory.isEmpty() == false);
+    _btnItemSell.enabled = (Inventory.isEmpty() == false);
     // スキルを所持していない場合は売却できない
-    _btnSkillSell.enable = (SkillSlot.isEmpty() == false);
+    _btnSkillSell.enabled = (SkillSlot.isEmpty() == false);
   }
 
   /**
@@ -143,7 +143,7 @@ class ShopState extends FlxSubState {
       var px = InventoryUI.BTN_CANCEL_X;
       var py = InventoryUI.BTN_CANCEL_Y;
       var label = UIMsg.get(UIMsg.CANCEL);
-      var btn = new MyButton(px, py, label, function() {
+      var btn = new MyButton2(px, py, label, function() {
         // UIを閉じる
         close();
         // 終了コールバック実行
@@ -216,7 +216,7 @@ class ShopState extends FlxSubState {
   /**
    * 購入ボタン
    **/
-  private function _addBuyButton(px:Float, py:Float):MyButton {
+  private function _addBuyButton(px:Float, py:Float):MyButton2 {
 
     var cbFunc = function(btnID:Int, category:Int) {
 
@@ -230,7 +230,7 @@ class ShopState extends FlxSubState {
     }
 
     var label = UIMsg.get(UIMsg.SHOP_BUY);
-    var btn = new MyButton(px, py, label, function() {
+    var btn = new MyButton2(px, py, label, function() {
       // 購入メニューを開く
       ShopBuyUI.open(this, cbFunc, null);
       // メニュー非表示
@@ -243,7 +243,7 @@ class ShopState extends FlxSubState {
   /**
    * アイテム売却ボタン
    **/
-  private function _addItemSellButton(px:Float, py:Float):MyButton {
+  private function _addItemSellButton(px:Float, py:Float):MyButton2 {
 
     var cbFunc = function(btnID:Int) {
       if(btnID != InventoryUI.CMD_CANCEL) {
@@ -266,7 +266,7 @@ class ShopState extends FlxSubState {
     }
 
     var label = UIMsg.get(UIMsg.SHOP_ITEM_SELL);
-    var btn = new MyButton(px, py, label, function() {
+    var btn = new MyButton2(px, py, label, function() {
       // インベントリを開く
       InventoryUI.open(this, cbFunc, null, InventoryUI.MODE_SELL);
       // メニュー非表示
@@ -279,7 +279,7 @@ class ShopState extends FlxSubState {
   /**
    * スキル売却
    **/
-  private function _addSkillSellButton(px:Float, py:Float):MyButton {
+  private function _addSkillSellButton(px:Float, py:Float):MyButton2 {
 
     var cbFunc = function(btnID:Int) {
       if(btnID != SkillUI.BTN_ID_CANCEL) {
@@ -302,7 +302,7 @@ class ShopState extends FlxSubState {
     }
 
     var label = UIMsg.get(UIMsg.SHOP_SKILL_SELL);
-    var btn = new MyButton(px, py, label, function() {
+    var btn = new MyButton2(px, py, label, function() {
       // スキルUIを開く
       SkillUI.open(this, cbFunc, null, SkillUI.MODE_SELL);
       // メニュー非表示

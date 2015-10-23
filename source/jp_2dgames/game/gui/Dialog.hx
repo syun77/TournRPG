@@ -32,7 +32,7 @@ class Dialog extends FlxGroup {
   private static inline var SELECT3_OFS_Y:Int = 24;
 
   // ボタンの間隔
-  private static inline var BTN_DY:Int = MyButton.HEIGHT + 2;
+  private static inline var BTN_DY:Int = MyButton2.HEIGHT + 2;
 
   // インスタンス
   private static var _instance:Dialog = null;
@@ -119,7 +119,7 @@ class Dialog extends FlxGroup {
     var idx:Int = 0;
     for(str in labels) {
       var btnID = idx;
-      var btn = new MyButton(px, py2, str, function() {
+      var btn = new MyButton2(px, py2, str, function() {
 
         // 決定した
         _pressButton(cbFunc, btnID);

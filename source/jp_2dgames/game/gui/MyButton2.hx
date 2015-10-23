@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.gui;
 
 import flixel.util.FlxColor;
 import openfl.display.BitmapData;
@@ -11,7 +11,7 @@ import flixel.ui.FlxTypedButton;
  **/
 @:bitmap("assets/images/ui/button2.png")
 private class GraphicButton extends BitmapData {}
-class MyButton extends FlxTypedButton<FlxText> {
+class MyButton2 extends FlxTypedButton<FlxText> {
 
   // 幅
   public static inline var WIDTH = 76;
@@ -41,8 +41,8 @@ class MyButton extends FlxTypedButton<FlxText> {
   public var text(get, set):String;
 
   private var _enabled:Bool = true;
-  public var enable(get, set):Bool;
-  private function set_enable(b:Bool):Bool {
+  public var enabled(get, set):Bool;
+  private function set_enabled(b:Bool):Bool {
     _enabled = b;
     if(b) {
       // 有効
@@ -55,7 +55,7 @@ class MyButton extends FlxTypedButton<FlxText> {
     }
     return b;
   }
-  private function get_enable():Bool {
+  private function get_enabled():Bool {
     return _enabled;
   }
 
@@ -101,7 +101,7 @@ class MyButton extends FlxTypedButton<FlxText> {
     initLabel(Text);
 
     // 有効にしておく
-    enable = true;
+    enabled = true;
   }
 
   /**

@@ -1,6 +1,6 @@
 package jp_2dgames.game.state;
 
-import jp_2dgames.lib.Input;
+import jp_2dgames.game.gui.MyButton2;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.FlxState;
@@ -20,9 +20,9 @@ class TitleState extends FlxState {
     txt.alignment = "center";
     this.add(txt);
 
-    var px = FlxG.width/2 - MyButton.WIDTH/2;
+    var px = FlxG.width/2 - MyButton2.WIDTH/2;
     var py = FlxG.height - 128;
-    var btn = new MyButton(px, py, "CLICK TO START", function() {
+    var btn = new MyButton2(px, py, "CLICK TO START", function() {
       FlxG.switchState(new PlayInitState());
     });
     this.add(btn);

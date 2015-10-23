@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.MyButton2;
 import jp_2dgames.game.gui.UIUtil;
 import jp_2dgames.game.gui.BtlCharaUI;
 import flixel.FlxG;
@@ -31,7 +32,7 @@ class FieldSubState extends FlxSubState {
   var _group:FlxSpriteGroup;
 
   // アイテムボタン
-  var _btnItem:MyButton;
+  var _btnItem:MyButton2;
 
   // キャラUI
   var _ui:BtlCharaUI;
@@ -106,7 +107,7 @@ class FieldSubState extends FlxSubState {
       var px = InventoryUI.BTN_CANCEL_X;
       var py = InventoryUI.BTN_CANCEL_Y;
       var label = UIMsg.get(UIMsg.CANCEL);
-      var btn = new MyButton(px, py, label, function() {
+      var btn = new MyButton2(px, py, label, function() {
         // UIを閉じる
         close();
         // 終了コールバック実行
@@ -121,8 +122,8 @@ class FieldSubState extends FlxSubState {
   /**
    * アイテムボタンを配置
    **/
-  private function _addItemButton(px:Float, py:Float):MyButton {
-    var btn:MyButton = null;
+  private function _addItemButton(px:Float, py:Float):MyButton2 {
+    var btn:MyButton2 = null;
 
     var cbFunc = function(btnID:Int) {
       if(btnID != InventoryUI.CMD_CANCEL) {
@@ -141,7 +142,7 @@ class FieldSubState extends FlxSubState {
     };
 
     var label = UIMsg.get(UIMsg.CMD_ITEM);
-    btn = new MyButton(px, py, label, function() {
+    btn = new MyButton2(px, py, label, function() {
       // インベントリを開く
       InventoryUI.open(this, cbFunc, _actor, InventoryUI.MODE_NORMAL);
       // メニュー非表示
@@ -168,7 +169,7 @@ class FieldSubState extends FlxSubState {
     _ui.update();
 
     // アイテムボタンを押せるかどうかチェック
-    _btnItem.enable = (Inventory.isEmpty() == false);
+    _btnItem.enabled = (Inventory.isEmpty() == false);
 
     // メッセージ更新
     Message.forceUpdate();

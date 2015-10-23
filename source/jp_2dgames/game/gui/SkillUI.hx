@@ -38,7 +38,7 @@ class SkillUI extends FlxSpriteGroup {
   var _mode:Int;
 
   // ボタンリスト
-  var _btnList:Array<MyButton>;
+  var _btnList:Array<MyButton2>;
 
   // アイテム詳細UI
   var _detailUI:DetailUI;
@@ -88,14 +88,14 @@ class SkillUI extends FlxSpriteGroup {
    **/
   private function _displayButton(cbFunc:Int->Void, actor:Actor):Void {
 
-    _btnList = new Array<MyButton>();
+    _btnList = new Array<MyButton2>();
 
     var px = InventoryUI.BTN_X;
     var py = InventoryUI.BTN_Y;
     for(btnID in 0...SkillSlot.count()) {
       var skill = SkillSlot.getSkill(btnID);
       var label = SkillUtil.getName(skill.id);
-      var btn = new MyButton(px, py, label, function() {
+      var btn = new MyButton2(px, py, label, function() {
         // ボタンを押した
         cbFunc(btnID);
         // UIを閉じる
@@ -121,7 +121,7 @@ class SkillUI extends FlxSpriteGroup {
       var px = InventoryUI.BTN_CANCEL_X;
       var py = InventoryUI.BTN_CANCEL_Y;
       var label = UIMsg.get(UIMsg.CANCEL);
-      var btn = new MyButton(px, py, label, function() {
+      var btn = new MyButton2(px, py, label, function() {
         cbFunc(BTN_ID_CANCEL);
         // UIを閉じる
         _close();

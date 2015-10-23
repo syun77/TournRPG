@@ -45,12 +45,12 @@ class InventoryUI extends FlxSpriteGroup {
   // ボタン
   public static inline var BTN_X = Reg.BTN_OFS_X;
   public static inline var BTN_Y = BTN_PAGE_Y + 48;
-  public static inline var BTN_DX = MyButton.WIDTH + Reg.BTN_OFS_DX;
-  public static inline var BTN_DY = MyButton.HEIGHT + Reg.BTN_OFS_DY;
+  public static inline var BTN_DX = MyButton2.WIDTH + Reg.BTN_OFS_DX;
+  public static inline var BTN_DY = MyButton2.HEIGHT + Reg.BTN_OFS_DY;
 
   // ページ切り替えボタン
   private static inline var BTN_PREV_X = Reg.BTN_OFS_X;
-  private static inline var BTN_NEXT_X = BTN_PREV_X + MyButton.WIDTH + Reg.BTN_OFS_DX;
+  private static inline var BTN_NEXT_X = BTN_PREV_X + MyButton2.WIDTH + Reg.BTN_OFS_DX;
   private static inline var BTN_PAGE_Y = 24;
 
   // ページ情報
@@ -77,7 +77,7 @@ class InventoryUI extends FlxSpriteGroup {
   // ■メンバ変数
   // モード
   private var _mode:Int;
-  private var _btnList:Array<MyButton>;
+  private var _btnList:Array<MyButton2>;
   // ページ番号
   private var _nPage:Int = 0;
   // ページの最大数
@@ -167,7 +167,7 @@ class InventoryUI extends FlxSpriteGroup {
     _txtPage.text = 'Page: (${_nPage+1}/${_nPageMax})';
 
     // コマンドボタンの配置
-    _btnList = new Array<MyButton>();
+    _btnList = new Array<MyButton2>();
 
     // 背景
     var bgList = new List<FlxSprite>();
@@ -188,7 +188,7 @@ class InventoryUI extends FlxSpriteGroup {
       // アイテム名
       var name = ItemUtil.getName(item);
       var btnID = uid;
-      var btn = new MyButton(px, py, name, function() {
+      var btn = new MyButton2(px, py, name, function() {
 
         // ボタンを押した
         switch(_mode) {
@@ -229,7 +229,7 @@ class InventoryUI extends FlxSpriteGroup {
       var px = BTN_CANCEL_X;
       var py = BTN_CANCEL_Y;
       var label = UIMsg.get(UIMsg.CANCEL);
-      var btn = new MyButton(px, py, label, function() {
+      var btn = new MyButton2(px, py, label, function() {
         cbFunc(CMD_CANCEL);
         // UIを閉じる
         _close();
@@ -244,20 +244,20 @@ class InventoryUI extends FlxSpriteGroup {
     {
       // 1つ前に戻る
       var py = BTN_PAGE_Y;
-      var btn = new MyButton(BTN_PREV_X, py, "<<", function() {
+      var btn = new MyButton2(BTN_PREV_X, py, "<<", function() {
         _changePage(-1, cbFunc, actor);
       });
-      btn.enable = (_nPage > 0);
+      btn.enabled = (_nPage > 0);
       btn.ID = BTN_ID_PAGE;
       _btnList.push(btn);
     }
     {
       // 1つ先に進む
       var py = BTN_PAGE_Y;
-      var btn = new MyButton(BTN_NEXT_X, py, ">>", function() {
+      var btn = new MyButton2(BTN_NEXT_X, py, ">>", function() {
         _changePage(1, cbFunc, actor);
       });
-      btn.enable = (_nPage < _nPageMax - 1);
+      btn.enabled = (_nPage < _nPageMax - 1);
       btn.ID = BTN_ID_PAGE;
       _btnList.push(btn);
     }

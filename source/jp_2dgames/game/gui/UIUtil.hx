@@ -14,7 +14,7 @@ class UIUtil {
    **/
   public static function createPriceBG(px:Float, py:Float):FlxSprite {
     var bg = new FlxSprite(px, py+24);
-    bg.makeGraphic(MyButton.WIDTH, 12, MyColor.ASE_NAVY);
+    bg.makeGraphic(MyButton2.WIDTH, 12, MyColor.ASE_NAVY);
     bg.alpha = 0.5;
 
     return bg;
@@ -24,7 +24,7 @@ class UIUtil {
    * 値段のテキストを生成
    **/
   public static function createPriceText(px:Float, py:Float, label:String):FlxText {
-    var txt = new FlxText(px, py+24, MyButton.WIDTH);
+    var txt = new FlxText(px, py+24, MyButton2.WIDTH);
     txt.text = label;
     txt.alignment = "center";
     txt.color = MyColor.ASE_YELLOW;

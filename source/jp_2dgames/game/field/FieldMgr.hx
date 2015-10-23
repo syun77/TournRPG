@@ -1,11 +1,11 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.gui.MyButton2;
 import jp_2dgames.game.gui.FieldUI;
 import jp_2dgames.game.state.ShopState;
 import flixel.util.FlxColor;
 import flixel.util.FlxSpriteUtil;
 import flixel.FlxSprite;
-import flixel.text.FlxText;
 import jp_2dgames.game.gui.BtlUI;
 import jp_2dgames.game.gui.BtlCharaUI;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
@@ -65,13 +65,13 @@ class FieldMgr {
   var _eventMgr:FieldEventMgr;
 
   // メニューボタン
-  var _btnMenu:MyButton;
+  var _btnMenu:MyButton2;
 
   // 次のフロアに進むボタン
-  var _btnNextFloor:MyButton;
+  var _btnNextFloor:MyButton2;
 
   // ショップボタン
-  var _btnShop:MyButton;
+  var _btnShop:MyButton2;
 
   // Actor情報
   var _actor:Actor;
@@ -180,7 +180,7 @@ class FieldMgr {
     {
       var label = UIMsg.get(UIMsg.MENU);
       var px = InventoryUI.BTN_CANCEL_X;
-      _btnMenu = new MyButton(px, 0, label, function() {
+      _btnMenu = new MyButton2(px, 0, label, function() {
         _hideUI();
         _flxState.openSubState(new FieldSubState(_actor, _charaUI, function() {
           // サブメニューを閉じたときに呼び出す関数
@@ -194,7 +194,7 @@ class FieldMgr {
     {
       var label = UIMsg.get(UIMsg.NEXT_FLOOR);
       var px = InventoryUI.BTN_NEXTFLOOR_X;
-      _btnNextFloor = new MyButton(px, 0, label, function() {
+      _btnNextFloor = new MyButton2(px, 0, label, function() {
         _hideUI();
         // 次のフロアに進む
         _gotoNextFloor();
@@ -206,7 +206,7 @@ class FieldMgr {
     {
       var label = UIMsg.get(UIMsg.SHOP);
       var px = InventoryUI.BTN_SHOP_X;
-      _btnShop = new MyButton(px, 0, label, function() {
+      _btnShop = new MyButton2(px, 0, label, function() {
         _hideUI();
         // ショップを表示
         _flxState.openSubState(new ShopState(_cbShopEnd, _fieldUI));
@@ -319,9 +319,9 @@ class FieldMgr {
     // メニューボタンの更新
     switch(_state) {
       case State.Main:
-        _btnMenu.enable = true;
+        _btnMenu.enabled = true;
       default:
-        _btnMenu.enable = false;
+        _btnMenu.enabled = false;
         _btnNextFloor.visible = false;
         _btnShop.visible = false;
     }

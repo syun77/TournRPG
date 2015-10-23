@@ -47,7 +47,7 @@ class ShopBuyUI extends FlxSpriteGroup {
   // ■メンバ変数
 
   // ボタンリスト
-  var _btnList:Array<MyButton>;
+  var _btnList:Array<MyButton2>;
 
   // カテゴリ
   var _category:Int;
@@ -73,12 +73,6 @@ class ShopBuyUI extends FlxSpriteGroup {
       var px = InventoryUI.BASE_X;
       var py = FlxG.height + InventoryUI.BASE_OFS_Y;
       super(px, py);
-    }
-
-    // 背景
-    {
-      var bg = UIUtil.createMenuBG(0, UIUtil.MENU_BG_OFS_Y);
-      this.add(bg);
     }
 
     // カテゴリ
@@ -216,8 +210,14 @@ class ShopBuyUI extends FlxSpriteGroup {
    **/
   private function _displayButton(cbFunc:Int->Int->Void, actor:Actor, bAnim:Bool):Void {
 
+    // 背景
+    {
+      var bg = UIUtil.createMenuBG(0, UIUtil.MENU_BG_OFS_Y);
+      this.add(bg);
+    }
+
     // コマンドボタンの配置
-    _btnList = new Array<MyButton>();
+    _btnList = new Array<MyButton2>();
 
     var px = InventoryUI.BTN_X;
     var py = InventoryUI.BTN_Y;
@@ -225,7 +225,7 @@ class ShopBuyUI extends FlxSpriteGroup {
     var length = _getItemLength();
     for(btnID in 0...length) {
       var label = _getItemName(btnID);
-      var btn = new MyButton(px, py, label, function() {
+      var btn = new MyButton2(px, py, label, function() {
 
         // ボタンを押した
         cbFunc(btnID, _category);
@@ -245,7 +245,7 @@ class ShopBuyUI extends FlxSpriteGroup {
 
       if(Global.getMoney() < money) {
         // 所持金が足りない
-        btn.enable = false;
+        btn.enabled = false;
       }
 
       px += InventoryUI.BTN_DX;
@@ -256,7 +256,7 @@ class ShopBuyUI extends FlxSpriteGroup {
       var px = InventoryUI.BTN_CANCEL_X;
       var py = InventoryUI.BTN_CANCEL_Y;
       var label = UIMsg.get(UIMsg.CANCEL);
-      var btn = new MyButton(px, py, label, function() {
+      var btn = new MyButton2(px, py, label, function() {
         cbFunc(BTN_ID_CANCEL, _category);
         // UIを閉じる
         _close();
@@ -306,6 +306,16 @@ class ShopBuyUI extends FlxSpriteGroup {
       }
     };
 
+    // アイコンをクリックできるかどうか
+    var fnEmpty = function(type:Int) {
+      var shop = Global.getShopData();
+      switch(type) {
+        case CATEGORY_ITEM: return shop.isEmptyItem();
+        case CATEGORY_EQUIP: return shop.isEmptyEquip();
+        default: return shop.isEmptySkill();
+      }
+    }
+
     // ボタン生成
     for(type in tbl) {
       var func = function() {
@@ -316,8 +326,9 @@ class ShopBuyUI extends FlxSpriteGroup {
         _category = type;
         _displayButton(cbFunc, actor, false);
       }
-      var btn = new FlxButton(px, py, "", func);
+      var btn = new MyButton(px, py, "", func);
       btn.loadGraphic(fnImage(type), true);
+      btn.enabled = fnEmpty(type) == false;
       this.add(btn);
       px += CATEGORY_DX;
     }

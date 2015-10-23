@@ -30,6 +30,16 @@ class ShopData {
     return _skillList;
   }
 
+  public function isEmptyItem():Bool {
+    return itemList.length == 0;
+  }
+  public function isEmptyEquip():Bool {
+    return equipList.length == 0;
+  }
+  public function isEmptySkill():Bool {
+    return skillList.length == 0;
+  }
+
   /**
    * コンストラクタ
    **/

@@ -1,4 +1,5 @@
 package jp_2dgames.game.btl;
+import jp_2dgames.game.gui.MyButton2;
 import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.ActorMgr;
@@ -43,7 +44,7 @@ class BtlUtil {
       if(cnt >= 3) {
         // 3体以上の場合は上下にずらす
         if(idx%2 == 1) {
-          py += MyButton.HEIGHT + Reg.BTN_OFS_DY;
+          py += MyButton2.HEIGHT + Reg.BTN_OFS_DY;
         }
       }
       // 座標を設定

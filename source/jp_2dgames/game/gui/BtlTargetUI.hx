@@ -43,7 +43,7 @@ class BtlTargetUI extends FlxSpriteGroup {
   public function new(cbFunc:Int->Void, group:BtlGroup, range:BtlRange) {
     super();
 
-    var btnList = new Array<MyButton>();
+    var btnList = new Array<MyButton2>();
 
     // 対象Actorを決めるボタン
     switch(range) {
@@ -54,9 +54,9 @@ class BtlTargetUI extends FlxSpriteGroup {
       case BtlRange.One:
         // 単体
         ActorMgr.forEachAliveGroup(group, function(actor:Actor) {
-          var px = actor.xcenter - MyButton.WIDTH/2;
+          var px = actor.xcenter - MyButton2.WIDTH/2;
           var py = actor.bottom;
-          var btn = new MyButton(px, py, actor.name, function() {
+          var btn = new MyButton2(px, py, actor.name, function() {
             _click(cbFunc, actor.ID);
           });
           btnList.push(btn);
@@ -70,10 +70,10 @@ class BtlTargetUI extends FlxSpriteGroup {
           }
           return false;
         });
-        var px = FlxG.width/2 - MyButton.WIDTH/2;
+        var px = FlxG.width/2 - MyButton2.WIDTH/2;
         var py = actor.bottom;
         var name = UIMsg.get(UIMsg.CMD_ENEMY_ALL);
-        var btn = new MyButton(px, py, name, function() {
+        var btn = new MyButton2(px, py, name, function() {
           _click(cbFunc, actor.ID);
         });
         btnList.push(btn);
@@ -85,10 +85,10 @@ class BtlTargetUI extends FlxSpriteGroup {
 
     // キャンセルボタン
     {
-      var px = FlxG.width/2 - MyButton.WIDTH/2;
+      var px = FlxG.width/2 - MyButton2.WIDTH/2;
       var py = FlxG.height - BTN_CANCEL_OFS_Y;
       var label = UIMsg.get(UIMsg.CANCEL);
-      var btn = new MyButton(px, py, label, function() {
+      var btn = new MyButton2(px, py, label, function() {
         // キャンセル
         _click(cbFunc, CMD_CANCEL);
       });

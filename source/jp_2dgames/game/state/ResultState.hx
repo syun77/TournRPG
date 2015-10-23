@@ -1,8 +1,7 @@
 package jp_2dgames.game.state;
-import flixel.ui.FlxButton;
+import jp_2dgames.game.gui.MyButton2;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import jp_2dgames.lib.Input;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.FlxState;
@@ -50,9 +49,9 @@ class ResultState extends FlxState {
       idx++;
     }
 
-    var px = FlxG.width/2 - MyButton.WIDTH/2;
+    var px = FlxG.width/2 - MyButton2.WIDTH/2;
     var py = FlxG.height - 128;
-    var btn = new MyButton(px, py, "BACK TO TITLE", function() {
+    var btn = new MyButton2(px, py, "BACK TO TITLE", function() {
       FlxG.switchState(new TitleState());
     });
     this.add(btn);

@@ -29,8 +29,8 @@ class BtlCmdUI extends FlxSpriteGroup {
   // ボタン
   private static inline var BTN_X = Reg.BTN_OFS_X;
   private static inline var BTN_Y = 0;
-  private static inline var BTN_DX = MyButton.WIDTH + Reg.BTN_OFS_DX;
-  private static inline var BTN_DY = MyButton.HEIGHT + Reg.BTN_OFS_DY;
+  private static inline var BTN_DX = MyButton2.WIDTH + Reg.BTN_OFS_DX;
+  private static inline var BTN_DY = MyButton2.HEIGHT + Reg.BTN_OFS_DY;
 
   // ■メンバ変数
 
@@ -41,7 +41,7 @@ class BtlCmdUI extends FlxSpriteGroup {
   private var _detailUI:DetailUI;
 
   // ボタン
-  private var _btnList:List<MyButton>;
+  private var _btnList:List<MyButton2>;
 
   private var _state:FlxState;
 
@@ -75,9 +75,9 @@ class BtlCmdUI extends FlxSpriteGroup {
 
     // コマンドボタンの配置
     // 攻撃
-    _btnList = new List<MyButton>();
+    _btnList = new List<MyButton2>();
     var lblAtk = UIMsg.get(UIMsg.CMD_ATK);
-    _btnList.add(new MyButton(0, 0, lblAtk, function() {
+    _btnList.add(new MyButton2(0, 0, lblAtk, function() {
       _attack(actor, cbFunc);
     }));
 
@@ -85,11 +85,11 @@ class BtlCmdUI extends FlxSpriteGroup {
     for(idx in 0...SkillSlot.count()) {
       var skill = SkillSlot.getSkill(idx);
       var name = SkillUtil.getName(skill.id);
-      var btn = new MyButton(0, 0, name, function() {
+      var btn = new MyButton2(0, 0, name, function() {
         _skill(actor, cbFunc, skill);
       });
       // コストチェック
-      btn.enable = SkillUtil.checkCost(skill.id, actor);
+      btn.enabled = SkillUtil.checkCost(skill.id, actor);
       // スキル説明
       btn.detail = SkillUtil.getDetail2(skill.id);
       _btnList.add(btn);
@@ -97,19 +97,19 @@ class BtlCmdUI extends FlxSpriteGroup {
 
     // アイテム
     var lblItem = UIMsg.get(UIMsg.CMD_ITEM);
-    var btnItem = new MyButton(0, 0, lblItem, function() {
+    var btnItem = new MyButton2(0, 0, lblItem, function() {
       // インベントリ表示
       _displayInventoryUI(actor);
     });
     if(Inventory.isEmpty()) {
       // アイテムがないので選べない
-      btnItem.enable = false;
+      btnItem.enabled = false;
     }
     _btnList.add(btnItem);
 
     // 逃走
     var lblEscape = UIMsg.get(UIMsg.CMD_ESCAPE);
-    _btnList.add(new MyButton(0, 0, lblEscape, function() {
+    _btnList.add(new MyButton2(0, 0, lblEscape, function() {
       cbFunc(actor, BtlCmd.Escape(true));
     }));
 

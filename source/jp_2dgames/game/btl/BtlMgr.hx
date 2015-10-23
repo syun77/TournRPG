@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.game.gui.MyButton2;
 import flixel.FlxState;
 import flixel.FlxCamera;
 import jp_2dgames.game.item.ItemData;
@@ -267,9 +268,9 @@ class BtlMgr {
 
       case State.ResultWait:
 
-        var px = FlxG.width/2 - MyButton.WIDTH/2;
+        var px = FlxG.width/2 - MyButton2.WIDTH/2;
         var py = FlxG.height -128;
-        var btn = new MyButton(px, py, "NEXT", function() {
+        var btn = new MyButton2(px, py, "NEXT", function() {
           // プレイヤーパラメータをグローバルに戻しておく
           Global.setPlayerParam(_player.param);
           _change(State.End);
