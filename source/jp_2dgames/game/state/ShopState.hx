@@ -271,11 +271,10 @@ class ShopState extends FlxSubState {
       // アイテム購入
       _buyItem(btnID, category);
 
-      if(_isEmptyBuyItem(category) == false) {
-        // まだ買えるものがるので再び購入メニューを開く
-        ShopBuyUI.open(this, _cbBuy, null, category, false);
-        return;
-      }
+      // 再び購入メニューを開く
+      ShopBuyUI.open(this, _cbBuy, null, category, false);
+
+      return;
     }
 
     // ボタン出現
