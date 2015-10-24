@@ -49,6 +49,9 @@ class ShopBuyUI extends FlxSpriteGroup {
   // ボタンリスト
   var _btnList:Array<MyButton2>;
 
+  // カテゴリカーソル
+  var _cursor:FlxSprite;
+
   // カテゴリ
   var _category:Int;
 
@@ -270,6 +273,9 @@ class ShopBuyUI extends FlxSpriteGroup {
     // カテゴリボタン
     _addCategoryButton(cbFunc, actor);
 
+    // カテゴリカーソル
+    _addCategoryCursor();
+
     if(bAnim) {
 
       // 出現アニメーション
@@ -332,6 +338,17 @@ class ShopBuyUI extends FlxSpriteGroup {
       this.add(btn);
       px += CATEGORY_DX;
     }
+  }
+
+  /**
+   * カテゴリカーソルの追加
+   **/
+  private function _addCategoryCursor():Void {
+    var px = CATEGORY_X + (CATEGORY_DX * _category);
+    var py = CATEGORY_Y;
+    var cursor = new FlxSprite(px, py);
+    cursor.loadGraphic(Reg.PATH_SHOP_CURSOR);
+    this.add(cursor);
   }
 
   /**
