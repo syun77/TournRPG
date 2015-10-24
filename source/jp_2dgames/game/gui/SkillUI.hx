@@ -26,9 +26,9 @@ class SkillUI extends FlxSpriteGroup {
   static var _state:FlxState = null;
 
   // 開く
-  public static function open(state:FlxState, cbFunc:Int->Void, actor:Actor, mode:Int):Void {
+  public static function open(state:FlxState, cbFunc:Int->Void, actor:Actor, mode:Int, bAnim:Bool):Void {
     _state = state;
-    _instance = new SkillUI(cbFunc, actor, mode);
+    _instance = new SkillUI(cbFunc, actor, mode, bAnim);
     state.add(_instance);
   }
 
@@ -48,8 +48,9 @@ class SkillUI extends FlxSpriteGroup {
    * @param cbFunc スキル選択コールバック
    * @param actor  行動主体者
    * @param mode   モード
+   * @param bAnim  表示アニメの有無
    **/
-  public function new(cbFunc:Int->Void, actor:Actor, mode:Int) {
+  public function new(cbFunc:Int->Void, actor:Actor, mode:Int, bAnim:Bool) {
 
     _mode = mode;
 
@@ -67,7 +68,7 @@ class SkillUI extends FlxSpriteGroup {
     }
 
     // ボタンの表示
-    _displayButton(cbFunc, actor);
+    _displayButton(cbFunc, actor, bAnim);
 
     // 詳細情報
     _detailUI = new DetailUI();
@@ -86,7 +87,7 @@ class SkillUI extends FlxSpriteGroup {
   /**
    * ボタン表示
    **/
-  private function _displayButton(cbFunc:Int->Void, actor:Actor):Void {
+  private function _displayButton(cbFunc:Int->Void, actor:Actor, bAnim:Bool):Void {
 
     _btnList = new Array<MyButton2>();
 
@@ -96,10 +97,10 @@ class SkillUI extends FlxSpriteGroup {
       var skill = SkillSlot.getSkill(btnID);
       var label = SkillUtil.getName(skill.id);
       var btn = new MyButton2(px, py, label, function() {
-        // ボタンを押した
-        cbFunc(btnID);
         // UIを閉じる
         _close();
+        // ボタンを押した
+        cbFunc(btnID);
       });
 
       // 要素番号を入れておく
@@ -133,7 +134,7 @@ class SkillUI extends FlxSpriteGroup {
     }
 
     // 出現アニメーション
-    {
+    if(bAnim) {
       var py2 = FlxG.height + InventoryUI.BASE_OFS_Y;
       y = FlxG.height;
       FlxTween.tween(this, {y:py2}, 0.5, {ease:FlxEase.expoOut});

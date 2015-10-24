@@ -271,10 +271,11 @@ class ShopState extends FlxSubState {
       // アイテム購入
       _buyItem(btnID, category);
 
-      // 再び購入メニューを開く
-      ShopBuyUI.open(this, _cbBuy, null, category, false);
-
-      return;
+      if(_isEmptyBuyItem(-1) == false) {
+        // 再び購入メニューを開く
+        ShopBuyUI.open(this, _cbBuy, null, category, false);
+        return;
+      }
     }
 
     // ボタン出現
@@ -357,32 +358,41 @@ class ShopState extends FlxSubState {
   /**
    * スキル売却
    **/
-  private function _addSkillSellButton(px:Float, py:Float):MyButton2 {
+  private function _cbSkillSell(btnID:Int):Void {
+    if(btnID != SkillUI.BTN_ID_CANCEL) {
+      // スキル売却
+      var skill = SkillSlot.getSkill(btnID);
+      // お金に換算
+      var money = SkillUtil.getSell(skill.id);
+      Global.addMoney(money);
+      // スキル削除
+      SkillSlot.delSkill(btnID);
+      // 名前
+      var name = SkillUtil.getName(skill.id);
+      // メッセージ表示
+      Message.push2(Msg.ITEM_SELL, [name, money]);
+      Snd.playSe("coin", true);
 
-    var cbFunc = function(btnID:Int) {
-      if(btnID != SkillUI.BTN_ID_CANCEL) {
-        // スキル売却
-        var skill = SkillSlot.getSkill(btnID);
-        // お金に換算
-        var money = SkillUtil.getSell(skill.id);
-        Global.addMoney(money);
-        // スキル削除
-        SkillSlot.delSkill(btnID);
-        // 名前
-        var name = SkillUtil.getName(skill.id);
-        // メッセージ表示
-        Message.push2(Msg.ITEM_SELL, [name, money]);
-        Snd.playSe("coin", true);
+      if(SkillSlot.isEmpty() == false) {
+        // 再び売却メニューを開く
+        SkillUI.open(this, _cbSkillSell, null, SkillUI.MODE_SELL, false);
+        return;
       }
-
-      // ボタン出現
-      _appearBtn();
     }
+
+    // ボタン出現
+    _appearBtn();
+  }
+
+  /**
+   * スキル売却
+   **/
+  private function _addSkillSellButton(px:Float, py:Float):MyButton2 {
 
     var label = UIMsg.get(UIMsg.SHOP_SKILL_SELL);
     var btn = new MyButton2(px, py, label, function() {
       // スキルUIを開く
-      SkillUI.open(this, cbFunc, null, SkillUI.MODE_SELL);
+      SkillUI.open(this, _cbSkillSell, null, SkillUI.MODE_SELL, true);
       // メニュー非表示
       _group.visible = false;
     });
