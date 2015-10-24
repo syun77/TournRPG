@@ -105,6 +105,14 @@ class FieldState extends FlxState {
       // バトルテストシーン
       FlxG.switchState(new TestBattleState());
     }
+    if(FlxG.keys.justPressed.M) {
+      // お金を増やす
+      var v = 100;
+      if(FlxG.keys.pressed.SHIFT) {
+        v *= 10;
+      }
+      Global.addMoney(v);
+    }
     #end
 
   }
