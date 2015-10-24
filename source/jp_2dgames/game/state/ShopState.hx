@@ -1,22 +1,24 @@
 package jp_2dgames.game.state;
-import jp_2dgames.game.gui.MyButton2;
-import jp_2dgames.lib.Snd;
-import jp_2dgames.lib.CsvLoader;
-import jp_2dgames.game.gui.SkillUI;
-import jp_2dgames.game.gui.FieldUI;
-import jp_2dgames.game.skill.SkillUtil;
-import jp_2dgames.game.skill.SkillSlot;
-import jp_2dgames.game.gui.ShopBuyUI;
-import jp_2dgames.game.item.ItemUtil;
-import jp_2dgames.game.item.Inventory;
+
+import jp_2dgames.game.gui.MyButton;
+import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.FlxSubState;
+import flixel.group.FlxSpriteGroup;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
-import flixel.FlxG;
-import flixel.group.FlxSpriteGroup;
+import jp_2dgames.game.gui.FieldUI;
 import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.gui.InventoryUI;
-import flixel.FlxSubState;
+import jp_2dgames.game.gui.MyButton2;
+import jp_2dgames.game.gui.ShopBuyUI;
+import jp_2dgames.game.gui.SkillUI;
+import jp_2dgames.game.skill.SkillUtil;
+import jp_2dgames.game.skill.SkillSlot;
+import jp_2dgames.game.item.ItemUtil;
+import jp_2dgames.game.item.Inventory;
+import jp_2dgames.lib.Snd;
+import jp_2dgames.lib.CsvLoader;
 
 /**
  * ショップ画面
@@ -36,6 +38,9 @@ class ShopState extends FlxSubState {
 
   // フィールドUI
   var _fieldUI:FieldUI;
+
+  // アイテム購入ボタン
+  var _btnItemBuy:MyButton2;
 
   // アイテム売却ボタン
   var _btnItemSell:MyButton2;
@@ -105,10 +110,55 @@ class ShopState extends FlxSubState {
     _group.y = FlxG.height;
     FlxTween.tween(_group, {y:py}, 0.5, {ease:FlxEase.expoOut});
 
+    // 購入アイテムが存在しない
+    _btnItemBuy.enabled = (_isEmptyBuyItem(-1) == false);
     // アイテムを所持していない場合は売却できない
     _btnItemSell.enabled = (Inventory.isEmpty() == false);
     // スキルを所持していない場合は売却できない
     _btnSkillSell.enabled = (SkillSlot.isEmpty() == false);
+  }
+
+  /**
+   * 購入アイテムが空かどうか
+   **/
+  private function _isEmptyBuyItem(category:Int):Bool {
+    var shop = Global.getShopData();
+
+    // アイテムをチェック
+    if(shop.isEmptyItem() == false) {
+      return false;
+    }
+    else {
+      if(category == ShopBuyUI.CATEGORY_ITEM) {
+        // アイテムは空
+        return true;
+      }
+    }
+
+    // 装備品をチェック
+    if(shop.isEmptyEquip() == false) {
+      return false;
+    }
+    else {
+      if(category == ShopBuyUI.CATEGORY_EQUIP) {
+        // 装備品は空
+        return true;
+      }
+    }
+
+    // スキルをチェック
+    if(shop.isEmptySkill() == false) {
+      return false;
+    }
+    else {
+      if(category == ShopBuyUI.CATEGORY_SKILL) {
+        // スキルは空
+        return true;
+      }
+    }
+
+    // すべて空
+    return true;
   }
 
   /**
@@ -120,8 +170,8 @@ class ShopState extends FlxSubState {
 
     // 購入ボタン
     {
-      var btn = _addBuyButton(px, py);
-      _group.add(btn);
+      _btnItemBuy = _addBuyButton(px, py);
+      _group.add(_btnItemBuy);
     }
 
     px += InventoryUI.BTN_DX;
@@ -214,25 +264,54 @@ class ShopState extends FlxSubState {
   }
 
   /**
+   * 購入のコールバック
+   **/
+  private function _cbBuy(btnID:Int, category:Int):Void {
+    if(btnID != ShopBuyUI.BTN_ID_CANCEL) {
+      // アイテム購入
+      _buyItem(btnID, category);
+
+      if(_isEmptyBuyItem(category) == false) {
+        // まだ買えるものがるので再び購入メニューを開く
+        ShopBuyUI.open(this, _cbBuy, null, category, false);
+        return;
+      }
+    }
+
+    // ボタン出現
+    _appearBtn();
+  }
+
+  /**
+   * 購入可能なカテゴリを取得する
+   **/
+  private function _getValidBuyCategory():Int {
+    if(_isEmptyBuyItem(ShopBuyUI.CATEGORY_ITEM) == false) {
+      // 消耗品が購入可能
+      return ShopBuyUI.CATEGORY_ITEM;
+    }
+    if(_isEmptyBuyItem(ShopBuyUI.CATEGORY_EQUIP) == false) {
+      // 装備品が購入可能
+      return ShopBuyUI.CATEGORY_EQUIP;
+    }
+    if(_isEmptyBuyItem(ShopBuyUI.CATEGORY_SKILL) == false) {
+      // スキルが購入可能
+      return ShopBuyUI.CATEGORY_SKILL;
+    }
+
+    // あり得ないけど念のため
+    return ShopBuyUI.CATEGORY_ITEM;
+  }
+
+  /**
    * 購入ボタン
    **/
   private function _addBuyButton(px:Float, py:Float):MyButton2 {
 
-    var cbFunc = function(btnID:Int, category:Int) {
-
-      if(btnID != ShopBuyUI.BTN_ID_CANCEL) {
-        // アイテム購入
-        _buyItem(btnID, category);
-      }
-
-      // ボタン出現
-      _appearBtn();
-    }
-
     var label = UIMsg.get(UIMsg.SHOP_BUY);
     var btn = new MyButton2(px, py, label, function() {
       // 購入メニューを開く
-      ShopBuyUI.open(this, cbFunc, null);
+      ShopBuyUI.open(this, _cbBuy, null, _getValidBuyCategory(), true);
       // メニュー非表示
       _group.visible = false;
     });

@@ -38,9 +38,9 @@ class ShopBuyUI extends FlxSpriteGroup {
   static var _state:FlxState = null;
 
   // 開く
-  public static function open(state:FlxState, cbFunc:Int->Int->Void, actor:Actor):Void {
+  public static function open(state:FlxState, cbFunc:Int->Int->Void, actor:Actor, category:Int, bAnim:Bool):Void {
     _state = state;
-    _instance = new ShopBuyUI(cbFunc, actor);
+    _instance = new ShopBuyUI(cbFunc, actor, category, bAnim);
     state.add(_instance);
   }
 
@@ -66,10 +66,12 @@ class ShopBuyUI extends FlxSpriteGroup {
 
   /**
    * コンストラクタ
-   * @param cbFunc アイテム選択コールバック
-   * @param actor  行動主体者
+   * @param cbFunc   アイテム選択コールバック
+   * @param actor    行動主体者
+   * @param category カテゴリ
+   * @param bAnim    出現アニメーションの有無
    **/
-  public function new(cbFunc:Int->Int->Void, actor:Actor) {
+  public function new(cbFunc:Int->Int->Void, actor:Actor, category:Int, bAnim:Bool) {
 
     // 基準座標を設定
     {
@@ -79,10 +81,10 @@ class ShopBuyUI extends FlxSpriteGroup {
     }
 
     // カテゴリ
-    _category = CATEGORY_ITEM;
+    _category = category;
 
     // ボタンの表示
-    _displayButton(cbFunc, actor, true);
+    _displayButton(cbFunc, actor, bAnim);
 
     // 装備情報
     _equipUI = new EquipUI();
@@ -230,10 +232,10 @@ class ShopBuyUI extends FlxSpriteGroup {
       var label = _getItemName(btnID);
       var btn = new MyButton2(px, py, label, function() {
 
-        // ボタンを押した
-        cbFunc(btnID, _category);
         // UIを閉じる
         _close();
+        // ボタンを押した
+        cbFunc(btnID, _category);
       });
       // 要素番号を入れておく
       btn.ID = btnID;

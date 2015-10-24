@@ -54,6 +54,8 @@ class ShopData {
 
     item = new ItemData(ItemConst.WEAPON01);
     _equipList.push(item);
+    item = new ItemData(ItemConst.WEAPON02);
+    _equipList.push(item);
 
     var skill = new SkillData(SkillConst.SKILL001);
     _skillList.push(skill);
