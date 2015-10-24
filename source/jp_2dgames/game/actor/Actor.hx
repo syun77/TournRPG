@@ -31,6 +31,9 @@ class Actor extends FlxSprite {
   public static inline var HP_WARN:Int = 1; // 警告
   public static inline var HP_DANGER:Int = 2; // 危険
 
+  public static inline var HPBAR_WIDTH = (BtlCharaUI.BAR_HPMP_WIDTH * 1.5);
+  public static inline var HPBAR_HEIGHT = (BtlCharaUI.BAR_HPMP_HEIGHT * 2);
+
   // ■メンバ変数
   // 状態
   var _state:State     = State.None;
@@ -305,7 +308,11 @@ class Actor extends FlxSprite {
     _bstIcon = new BadStatusUI(0, 0);
 
     // HPゲージ
-    _hpBar = new HpBar(0, 0, BtlCharaUI.BAR_HPMP_WIDTH, BtlCharaUI.BAR_HPMP_HEIGHT);
+    {
+      var w = Std.int(HPBAR_WIDTH);
+      var h = Std.int(HPBAR_HEIGHT);
+      _hpBar = new HpBar(0, 0, w, h);
+    }
 
     // 非表示にしておく
     kill();
@@ -446,8 +453,8 @@ class Actor extends FlxSprite {
     _bstIcon.x = xcenter;
     _bstIcon.y = ycenter;
 
-    _hpBar.x = xcenter - BtlCharaUI.BAR_HPMP_WIDTH/2;
-    _hpBar.y = y + height + 8;
+    _hpBar.x = xcenter - HPBAR_WIDTH/2;
+    _hpBar.y = y + height + 4;
   }
 
   /**
