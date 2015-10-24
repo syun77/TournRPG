@@ -40,7 +40,7 @@ class MyButton extends FlxButton {
   public function new(X:Float = 0, Y:Float = 0, ?Text:String, ?OnClick:Void->Void) {
     super(X, Y, Text, OnClick);
 
-    onUp.sound   = Snd.load("push");
+    onDown.sound = Snd.load("push");
   }
 
   override private function updateButton():Void {
