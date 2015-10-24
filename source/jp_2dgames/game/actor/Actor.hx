@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.gui.BtlCharaUI;
+import jp_2dgames.game.gui.HpBar;
 import jp_2dgames.game.gui.BadStatusUI;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import flixel.util.FlxColor;
@@ -210,6 +212,13 @@ class Actor extends FlxSprite {
     return _bstIcon;
   }
 
+  // HPゲージ
+  var _hpBar:HpBar;
+  public var hpBar(get, never):HpBar;
+  private function get_hpBar() {
+    return _hpBar;
+  }
+
   /**
    * 経験値を増やす
    **/
@@ -295,6 +304,9 @@ class Actor extends FlxSprite {
     // バステアイコン
     _bstIcon = new BadStatusUI(0, 0);
 
+    // HPゲージ
+    _hpBar = new HpBar(0, 0, BtlCharaUI.BAR_HPMP_WIDTH, BtlCharaUI.BAR_HPMP_HEIGHT);
+
     // 非表示にしておく
     kill();
     visible = false;
@@ -305,6 +317,7 @@ class Actor extends FlxSprite {
    **/
   override public function kill():Void {
     _bstIcon.kill();
+    _hpBar.kill();
     super.kill();
   }
 
@@ -335,6 +348,7 @@ class Actor extends FlxSprite {
       if(bCreate) {
         _initEnemy();
       }
+      _hpBar.revive();
     }
 
     color = FlxColor.WHITE;
@@ -431,6 +445,9 @@ class Actor extends FlxSprite {
 
     _bstIcon.x = xcenter;
     _bstIcon.y = ycenter;
+
+    _hpBar.x = xcenter - BtlCharaUI.BAR_HPMP_WIDTH/2;
+    _hpBar.y = y + height + 8;
   }
 
   /**
@@ -473,7 +490,11 @@ class Actor extends FlxSprite {
 
     _tAnime++;
 
+    // 揺れ更新
     _updateShake();
+
+    // HPゲージ更新
+    _updateHpBar();
   }
 
   /**
@@ -493,6 +514,17 @@ class Actor extends FlxSprite {
       var xsign = if(_tAnime%4 < 2) 1 else -1;
       x = _xstart + (_tShake * xsign * 0.2);
     }
+  }
+
+  /**
+   * HPゲージ更新
+   **/
+  private function _updateHpBar():Void {
+    if(_group != BtlGroup.Enemy) {
+      return;
+    }
+
+    _hpBar.setPercent(100 * hpratio);
   }
 
   /**

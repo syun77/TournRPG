@@ -4,7 +4,6 @@ import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import flixel.FlxState;
 import flixel.util.FlxRandom;
-import jp_2dgames.game.btl.BtlGroupUtil;
 import flixel.group.FlxTypedGroup;
 
 /**
@@ -29,6 +28,7 @@ class ActorPool {
       state.add(_pool);
       _pool.forEach(function(actor:Actor) {
         state.add(actor.bstIcon);
+        state.add(actor.hpBar);
       });
     }
 

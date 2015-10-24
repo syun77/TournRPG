@@ -126,7 +126,7 @@ class BtlCharaUI extends FlxSpriteGroup {
   // HP数値
   var _txtHp:FlxText;
   // HPゲージ
-  var _barHp:StatusBar;
+  var _barHp:HpBar;
   // MPラベル
   var _txtMpLabel:FlxText;
   // MP数値
@@ -206,8 +206,7 @@ class BtlCharaUI extends FlxSpriteGroup {
     _txtHpLabel.color = FlxColor.CORAL;
     this.add(_txtHpLabel);
     // HPゲージ
-    _barHp = new StatusBar(BAR_HP_X, BAR_HPMP_Y, BAR_HPMP_WIDTH, BAR_HPMP_HEIGHT);
-    _barHp.createGradientBar([FlxColor.CHARCOAL, FlxColor.CHARCOAL], [FlxColor.WHEAT, FlxColor.CORAL], 2);
+    _barHp = new HpBar(BAR_HP_X, BAR_HPMP_Y, BAR_HPMP_WIDTH, BAR_HPMP_HEIGHT);
     this.add(_barHp);
     // HP数値
     _txtHp = new FlxText(TXT_HP_OFS_X, TXT_HP_OFS_Y, TXT_HPMP_WIDTH, TXT_HPMP_SIZE);

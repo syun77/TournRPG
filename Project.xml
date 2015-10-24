@@ -22,9 +22,9 @@
 
 	<!--These window settings apply to all targets-->
 	<window width="640" height="1136" fps="60" background="#000000" hardware="true" vsync="true" />
-	<window width="160" height="289" fps="60" background="#000000" hardware="true" vsync="true" />
 	<window width="320" height="568" fps="60" background="#000000" hardware="true" vsync="true" />
 	<window width="480" height="852" fps="60" background="#000000" hardware="true" vsync="true" />
+	<window width="160" height="289" fps="60" background="#000000" hardware="true" vsync="true" />
 
 	<!--Web-specific-->
 	<window if="web" orientation="portrait"  />
