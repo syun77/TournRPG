@@ -16,6 +16,19 @@ class RectLine extends FlxSpriteGroup {
     visible = false;
   }
 
+  override public function kill():Void {
+    forEach(function(spr:FlxSprite) {
+      spr.kill();
+    });
+    super.kill();
+  }
+  override public function revive():Void {
+    forEach(function(spr:FlxSprite) {
+      spr.revive();
+    });
+    super.revive();
+  }
+
   /**
    * 色の設定
    **/

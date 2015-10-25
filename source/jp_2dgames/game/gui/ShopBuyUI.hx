@@ -94,9 +94,7 @@ class ShopBuyUI extends FlxSpriteGroup {
     _detailUI = new DetailUI();
     _state.add(_detailUI);
 
-    for(obj in members) {
-      obj.scrollFactor.set(0, 0);
-    }
+    scrollFactor.set();
   }
 
   /**

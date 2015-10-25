@@ -41,6 +41,7 @@ class MyButton extends FlxButton {
     super(X, Y, Text, OnClick);
 
     onDown.sound = Snd.load("push");
+    scrollFactor.set();
   }
 
   override private function updateButton():Void {

@@ -89,6 +89,8 @@ class ShopState extends FlxSubState {
     // メッセージウィンドウ登録
     var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
     Message.createInstancePush(csv, this);
+
+    _group.scrollFactor.set();
   }
 
   /**

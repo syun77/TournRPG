@@ -30,7 +30,6 @@ class FieldState extends FlxState {
 
     // フィールド管理の生成
     _fieldMgr = new FieldMgr(this);
-
   }
 
   /**

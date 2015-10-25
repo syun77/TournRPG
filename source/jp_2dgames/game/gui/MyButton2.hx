@@ -106,6 +106,8 @@ class MyButton2 extends FlxTypedButton<FlxText> {
 
     // サウンド設定
     onDown.sound = Snd.load("push");
+
+    scrollFactor.set();
   }
 
   /**

@@ -31,6 +31,13 @@ class LineMgr {
       var line = new RectLine(8, color);
       state.add(line);
       _lines.add(line);
+      line.visible = false;
+    }
+  }
+
+  public function kill() {
+    for(line in _lines) {
+      line.visible = false;
     }
   }
 
@@ -38,12 +45,12 @@ class LineMgr {
    * 指定のノード情報で描画する
    **/
   public function drawFromNode(n1:FieldNode, n2:FieldNode):Void {
+    var i = 0;
     for(line in _lines) {
       if(line.visible) {
         // 使用済み
         continue;
       }
-
       var x1 = n1.xcenter;
       var y1 = n1.ycenter;
       var x2 = n2.xcenter;

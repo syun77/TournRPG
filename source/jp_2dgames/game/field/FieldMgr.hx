@@ -1,5 +1,7 @@
 package jp_2dgames.game.field;
 
+import flixel.FlxObject;
+import flixel.FlxCamera;
 import jp_2dgames.game.gui.MyButton2;
 import jp_2dgames.game.gui.FieldUI;
 import jp_2dgames.game.state.ShopState;
@@ -100,7 +102,10 @@ class FieldMgr {
     // 背景
     var bg = new FlxSprite().loadGraphic(Reg.getBackImagePath(1));
     bg.color = FlxColor.SILVER;
+    bg.scale.set(1.5, 1.5);
     _flxState.add(bg);
+    var bgPath = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.TRANSPARENT);
+    _flxState.add(bgPath);
 
     // ノード管理作成
     FieldNode.createParent(_flxState);
@@ -132,7 +137,7 @@ class FieldMgr {
     }
 
     // 経路描画
-    _createWayLine(bg);
+    _createWayLine(bgPath);
 
     // TODO: F.O.E.をひとまず出してみる
     FieldNode.forEachAlive(function(n:FieldNode) {
@@ -166,10 +171,12 @@ class FieldMgr {
 
     // UI表示
     _charaUI = new BtlCharaUI(0, BtlUI.CHARA_Y, _actor);
+    _charaUI.scrollFactor.set();
     _flxState.add(_charaUI);
 
     // フィールドUI
     _fieldUI = new FieldUI();
+    _fieldUI.scrollFactor.set();
     _flxState.add(_fieldUI);
 
     // メッセージ
@@ -182,9 +189,13 @@ class FieldMgr {
       var px = InventoryUI.BTN_CANCEL_X;
       _btnMenu = new MyButton2(px, 0, label, function() {
         _hideUI();
+        // プレイヤーフォーカス
+        FlxG.camera.follow(_player, FlxCamera.STYLE_LOCKON, null, 10);
         _flxState.openSubState(new FieldSubState(_actor, _charaUI, function() {
           // サブメニューを閉じたときに呼び出す関数
           _appearUI();
+          var obj = new FlxObject(FlxG.width/2, FlxG.height/2);
+          FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 10);
         }));
       });
       flxState.add(_btnMenu);
@@ -208,6 +219,8 @@ class FieldMgr {
       var px = InventoryUI.BTN_SHOP_X;
       _btnShop = new MyButton2(px, 0, label, function() {
         _hideUI();
+        // プレイヤーフォーカス
+        FlxG.camera.follow(_player, FlxCamera.STYLE_LOCKON, null, 10);
         // ショップを表示
         _flxState.openSubState(new ShopState(_cbShopEnd, _fieldUI));
         _state = State.Shop;
@@ -217,6 +230,16 @@ class FieldMgr {
 
     // UI出現
     _appearUI();
+
+    // ズーム演出
+    _startZoom();
+  }
+
+  /**
+   * ズーム演出開始
+   **/
+  private function _startZoom():Void {
+    FlxG.camera.zoom = FlxCamera.defaultZoom + 0.3;
   }
 
   /**
@@ -237,6 +260,8 @@ class FieldMgr {
     _btnMenu.visible      = false;
     _btnNextFloor.visible = false;
     _btnShop.visible      = false;
+    return;
+
     FieldNode.setVisible(false);
     _lines.visible = false;
   }
@@ -299,6 +324,12 @@ class FieldMgr {
    * 更新
    **/
   public function proc():Void {
+
+    // ズーム演出
+    {
+      var d = FlxG.camera.zoom - FlxCamera.defaultZoom;
+      FlxG.camera.zoom -= d * 0.1;
+    }
 
     switch(_state) {
       case State.Main:
@@ -378,7 +409,7 @@ class FieldMgr {
         selNode.scale.set(1, 1);
 
         // 経路をいったん消す
-        _lines.visible = false;
+        _lines.kill();
 
         // 選択したノードに向かって移動する
         _state = State.Moving;
@@ -433,6 +464,8 @@ class FieldMgr {
           _actor.init(BtlGroup.Player, Global.getPlayerParam());
           // UI表示
           _appearUI();
+          // ズーム演出開始
+          _startZoom();
         }
 
         // メイン処理に戻る
@@ -468,6 +501,10 @@ class FieldMgr {
     // ショップ終わり
     _state = State.Main;
 
+    // フォーカスを戻す
+    var obj = new FlxObject(FlxG.width/2, FlxG.height/2);
+    FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 10);
+
     // UI表示
     _appearUI();
   }
@@ -484,7 +521,7 @@ class FieldMgr {
 
     // 経路描画
     // いったん非表示
-    _lines.visible = false;
+    _lines.kill();
     for(n in _nowNode.reachableNodes) {
       _lines.drawFromNode(_nowNode, n);
     }

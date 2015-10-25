@@ -73,6 +73,8 @@ class SkillUI extends FlxSpriteGroup {
     // 詳細情報
     _detailUI = new DetailUI();
     _state.add(_detailUI);
+
+    scrollFactor.set();
   }
 
   /**

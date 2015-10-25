@@ -80,6 +80,7 @@ private class _Node {
   public var ev:String;
   public var bStart:Bool;
   public var bFoot:Bool;
+  public var bOpened:Bool;
 
   public function new() {
   }
@@ -102,6 +103,7 @@ private class _Field {
       n.ev = FieldEventUtil.toString(node.evType);
       n.bStart = node.isStartFlag();
       n.bFoot = node.bFoot;
+      n.bOpened = node.bOpened;
       this.array.push(n);
     });
   }
@@ -113,12 +115,13 @@ private class _Field {
 
     for(idx in 0...data.array.length) {
       var node = data.array[idx];
-      var x:Float     = node.x;
-      var y:Float     = node.y;
-      var ev:String   = node.ev;
-      var bStart:Bool = node.bStart;
-      var bFoot:Bool  = node.bFoot;
-      TmpFieldNode.add(x, y, ev, bStart, bFoot);
+      var x:Float      = node.x;
+      var y:Float      = node.y;
+      var ev:String    = node.ev;
+      var bStart:Bool  = node.bStart;
+      var bFoot:Bool   = node.bFoot;
+      var bOpened:Bool = node.bOpened;
+      TmpFieldNode.add(x, y, ev, bStart, bFoot, bOpened);
     }
   }
 }

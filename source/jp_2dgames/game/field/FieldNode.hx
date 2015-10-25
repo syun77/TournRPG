@@ -247,6 +247,8 @@ class FieldNode extends FlxSprite {
     if(b) {
       // 到達できる
       _setColor();
+      // 開いたフラグを立てる
+      _bOpened = true;
     }
     else {
       // 到達できない
@@ -281,6 +283,19 @@ class FieldNode extends FlxSprite {
   public function setFoot(b:Bool):Void {
     _bFoot = b;
     _playAnime(reachable, _bFoot);
+  }
+
+  // 情報を開いたかどうか
+  private var _bOpened:Bool;
+  public var bOpened(get, never):Bool;
+  private function get_bOpened() {
+    return _bOpened;
+  }
+  public function setOpened(b:Bool):Void {
+    _bOpened = b;
+    if(b) {
+      _setColor();
+    }
   }
 
   /**
@@ -390,8 +405,9 @@ class FieldNode extends FlxSprite {
     // イベント種別を設定する
     setEventType(evType);
 
-    _bFoot = false;
+    _bFoot    = false;
     reachable = false;
+    _bOpened  = false;
     _reachableNodes = new List<FieldNode>();
   }
 

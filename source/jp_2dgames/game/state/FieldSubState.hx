@@ -71,6 +71,8 @@ class FieldSubState extends FlxSubState {
     _displayButton();
 
     _appearBtn();
+
+    _group.scrollFactor.set();
   }
 
   /**
