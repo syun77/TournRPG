@@ -173,9 +173,7 @@ class InventoryUI extends FlxSpriteGroup {
     // 非表示にしておく
     _detailUI.visible = false;
 
-    for(obj in members) {
-      obj.scrollFactor.set(0, 0);
-    }
+    scrollFactor.set();
   }
 
   /**
