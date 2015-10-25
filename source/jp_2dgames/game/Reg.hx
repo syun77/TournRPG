@@ -53,7 +53,7 @@ class Reg {
   // ・装備品
   public static inline var PATH_SHOP_EQUIP = "assets/images/ui/shop/weapon.png";
   // ・スキル
-  public static inline var PATH_SHOP_SKILL = "assets/images/ui/shop/wand.png";
+  public static inline var PATH_SHOP_SKILL = "assets/images/ui/shop/skill.png";
   // ・カーソル
   public static inline var PATH_SHOP_CURSOR = "assets/images/ui/shop/cursor.png";
 
