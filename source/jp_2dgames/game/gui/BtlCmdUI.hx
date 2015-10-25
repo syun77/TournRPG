@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.gui.InventoryUI;
 import jp_2dgames.game.skill.SkillRange;
 import flixel.FlxState;
 import flixel.ui.FlxButton;
@@ -251,7 +252,8 @@ class BtlCmdUI extends FlxSpriteGroup {
    * インベントリUIを表示する
    **/
   private function _displayInventoryUI(actor:Actor):Void {
-    InventoryUI.open(_state, _cbItemSelect, actor, InventoryUI.MODE_NORMAL);
+    var param = new InventoryUIParam(InventoryUI.MODE_NORMAL);
+    InventoryUI.open(_state, _cbItemSelect, actor, param);
     // 自身は非表示
     visible = false;
   }
@@ -259,16 +261,16 @@ class BtlCmdUI extends FlxSpriteGroup {
   /**
    * アイテム選択のコールバック関数
    **/
-  private function _cbItemSelect(btnID:Int):Void {
+  private function _cbItemSelect(result:InventoryUIResult):Void {
 
-    if(btnID == InventoryUI.CMD_CANCEL) {
+    if(result.uid == InventoryUI.CMD_CANCEL) {
       // キャンセルしたのでコマンドUIを再び表示
       _display();
       return;
     }
 
     // アイテムを選んだ
-    _cbItem(btnID);
+    _cbItem(result.uid);
   }
 
   /**

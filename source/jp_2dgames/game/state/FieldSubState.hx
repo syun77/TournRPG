@@ -125,13 +125,14 @@ class FieldSubState extends FlxSubState {
   private function _addItemButton(px:Float, py:Float):MyButton2 {
     var btn:MyButton2 = null;
 
-    var cbFunc = function(btnID:Int) {
-      if(btnID != InventoryUI.CMD_CANCEL) {
+    var cbFunc = function(result:InventoryUIResult) {
+      var uid = result.uid;
+      if(uid != InventoryUI.CMD_CANCEL) {
 
         // アイテムを使う
-        var item = Inventory.getItem(btnID);
+        var item = Inventory.getItem(uid);
         ItemUtil.use(_actor, item, true);
-        Inventory.delItem(btnID);
+        Inventory.delItem(uid);
 
         // プレイヤーパラメータをグローバルに戻しておく
         Global.setPlayerParam(_actor.param);
@@ -144,7 +145,8 @@ class FieldSubState extends FlxSubState {
     var label = UIMsg.get(UIMsg.CMD_ITEM);
     btn = new MyButton2(px, py, label, function() {
       // インベントリを開く
-      InventoryUI.open(this, cbFunc, _actor, InventoryUI.MODE_NORMAL);
+      var param = new InventoryUIParam(InventoryUI.MODE_NORMAL);
+      InventoryUI.open(this, cbFunc, _actor, param);
       // メニュー非表示
       _group.visible = false;
     });

@@ -124,6 +124,14 @@ class Global {
 
     // 初期アイテム
     Inventory.push(new ItemData(ItemConst.POTION01));
+    Inventory.push(new ItemData(ItemConst.POTION01));
+    Inventory.push(new ItemData(ItemConst.POTION01));
+    Inventory.push(new ItemData(ItemConst.POTION01));
+    Inventory.push(new ItemData(ItemConst.POTION02));
+    Inventory.push(new ItemData(ItemConst.POTION02));
+    Inventory.push(new ItemData(ItemConst.POTION02));
+    Inventory.push(new ItemData(ItemConst.POTION02));
+    Inventory.push(new ItemData(ItemConst.POTION02));
   }
 
   // アイテムリストを設定

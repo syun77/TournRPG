@@ -2,11 +2,9 @@ package jp_2dgames.game.btl;
 
 import jp_2dgames.lib.Snd;
 import flixel.FlxState;
-import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.lib.Input;
-import flixel.FlxG;
 import jp_2dgames.game.gui.InventoryUI;
 import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.gui.Dialog;
@@ -225,27 +223,26 @@ class BtlResult {
 
       case State.ItemDel:
         // アイテムを捨てて拾う
-        var ui = null;
-        ui = new InventoryUI(function(idx:Int) {
-          if(idx == InventoryUI.CMD_CANCEL) {
+        var param = new InventoryUIParam(InventoryUI.MODE_DROP);
+        var cbFunc = function(result:InventoryUIResult) {
+          var uid = result.uid;
+          if(uid == InventoryUI.CMD_CANCEL) {
             // キャンセル
             _state = State.CantGet;
             return;
           }
 
-          var item = Inventory.getItem(idx);
+          var item = Inventory.getItem(uid);
           var name = ItemUtil.getName(item);
           var name2  = ItemUtil.getName(_nowInfo.item);
-          Inventory.delItem(idx);
+          Inventory.delItem(uid);
           Inventory.push(_nowInfo.item);
           Message.push2(Msg.ITEM_DEL_GET, [name, name2]);
-          _flxState.remove(ui);
 
           // 次のアイテムを見る
           _state = State.Pickup;
-        }, null, InventoryUI.MODE_DROP);
-        _flxState.add(ui);
-
+        }
+        InventoryUI.open(_flxState, cbFunc, null, param);
         _state = State.ItemDelUI;
 
       case State.ItemDelUI:

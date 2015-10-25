@@ -320,34 +320,46 @@ class ShopState extends FlxSubState {
   }
 
   /**
+   * アイテム売却コールバック
+   **/
+  private function _cbItemSell(result:InventoryUIResult):Void {
+    var uid = result.uid;
+    if(uid != InventoryUI.CMD_CANCEL) {
+      // アイテム売却
+      var item = Inventory.getItem(uid);
+      // お金に換算
+      var money = ItemUtil.getSell(item);
+      Global.addMoney(money);
+      // アイテム削除
+      Inventory.delItem(uid);
+      // 名前
+      var name = ItemUtil.getName(item);
+      // メッセージ表示
+      Message.push2(Msg.ITEM_SELL, [name, money]);
+      Snd.playSe("coin", true);
+
+      if(Inventory.isEmpty() == false) {
+        // 再びインベントリを開く
+        var param = new InventoryUIParam(InventoryUI.MODE_SELL, false, result.nPage);
+        InventoryUI.open(this, _cbItemSell, null, param);
+        return;
+      }
+    }
+
+    // ボタン出現
+    _appearBtn();
+  }
+
+  /**
    * アイテム売却ボタン
    **/
   private function _addItemSellButton(px:Float, py:Float):MyButton2 {
 
-    var cbFunc = function(btnID:Int) {
-      if(btnID != InventoryUI.CMD_CANCEL) {
-        // アイテム売却
-        var item = Inventory.getItem(btnID);
-        // お金に換算
-        var money = ItemUtil.getSell(item);
-        Global.addMoney(money);
-        // アイテム削除
-        Inventory.delItem(btnID);
-        // 名前
-        var name = ItemUtil.getName(item);
-        // メッセージ表示
-        Message.push2(Msg.ITEM_SELL, [name, money]);
-        Snd.playSe("coin", true);
-      }
-
-      // ボタン出現
-      _appearBtn();
-    }
-
     var label = UIMsg.get(UIMsg.SHOP_ITEM_SELL);
     var btn = new MyButton2(px, py, label, function() {
       // インベントリを開く
-      InventoryUI.open(this, cbFunc, null, InventoryUI.MODE_SELL);
+      var param = new InventoryUIParam(InventoryUI.MODE_SELL);
+      InventoryUI.open(this, _cbItemSell, null, param);
       // メニュー非表示
       _group.visible = false;
     });
