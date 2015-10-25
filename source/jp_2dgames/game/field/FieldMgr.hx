@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.lib.Snd;
 import flixel.FlxObject;
 import flixel.FlxCamera;
 import jp_2dgames.game.gui.MyButton2;
@@ -27,12 +28,13 @@ import jp_2dgames.lib.CsvLoader;
  * 状態
  **/
 private enum State {
-  Main;   // メイン
-  Moving; // 移動中
-  Event;  // イベント実行中
-  Shop;   // ショップ表示中
+  Main;      // メイン
+  Moving;    // 移動中
+  Event;     // イベント実行中
+  Shop;      // ショップ表示中
+  NextFloor; // 次のフロアに進む
 
-  End;    // 終了
+  End;       // 終了
 }
 
 /**
@@ -343,6 +345,8 @@ class FieldMgr {
 
       case State.Shop:
 
+      case State.NextFloor:
+
       case State.End:
         // おしまい
     }
@@ -532,8 +536,13 @@ class FieldMgr {
    **/
   private function _gotoNextFloor():Void {
     // 次のステージに進む
-    _resultCode = RET_NEXTSTAGE;
-    _state = State.End;
+    _state = State.NextFloor;
+    Snd.playSe("foot2");
+    // フェード開始
+    FlxG.camera.fade(FlxColor.BLACK, 1, false, function() {
+      _resultCode = RET_NEXTSTAGE;
+      _state = State.End;
+    });
   }
 
   /**
