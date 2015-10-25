@@ -105,6 +105,9 @@ class InventoryUI extends FlxSpriteGroup {
   // モード
   private var _mode:Int;
   private var _btnList:Array<MyButton2>;
+  private var _priceBgList:List<FlxSprite>;
+  private var _priceList:List<FlxText>;
+
   // ページ番号
   private var _nPage:Int = 0;
   // ページの最大数
@@ -200,9 +203,9 @@ class InventoryUI extends FlxSpriteGroup {
     _btnList = new Array<MyButton2>();
 
     // 背景
-    var bgList = new List<FlxSprite>();
-    // テキスト
-    var txtList = new List<FlxText>();
+    _priceBgList = new List<FlxSprite>();
+    // 値段テキスト
+    _priceList = new List<FlxText>();
 
     var ofs = _getPageOffset();
     var max = _getPageOffsetMax();
@@ -248,10 +251,10 @@ class InventoryUI extends FlxSpriteGroup {
       if(_mode == MODE_SELL) {
 
         // 売却価格
-        bgList.add(UIUtil.createPriceBG(px, py));
+        _priceBgList.add(UIUtil.createPriceBG(px, py));
         var label = '${ItemUtil.getSell(item)}G';
         var txt = UIUtil.createPriceText(px, py, label);
-        txtList.add(txt);
+        _priceList.add(txt);
       }
     }
 
@@ -301,10 +304,10 @@ class InventoryUI extends FlxSpriteGroup {
 
     // 背景・売却価格の表示
     {
-      for(bg in bgList) {
+      for(bg in _priceBgList) {
         this.add(bg);
       }
-      for(txt in txtList) {
+      for(txt in _priceList) {
         this.add(txt);
       }
     }
@@ -338,6 +341,16 @@ class InventoryUI extends FlxSpriteGroup {
     // ボタンをすべて消す
     for(btn in _btnList) {
       this.remove(btn);
+    }
+    if(_mode == MODE_SELL) {
+      // 値段背景をすべて消す
+      for(bg in _priceBgList) {
+        this.remove(bg);
+      }
+      // 値段テキストをすべて消す
+      for(txt in _priceList) {
+        this.remove(txt);
+      }
     }
 
     // ボタンを再表示
