@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.gui.SkillUI;
 import jp_2dgames.game.gui.MyButton2;
 import jp_2dgames.game.gui.UIUtil;
@@ -34,6 +35,8 @@ class FieldSubState extends FlxSubState {
 
   // アイテムボタン
   var _btnItem:MyButton2;
+  // アイテムを捨てるボタン
+  var _btnItemDel:MyButton2;
   // スキル確認ボタン
   var _btnSkill:MyButton2;
 
@@ -99,6 +102,13 @@ class FieldSubState extends FlxSubState {
     {
       _btnItem = _addItemButton(px, py);
       _group.add(_btnItem);
+    }
+
+    px += InventoryUI.BTN_DX;
+    // アイテムを捨てるボタン
+    {
+      _btnItemDel = _addItemDelButton(px, py);
+      _group.add(_btnItemDel);
     }
 
     px += InventoryUI.BTN_DX;
@@ -187,6 +197,47 @@ class FieldSubState extends FlxSubState {
   }
 
   /**
+   * アイテム削除
+   **/
+  private function _cbItemDel(result:InventoryUIResult):Void {
+    var uid = result.uid;
+    if(uid != InventoryUI.CMD_CANCEL) {
+      // アイテムを捨てる
+      var item = Inventory.getItem(uid);
+      var name = ItemUtil.getName(item);
+      // アイテム削除
+      Inventory.delItem(uid);
+      Message.push2(Msg.ITEM_DEL, [name]);
+
+      if(Inventory.isEmpty() == false) {
+        // 再び表示
+        var param = new InventoryUIParam(InventoryUI.MODE_DROP, false, result.nPage);
+        InventoryUI.open(this, _cbItemDel, null, param);
+        return;
+      }
+    }
+    // ボタンを再表示
+    _appearBtn();
+  }
+
+  /**
+   * アイテムを捨てるボタンを配置
+   **/
+  private function _addItemDelButton(px:Float, py:Float):MyButton2 {
+
+    var label = UIMsg.get(UIMsg.ITEM_DROP);
+    var btn = new MyButton2(px, py, label, function() {
+      // インベントリUIを開く
+      var param = new InventoryUIParam(InventoryUI.MODE_DROP);
+      InventoryUI.open(this, _cbItemDel, null, param);
+      // メニュー非表示
+      _group.visible = false;
+    });
+
+    return btn;
+  }
+
+  /**
    * 破棄
    */
   override public function destroy():Void {
@@ -204,6 +255,10 @@ class FieldSubState extends FlxSubState {
 
     // アイテムボタンを押せるかどうかチェック
     _btnItem.enabled = (Inventory.isEmpty() == false);
+    // アイテム捨てるボタンを押せるかどうかチェック
+    _btnItemDel.enabled = (Inventory.isEmpty() == false);
+    // スキル確認ボタンを押せるかどうかチェック
+    _btnSkill.enabled = (SkillSlot.isEmpty() == false);
 
     // メッセージ更新
     Message.forceUpdate();

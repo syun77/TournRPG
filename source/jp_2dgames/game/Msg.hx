@@ -44,4 +44,5 @@ class Msg {
   public static inline var BUFF_SPD_DOWN:Int  = 42; // 素早さダウン
   public static inline var ITEM_BUY:Int       = 43; // アイテム購入
   public static inline var ITEM_SELL:Int      = 44; // アイテム売却
+  public static inline var ITEM_DEL:Int       = 45; // アイテムを捨てる
 }
