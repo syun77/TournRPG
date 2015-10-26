@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.ui.FlxButton;
 import flixel.text.FlxText;
 import flixel.FlxSprite;
 import jp_2dgames.game.skill.SkillUtil;
@@ -20,6 +21,7 @@ class SkillUI extends FlxSpriteGroup {
 
   // モード
   public static inline var MODE_SELL:Int = 0; // 売却モード
+  public static inline var MODE_VIEW:Int = 1; // 確認モード
 
   // ■スタティック
   static var _instance:SkillUI = null;
@@ -110,11 +112,13 @@ class SkillUI extends FlxSpriteGroup {
       _btnList.push(btn);
       this.add(btn);
 
-      // 売却価格の表示
-      this.add(UIUtil.createPriceBG(px, py));
-      var label = '${SkillUtil.getSell(skill.id)}G';
-      var txt = UIUtil.createPriceText(px, py, label);
-      this.add(txt);
+      if(_mode == MODE_SELL) {
+        // 売却価格の表示
+        this.add(UIUtil.createPriceBG(px, py));
+        var label = '${SkillUtil.getSell(skill.id)}G';
+        var txt = UIUtil.createPriceText(px, py, label);
+        this.add(txt);
+      }
 
       px += InventoryUI.BTN_DX;
     }
@@ -160,5 +164,21 @@ class SkillUI extends FlxSpriteGroup {
     super.update();
 
     _detailUI.visible = false;
+    for(btn in _btnList) {
+      switch(btn.status) {
+        case FlxButton.HIGHLIGHT, FlxButton.PRESSED:
+          var idx = btn.ID;
+          if(idx < 0) {
+            continue;
+          }
+
+          _detailUI.visible = true;
+          // 表示情報を更新
+          var skill = SkillSlot.getSkill(idx);
+          var detail = SkillUtil.getDetail2(skill.id);
+          _detailUI.setText(detail);
+          break;
+      }
+    }
   }
 }

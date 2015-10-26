@@ -22,6 +22,7 @@ class UIMsg {
   public static inline var SHOP_BUY:Int        = 14; // ショップ (購入)
   public static inline var SHOP_ITEM_SELL:Int  = 15; // ショップ (アイテム売却)
   public static inline var SHOP_SKILL_SELL:Int = 16; // ショップ (スキル売却)
+  public static inline var SKILL_VIEW:Int      = 17; // スキル確認
 
 
 

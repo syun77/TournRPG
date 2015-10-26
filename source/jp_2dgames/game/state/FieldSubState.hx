@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.SkillUI;
 import jp_2dgames.game.gui.MyButton2;
 import jp_2dgames.game.gui.UIUtil;
 import jp_2dgames.game.gui.BtlCharaUI;
@@ -33,6 +34,8 @@ class FieldSubState extends FlxSubState {
 
   // アイテムボタン
   var _btnItem:MyButton2;
+  // スキル確認ボタン
+  var _btnSkill:MyButton2;
 
   // キャラUI
   var _ui:BtlCharaUI;
@@ -99,6 +102,13 @@ class FieldSubState extends FlxSubState {
     }
 
     px += InventoryUI.BTN_DX;
+    // スキル確認ボタン
+    {
+      _btnSkill = _addSkillButton(px, py);
+      _group.add(_btnSkill);
+    }
+
+    px += InventoryUI.BTN_DX;
     py += InventoryUI.BTN_DY;
     {
       // 他にボタンを追加する場合はここに追加
@@ -125,7 +135,6 @@ class FieldSubState extends FlxSubState {
    * アイテムボタンを配置
    **/
   private function _addItemButton(px:Float, py:Float):MyButton2 {
-    var btn:MyButton2 = null;
 
     var cbFunc = function(result:InventoryUIResult) {
       var uid = result.uid;
@@ -140,15 +149,36 @@ class FieldSubState extends FlxSubState {
         Global.setPlayerParam(_actor.param);
       }
 
-      // 終了時のコールバック呼び出し
+      // ボタンを再表示
       _appearBtn();
     };
 
     var label = UIMsg.get(UIMsg.CMD_ITEM);
-    btn = new MyButton2(px, py, label, function() {
+    var btn = new MyButton2(px, py, label, function() {
       // インベントリを開く
       var param = new InventoryUIParam(InventoryUI.MODE_NORMAL);
       InventoryUI.open(this, cbFunc, _actor, param);
+      // メニュー非表示
+      _group.visible = false;
+    });
+
+    return btn;
+  }
+
+  /**
+   * スキルボタンを配置
+   **/
+  private function _addSkillButton(px:Float, py:Float):MyButton2 {
+
+    var cbFunc = function(btnID:Int) {
+      // ボタンを再表示
+      _appearBtn();
+    }
+
+    var label = UIMsg.get(UIMsg.SKILL_VIEW);
+    var btn = new MyButton2(px, py, label, function() {
+      // スキルUIを開く
+      SkillUI.open(this, cbFunc, null, SkillUI.MODE_VIEW, true);
       // メニュー非表示
       _group.visible = false;
     });
