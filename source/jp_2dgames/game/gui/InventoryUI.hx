@@ -94,7 +94,13 @@ class InventoryUI extends FlxSpriteGroup {
 
   private static var _state:FlxState = null;
 
-  // 開く
+  /**
+   * 開く
+   * @param state  親となるFlxState
+   * @param cbFunc アイテム選択時に呼び出すコールバック関数
+   * @param actor  実行主体者
+   * @param param  起動パラメータ
+   **/
   public static function open(state:FlxState, cbFunc:InventoryUIResult->Void, actor:Actor, param:InventoryUIParam):Void {
     _state = state;
     _instance = new InventoryUI(cbFunc, actor, param);
@@ -278,7 +284,7 @@ class InventoryUI extends FlxSpriteGroup {
       // 1つ前に戻る
       var py = BTN_PAGE_Y;
       var btn = new MyButton2(BTN_PREV_X, py, "<<", function() {
-        _changePage(-1, cbFunc, actor, bAnim);
+        _changePage(-1, cbFunc, actor, false);
       });
       btn.enabled = (_nPage > 0);
       btn.ID = BTN_ID_PAGE;
@@ -288,7 +294,7 @@ class InventoryUI extends FlxSpriteGroup {
       // 1つ先に進む
       var py = BTN_PAGE_Y;
       var btn = new MyButton2(BTN_NEXT_X, py, ">>", function() {
-        _changePage(1, cbFunc, actor, bAnim);
+        _changePage(1, cbFunc, actor, false);
       });
       btn.enabled = (_nPage < _nPageMax - 1);
       btn.ID = BTN_ID_PAGE;
