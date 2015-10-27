@@ -407,6 +407,7 @@ class FieldMgr {
       if(FlxG.mouse.justPressed) {
 
         // 移動先を選択した
+        Snd.playSe("menu");
         // 元のノードは何もない状態にする
         _nowNode.setEventType(FieldEvent.None);
 

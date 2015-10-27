@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.lib.Snd;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.gui.SkillUI;
 import jp_2dgames.game.gui.MyButton2;
@@ -208,6 +209,7 @@ class FieldSubState extends FlxSubState {
       // アイテム削除
       Inventory.delItem(uid);
       Message.push2(Msg.ITEM_DEL, [name]);
+      Snd.playSe("del");
 
       if(Inventory.isEmpty() == false) {
         // 再び表示
