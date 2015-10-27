@@ -1,5 +1,7 @@
 package jp_2dgames.game.save;
 
+import jp_2dgames.game.shop.ShopData;
+import jp_2dgames.game.skill.SkillData;
 import jp_2dgames.game.field.TmpFieldFoe;
 import flixel.util.FlxSave;
 import jp_2dgames.game.actor.Params;
@@ -166,6 +168,46 @@ private class _FoeInfo {
   }
 }
 
+// ショップ
+private class _Shop {
+  public var itemList:Array<ItemData>;
+  public var equipList:Array<ItemData>;
+  public var skillList:Array<SkillData>;
+
+  public function new() {
+  }
+  // セーブ
+  public function save() {
+    var shop = Global.getShopData();
+    itemList = shop.itemList;
+    equipList = shop.equipList;
+    skillList = shop.skillList;
+  }
+  // ロード
+  public function load(data:Dynamic) {
+    var items = new Array<ItemData>();
+    for(idx in 0...data.itemList.length) {
+      var item = data.itemList[idx];
+      var i = new ItemData(item.id);
+      items.push(i);
+    }
+    var equips = new Array<ItemData>();
+    for(idx in 0...data.equipList.length) {
+      var equip = data.equipList[idx];
+      var e = new ItemData(equip.id);
+      equips.push(e);
+    }
+    var skills = new Array<SkillData>();
+    for(idx in 0...data.skillList.length) {
+      var skill = data.skills[idx];
+      var s = new SkillData(skill.id);
+      skills.push(s);
+    }
+
+    Global.getShopData().set(items, equips, skills);
+  }
+}
+
 /**
  * セーブデータ
  **/
@@ -175,6 +217,7 @@ private class SaveData {
   public var inventory:_Inventory;
   public var field:_Field;
   public var foe:_FoeInfo;
+  public var shop:_Shop;
 
   public function new() {
     global = new _Global();
@@ -182,6 +225,7 @@ private class SaveData {
     inventory = new _Inventory();
     field = new _Field();
     foe = new _FoeInfo();
+    shop = new _Shop();
   }
 
   // セーブ
@@ -191,6 +235,7 @@ private class SaveData {
     inventory.save();
     field.save();
     foe.save();
+    shop.save();
   }
 
   // ロード
@@ -200,6 +245,7 @@ private class SaveData {
     inventory.load(data.inventory);
     field.load(data.field);
     foe.load(data.foe);
+    shop.load(data.shop);
   }
 }
 

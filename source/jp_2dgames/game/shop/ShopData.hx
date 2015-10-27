@@ -61,4 +61,13 @@ class ShopData {
     _skillList.push(skill);
   }
 
+  /**
+   * 外部から設定する
+   **/
+  public function set(items:Array<ItemData>, equips:Array<ItemData>, skills:Array<SkillData>):Void {
+    _itemList = items;
+    _equipList = equips;
+    _skillList = skills;
+  }
+
 }
