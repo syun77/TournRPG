@@ -122,6 +122,14 @@ class ItemUtil {
   public static function getSell(item:ItemData):Int {
     return getParam(item.id, "sell");
   }
+  // 特殊効果
+  public static function getExtra(item:ItemData):String {
+    return getParamString(item.id, "extra");
+  }
+  // 特殊効果パラメータ
+  public static function getExtVal(item:ItemData):Int {
+    return getParam(item.id, "extval");
+  }
 
   /**
    * アイテム種別変換
@@ -155,6 +163,9 @@ class ItemUtil {
    **/
   public static function use(actor:Actor, item:ItemData, bMsg:Bool=true):Void {
 
+    var extra = getExtra(item);
+    var extval = getExtVal(item);
+
     switch(item.type) {
       case IType.Potion:
         // 薬
@@ -164,11 +175,49 @@ class ItemUtil {
           if(bMsg) {
             Message.push2(Msg.RECOVER_HP, [actor.name, val]);
           }
-          Snd.playSe("recover");
         }
+        if(extra != "") {
+          // 特殊効果あり
+          useExtra(actor, extra, extval);
+        }
+
+        Snd.playSe("recover");
 
       default:
         // 何も起きない
+    }
+  }
+
+  /**
+   * アイテムを使う（特殊効果）
+   * @param actor    主体者
+   * @param extra    特殊効果
+   * @param extraVal 特殊効果パラメータ
+   **/
+  public static function useExtra(actor:Actor, extra:String, extval:Int):Void {
+
+    switch(extra) {
+      case "hpmax":
+        // 最大HP上昇
+        actor.addHpMax(extval);
+        Message.push2(Msg.GROW_HPMAX, [actor.name, extval]);
+
+      case "str":
+        // 力上昇
+        actor.addStr(extval);
+        Message.push2(Msg.GROW_STR, [actor.name, extval]);
+      case "vit":
+        // 体力上昇
+        actor.addVit(extval);
+        Message.push2(Msg.GROW_VIT, [actor.name, extval]);
+      case "agi":
+        // 素早さ上昇
+        actor.addAgi(extval);
+        Message.push2(Msg.GROW_AGI, [actor.name, extval]);
+      case "mag":
+        // 魔力上昇
+        actor.addMag(extval);
+        Message.push2(Msg.GROW_MAG, [actor.name, extval]);
     }
   }
 }

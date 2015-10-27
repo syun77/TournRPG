@@ -45,4 +45,9 @@ class Msg {
   public static inline var ITEM_BUY:Int       = 43; // アイテム購入
   public static inline var ITEM_SELL:Int      = 44; // アイテム売却
   public static inline var ITEM_DEL:Int       = 45; // アイテムを捨てる
+  public static inline var GROW_HPMAX:Int     = 46; // 最大HP上昇
+  public static inline var GROW_STR:Int       = 47; // 力上昇
+  public static inline var GROW_VIT:Int       = 48; // 体力上昇
+  public static inline var GROW_AGI:Int       = 49; // 素早さ上昇
+  public static inline var GROW_MAG:Int       = 50; // 魔力上昇
 }

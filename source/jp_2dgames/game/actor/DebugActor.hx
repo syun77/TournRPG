@@ -14,7 +14,7 @@ class DebugActor extends FlxSubState {
 
   // 背景のサイズ
   static inline var BG_WIDTH:Int = 128;
-  static inline var BG_HEIGHT:Int = TEXT_DY * (13 + 2);
+  static inline var BG_HEIGHT:Int = TEXT_DY * (14 + 2);
 
   // テキストの座標
   static inline var TEXT_X:Int = 16;
@@ -30,11 +30,12 @@ class DebugActor extends FlxSubState {
   static inline var ITEM_STR:Int   = 5;
   static inline var ITEM_VIT:Int   = 6;
   static inline var ITEM_AGI:Int   = 7;
-  static inline var ITEM_XP:Int    = 8;
-  static inline var ITEM_MONEY:Int = 9;
-  static inline var ITEM_BUFF_ATK:Int = 10;
-  static inline var ITEM_BUFF_DEF:Int = 11;
-  static inline var ITEM_BUFF_SPD:Int = 12;
+  static inline var ITEM_MAG:Int   = 8;
+  static inline var ITEM_XP:Int    = 9;
+  static inline var ITEM_MONEY:Int = 10;
+  static inline var ITEM_BUFF_ATK:Int = 11;
+  static inline var ITEM_BUFF_DEF:Int = 12;
+  static inline var ITEM_BUFF_SPD:Int = 13;
 
   // 開始番号
   static inline var ITEM_FIRST:Int = ITEM_ID;
@@ -63,6 +64,7 @@ class DebugActor extends FlxSubState {
   var _txtStr:FlxText;   // 力
   var _txtVit:FlxText;   // 耐久力
   var _txtAgi:FlxText;   // 素早さ
+  var _txtMag:FlxText;   // 魔力
   var _txtXp:FlxText;    // 経験値
   var _txtMoney:FlxText; // 所持金
   var _txtBuffAtk:FlxText; // バフ・攻撃力
@@ -120,6 +122,9 @@ class DebugActor extends FlxSubState {
     _txtAgi = new FlxText(px, py);
     txtList.add(_txtAgi);
     py += TEXT_DY;
+    _txtMag = new FlxText(px, py);
+    txtList.add(_txtMag);
+    py += TEXT_DY;
     _txtXp = new FlxText(px, py);
     txtList.add(_txtXp);
     py += TEXT_DY;
@@ -164,6 +169,7 @@ class DebugActor extends FlxSubState {
     _txtStr.text   = 'STR: ${act.str}';
     _txtVit.text   = 'VIT: ${act.vit}';
     _txtAgi.text   = 'AGI: ${act.agi}';
+    _txtMag.text   = 'MAG: ${act.mag}';
     _txtXp.text    = 'XP: ${act.xp}';
     _txtMoney.text = 'MONEY: ${act.money}';
     _txtBuffAtk.text = 'BUFF ATK: ${act.buffAtk}';
@@ -290,6 +296,8 @@ class DebugActor extends FlxSubState {
         _actor.param.vit += val;
       case ITEM_AGI:
         _actor.param.agi += val;
+      case ITEM_MAG:
+        _actor.param.mag += val;
       case ITEM_XP:
         _actor.param.xp += val;
       case ITEM_MONEY:

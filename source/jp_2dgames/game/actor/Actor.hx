@@ -99,6 +99,9 @@ class Actor extends FlxSprite {
   private function get_hpmax() {
     return _param.hpmax;
   }
+  public function addHpMax(v:Int):Void {
+    _param.hpmax += v;
+  }
   public var hpratio(get, never):Float;
   private function get_hpratio() {
     return _param.hp / _param.hpmax;
@@ -122,20 +125,32 @@ class Actor extends FlxSprite {
   private function get_str() {
     return _param.str;
   }
+  public function addStr(v:Int):Void {
+    _param.str += v;
+  }
   // 体力
   public var vit(get, never):Int;
   private function get_vit() {
     return _param.vit;
+  }
+  public function addVit(v:Int):Void {
+    _param.vit += v;
   }
   // 素早さ
   public var agi(get, never):Int;
   private function get_agi() {
     return _param.agi;
   }
+  public function addAgi(v:Int):Void {
+    _param.agi += v;
+  }
   // 魔力
   public var mag(get, never):Int;
   private function get_mag() {
     return _param.mag;
+  }
+  public function addMag(v:Int):Void {
+    _param.mag += v;
   }
 
   // 所持金

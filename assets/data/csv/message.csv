@@ -45,3 +45,8 @@ int,str,str
 43,<val1>を<val2>Gで購入した,green
 44,<val1>を<val2>Gで売却した,orange
 45,<val1>を捨てた,green
+46,<val1>の最大HPが<val2>上昇した,green
+47,<val1>の力が<val2>上昇した,green
+48,<val1>の体力が<val2>上昇した,green
+49,<val1>の素早さが<val2>上昇した,green
+50,<val1>の魔力が<val2>上昇した,green
