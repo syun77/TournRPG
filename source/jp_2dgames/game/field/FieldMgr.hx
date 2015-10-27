@@ -141,19 +141,21 @@ class FieldMgr {
     // 経路描画
     _createWayLine(bgPath);
 
-    // TODO: F.O.E.をひとまず出してみる
-    FieldNode.forEachAlive(function(n:FieldNode) {
-      if(n.evType == FieldEvent.None) {
-        FieldFoe.add(n.ID, 6);
-      }
-    });
-
     // TODO: ショップをひとまず配置
-    FieldNode.forEachAlive(function(n:FieldNode) {
-      if(n.evType == FieldEvent.Enemy) {
-        n.setEventType(FieldEvent.Shop);
+    {
+      var node = FieldNode.random(FieldEvent.None);
+      if(node != null) {
+        node.setEventType(FieldEvent.Shop);
       }
-    });
+    }
+
+    // TODO: F.O.E.をひとまず出してみる
+    {
+      var node = FieldNode.random(FieldEvent.None);
+      if(node != null) {
+        FieldFoe.add(node.ID, 6);
+      }
+    }
 
     // プレイヤー
     _player = new FieldPlayer();

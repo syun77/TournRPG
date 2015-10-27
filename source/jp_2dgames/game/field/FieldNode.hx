@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import flixel.util.FlxRandom;
 import jp_2dgames.lib.MyMath;
 import flixel.text.FlxText;
 import flixel.FlxG;
@@ -165,6 +166,24 @@ class FieldNode extends FlxSprite {
     forEachAlive(function(n:FieldNode) {
       n.txtDetail.visible = b;
     });
+  }
+
+  /**
+   * 指定のイベント種別のノードをランダムで取得する
+   **/
+  public static function random(ev:FieldEvent):FieldNode {
+
+    // 抽出
+    var list = _parent.members.filter(function(node:FieldNode) {
+      return node.evType == ev;
+    });
+    if(list == null) {
+      return null;
+    }
+
+    // シャッフルして先頭の要素を返す
+    FlxRandom.shuffleArray(list, 3);
+    return list[0];
   }
 
   // ---------------------------------------------
