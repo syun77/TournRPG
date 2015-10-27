@@ -24,8 +24,7 @@ class UIMsg {
   public static inline var SHOP_SKILL_SELL:Int = 16; // ショップ (スキル売却)
   public static inline var SKILL_VIEW:Int      = 17; // スキル確認
   public static inline var ITEM_DROP:Int       = 18; // アイテムを捨てる
-
-
+  public static inline var DEL_CONFIRM:Int     = 19; // 削除確認メッセージ
 
   private static var _csv:CsvLoader = null;
   /**

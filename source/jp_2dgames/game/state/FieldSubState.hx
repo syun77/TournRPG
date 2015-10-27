@@ -1,5 +1,7 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.skill.SkillUtil;
+import jp_2dgames.game.gui.Dialog;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.gui.SkillUI;
@@ -177,19 +179,47 @@ class FieldSubState extends FlxSubState {
   }
 
   /**
+   * スキル確認
+   **/
+  private function _cbSkillView(btnID:Int):Void {
+
+    if(btnID == SkillUI.BTN_ID_CANCEL) {
+      // ボタンを再表示
+      _appearBtn();
+      return;
+    }
+
+    var skill = SkillSlot.getSkill(btnID);
+    var name = SkillUtil.getName(skill.id);
+    var msg = UIMsg.get2(UIMsg.DEL_CONFIRM, [name]);
+    Dialog.open(this, Dialog.YESNO, msg, null, function(nSel) {
+      if(nSel == Dialog.BTN_YES) {
+        // 捨てる
+        SkillSlot.delSkill(btnID);
+        Message.push2(Msg.ITEM_DEL, [name]);
+        Snd.playSe("del");
+      }
+
+      if(SkillSlot.isEmpty() == false) {
+        // スキルUIを開く
+        SkillUI.open(this, _cbSkillView, null, SkillUI.MODE_VIEW, false);
+      }
+      else {
+        // ボタンを再表示
+        _appearBtn();
+      }
+    });
+  }
+
+  /**
    * スキルボタンを配置
    **/
   private function _addSkillButton(px:Float, py:Float):MyButton2 {
 
-    var cbFunc = function(btnID:Int) {
-      // ボタンを再表示
-      _appearBtn();
-    }
-
     var label = UIMsg.get(UIMsg.SKILL_VIEW);
     var btn = new MyButton2(px, py, label, function() {
       // スキルUIを開く
-      SkillUI.open(this, cbFunc, null, SkillUI.MODE_VIEW, true);
+      SkillUI.open(this, _cbSkillView, null, SkillUI.MODE_VIEW, true);
       // メニュー非表示
       _group.visible = false;
     });
