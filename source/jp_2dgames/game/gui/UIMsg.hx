@@ -25,6 +25,10 @@ class UIMsg {
   public static inline var SKILL_VIEW:Int      = 17; // スキル確認
   public static inline var ITEM_DROP:Int       = 18; // アイテムを捨てる
   public static inline var DEL_CONFIRM:Int     = 19; // 削除確認メッセージ
+  public static inline var STATUS_STR:Int      = 20; // 力
+  public static inline var STATUS_VIT:Int      = 21; // 体力
+  public static inline var STATUS_AGI:Int      = 22; // 素早さ
+  public static inline var STATUS_MAG:Int      = 23; // 魔力
 
   private static var _csv:CsvLoader = null;
   /**

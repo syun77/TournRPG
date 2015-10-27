@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import flixel.text.FlxText;
 import jp_2dgames.game.skill.SkillUtil;
 import jp_2dgames.game.gui.Dialog;
 import jp_2dgames.lib.Snd;
@@ -26,6 +27,10 @@ import jp_2dgames.game.actor.Actor;
  **/
 class FieldSubState extends FlxSubState {
 
+  static inline var STATUS_OFS_X = 64;
+  static inline var STATUS_Y = 48;
+  static inline var STATUS_DY = 12;
+
   // Actor情報
   var _actor:Actor;
 
@@ -45,6 +50,15 @@ class FieldSubState extends FlxSubState {
 
   // キャラUI
   var _ui:BtlCharaUI;
+
+  // ステータス
+  var _txtStr:FlxText;
+  var _txtVit:FlxText;
+  var _txtAgi:FlxText;
+  var _txtMag:FlxText;
+
+  // ステータステキストグループ
+  var _groupTxt:FlxSpriteGroup;
 
   /**
    * コンストラクタ
@@ -82,6 +96,53 @@ class FieldSubState extends FlxSubState {
     _appearBtn();
 
     _group.scrollFactor.set();
+
+    // ステータスグループ
+    _groupTxt = new FlxSpriteGroup(FlxG.width - STATUS_OFS_X, STATUS_Y);
+    _addStatusText();
+    _groupTxt.scrollFactor.set();
+    this.add(_groupTxt);
+    {
+      // 出現演出
+      var px2 = _groupTxt.x;
+      _groupTxt.x = FlxG.width;
+      FlxTween.tween(_groupTxt, {x:px2}, 0.5, {ease:FlxEase.expoOut});
+    }
+  }
+
+  /**
+   * ステータステキストの作成
+   **/
+  private function _createStatusText(px:Float, py:Float):FlxText {
+    var txt = new FlxText(px, py);
+    txt.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    txt.setBorderStyle(FlxText.BORDER_SHADOW);
+    _groupTxt.add(txt);
+    return txt;
+  }
+
+  /**
+   * ステータステキストの作成
+   **/
+  private function _addStatusText():Void {
+    var px = 0;
+    var py = 0;
+    _txtStr = _createStatusText(px, py); py += STATUS_DY;
+    _txtVit = _createStatusText(px, py); py += STATUS_DY;
+    _txtAgi = _createStatusText(px, py); py += STATUS_DY;
+    _txtMag = _createStatusText(px, py); py += STATUS_DY;
+
+    _updateStatusText();
+  }
+
+  /**
+   * ステータステキストの更新
+   **/
+  private function _updateStatusText():Void {
+    _txtStr.text = '${UIMsg.get(UIMsg.STATUS_STR)}: ${_actor.str}';
+    _txtVit.text = '${UIMsg.get(UIMsg.STATUS_VIT)}: ${_actor.vit}';
+    _txtAgi.text = '${UIMsg.get(UIMsg.STATUS_AGI)}: ${_actor.agi}';
+    _txtMag.text = '${UIMsg.get(UIMsg.STATUS_MAG)}: ${_actor.mag}';
   }
 
   /**
@@ -160,6 +221,9 @@ class FieldSubState extends FlxSubState {
 
         // プレイヤーパラメータをグローバルに戻しておく
         Global.setPlayerParam(_actor.param);
+
+        // ステータス更新
+        _updateStatusText();
       }
 
       // ボタンを再表示
