@@ -33,6 +33,7 @@ class Dialog extends FlxGroup {
 
   // ボタンの間隔
   private static inline var BTN_DY:Int = MyButton2.HEIGHT + 2;
+  private static inline var BTN_DX:Int = MyButton2.WIDTH + 4;
 
   // インスタンス
   private static var _instance:Dialog = null;
@@ -117,6 +118,15 @@ class Dialog extends FlxGroup {
 
     // 選択肢ボタン登録
     var idx:Int = 0;
+    var dx:Int = 0;
+    var dy:Int = BTN_DY;
+    if(labels.length == 2) {
+      // 2つの場合は特殊処理
+      px -= BTN_DX / 2;
+      dx = BTN_DX;
+      dy = 0;
+    }
+
     for(str in labels) {
       var btnID = idx;
       var btn = new MyButton2(px, py2, str, function() {
@@ -127,7 +137,8 @@ class Dialog extends FlxGroup {
       // センタリング
       btn.x -= btn.width / 2;
       this.add(btn);
-      py2 += BTN_DY;
+      px += dx;
+      py2 += dy;
 
       idx++;
 
