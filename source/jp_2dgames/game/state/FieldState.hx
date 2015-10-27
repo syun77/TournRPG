@@ -1,8 +1,8 @@
 package jp_2dgames.game.state;
 
-import jp_2dgames.game.field.FieldFoe;
 import flixel.FlxG;
 import flixel.FlxState;
+import jp_2dgames.game.field.FieldFoe;
 import jp_2dgames.game.field.FieldMgr;
 import jp_2dgames.game.field.FieldNode;
 import jp_2dgames.game.save.Save;

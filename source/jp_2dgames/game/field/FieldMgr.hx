@@ -136,26 +136,30 @@ class FieldMgr {
       _nowNode = FieldNodeUtil.create();
       // 開始地点を踏破済みにしておく
       _nowNode.setFoot(true);
+
+      // TODO: ショップをひとまず配置
+      {
+        var node = FieldNode.random(FieldEvent.None);
+        if(node != null) {
+          node.setEventType(FieldEvent.Shop);
+        }
+
+        // ショップ情報の初期化
+        Global.getShopData().testdata();
+      }
+
+      // TODO: F.O.E.をひとまず出してみる
+      {
+        var node = FieldNode.random(FieldEvent.None);
+        if(node != null) {
+          FieldFoe.add(node.ID, 6);
+        }
+      }
     }
 
     // 経路描画
     _createWayLine(bgPath);
 
-    // TODO: ショップをひとまず配置
-    {
-      var node = FieldNode.random(FieldEvent.None);
-      if(node != null) {
-        node.setEventType(FieldEvent.Shop);
-      }
-    }
-
-    // TODO: F.O.E.をひとまず出してみる
-    {
-      var node = FieldNode.random(FieldEvent.None);
-      if(node != null) {
-        FieldFoe.add(node.ID, 6);
-      }
-    }
 
     // プレイヤー
     _player = new FieldPlayer();

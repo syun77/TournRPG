@@ -44,10 +44,24 @@ class ShopData {
    * コンストラクタ
    **/
   public function new() {
+    init();
+  }
+
+  /**
+   * 初期化
+   **/
+  public function init() {
     _itemList = new Array<ItemData>();
     _equipList = new Array<ItemData>();
     _skillList = new Array<SkillData>();
+  }
 
+  /**
+   * テストデータ
+   **/
+  public function testdata():Void {
+
+    init();
     // TODO: 仮データ追加
     var item = new ItemData(ItemConst.POTION01);
     _itemList.push(item);
