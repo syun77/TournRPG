@@ -245,6 +245,7 @@ class BtlLogicPlayer {
         else {
           BtlUI.hitPlayer(_data.targetID);
         }
+        Snd.playSe("hit2");
         tWait = 0;     // ウェイトなし
         bZoom = false; // ズームなし
 

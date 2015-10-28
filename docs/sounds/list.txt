@@ -13,6 +13,7 @@
         <sound path="push.mp3" id="push" />
         <sound path="foot2.mp3" id="foot2" />
         <sound path="del.mp3" id="del" />
+        <sound path="hit2.mp3" id="hit2" />
     </assets>
     <assets path="assets/sounds" unless="flash" include="*.ogg">
         <sound path="coin.ogg" id="coin" />
@@ -29,4 +30,5 @@
         <sound path="push.ogg" id="push" />
         <sound path="foot2.ogg" id="foot2" />
         <sound path="del.ogg" id="del" />
+        <sound path="hit2.ogg" id="hit2" />
     </assets>

@@ -12,3 +12,4 @@
 - push: push
 - foot2: foot2
 - del: del
+- hit2: hit2
