@@ -28,6 +28,7 @@ class Reg {
 
   // メッセージウェイト
   public static inline var TIMER_WAIT:Int = 30; // 0.5秒
+  public static inline var TIMER_WAIT_HIT:Int = 15; // 0.25秒
   public static inline var TIMER_WAIT_SEQUENCE:Int = 15; // 0.25秒
 
   // ■画像データ

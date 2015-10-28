@@ -1,4 +1,7 @@
 package jp_2dgames.game.gui;
+import flixel.util.FlxColor;
+import jp_2dgames.game.particle.Particle.PType;
+import jp_2dgames.game.particle.Particle;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColorUtil;
 import jp_2dgames.game.actor.Actor;
@@ -272,6 +275,16 @@ class BtlCharaUI extends FlxSpriteGroup {
     // スクロール無効
     p.scrollFactor.set(0, 0);
     p.color = MyColor.NUM_MISS;
+  }
+
+  /**
+   * HIT
+   **/
+  public function hit():Void {
+    var px = xcenter;
+    var py = ycenter;
+      // ヒット演出
+    Particle.start(PType.Hit, px, py, FlxColor.YELLOW, false);
   }
 
   /**

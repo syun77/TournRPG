@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.game.btl.logic.BtlLogic;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.game.item.ItemData;
 
@@ -10,6 +11,7 @@ enum BtlLogic {
   None;                  // 無効
 
   // 開始行動
+  BeginEffect;              // 攻撃開始エフェクト
   BeginAttack;              // 通常攻撃開始
   BeginSkill(id:Int);       // スキル開始
   BeginItem(item:ItemData); // アイテム開始
@@ -46,7 +48,7 @@ class BtlLogicUtil {
    **/
   public static function isBegin(type:BtlLogic):Bool {
     switch(type) {
-      case BtlLogic.BeginAttack, BtlLogic.BeginSkill, BtlLogic.BeginItem:
+      case BtlLogic.BeginEffect, BtlLogic.BeginAttack, BtlLogic.BeginSkill, BtlLogic.BeginItem:
         return true;
       default:
         return false;

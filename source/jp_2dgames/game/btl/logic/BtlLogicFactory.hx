@@ -29,6 +29,11 @@ class BtlLogicFactory {
       case BtlCmd.Attack(range, targetID):
         // 攻撃演出の作成
         // 開始
+        {
+          var d = new BtlLogicData(actor.ID, actor.group, BtlLogic.BeginEffect);
+          d.setTarget(targetID);
+          ret.add(d);
+        }
         ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.BeginAttack));
 
         // 攻撃

@@ -1,5 +1,6 @@
 package jp_2dgames.game.particle;
 
+import jp_2dgames.lib.MyMath;
 import flixel.FlxState;
 import flixel.util.FlxAngle;
 import flash.display.BlendMode;
@@ -16,6 +17,7 @@ enum PType {
   Ring;    // リング
   Ring2;   // リング2
   Ring3;   // リング3(逆再生)
+  Hit;     // ヒット
 }
 
 /**
@@ -71,6 +73,13 @@ class Particle extends FlxSprite {
         var t = FlxRandom.intRanged(40, 60);
         p.init(type, t, X, Y, 90, spd, bScroll);
         p.color = color;
+
+      case PType.Hit:
+        // ヒットエフェクト
+        var t = 16;
+        var p:Particle = parent.recycle();
+        p.init(type, t, X, Y, 0, 0, bScroll);
+        p.color = color;
     }
   }
 
@@ -99,6 +108,7 @@ class Particle extends FlxSprite {
     animation.add('${PType.Ring2}', [1], 2);
     animation.add('${PType.Ring3}', [1], 2);
     animation.add('${PType.Circle2}', [0], 1);
+    animation.add('${PType.Hit}', [2], 1);
 
     // 中心を基準に描画
     offset.set(width / 2, height / 2);
@@ -141,6 +151,8 @@ class Particle extends FlxSprite {
         scale.set(0.25, 0.25);
         acceleration.y = -200;
         _val = FlxRandom.float() * 3.14*2;
+      case PType.Hit:
+        scale.set(0.5, 0.5);
     }
 
     if(bScroll) {
@@ -190,6 +202,12 @@ class Particle extends FlxSprite {
         velocity.y *= 0.95;
         scale.x *= 0.97;
         scale.y *= 0.97;
+      case PType.Hit:
+        _timer--;
+        var deg = 180 * _timer / _tStart;
+        var sc = 0.5 + 1 * MyMath.sinEx(deg);
+        scale.set(sc, sc);
+        alpha = _timer / _tStart;
     }
 
     if(_timer < 1) {

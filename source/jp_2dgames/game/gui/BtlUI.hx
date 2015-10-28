@@ -42,6 +42,10 @@ class BtlUI extends FlxSpriteGroup {
   public static function missPlayer(actorID):Void {
     _instance._missPlayer(actorID);
   }
+  // HITエフェクト
+  public static function hitPlayer(actorID):Void {
+    _instance._hitPlayer(actorID);
+  }
   // 座標取得
   public static function getPlayerX(actorID:Int):Float {
     return _instance._getPlayerX(actorID);
@@ -116,6 +120,16 @@ class BtlUI extends FlxSpriteGroup {
     var ui = _getCharaUI(actorID);
     if(ui != null) {
       ui.miss();
+    }
+  }
+
+  /**
+   * HIP演出開始
+   **/
+  private function _hitPlayer(actorID:Int):Void {
+    var ui = _getCharaUI(actorID);
+    if(ui != null) {
+      ui.hit();
     }
   }
 

@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.game.actor.Params;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.item.Inventory;
 import flixel.FlxG;
@@ -98,10 +99,10 @@ class BtlLogicPlayer {
   /**
    * メイン処理終了
    **/
-  private function _endMain(bWait:Bool):Void {
+  private function _endMain(tWait:Int):Void {
     _state = State.Wait;
-    if(bWait) {
-      _tWait = Reg.TIMER_WAIT;
+    if(tWait > 0) {
+      _tWait = tWait;
       if(_data.bWaitQuick) {
         // 待ち時間短縮
         _tWait = Reg.TIMER_WAIT_SEQUENCE;
@@ -230,8 +231,23 @@ class BtlLogicPlayer {
 
     var actor = ActorMgr.search(_data.actorID);
     var target = ActorMgr.search(_data.targetID);
+    var tWait = Reg.TIMER_WAIT;
+    var bZoom = true;
 
     switch(_data.type) {
+      case BtlLogic.BeginEffect:
+        // 開始演出
+        if(target.group == BtlGroup.Enemy) {
+          var px = target.xcenter;
+          var py = target.ycenter;
+          Particle.start(PType.Hit, px, py, FlxColor.YELLOW, true);
+        }
+        else {
+          BtlUI.hitPlayer(_data.targetID);
+        }
+        tWait = 0;     // ウェイトなし
+        bZoom = false; // ズームなし
+
       case BtlLogic.BeginAttack:
         // 攻撃
         Message.push2(Msg.ATTACK_BEGIN, [actor.name]);
@@ -241,6 +257,8 @@ class BtlLogicPlayer {
           var py = actor.ycenter;
           Particle.start(PType.Ring3, px, py, FlxColor.RED);
         }
+        // ウェイト時間少なめ
+        tWait = Reg.TIMER_WAIT_HIT;
 
       case BtlLogic.BeginSkill(id):
         // スキル
@@ -278,15 +296,17 @@ class BtlLogicPlayer {
       default:
     }
 
-    // ズーム演出
-    var obj = _getFollowObj(actor, _data.targetID);
-    if(obj != null) {
-      FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 10);
-      _zoom = FlxCamera.defaultZoom + 0.1;
+    if(bZoom) {
+      // ズーム演出
+      var obj = _getFollowObj(actor, _data.targetID);
+      if(obj != null) {
+        FlxG.camera.follow(obj, FlxCamera.STYLE_LOCKON, null, 10);
+        _zoom = FlxCamera.defaultZoom + 0.1;
+      }
     }
 
     // メイン処理終了
-    _endMain(true);
+    _endMain(tWait);
   }
 
   /**
@@ -297,11 +317,11 @@ class BtlLogicPlayer {
     var actor = ActorMgr.search(_data.actorID);
     var target = ActorMgr.search(_data.targetID);
 
-    // 一時停止するかどうか
-    var bWait:Bool = true;
+    // 停止時間
+    var tWait = Reg.TIMER_WAIT;
 
     switch(_data.type) {
-      case BtlLogic.None, BtlLogic.BeginAttack, BtlLogic.BeginSkill, BtlLogic.BeginItem:
+      case BtlLogic.None, BtlLogic.BeginEffect, BtlLogic.BeginAttack, BtlLogic.BeginSkill, BtlLogic.BeginItem:
         // ここに来てはいけない
         throw 'Invalid _data.type ${_data.type}';
 
@@ -314,13 +334,13 @@ class BtlLogicPlayer {
           actor.damageMp(mp);
         }
         // 一時停止無効
-        bWait = false;
+        tWait = 0;
 
       case BtlLogic.UseItem(item):
         // インベントリから削除
         Inventory.delItem(item.uid);
         // 一時停止無効
-        bWait = false;
+        tWait = 0;
 
       case BtlLogic.Message(msgID):
         // メッセージ表示
@@ -389,16 +409,16 @@ class BtlLogicPlayer {
           // 味方が全滅
           Message.push2(Msg.BATTLE_LOSE);
         }
-        bWait = false;
+        tWait = 0;
 
       case BtlLogic.EndAction:
         // 行動終了
         _endAction();
-        bWait = false;
+        tWait = 0;
     }
 
     // メイン処理終了
-    _endMain(bWait);
+    _endMain(tWait);
   }
 
   private function _checkWait():Bool {
