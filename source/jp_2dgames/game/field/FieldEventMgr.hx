@@ -280,7 +280,7 @@ class FieldEventMgr {
       msg = '${name}を見つけた';
     }
 
-    Snd.playSe("powerup");
+    Snd.playSe("powerup2");
 
     Dialog.open(_flxState, Dialog.OK, msg, null, function(btnID:Int) {
       _change(State.End);

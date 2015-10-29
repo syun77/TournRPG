@@ -54,6 +54,6 @@ class BtlLogicBeginUtil {
       var py = BtlUI.getCenterY(target.ID);
       Particle.start(PType.Blade, px, py, FlxColor.YELLOW, false);
     }
-    Snd.playSe("hit2");
+    Snd.playSe("powerup");
   }
 }

@@ -6,7 +6,7 @@
         <sound path="hit.mp3" id="hit" />
         <sound path="levelup.mp3" id="levelup" />
         <sound path="miss.mp3" id="miss" />
-        <sound path="powerup.mp3" id="powerup" />
+        <sound path="powerup2.mp3" id="powerup2" />
         <sound path="recover.mp3" id="recover" />
         <sound path="roar.mp3" id="roar" />
         <sound path="menu.mp3" id="menu" />
@@ -14,6 +14,8 @@
         <sound path="foot2.mp3" id="foot2" />
         <sound path="del.mp3" id="del" />
         <sound path="hit2.mp3" id="hit2" />
+        <sound path="powerup.mp3" id="powerup" />
+        <sound path="powerdown.mp3" id="powerdown" />
     </assets>
     <assets path="assets/sounds" unless="flash" include="*.ogg">
         <sound path="coin.ogg" id="coin" />
@@ -23,7 +25,7 @@
         <sound path="hit.ogg" id="hit" />
         <sound path="levelup.ogg" id="levelup" />
         <sound path="miss.ogg" id="miss" />
-        <sound path="powerup.ogg" id="powerup" />
+        <sound path="powerup2.ogg" id="powerup2" />
         <sound path="recover.ogg" id="recover" />
         <sound path="roar.ogg" id="roar" />
         <sound path="menu.ogg" id="menu" />
@@ -31,4 +33,6 @@
         <sound path="foot2.ogg" id="foot2" />
         <sound path="del.ogg" id="del" />
         <sound path="hit2.ogg" id="hit2" />
+        <sound path="powerup.ogg" id="powerup" />
+        <sound path="powerdown.ogg" id="powerdown" />
     </assets>

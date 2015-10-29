@@ -5,7 +5,7 @@
 - hit: hit
 - levelup: levelup
 - miss: miss
-- powerup: powerup
+- powerup2: powerup2
 - recover: recover
 - roar: roar
 - menu: menu
@@ -13,3 +13,5 @@
 - foot2: foot2
 - del: del
 - hit2: hit2
+- powerup: powerup
+- powerdown: powerdown
