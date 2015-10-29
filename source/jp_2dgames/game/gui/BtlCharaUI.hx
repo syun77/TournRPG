@@ -278,16 +278,6 @@ class BtlCharaUI extends FlxSpriteGroup {
   }
 
   /**
-   * HIT
-   **/
-  public function hit():Void {
-    var px = xcenter;
-    var py = ycenter;
-      // ヒット演出
-    Particle.start(PType.Hit, px, py, FlxColor.YELLOW, false);
-  }
-
-  /**
    * アクティブ状態の設定
    **/
   public function setActive(b:Bool):Void {

@@ -30,7 +30,8 @@ class BtlLogicFactory {
         // 攻撃演出の作成
         // 開始
         {
-          var d = new BtlLogicData(actor.ID, actor.group, BtlLogic.BeginEffect);
+          var type = BtlLogic.BeginEffect(BtlLogicBegin.Attack);
+          var d = new BtlLogicData(actor.ID, actor.group, type);
           d.setTarget(targetID);
           ret.add(d);
         }
@@ -367,6 +368,13 @@ class BtlLogicFactory {
 
     var ret = new List<BtlLogicData>();
 
+    // 開始
+    {
+      var type = BtlLogic.BeginEffect(BtlLogicBegin.PowerUp);
+      var d = new BtlLogicData(actor.ID, actor.group, type);
+      d.setTarget(target.ID);
+      ret.add(d);
+    }
     // 効果
     var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
     eft.setTarget(target.ID);

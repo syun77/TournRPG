@@ -8,13 +8,13 @@ import jp_2dgames.game.item.ItemData;
  * バトル演出種別
  **/
 enum BtlLogic {
-  None;                  // 無効
+  None; // 無効
 
   // 開始行動
-  BeginEffect;              // 攻撃開始エフェクト
-  BeginAttack;              // 通常攻撃開始
-  BeginSkill(id:Int);       // スキル開始
-  BeginItem(item:ItemData); // アイテム開始
+  BeginEffect(eft:BtlLogicBegin); // 攻撃開始エフェクト
+  BeginAttack;                    // 通常攻撃開始
+  BeginSkill(id:Int);             // スキル開始
+  BeginItem(item:ItemData);       // アイテム開始
 
   // 行動終了
   EndAction;

@@ -1,6 +1,6 @@
 package jp_2dgames.game.btl.logic;
 
-import jp_2dgames.game.actor.Params;
+import jp_2dgames.game.btl.logic.BtlLogicBegin;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.item.Inventory;
 import flixel.FlxG;
@@ -235,17 +235,10 @@ class BtlLogicPlayer {
     var bZoom = true;
 
     switch(_data.type) {
-      case BtlLogic.BeginEffect:
+      case BtlLogic.BeginEffect(type):
         // 開始演出
-        if(target.group == BtlGroup.Enemy) {
-          var px = target.xcenter;
-          var py = target.ycenter;
-          Particle.start(PType.Hit, px, py, FlxColor.YELLOW, true);
-        }
-        else {
-          BtlUI.hitPlayer(_data.targetID);
-        }
-        Snd.playSe("hit2");
+        BtlLogicBeginUtil.start(type, target);
+
         tWait = 0;     // ウェイトなし
         bZoom = false; // ズームなし
 

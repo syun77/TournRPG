@@ -1,5 +1,6 @@
 package jp_2dgames.game.particle;
 
+import flixel.util.FlxRandom;
 import jp_2dgames.lib.MyMath;
 import flixel.FlxState;
 import flixel.util.FlxAngle;
@@ -18,6 +19,7 @@ enum PType {
   Ring2;   // リング2
   Ring3;   // リング3(逆再生)
   Hit;     // ヒット
+  Blade;   // 斬る
 }
 
 /**
@@ -80,6 +82,18 @@ class Particle extends FlxSprite {
         var p:Particle = parent.recycle();
         p.init(type, t, X, Y, 0, 0, bScroll);
         p.color = color;
+
+      case PType.Blade:
+        // 斬る
+        for(i in 0...8) {
+          var px = X + FlxRandom.intRanged(-32, 32);
+          var py = Y + FlxRandom.intRanged(-16, 16);
+          var p:Particle = parent.recycle();
+          var spd = FlxRandom.floatRanged(10, 20);
+          var t = FlxRandom.intRanged(40, 60);
+          p.init(type, t, px, py, 90, spd, bScroll);
+          p.color = color;
+        }
     }
   }
 
@@ -109,6 +123,7 @@ class Particle extends FlxSprite {
     animation.add('${PType.Ring3}', [1], 2);
     animation.add('${PType.Circle2}', [0], 1);
     animation.add('${PType.Hit}', [2], 1);
+    animation.add('${PType.Blade}', [3], 1);
 
     // 中心を基準に描画
     offset.set(width / 2, height / 2);
@@ -153,6 +168,10 @@ class Particle extends FlxSprite {
         _val = FlxRandom.float() * 3.14*2;
       case PType.Hit:
         scale.set(0.5, 0.5);
+      case PType.Blade:
+        scale.set(0.5, 0.5);
+        acceleration.y = -FlxRandom.intRanged(100, 200);
+        angle = 90;
     }
 
     if(bScroll) {
@@ -207,6 +226,11 @@ class Particle extends FlxSprite {
         var deg = 180 * _timer / _tStart;
         var sc = 0.5 + 1 * MyMath.sinEx(deg);
         scale.set(sc, sc);
+        alpha = _timer / _tStart;
+      case PType.Blade:
+        _timer--;
+        scale.y *= 0.9;
+        scale.x *= 0.97;
         alpha = _timer / _tStart;
     }
 
