@@ -148,4 +148,11 @@ class MyButton2 extends FlxTypedButton<FlxText> {
       super.updateButton();
     }
   }
+
+  /**
+   * クリックイベントを無効にする
+   **/
+  public function disableClick():Void {
+    onUp.callback = function() {};
+  }
 }

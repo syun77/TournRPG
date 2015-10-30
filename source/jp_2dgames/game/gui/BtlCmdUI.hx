@@ -85,6 +85,10 @@ class BtlCmdUI extends FlxSpriteGroup {
     //  スキル
     for(idx in 0...SkillSlot.count()) {
       var skill = SkillSlot.getSkill(idx);
+      if(SkillUtil.isNormal(skill.id) == false) {
+        // パッシブスキルは選べない
+        continue;
+      }
       var name = SkillUtil.getName(skill.id);
       var btn = new MyButton2(0, 0, name, function() {
         _skill(actor, cbFunc, skill);
@@ -154,10 +158,6 @@ class BtlCmdUI extends FlxSpriteGroup {
     state.remove(_detailUI);
 
     super.kill();
-  }
-
-  private function _cbTarget(actor:Actor, cbFunc:Actor->BtlCmd->Void):Void {
-
   }
 
   /**

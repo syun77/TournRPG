@@ -137,6 +137,11 @@ class SkillUtil {
    * 詳細情報(消費コスト付き)を取得する
    **/
   public static function getDetail2(skillID:Int):String {
+    if(isNormal(skillID) == false) {
+      // パッシブスキルはコスト表示なし
+      return getDetail(skillID);
+    }
+
     var detail = getDetail(skillID);
     var hp = getCostHp(skillID);
     if(hp > 0) {
