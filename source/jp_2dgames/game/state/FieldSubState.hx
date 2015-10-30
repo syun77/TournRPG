@@ -206,35 +206,45 @@ class FieldSubState extends FlxSubState {
   }
 
   /**
+   * アイテムを使うコールバック関数
+   **/
+  private function _cbItemUse(result:InventoryUIResult):Void {
+    var uid = result.uid;
+    if(uid != InventoryUI.CMD_CANCEL) {
+
+      // アイテムを使う
+      var item = Inventory.getItem(uid);
+      ItemUtil.use(_actor, item, true);
+      Inventory.delItem(uid);
+
+      // プレイヤーパラメータをグローバルに戻しておく
+      Global.setPlayerParam(_actor.param);
+
+      // ステータス更新
+      _updateStatusText();
+
+      if(Inventory.isEmpty() == false) {
+        // 再び開く
+        var param = new InventoryUIParam(InventoryUI.MODE_NORMAL, false, result.nPage);
+        InventoryUI.open(this, _cbItemUse, _actor, param);
+        return;
+      }
+    }
+
+    // ボタンを再表示
+    _appearBtn();
+  }
+
+  /**
    * アイテムボタンを配置
    **/
   private function _addItemButton(px:Float, py:Float):MyButton2 {
-
-    var cbFunc = function(result:InventoryUIResult) {
-      var uid = result.uid;
-      if(uid != InventoryUI.CMD_CANCEL) {
-
-        // アイテムを使う
-        var item = Inventory.getItem(uid);
-        ItemUtil.use(_actor, item, true);
-        Inventory.delItem(uid);
-
-        // プレイヤーパラメータをグローバルに戻しておく
-        Global.setPlayerParam(_actor.param);
-
-        // ステータス更新
-        _updateStatusText();
-      }
-
-      // ボタンを再表示
-      _appearBtn();
-    };
 
     var label = UIMsg.get(UIMsg.CMD_ITEM);
     var btn = new MyButton2(px, py, label, function() {
       // インベントリを開く
       var param = new InventoryUIParam(InventoryUI.MODE_NORMAL);
-      InventoryUI.open(this, cbFunc, _actor, param);
+      InventoryUI.open(this, _cbItemUse, _actor, param);
       // メニュー非表示
       _group.visible = false;
     });
