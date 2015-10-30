@@ -368,13 +368,6 @@ class BtlLogicFactory {
 
     var ret = new List<BtlLogicData>();
 
-    // 開始
-    {
-      var type = BtlLogic.BeginEffect(BtlLogicBegin.PowerUp);
-      var d = new BtlLogicData(actor.ID, actor.group, type);
-      d.setTarget(target.ID);
-      ret.add(d);
-    }
     // 効果
     var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
     eft.setTarget(target.ID);
@@ -389,6 +382,15 @@ class BtlLogicFactory {
     target.addBuffDef(def);
     target.addBuffSpd(spd);
 
+    // 開始
+    {
+      var ave = (atk + def + spd) / 3;
+      var begin = if(ave > 0) BtlLogicBegin.PowerUp else BtlLogicBegin.PowerDown;
+      var type = BtlLogic.BeginEffect(begin);
+      var d = new BtlLogicData(actor.ID, actor.group, type);
+      d.setTarget(target.ID);
+      ret.add(d);
+    }
     ret.add(eft);
 
     if(atk > 0) {

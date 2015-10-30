@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import flixel.util.FlxColorUtil;
+import flixel.util.FlxSpriteUtil;
 import jp_2dgames.game.gui.BtlCharaUI;
 import jp_2dgames.game.gui.HpBar;
 import jp_2dgames.game.gui.BadStatusUI;
@@ -25,6 +27,7 @@ class Actor extends FlxSprite {
   // ■定数
   // 揺れタイマー
   static inline var TIMER_SHAKE:Int = 120;
+  static inline var TIMER_ANIM_COLOR:Int = 60;
 
   // 危険状態
   public static inline var HP_NONE:Int = 0; // 通常
@@ -66,6 +69,10 @@ class Actor extends FlxSprite {
 
   // アニメーションタイマー
   var _tAnime:Int = 0;
+
+  // 色替え演出
+  var _tAnimColor:Int = 0;
+  var _animColor:Int  = 0;
 
   // AI
   var _ai:ActorAI;
@@ -374,6 +381,8 @@ class Actor extends FlxSprite {
     }
 
     color = FlxColor.WHITE;
+    _tAnimColor = 0;
+    _animColor  = FlxColor.WHITE;
 
     // バッドステータス初期化
     _badstatus = BadStatus.None;
@@ -386,6 +395,14 @@ class Actor extends FlxSprite {
    **/
   public function changeColor(c:Int):Void {
     color = c;
+  }
+
+  /**
+   * 色変えアニメーション開始
+   **/
+  public function startAnimColor(c:Int):Void {
+    _tAnimColor = TIMER_ANIM_COLOR;
+    _animColor = c;
   }
 
   /**
@@ -500,8 +517,8 @@ class Actor extends FlxSprite {
   /**
    * 揺らす
    **/
-  public function shake():Void {
-    _tShake = TIMER_SHAKE;
+  public function shake(ratio:Float=1.0):Void {
+    _tShake = Std.int(TIMER_SHAKE * ratio);
   }
 
   /**
@@ -514,6 +531,9 @@ class Actor extends FlxSprite {
 
     // 揺れ更新
     _updateShake();
+
+    // 色変えアニメ更新
+    _updateAnimColor();
 
     // HPゲージ更新
     _updateHpBar();
@@ -535,6 +555,19 @@ class Actor extends FlxSprite {
       }
       var xsign = if(_tAnime%4 < 2) 1 else -1;
       x = _xstart + (_tShake * xsign * 0.2);
+    }
+  }
+
+  /**
+   * 色変えアニメーション更新
+   **/
+  private function _updateAnimColor():Void {
+    if(_tAnimColor > 0) {
+      _tAnimColor--;
+      color = FlxColorUtil.interpolateColor(FlxColor.WHITE, _animColor, TIMER_ANIM_COLOR, _tAnimColor);
+      if(_tAnimColor == 0) {
+        color = FlxColor.WHITE;
+      }
     }
   }
 
