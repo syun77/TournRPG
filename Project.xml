@@ -1,137 +1,141 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
-	<!------------------------------APPLICATION SETTINGS---------------------------->
+    <!------------------------------APPLICATION SETTINGS---------------------------->
 
-	<app title="TournRPG" file="TournRPG" main="Main" version="0.0.1" company="2dgames.jp" />
+    <app title="TournRPG" file="TournRPG" main="Main" version="0.0.1" company="2dgames.jp"/>
 
-	<!-- For iOS -->
-	<meta title="TournRPG" package="jp.2dgames.test" version="1.0.0" company="2dgames.jp" />
-	<ios deployment="5" binaries="arm7" devices="iphone" />
-	<ios linker-flags="" prerenderd-icon="false" />
-	<window  hardware="true" allow-shaders="true" require-shaders="true" if="cpp" />
-	<window vsync="true" antialiasing="4" if="cpp" />
+    <!-- For Android -->
+    <meta title="TournRPG" package="jp_2dgames.tournrpg" version="1.0.0" company="2dgames.jp" if="android" />
+    <android target-sdk-version="16" />
 
-	<!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
-	<!--or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"!-->
-	<app preloader="flixel.system.FlxPreloader" />
+    <!-- For iOS -->
+    <meta title="TournRPG" package="jp.2dgames.test" version="1.0.0" company="2dgames.jp" if="ios"/>
+    <ios deployment="5" binaries="arm7" devices="iphone"/>
+    <ios linker-flags="" prerenderd-icon="false"/>
+    <window hardware="true" allow-shaders="true" require-shaders="true" if="cpp"/>
+    <window vsync="true" antialiasing="4" if="cpp"/>
 
-	<!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2 -->
-	<set name="SWF_VERSION" value="11.8" />
+    <!--The flixel preloader is not accurate in Chrome. You can use it regularly if you embed the swf into a html file
+    <!--or you can set the actual size of your file manually at "FlxPreloaderBase-onUpdate-bytesTotal"!-->
+    <app preloader="flixel.system.FlxPreloader"/>
 
-	<!--------------------------------WINDOW SETTINGS------------------------------->
+    <!--Minimum without FLX_NO_GAMEPAD: 11.8, without FLX_NO_NATIVE_CURSOR: 11.2 -->
+    <set name="SWF_VERSION" value="11.8"/>
 
-	<!--These window settings apply to all targets-->
-	<window width="640" height="1136" fps="60" background="#000000" hardware="true" vsync="true" />
-	<window width="320" height="568" fps="60" background="#000000" hardware="true" vsync="true" />
-	<window width="160" height="289" fps="60" background="#000000" hardware="true" vsync="true" />
-	<window width="480" height="852" fps="60" background="#000000" hardware="true" vsync="true" />
+    <!--------------------------------WINDOW SETTINGS------------------------------->
 
-	<!--Web-specific-->
-	<window if="web" orientation="portrait"  />
+    <!--These window settings apply to all targets-->
+    <window width="640" height="1136" fps="60" background="#000000" hardware="true" vsync="true"/>
+    <window width="320" height="568" fps="60" background="#000000" hardware="true" vsync="true"/>
+    <window width="160" height="289" fps="60" background="#000000" hardware="true" vsync="true"/>
+    <window width="480" height="852" fps="60" background="#000000" hardware="true" vsync="true"/>
 
-	<!--Desktop-specific-->
-	<window if="desktop" orientation="portrait" fullscreen="false" resizable="true" />
+    <!--Web-specific-->
+    <window if="web" orientation="portrait"/>
 
-	<!--Mobile-specific-->
-	<window if="mobile" orientation="portrait" fullscreen="true" width="0" height="0" />
+    <!--Desktop-specific-->
+    <window if="desktop" orientation="portrait" fullscreen="false" resizable="true"/>
 
-	<!--------------------------------PATHS SETTINGS-------------------------------->
+    <!--Mobile-specific-->
+    <window if="mobile" orientation="portrait" fullscreen="true" width="0" height="0"/>
 
-	<set name="BUILD_DIR" value="export" />
-	<classpath name="source" />
-	<assets path="assets" include="*.tmx|*.png|*.csv|*.ttf|*.jpg" />
-	<!-- BGM -->
-	<assets path="assets/music" if="flash" include="*.mp3">
-	</assets>
-	<assets path="assets/music" unless="flash" include="*.ogg">
-	</assets>
-	<!-- SE -->
-	<assets path="assets/sounds" if="flash" include="*.mp3">
-        <sound path="coin.mp3" id="coin" />
-		<sound path="destroy.mp3" id="destroy" />
-        <sound path="enemy.mp3" id="enemy" />
-        <sound path="equip.mp3" id="equip" />
-		<sound path="hit.mp3" id="hit" />
-        <sound path="levelup.mp3" id="levelup" />
-		<sound path="miss.mp3" id="miss" />
-        <sound path="recover.mp3" id="recover" />
-		<sound path="roar.mp3" id="roar" />
-        <sound path="powerup2.mp3" id="powerup2" />
-		<sound path="menu.mp3" id="menu" />
-		<sound path="push.mp3" id="push" />
-		<sound path="foot2.mp3" id="foot2" />
-        <sound path="del.mp3" id="del" />
-		<sound path="hit2.mp3" id="hit2" />
-		<sound path="powerup.mp3" id="powerup" />
-		<sound path="powerdown.mp3" id="powerdown" />
-	</assets>
-	<assets path="assets/sounds" unless="flash" include="*.ogg">
-        <sound path="coin.ogg" id="coin" />
-        <sound path="destroy.ogg" id="destroy" />
-        <sound path="enemy.ogg" id="enemy" />
-        <sound path="equip.ogg" id="equip" />
-        <sound path="hit.ogg" id="hit" />
-        <sound path="levelup.ogg" id="levelup" />
-		<sound path="miss.ogg" id="miss" />
-        <sound path="recover.ogg" id="recover" />
-		<sound path="roar.ogg" id="roar" />
-        <sound path="powerup2.ogg" id="powerup2" />
-        <sound path="menu.ogg" id="menu" />
-        <sound path="push.ogg" id="push" />
-        <sound path="foot2.ogg" id="foot2" />
-        <sound path="del.ogg" id="del" />
-		<sound path="hit2.ogg" id="hit2" />
-		<sound path="powerup.ogg" id="powerup" />
-		<sound path="powerdown.ogg" id="powerdown" />
-	</assets>
+    <!--------------------------------PATHS SETTINGS-------------------------------->
+
+    <set name="BUILD_DIR" value="export"/>
+    <classpath name="source"/>
+    <assets path="assets" include="*.tmx|*.png|*.csv|*.ttf|*.jpg"/>
+    <!-- BGM -->
+    <assets path="assets/music" if="flash" include="*.mp3">
+    </assets>
+    <assets path="assets/music" unless="flash" include="*.ogg">
+    </assets>
+    <!-- SE -->
+    <assets path="assets/sounds" if="flash" include="*.mp3">
+        <sound path="coin.mp3" id="coin"/>
+        <sound path="destroy.mp3" id="destroy"/>
+        <sound path="enemy.mp3" id="enemy"/>
+        <sound path="equip.mp3" id="equip"/>
+        <sound path="hit.mp3" id="hit"/>
+        <sound path="levelup.mp3" id="levelup"/>
+        <sound path="miss.mp3" id="miss"/>
+        <sound path="recover.mp3" id="recover"/>
+        <sound path="roar.mp3" id="roar"/>
+        <sound path="powerup2.mp3" id="powerup2"/>
+        <sound path="menu.mp3" id="menu"/>
+        <sound path="push.mp3" id="push"/>
+        <sound path="foot2.mp3" id="foot2"/>
+        <sound path="del.mp3" id="del"/>
+        <sound path="hit2.mp3" id="hit2"/>
+        <sound path="powerup.mp3" id="powerup"/>
+        <sound path="powerdown.mp3" id="powerdown"/>
+    </assets>
+    <assets path="assets/sounds" unless="flash" include="*.ogg">
+        <sound path="coin.ogg" id="coin"/>
+        <sound path="destroy.ogg" id="destroy"/>
+        <sound path="enemy.ogg" id="enemy"/>
+        <sound path="equip.ogg" id="equip"/>
+        <sound path="hit.ogg" id="hit"/>
+        <sound path="levelup.ogg" id="levelup"/>
+        <sound path="miss.ogg" id="miss"/>
+        <sound path="recover.ogg" id="recover"/>
+        <sound path="roar.ogg" id="roar"/>
+        <sound path="powerup2.ogg" id="powerup2"/>
+        <sound path="menu.ogg" id="menu"/>
+        <sound path="push.ogg" id="push"/>
+        <sound path="foot2.ogg" id="foot2"/>
+        <sound path="del.ogg" id="del"/>
+        <sound path="hit2.ogg" id="hit2"/>
+        <sound path="powerup.ogg" id="powerup"/>
+        <sound path="powerdown.ogg" id="powerdown"/>
+    </assets>
 
 
-	<!--------------------------------LIBRARIES------------------------------------->
+    <!--------------------------------LIBRARIES------------------------------------->
 
-	<haxelib name="flixel"/>
+    <haxelib name="flixel"/>
 
-	<!--In case you want to use the addons package-->
-	<haxelib name="flixel-addons" />
+    <!--In case you want to use the addons package-->
+    <haxelib name="flixel-addons"/>
 
-	<!--In case you want to use the ui package-->
-	<!--haxelib name="flixel-ui"/-->
+    <!--In case you want to use the ui package-->
+    <!--haxelib name="flixel-ui"/-->
 
-	<!--In case you want to use nape with flixel-->
-	<!--haxelib name="nape" /-->
+    <!--In case you want to use nape with flixel-->
+    <!--haxelib name="nape" /-->
 
-	<!--------------------------------HAXEDEFINES----------------------------------->
+    <!--------------------------------HAXEDEFINES----------------------------------->
 
-	<!--Enable the Flixel core recording system-->
-	<!--haxedef name="FLX_RECORD" /-->
+    <!--Enable the Flixel core recording system-->
+    <!--haxedef name="FLX_RECORD" /-->
 
-	<!--Disable the right and middle mouse buttons-->
-	<!--haxedef name="FLX_NO_MOUSE_ADVANCED" /-->
+    <!--Disable the right and middle mouse buttons-->
+    <!--haxedef name="FLX_NO_MOUSE_ADVANCED" /-->
 
-	<!--Disable the Native cursor api for Flash target-->
-	<!--haxedef name="FLX_NO_NATIVE_CURSOR" /-->
+    <!--Disable the Native cursor api for Flash target-->
+    <!--haxedef name="FLX_NO_NATIVE_CURSOR" /-->
 
-	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
-	<!--haxedef name="FLX_NO_MOUSE" if="mobile" /-->
-	<!--haxedef name="FLX_NO_KEYBOARD" if="mobile" /-->
-	<!--haxedef name="FLX_NO_TOUCH" if="desktop" /-->
-	<!--haxedef name="FLX_NO_GAMEPAD" /-->
+    <!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
+    <!--haxedef name="FLX_NO_MOUSE" if="mobile" /-->
+    <!--haxedef name="FLX_NO_KEYBOARD" if="mobile" /-->
+    <!--haxedef name="FLX_NO_TOUCH" if="desktop" /-->
+    <!--haxedef name="FLX_NO_GAMEPAD" /-->
 
-	<!--Disable the Flixel core sound tray-->
-	<!--haxedef name="FLX_NO_SOUND_TRAY" /-->
+    <!--Disable the Flixel core sound tray-->
+    <!--haxedef name="FLX_NO_SOUND_TRAY" /-->
 
-	<!--Disable the Flixel sound management code-->
-	<!--haxedef name="FLX_NO_SOUND_SYSTEM" /-->
+    <!--Disable the Flixel sound management code-->
+    <!--haxedef name="FLX_NO_SOUND_SYSTEM" /-->
 
-	<!--Disable the Flixel core focus lost screen-->
-	<!--haxedef name="FLX_NO_FOCUS_LOST_SCREEN" /-->
+    <!--Disable the Flixel core focus lost screen-->
+    <!--haxedef name="FLX_NO_FOCUS_LOST_SCREEN" /-->
 
-	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
-	<haxedef name="FLX_NO_DEBUG" unless="debug" />
+    <!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
+    <haxedef name="FLX_NO_DEBUG" unless="debug"/>
 
-	<!--Enable this for Nape release builds for a serious peformance improvement-->
-	<haxedef name="NAPE_RELEASE_BUILD" unless="debug" />
+    <!--Enable this for Nape release builds for a serious peformance improvement-->
+    <haxedef name="NAPE_RELEASE_BUILD" unless="debug"/>
 
-	<!--------------------------------CUSTOM---------------------------------------->
+    <!--------------------------------CUSTOM---------------------------------------->
 
-	<!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
+    <!--Place custom nodes like icons here (higher priority to override the HaxeFlixel icon)-->
 </project>
