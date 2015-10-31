@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import flixel.util.FlxDestroyUtil;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -185,13 +186,17 @@ class InventoryUI extends FlxSpriteGroup {
   /**
    * 消滅
    **/
-  override public function kill():Void {
+  override public function destroy():Void {
 
     // アイテム詳細UIを消す
     _state.remove(_detailUI);
     // 装備UIを消す
     _state.remove(_equipUI);
-    super.kill();
+
+    _detailUI = FlxDestroyUtil.destroy(_detailUI);
+    _equipUI = FlxDestroyUtil.destroy(_equipUI);
+
+    super.destroy();
   }
 
 
@@ -488,9 +493,8 @@ class InventoryUI extends FlxSpriteGroup {
    * UIを閉じる
    **/
   private function _close():Void {
-    kill();
     _state.remove(this);
-    _instance = null;
+    _instance = FlxDestroyUtil.destroy(_instance);
     _state = null;
   }
 }

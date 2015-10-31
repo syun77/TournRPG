@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.util.FlxDestroyUtil;
 import flixel.ui.FlxButton;
 import flixel.text.FlxText;
 import flixel.FlxSprite;
@@ -40,7 +41,7 @@ class SkillUI extends FlxSpriteGroup {
   var _mode:Int;
 
   // ボタンリスト
-  var _btnList:Array<MyButton2>;
+  var _btnList:Array<MyButton2> = null;
 
   // アイテム詳細UI
   var _detailUI:DetailUI;
@@ -84,6 +85,9 @@ class SkillUI extends FlxSpriteGroup {
    **/
   override public function kill():Void {
     _state.remove(_detailUI);
+    for(btn in _btnList) {
+      this.remove(btn);
+    }
 
     super.kill();
   }
@@ -151,9 +155,10 @@ class SkillUI extends FlxSpriteGroup {
    * 閉じる
    **/
   private function _close():Void {
-    kill();
+    _state.remove(_detailUI);
     _state.remove(this);
-    _instance = null;
+    _detailUI = FlxDestroyUtil.destroy(_detailUI);
+    _instance = FlxDestroyUtil.destroy(_instance);
     _state = null;
   }
 

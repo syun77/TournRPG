@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import flixel.util.FlxDestroyUtil;
 import flixel.FlxState;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -156,6 +157,6 @@ class Dialog extends FlxGroup {
     _instance.kill();
     _state.remove(_instance);
     _state = null;
-    _instance = null;
+    _instance = FlxDestroyUtil.destroy(_instance);
   }
 }
