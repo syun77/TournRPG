@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import flixel.util.FlxDestroyUtil;
 import flixel.FlxState;
 import flixel.FlxG;
 import jp_2dgames.game.actor.ActorMgr;
@@ -123,7 +124,7 @@ class BtlTargetUI extends FlxSpriteGroup {
   private function _close():Void {
     kill();
     _state.remove(this);
-    _instance = null;
+    _instance = FlxDestroyUtil.destroy(_instance);
     _state = null;
   }
 }

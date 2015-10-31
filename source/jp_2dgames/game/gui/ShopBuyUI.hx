@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import flixel.util.FlxDestroyUtil;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
 import jp_2dgames.game.skill.SkillUtil;
@@ -100,11 +101,13 @@ class ShopBuyUI extends FlxSpriteGroup {
   /**
    * 消滅
    **/
-  override public function kill():Void {
+  override public function destroy():Void {
+    super.destroy();
+
     _state.remove(_detailUI);
     _state.remove(_equipUI);
-
-    super.kill();
+    _detailUI = FlxDestroyUtil.destroy(_detailUI);
+    _equipUI = FlxDestroyUtil.destroy(_equipUI);
   }
 
   /**
@@ -355,9 +358,8 @@ class ShopBuyUI extends FlxSpriteGroup {
    * UIを閉じる
    **/
   private function _close():Void {
-    kill();
     _state.remove(this);
-    _instance = null;
+    _instance = FlxDestroyUtil.destroy(_instance);
     _state = null;
   }
 

@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.util.FlxDestroyUtil;
 import jp_2dgames.game.gui.InventoryUI;
 import jp_2dgames.game.skill.SkillRange;
 import flixel.FlxState;
@@ -150,6 +151,12 @@ class BtlCmdUI extends FlxSpriteGroup {
     _detailUI.visible = false;
   }
 
+  override public function destroy():Void {
+    super.destroy();
+
+    _detailUI = FlxDestroyUtil.destroy(_detailUI);
+  }
+
   /**
    * 消滅
    **/
@@ -157,7 +164,8 @@ class BtlCmdUI extends FlxSpriteGroup {
     // コマンド詳細を消す
     state.remove(_detailUI);
 
-    super.kill();
+    // 破棄
+    destroy();
   }
 
   /**

@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import flixel.util.FlxDestroyUtil;
 import flixel.FlxState;
 import jp_2dgames.lib.CsvLoader;
 import flixel.group.FlxGroup;
@@ -60,7 +61,15 @@ private class MessageText extends FlxText {
   }
   override public function kill():Void {
     super.kill();
-    _bg.kill();
+
+    // 消滅
+    destroy();
+  }
+
+  override public function destroy():Void {
+    super.destroy();
+
+    _bg = FlxDestroyUtil.destroy(_bg);
   }
 
   /**
@@ -105,6 +114,7 @@ class Message extends FlxGroup {
   }
   public static function destroyInstance(state:FlxState):Void {
     state.remove(instance);
+    instance = FlxDestroyUtil.destroy(instance);
     instance = _instancePrev;
   }
   public static function createInstancePush(csv:CsvLoader, state:FlxState):Void {
@@ -181,6 +191,15 @@ class Message extends FlxGroup {
 
     // 非表示
     visible = false;
+  }
+
+  override public function destroy():Void {
+    super.destroy();
+    _window = FlxDestroyUtil.destroy(_window);
+
+    for(msg in _msgList) {
+      msg.kill();
+    }
   }
 
   private var ofsY(get_ofsY, never):Float;

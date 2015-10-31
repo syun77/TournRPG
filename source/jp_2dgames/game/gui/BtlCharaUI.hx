@@ -1,14 +1,11 @@
 package jp_2dgames.game.gui;
 import flixel.util.FlxColor;
-import jp_2dgames.game.particle.Particle.PType;
-import jp_2dgames.game.particle.Particle;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColorUtil;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.actor.ActorMgr;
-import flixel.util.FlxColor;
 import jp_2dgames.lib.StatusBar;
 import flixel.text.FlxText;
 import flixel.FlxSprite;

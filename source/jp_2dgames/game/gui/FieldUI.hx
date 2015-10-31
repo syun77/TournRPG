@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import flixel.util.FlxDestroyUtil;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import flixel.FlxSprite;
@@ -30,7 +31,7 @@ class FieldUI extends FlxSpriteGroup {
   // 閉じる
   public static function close(state:FlxState):Void {
     state.remove(_instance);
-    _instance = null;
+    _instance = FlxDestroyUtil.destroy(_instance);
   }
 
   // ■メンバ変数
