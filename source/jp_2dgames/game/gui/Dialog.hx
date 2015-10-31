@@ -156,5 +156,6 @@ class Dialog extends FlxGroup {
     _instance.kill();
     _state.remove(_instance);
     _state = null;
+    _instance = null;
   }
 }
