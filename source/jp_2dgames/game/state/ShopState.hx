@@ -97,9 +97,7 @@ class ShopState extends FlxSubState {
    * 破棄
    **/
   override public function destroy():Void {
-
     Message.destroyInstance(this);
-
     super.destroy();
   }
 

@@ -331,6 +331,7 @@ class ShopBuyUI extends FlxSpriteGroup {
         // いったん全部消す
         for(obj in members) {
           this.remove(obj);
+          obj = FlxDestroyUtil.destroy(obj);
         }
         _category = type;
         _displayButton(cbFunc, actor, false);

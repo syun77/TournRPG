@@ -196,6 +196,8 @@ class InventoryUI extends FlxSpriteGroup {
     _detailUI = FlxDestroyUtil.destroy(_detailUI);
     _equipUI = FlxDestroyUtil.destroy(_equipUI);
 
+    _btnList = null;
+
     super.destroy();
   }
 
@@ -350,15 +352,18 @@ class InventoryUI extends FlxSpriteGroup {
     // ボタンをすべて消す
     for(btn in _btnList) {
       this.remove(btn);
+      btn = FlxDestroyUtil.destroy(btn);
     }
     if(_mode == MODE_SELL) {
       // 値段背景をすべて消す
       for(bg in _priceBgList) {
         this.remove(bg);
+        bg = FlxDestroyUtil.destroy(bg);
       }
       // 値段テキストをすべて消す
       for(txt in _priceList) {
         this.remove(txt);
+        txt = FlxDestroyUtil.destroy(txt);
       }
     }
 

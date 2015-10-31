@@ -72,6 +72,8 @@ class BattleState extends FlxSubState {
    */
   override public function destroy():Void {
 
+    super.destroy();
+
     ParticleDamage.terminate();
     Particle.terminate();
     BtlLogicMgr.destroy();
@@ -79,8 +81,6 @@ class BattleState extends FlxSubState {
     BtlUI.close(this);
     TempActorMgr.destroy();
     Message.destroyInstance(this);
-
-    super.destroy();
 
     // カメラズームをデフォルト値に戻す
     FlxG.camera.zoom = FlxCamera.defaultZoom;

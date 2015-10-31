@@ -30,8 +30,8 @@ class FieldFoe extends FlxSprite {
   /**
    * 破棄
    **/
-  public static function destroyParent(state:FlxState):Void {
-    state.remove(_parent);
+  public static function destroyParent():Void {
+    _parent = null;
   }
 
   /**

@@ -36,10 +36,10 @@ class FieldState extends FlxState {
    * 破棄
    */
   override public function destroy():Void {
-    FieldNode.destroyParent(this);
-    FieldFoe.destroyParent(this);
-
     super.destroy();
+
+    FieldNode.destroyParent();
+    FieldFoe.destroyParent();
   }
 
   /**

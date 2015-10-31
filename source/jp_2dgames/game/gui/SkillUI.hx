@@ -85,10 +85,6 @@ class SkillUI extends FlxSpriteGroup {
    **/
   override public function kill():Void {
     _state.remove(_detailUI);
-    for(btn in _btnList) {
-      this.remove(btn);
-    }
-
     super.kill();
   }
 
