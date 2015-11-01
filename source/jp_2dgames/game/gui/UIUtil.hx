@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.FlxSprite;
 
@@ -39,6 +40,8 @@ class UIUtil {
   public static function createMenuBG(px:Float, py:Float):FlxSprite {
     var bg = new FlxSprite(px, py);
     bg.loadGraphic(Reg.PATH_MENU_BG);
+    bg.x = FlxG.width/2;
+    bg.scale.x = 80;
     bg.alpha = 0.5;
 
     return bg;
