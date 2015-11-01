@@ -268,6 +268,12 @@ class BtlMgr {
 
       case State.ResultWait:
 
+        if(_btlEnd == BtlLogicPlayer.BTL_END_ESCAPE) {
+          // 逃走時はそのまま終わる
+          _change(State.End);
+          return;
+        }
+
         var px = FlxG.width/2 - MyButton2.WIDTH/2;
         var py = FlxG.height -128;
         var btn = new MyButton2(px, py, "NEXT", function() {
