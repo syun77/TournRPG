@@ -138,6 +138,7 @@ class FieldMgr {
       _nowNode.setFoot(true);
 
       // TODO: ショップをひとまず配置
+      #if !debug
       {
         var node = FieldNode.random(FieldEvent.None);
         if(node != null) {
@@ -147,6 +148,20 @@ class FieldMgr {
         // ショップ情報の初期化
         Global.getShopData().testdata();
       }
+      #else
+      // TODO: ショップを全配置
+      while(true)
+      {
+        var node = FieldNode.random(FieldEvent.None);
+        if(node == null) {
+          break;
+        }
+        node.setEventType(FieldEvent.Shop);
+
+        // ショップ情報の初期化
+        Global.getShopData().testdata();
+      }
+      #end
 
       // TODO: F.O.E.をひとまず出してみる
       {

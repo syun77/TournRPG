@@ -1,5 +1,7 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.ShopRecoveryUI;
+import jp_2dgames.game.gui.UIUtil;
 import jp_2dgames.game.gui.MyButton;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -48,6 +50,9 @@ class ShopState extends FlxSubState {
   // スキル売却ボタン
   var _btnSkillSell:MyButton2;
 
+  // 回復ボタン
+  var _btnRecovery:MyButton2;
+
   /**
    * コンストラクタ
    **/
@@ -74,10 +79,7 @@ class ShopState extends FlxSubState {
 
     // 背景
     {
-      var height = FlxG.height + InventoryUI.BASE_OFS_Y;
-      _bg = new FlxSprite(0, BG_OFS_Y);
-      _bg.loadGraphic(Reg.PATH_MENU_BG);
-      _bg.alpha = 0.5;
+      _bg = UIUtil.createMenuBG(0, UIUtil.MENU_BG_OFS_Y);
       _group.add(_bg);
     }
 
@@ -187,6 +189,15 @@ class ShopState extends FlxSubState {
       _btnSkillSell = _addSkillSellButton(px, py);
       _group.add(_btnSkillSell);
     }
+
+    px = InventoryUI.BTN_X;
+    py += InventoryUI.BTN_DY;
+    // 回復ボタン
+    {
+      _btnRecovery = _addRecoveryButton(px, py);
+      _group.add(_btnRecovery);
+    }
+
     // キャンセルボタン
 
     {
@@ -406,6 +417,35 @@ class ShopState extends FlxSubState {
       // スキルUIを開く
       SkillUI.open(this, _cbSkillSell, null, SkillUI.MODE_SELL, true);
       // メニュー非表示
+      _group.visible = false;
+    });
+
+    return btn;
+  }
+
+  /**
+   * 回復実行
+   **/
+  private function _cbRecovery(btnID:Int, cost:Int):Void {
+
+    if(btnID != ShopRecoveryUI.BTN_ID_CANCEL) {
+      // TODO:
+    }
+
+    // ボタン出現
+    _appearBtn();
+  }
+
+  /**
+   * 回復
+   **/
+  private function _addRecoveryButton(px:Float, py:Float):MyButton2 {
+
+    var label = UIMsg.get(UIMsg.SHOP_RECOVERY);
+    var btn = new MyButton2(px, py, label, function() {
+      // 回復UIを開く
+      ShopRecoveryUI.open(this, _cbRecovery, null, true);
+      // メニューを非表示
       _group.visible = false;
     });
 
