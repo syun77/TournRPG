@@ -53,6 +53,10 @@ class MyColor {
   public static inline var BTN_CONSUME       = FlxColor.LIME;
   public static inline var BTN_CONSUME_LABEL = FlxColor.BLACK;
 
+  // ボタン(ショップ・次のフロア)
+  public static inline var BTN_SHOP          = FlxColor.YELLOW;
+  public static inline var BTN_SHOP_LABEL    = FlxColor.BLACK;
+
   // ボタン(キャンセル)
   public static inline var BTN_CANCEL        = FlxColor.SILVER;
   public static inline var BTN_CANCEL_LABEL  = FlxColor.BLACK;

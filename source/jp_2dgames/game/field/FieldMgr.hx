@@ -218,6 +218,8 @@ class FieldMgr {
         // 次のフロアに進む
         _gotoNextFloor();
       });
+      _btnNextFloor.color = MyColor.BTN_SHOP;
+      _btnNextFloor.label.color = MyColor.BTN_SHOP_LABEL;
       flxState.add(_btnNextFloor);
     }
 
@@ -233,6 +235,8 @@ class FieldMgr {
         _flxState.openSubState(new ShopState(_cbShopEnd, _fieldUI));
         _state = State.Shop;
       });
+      _btnShop.color = MyColor.BTN_SHOP;
+      _btnShop.label.color = MyColor.BTN_SHOP_LABEL;
       flxState.add(_btnShop);
     }
 
