@@ -1,6 +1,6 @@
 id,name,type,hp,mp,rec_hp,rec_mp,revive,win_hp,win_mp,attr,pow,bst,detail
 int,str,str,int,int,int,int,int,int,int,str,int,str,str
-501,物理ブースト,AUTO_ATTR,,,,,,,,AT_PHY,10,,物理攻撃ダメージアップ(小)
+501,物理↑(小),AUTO_ATTR,,,,,,,,AT_PHY,10,,物理攻撃ダメージアップ(小)
 502,HP上昇,AUTO_STUP,10,,,,,,,,,,最大HPが10%上昇
 503,自然治癒,AUTO,,,10,,,,,,,,ターン終了時にHPが10%回復
 504,食いしばり,AUTO,,,,,1,,,,,,死亡しても一度だけ復活
