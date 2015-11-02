@@ -261,6 +261,7 @@ class BtlCmdUI extends FlxSpriteGroup {
    **/
   private function _displayInventoryUI(actor:Actor):Void {
     var param = new InventoryUIParam(InventoryUI.MODE_NORMAL);
+    param.call = InventoryUIParam.CALL_BATTLE;
     InventoryUI.open(_state, _cbItemSelect, actor, param);
     // 自身は非表示
     visible = false;

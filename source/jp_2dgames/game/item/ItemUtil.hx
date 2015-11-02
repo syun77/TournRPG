@@ -85,6 +85,30 @@ class ItemUtil {
   }
 
   /**
+   * バトル中に使えるかどうか
+   **/
+  public static function isAvailableBattle(itemID:Int):Bool {
+    switch(getParamString(itemID, "available")) {
+      case "BOTH", "BATTLE":
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /**
+   * フィールドで使えるかどうか
+   **/
+  public static function isAvailableField(itemID:Int):Bool {
+    switch(getParamString(itemID, "available")) {
+      case "BOTH", "FIELD":
+        return true;
+      default:
+        return false;
+    }
+  }
+
+  /**
    * パラメータを取得する
    **/
   public static function getParam(itemID:Int, key:String):Int {

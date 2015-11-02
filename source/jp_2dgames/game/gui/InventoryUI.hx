@@ -19,13 +19,18 @@ import jp_2dgames.lib.Snd;
  * 起動パラメータ
  **/
 class InventoryUIParam {
-  public var mode:Int;   // 起動モード
-  public var bAnim:Bool; // アニメの有無
-  public var nPage:Int;  // ページ
-  public function new(mode:Int, bAnim:Bool=true, nPage:Int=0) {
-    this.mode  = mode;
-    this.bAnim = bAnim;
-    this.nPage = nPage;
+  public static inline var CALL_FIELD:Int = 0;
+  public static inline var CALL_BATTLE:Int = 1;
+
+  public var mode:Int;     // 起動モード
+  public var bAnim:Bool;   // アニメの有無
+  public var nPage:Int;    // ページ
+  public var call:Int;     // 呼び出しもと
+  public function new(mode:Int, bAnim:Bool=true, nPage:Int=0, call=CALL_FIELD) {
+    this.mode    = mode;
+    this.bAnim   = bAnim;
+    this.nPage   = nPage;
+    this.call    = call;
   }
 }
 
@@ -166,7 +171,7 @@ class InventoryUI extends FlxSpriteGroup {
     this.add(_txtPage);
 
     // ボタンの表示
-    _displayButton(cbFunc, actor, param.bAnim);
+    _displayButton(cbFunc, actor, param.bAnim, param.call);
 
     // 装備情報
     _equipUI = new EquipUI();
@@ -205,7 +210,7 @@ class InventoryUI extends FlxSpriteGroup {
   /**
    * ボタンの表示
    **/
-  private function _displayButton(cbFunc:InventoryUIResult->Void, actor:Actor, bAnim:Bool):Void {
+  private function _displayButton(cbFunc:InventoryUIResult->Void, actor:Actor, bAnim:Bool, call:Int):Void {
 
     // ページ数表示を更新しておく
     _txtPage.text = 'Page: (${_nPage+1}/${_nPageMax})';
@@ -220,6 +225,24 @@ class InventoryUI extends FlxSpriteGroup {
 
     var ofs = _getPageOffset();
     var max = _getPageOffsetMax();
+
+    // 利用可能かどうかチェックする
+    var isAvailabel = function(itemID:Int) {
+      switch(call) {
+        case InventoryUIParam.CALL_FIELD:
+          if(ItemUtil.isAvailableField(itemID) == false) {
+            // フィールドでは使えない
+            return false;
+          }
+        case InventoryUIParam.CALL_BATTLE:
+          if(ItemUtil.isAvailableBattle(itemID) == false) {
+            // バトルでは使えない
+            return false;
+          }
+      }
+      // 利用可能
+      return true;
+    };
 
     for(idx in ofs...max) {
 
@@ -258,6 +281,7 @@ class InventoryUI extends FlxSpriteGroup {
       // 要素番号を入れておく
       btn.ID = result.uid;
       _btnList.push(btn);
+      btn.enabled = isAvailabel(item.id);
 
       if(_mode == MODE_SELL) {
 
@@ -291,7 +315,7 @@ class InventoryUI extends FlxSpriteGroup {
       // 1つ前に戻る
       var py = BTN_PAGE_Y;
       var btn = new MyButton2(BTN_PREV_X, py, "<<", function() {
-        _changePage(-1, cbFunc, actor, false);
+        _changePage(-1, cbFunc, actor, false, call);
       });
       btn.enabled = (_nPage > 0);
       btn.ID = BTN_ID_PAGE;
@@ -301,7 +325,7 @@ class InventoryUI extends FlxSpriteGroup {
       // 1つ先に進む
       var py = BTN_PAGE_Y;
       var btn = new MyButton2(BTN_NEXT_X, py, ">>", function() {
-        _changePage(1, cbFunc, actor, false);
+        _changePage(1, cbFunc, actor, false, call);
       });
       btn.enabled = (_nPage < _nPageMax - 1);
       btn.ID = BTN_ID_PAGE;
@@ -340,7 +364,7 @@ class InventoryUI extends FlxSpriteGroup {
   /**
    * ページ切り替え
    **/
-  private function _changePage(ofs:Int, cbFunc:InventoryUIResult->Void, actor:Actor, bAnim:Bool):Void {
+  private function _changePage(ofs:Int, cbFunc:InventoryUIResult->Void, actor:Actor, bAnim:Bool, call:Int):Void {
     _nPage += ofs;
     if(_nPage < 0) {
       _nPage = _nPageMax - 1;
@@ -368,7 +392,7 @@ class InventoryUI extends FlxSpriteGroup {
     }
 
     // ボタンを再表示
-    _displayButton(cbFunc, actor, bAnim);
+    _displayButton(cbFunc, actor, bAnim, call);
   }
 
   /**
@@ -402,6 +426,10 @@ class InventoryUI extends FlxSpriteGroup {
       // ボタンを取得
       var btnIdx = idx - ofs;
       var btn = _btnList[btnIdx];
+      if(btn.enabled == false) {
+        // 更新不要
+        continue;
+      }
 
       if(ItemUtil.isConsumable(item.id)) {
         // 消費アイテム
