@@ -50,3 +50,4 @@ int,str,str
 48,<val1>の体力が<val2>上昇した,green
 49,<val1>の素早さが<val2>上昇した,green
 50,<val1>の魔力が<val2>上昇した,green
+51,<val1>のHPが<val2>回復した,blue

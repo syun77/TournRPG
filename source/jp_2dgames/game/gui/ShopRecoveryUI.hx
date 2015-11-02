@@ -14,8 +14,8 @@ import flixel.group.FlxSpriteGroup;
 class ShopRecoveryUI extends FlxSpriteGroup {
 
   // ■定数
-  public static inline var BTN_ID_CANCEL:Int = -1; // キャンセル
-  public static inline var BTN_ID_RECOVER:Int = 0; // 少しだけ回復する
+  public static inline var BTN_ID_CANCEL:Int       = -1; // キャンセル
+  public static inline var BTN_ID_RECOVER:Int      = 0; // 少しだけ回復する
   public static inline var BTN_ID_RECOVER_FULL:Int = 1; // 全回復
 
   // ■スタティック

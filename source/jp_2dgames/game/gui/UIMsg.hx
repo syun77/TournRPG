@@ -30,7 +30,7 @@ class UIMsg {
   public static inline var STATUS_AGI:Int      = 22; // 素早さ
   public static inline var STATUS_MAG:Int      = 23; // 魔力
   public static inline var SHOP_RECOVERY:Int   = 24; // ショップ（回復）
-  public static inline var SHOP_REC_LITTLE:Int = 25; // ショップ（回復→10%回復）
+  public static inline var SHOP_REC_LITTLE:Int = 25; // ショップ（回復→10%）
   public static inline var SHOP_REC_FULL:Int   = 26; // ショップ（回復→全回復）
 
   private static var _csv:CsvLoader = null;

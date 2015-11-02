@@ -247,7 +247,7 @@ class FieldMgr {
         // プレイヤーフォーカス
         FlxG.camera.follow(_player, FlxCamera.STYLE_LOCKON, null, 10);
         // ショップを表示
-        _flxState.openSubState(new ShopState(_cbShopEnd, _fieldUI));
+        _flxState.openSubState(new ShopState(_cbShopEnd, _fieldUI, _charaUI, _actor));
         _state = State.Shop;
       });
       _btnShop.color = MyColor.BTN_SHOP;

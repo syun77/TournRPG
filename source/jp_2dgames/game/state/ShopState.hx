@@ -1,8 +1,9 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.BtlCharaUI;
+import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.gui.ShopRecoveryUI;
 import jp_2dgames.game.gui.UIUtil;
-import jp_2dgames.game.gui.MyButton;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxSubState;
@@ -27,8 +28,11 @@ import jp_2dgames.lib.CsvLoader;
  **/
 class ShopState extends FlxSubState {
 
+  // ■定数
   static inline var BG_OFS_Y:Int = 0;
+  static inline var HP_RECOVERY_RATIO:Float = 0.1; // HP小回復の値
 
+  // ■メンバ変数
   // 終了時のコールバック
   var _cbClose:Void->Void;
 
@@ -40,6 +44,9 @@ class ShopState extends FlxSubState {
 
   // フィールドUI
   var _fieldUI:FieldUI;
+
+  // キャラUI
+  var _charaUI:BtlCharaUI;
 
   // アイテム購入ボタン
   var _btnItemBuy:MyButton2;
@@ -53,14 +60,19 @@ class ShopState extends FlxSubState {
   // 回復ボタン
   var _btnRecovery:MyButton2;
 
+  // 主体者
+  var _actor:Actor;
+
   /**
    * コンストラクタ
    **/
-  public function new(cbClose:Void->Void, fieldUI:FieldUI) {
+  public function new(cbClose:Void->Void, fieldUI:FieldUI, charaUI:BtlCharaUI, actor:Actor) {
     super();
 
     _cbClose = cbClose;
     _fieldUI = fieldUI;
+    _charaUI = charaUI;
+    _actor   = actor;
   }
 
   /**
@@ -429,7 +441,30 @@ class ShopState extends FlxSubState {
   private function _cbRecovery(btnID:Int, cost:Int):Void {
 
     if(btnID != ShopRecoveryUI.BTN_ID_CANCEL) {
-      // TODO:
+      switch(btnID) {
+        case ShopRecoveryUI.BTN_ID_RECOVER:
+          // 10%回復
+          var v = Std.int(_actor.hpmax * HP_RECOVERY_RATIO);
+          _actor.recoverHp(v);
+          Message.push2(Msg.RECOVER_HP, [_actor.name, v]);
+        case ShopRecoveryUI.BTN_ID_RECOVER_FULL:
+          // 全回復
+          _actor.recoverHp(9999);
+          Message.push2(Msg.RECOVER_HP_ALL, [_actor.name]);
+      }
+
+      // お金消費
+      Global.useMoney(cost);
+
+      // UI更新
+      _fieldUI.update();
+      _charaUI.update();
+
+      if(_actor.isHpMax() == false) {
+        // 回復メニューを再表示
+        ShopRecoveryUI.open(this, _cbRecovery, null, false);
+        return;
+      }
     }
 
     // ボタン出現

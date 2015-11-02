@@ -285,6 +285,15 @@ class Actor extends FlxSprite {
   }
 
   /**
+   * MP回復
+   * @param val 回復する値
+   **/
+  public function recoverMp(val:Int):Void {
+    _param.mp += val;
+    _clampMp();
+  }
+
+  /**
    * 危険状態の取得
    **/
   public function getDanger():Int {
@@ -512,6 +521,13 @@ class Actor extends FlxSprite {
   public function damageMp(v:Int):Void {
     _param.mp -= v;
     _clampMp();
+  }
+
+  /**
+   * HPが最大かどうか
+   **/
+  public function isHpMax():Bool {
+    return (_param.hp == _param.hpmax);
   }
 
   /**
