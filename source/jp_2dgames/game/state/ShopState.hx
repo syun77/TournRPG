@@ -464,7 +464,7 @@ class ShopState extends FlxSubState {
 
       if(_actor.isHpMax() == false) {
         // 回復メニューを再表示
-        ShopRecoveryUI.open(this, _cbRecovery, null, false);
+        ShopRecoveryUI.open(this, _cbRecovery, _actor, false);
         return;
       }
     }
@@ -481,7 +481,7 @@ class ShopState extends FlxSubState {
     var label = UIMsg.get(UIMsg.SHOP_RECOVERY);
     var btn = new MyButton2(px, py, label, function() {
       // 回復UIを開く
-      ShopRecoveryUI.open(this, _cbRecovery, null, true);
+      ShopRecoveryUI.open(this, _cbRecovery, _actor, true);
       // メニューを非表示
       _group.visible = false;
     });

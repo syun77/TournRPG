@@ -83,13 +83,16 @@ class ShopRecoveryUI extends FlxSpriteGroup {
     var px = InventoryUI.BTN_X;
     var py = InventoryUI.BTN_Y;
 
+    // 回復ボタン
     var btnIDs = [BTN_ID_RECOVER, BTN_ID_RECOVER_FULL];
-    var msgIDs = [UIMsg.SHOP_REC_LITTLE, UIMsg.SHOP_REC_FULL];
-    var costs  = [2, 10];
     for(btnID in btnIDs) {
+      // ラベルID
       var msgID = _getLabel(btnID);
-      var cost  = _getCost(btnID);
+      // コスト
+      var cost  = _getCost(btnID, actor);
+      // ラベル
       var label = UIMsg.get(msgID);
+      // ボタン生成
       var btn = new MyButton2(px, py, label, function() {
         // UIを閉じる
         _close();
@@ -99,6 +102,8 @@ class ShopRecoveryUI extends FlxSpriteGroup {
 
       // 要素番号を入れておく
       btn.ID = btnID;
+      // ボタンをクリックできるかどうか
+      btn.enabled = _checkEnabled(btnID, actor);
       _btnList.push(btn);
       this.add(btn);
 
@@ -182,13 +187,32 @@ class ShopRecoveryUI extends FlxSpriteGroup {
   /**
    * コストを取得
    **/
-  private function _getCost(btnID:Int):Int {
+  private function _getCost(btnID:Int, actor:Actor):Int {
+
+    var base:Int = 50;
+    var lv:Int   = actor.lv;
+    var cost = (base + lv*4) * (1 + lv * 0.2);
+    var cost10   = cost * 0.1;
+    var costFull = cost * (1 - actor.hpratio);
+
     switch(btnID) {
-      case BTN_ID_RECOVER: return 2;
-      case BTN_ID_RECOVER_FULL: return 10;
+      case BTN_ID_RECOVER: return Std.int(cost10);
+      case BTN_ID_RECOVER_FULL: return Std.int(costFull);
       default: return 0;
     }
   }
+
+  /**
+   * ボタンをクリックできるかどうか
+   **/
+  private function _checkEnabled(btnID:Int, actor:Actor):Bool {
+    switch(btnID) {
+      case BTN_ID_RECOVER: return actor.hpratio <= 0.9;
+      case BTN_ID_RECOVER_FULL: return true;
+      default: return true;
+    }
+  }
+
 
   /**
    * 詳細メッセージ
