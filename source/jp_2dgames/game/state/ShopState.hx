@@ -130,6 +130,8 @@ class ShopState extends FlxSubState {
     _btnItemSell.enabled = (Inventory.isEmpty() == false);
     // スキルを所持していない場合は売却できない
     _btnSkillSell.enabled = (SkillSlot.isEmpty() == false);
+    // 体力回復の必要がない
+    _btnRecovery.enabled = (_actor.isHpMax() == false);
   }
 
   /**

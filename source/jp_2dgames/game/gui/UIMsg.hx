@@ -32,6 +32,8 @@ class UIMsg {
   public static inline var SHOP_RECOVERY:Int   = 24; // ショップ（回復）
   public static inline var SHOP_REC_LITTLE:Int = 25; // ショップ（回復→10%）
   public static inline var SHOP_REC_FULL:Int   = 26; // ショップ（回復→全回復）
+  public static inline var MSG_REC_LITTLE:Int  = 27; // ショップメッセージ（回復→10%）
+  public static inline var MSg_REC_FULL:Int    = 28; // ショップメッセージ（回復→全回復）
 
   private static var _csv:CsvLoader = null;
   /**

@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.gui.UIMsg;
 import flixel.ui.FlxButton;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -85,10 +86,9 @@ class ShopRecoveryUI extends FlxSpriteGroup {
     var btnIDs = [BTN_ID_RECOVER, BTN_ID_RECOVER_FULL];
     var msgIDs = [UIMsg.SHOP_REC_LITTLE, UIMsg.SHOP_REC_FULL];
     var costs  = [2, 10];
-    for(idx in 0...btnIDs.length) {
-      var btnID = btnIDs[idx];
-      var msgID = msgIDs[idx];
-      var cost  = costs[idx];
+    for(btnID in btnIDs) {
+      var msgID = _getLabel(btnID);
+      var cost  = _getCost(btnID);
       var label = UIMsg.get(msgID);
       var btn = new MyButton2(px, py, label, function() {
         // UIを閉じる
@@ -161,10 +161,43 @@ class ShopRecoveryUI extends FlxSpriteGroup {
 
           _detailUI.visible = true;
           // 表示情報を更新
-          var msg = "test";
+          var msg = UIMsg.get(_getDetail(btn.ID));
           _detailUI.setText(msg);
           break;
       }
+    }
+  }
+
+  /**
+   * ボタンのラベル番号取得
+   **/
+  private function _getLabel(btnID:Int):Int {
+    switch(btnID) {
+      case BTN_ID_RECOVER: return UIMsg.SHOP_REC_LITTLE;
+      case BTN_ID_RECOVER_FULL: return UIMsg.SHOP_REC_FULL;
+      default: return 0;
+    }
+  }
+
+  /**
+   * コストを取得
+   **/
+  private function _getCost(btnID:Int):Int {
+    switch(btnID) {
+      case BTN_ID_RECOVER: return 2;
+      case BTN_ID_RECOVER_FULL: return 10;
+      default: return 0;
+    }
+  }
+
+  /**
+   * 詳細メッセージ
+   **/
+  private function _getDetail(btnID:Int):Int {
+    switch(btnID) {
+      case BTN_ID_RECOVER: return UIMsg.MSG_REC_LITTLE;
+      case BTN_ID_RECOVER_FULL: return UIMsg.MSg_REC_FULL;
+      default: return 0;
     }
   }
 }
