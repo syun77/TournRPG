@@ -268,19 +268,22 @@ class BtlMgr {
 
       case State.ResultWait:
 
+        // 次に進む
+        var cbNext = function() {
+          // プレイヤーパラメータをグローバルに戻しておく
+          Global.setPlayerParam(_player.param);
+          _change(State.End);
+        }
+
         if(_btlEnd == BtlLogicPlayer.BTL_END_ESCAPE) {
           // 逃走時はそのまま終わる
-          _change(State.End);
+          cbNext();
           return;
         }
 
         var px = FlxG.width/2 - MyButton2.WIDTH/2;
         var py = FlxG.height -128;
-        var btn = new MyButton2(px, py, "NEXT", function() {
-          // プレイヤーパラメータをグローバルに戻しておく
-          Global.setPlayerParam(_player.param);
-          _change(State.End);
-        });
+        var btn = new MyButton2(px, py, "NEXT", cbNext);
         _flxState.add(btn);
 
         _change(State.EndWait);
