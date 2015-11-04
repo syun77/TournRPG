@@ -138,7 +138,7 @@ class Calc {
     if(target.group == BtlGroup.Player) {
       // 物理耐性
       var regist = SkillSlot.getRegist(SkillAttr.Physcal);
-      def *= regist;
+      power *= regist;
     }
 
     // 力係数 (基礎体力の差)
@@ -207,7 +207,7 @@ class Calc {
         if(target.group == BtlGroup.Player) {
           // 魔法耐性
           var regist = SkillSlot.getRegist(SkillAttr.Magical);
-          def *= regist;
+          power *= regist;
         }
 
         // 真係数

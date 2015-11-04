@@ -172,11 +172,14 @@ class SkillSlot {
       if(skill.type == SkillType.AutoAttr) {
         if(skill.attr == attr) {
           var regist = SkillUtil.getParam(skill.id, "regist");
-          ratio += (regist * 0.01);
+          ratio -= (regist * 0.01);
         }
       }
     });
 
+    if(ratio < 0) {
+      return 0;
+    }
     return ratio;
   }
 }
