@@ -3,6 +3,7 @@ package jp_2dgames.game.skill;
 /**
  * スキルスロット
  **/
+import jp_2dgames.game.gui.SkillUI;
 class SkillSlot {
 
   // スキルスロットの最大数
@@ -69,6 +70,20 @@ class SkillSlot {
     return _instance._delSkill(idx);
   }
 
+  /**
+   * 属性ブースト値を取得する
+   **/
+  public static function getBoost(attr:SkillAttr):Float {
+    return _instance._getBoost(attr);
+  }
+
+  /**
+   * 属性耐性値を取得する
+   **/
+  public static function getRegist(attr:SkillAttr):Float {
+    return _instance._getRegist(attr);
+  }
+
 
   // ================================================
   // ■以下インスタンス変数
@@ -92,6 +107,15 @@ class SkillSlot {
    **/
   private function _init(skillList:Array<SkillData>):Void {
     _skillList = skillList;
+  }
+
+  /**
+   * まとめて実行する
+   **/
+  private function _forEach(func:SkillData->Void):Void {
+    for(skill in _skillList) {
+      func(skill);
+    }
   }
 
   /**
@@ -120,5 +144,39 @@ class SkillSlot {
    **/
   private function _delSkill(idx:Int):Void {
     skillList.splice(idx, 1);
+  }
+
+  /**
+   * 属性ブースト値を取得する
+   **/
+  private function _getBoost(attr:SkillAttr):Float {
+    var ratio:Float = 1;
+    _forEach(function(skill:SkillData) {
+      if(skill.type == SkillType.AutoAttr) {
+        if(skill.attr == attr) {
+          var boost = SkillUtil.getParam(skill.id, "boost");
+          ratio += (boost * 0.01);
+        }
+      }
+    });
+
+    return ratio;
+  }
+
+  /**
+   * 属性耐性値を取得する
+   **/
+  private function _getRegist(attr:SkillAttr):Float {
+    var ratio:Float = 1;
+    _forEach(function(skill:SkillData) {
+      if(skill.type == SkillType.AutoAttr) {
+        if(skill.attr == attr) {
+          var regist = SkillUtil.getParam(skill.id, "regist");
+          ratio += (regist * 0.01);
+        }
+      }
+    });
+
+    return ratio;
   }
 }

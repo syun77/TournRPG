@@ -5,8 +5,20 @@ package jp_2dgames.game.skill;
  **/
 class SkillData {
 
-  public var id:Int         = SkillUtil.NONE; // スキルID
-  public var type:SkillType = SkillType.None; // スキル種別
+  // スキルID
+  public var id:Int = SkillUtil.NONE;
+  // スキル種別
+  private var _type:SkillType = SkillType.None;
+  public var type(get, never):SkillType;
+  private function get_type() {
+    return _type;
+  }
+  // スキル属性
+  private var _attr:SkillAttr;
+  public var attr(get, never):SkillAttr;
+  private function get_attr() {
+    return _attr;
+  }
 
   /**
    * コンストラクタ
@@ -24,7 +36,9 @@ class SkillData {
    * スキルIDを設定
    **/
   public function setSkillID(skillID:Int):Void {
-    id   = skillID;
-    type = SkillUtil.toType(skillID);
+    id    = skillID;
+    _type = SkillUtil.toType(skillID);
+    _attr = SkillUtil.toAttribute(skillID);
   }
+
 }

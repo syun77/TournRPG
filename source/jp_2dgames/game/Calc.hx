@@ -1,5 +1,7 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.skill.SkillAttr;
+import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.actor.BadStatusUtil;
@@ -120,12 +122,23 @@ class Calc {
     // 攻撃力
     var atk = _getAtk(act);
     // 防御力
-    var def = _getDef(target);
+    var def:Float = _getDef(target);
 
     // 威力
     var power = str + (atk * 0.4) + BASE_ATK;
     if(power_skill > 0) {
       power = power_skill;
+    }
+
+    if(act.group == BtlGroup.Player) {
+      // 物理ブースト
+      var boost = SkillSlot.getBoost(SkillAttr.Physcal);
+      power *= boost;
+    }
+    if(target.group == BtlGroup.Player) {
+      // 物理耐性
+      var regist = SkillSlot.getRegist(SkillAttr.Physcal);
+      def *= regist;
     }
 
     // 力係数 (基礎体力の差)
@@ -181,10 +194,22 @@ class Calc {
         // 攻撃力
         var atk = SkillUtil.getParam(skillID, "pow") * 0.2;
         // 防御力
-        var def = _getDef(target);
+        var def:Float = _getDef(target);
 
         // 威力
         var power = atk + (mag1 * 0.4) + BASE_ATK;
+
+        if(act.group == BtlGroup.Player) {
+          // 魔法ブースト
+          var boost = SkillSlot.getBoost(SkillAttr.Magical);
+          power *= boost;
+        }
+        if(target.group == BtlGroup.Player) {
+          // 魔法耐性
+          var regist = SkillSlot.getRegist(SkillAttr.Magical);
+          def *= regist;
+        }
+
         // 真係数
         var mag_rate = Math.pow(1.02, mag1 - mag2);
         // 威力係数

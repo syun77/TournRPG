@@ -16,7 +16,7 @@ enum SkillType {
   Recover;      // 回復
   Buff;         // 補助
 
-  // 自動
+  // 自動 (パッシブ)
   Auto;         // 自動発動
   AutoAttr;     // 耐性アップ
   AutoStatusUp; // ステータス上昇
