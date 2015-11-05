@@ -269,7 +269,7 @@ class FieldSubState extends FlxSubState {
     Dialog.open(this, Dialog.YESNO, msg, null, function(nSel) {
       if(nSel == Dialog.BTN_YES) {
         // 捨てる
-        SkillSlot.delSkill(btnID);
+        SkillSlot.delSkill(btnID, _actor);
         Message.push2(Msg.ITEM_DEL, [name]);
         Snd.playSe("del");
       }

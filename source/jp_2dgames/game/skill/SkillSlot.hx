@@ -3,6 +3,7 @@ package jp_2dgames.game.skill;
 /**
  * スキルスロット
  **/
+import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.gui.SkillUI;
 class SkillSlot {
 
@@ -59,15 +60,15 @@ class SkillSlot {
   /**
    * スキルを追加
    **/
-  public static function addSkill(skill:SkillData):Void {
-    return _instance._addSkill(skill);
+  public static function addSkill(skill:SkillData, actor:Actor):Void {
+    return _instance._addSkill(skill, actor);
   }
 
   /**
    * スキルを削除
    **/
-  public static function delSkill(idx:Int):Void {
-    return _instance._delSkill(idx);
+  public static function delSkill(idx:Int, actor:Actor):Void {
+    return _instance._delSkill(idx, actor);
   }
 
   /**
@@ -135,15 +136,48 @@ class SkillSlot {
   /**
    * スキルを追加
    **/
-  private function _addSkill(skill:SkillData):Void {
+  private function _addSkill(skill:SkillData, actor:Actor):Void {
     skillList.push(skill);
+    if(skill.type == SkillType.AutoStatusUp) {
+      // 自動ステータス上昇
+      _autoStatusUp(skill, actor);
+    }
   }
 
   /**
    * スキルを削除
    **/
-  private function _delSkill(idx:Int):Void {
+  private function _delSkill(idx:Int, actor:Actor):Void {
+    var skill = skillList[idx];
     skillList.splice(idx, 1);
+    if(skill.type == SkillType.AutoStatusUp) {
+      // 自動ステータス上昇を解除
+      _delAutoStatusUp(skill, actor);
+    }
+  }
+
+  /**
+   * 自動ステータス上昇
+   **/
+  private function _autoStatusUp(skill:SkillData, actor:Actor):Void {
+    var hp = SkillUtil.getParam(skill.id, "hp");
+    var mp = SkillUtil.getParam(skill.id, "mp");
+
+    actor.param.hpmax += hp;
+    actor.param.mpmax += mp;
+  }
+
+  /**
+   * 自動ステータス上昇の解除
+   **/
+  private function _delAutoStatusUp(skill:SkillData, actor:Actor):Void {
+    var hp = SkillUtil.getParam(skill.id, "hp");
+    var mp = SkillUtil.getParam(skill.id, "mp");
+
+    actor.param.hpmax -= hp;
+    actor.param.mpmax -= mp;
+    actor.clampHp();
+    actor.clampMp();
   }
 
   /**

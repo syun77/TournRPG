@@ -272,7 +272,7 @@ class ShopState extends FlxSubState {
         var skillList = shop.skillList;
         var skill = skillList[idx];
         // スキルスロットに追加
-        SkillSlot.addSkill(skill);
+        SkillSlot.addSkill(skill, _actor);
         // お金を減らす
         money = SkillUtil.getBuy(skill.id);
         Global.useMoney(money);
@@ -282,7 +282,7 @@ class ShopState extends FlxSubState {
         name = SkillUtil.getName(skill.id);
     }
 
-    // メッセージ表示　
+    // メッセージ表示
     Message.push2(Msg.ITEM_BUY, [name, money]);
 
     Snd.playSe("coin", true);
@@ -403,7 +403,7 @@ class ShopState extends FlxSubState {
       var money = SkillUtil.getSell(skill.id);
       Global.addMoney(money);
       // スキル削除
-      SkillSlot.delSkill(btnID);
+      SkillSlot.delSkill(btnID, _actor);
       // 名前
       var name = SkillUtil.getName(skill.id);
       // メッセージ表示
@@ -497,6 +497,9 @@ class ShopState extends FlxSubState {
   override public function update():Void {
     super.update();
 
+    // UI更新
     _fieldUI.update();
+    _charaUI.update();
+
   }
 }

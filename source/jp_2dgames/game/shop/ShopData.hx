@@ -73,6 +73,9 @@ class ShopData {
 
     var skill = new SkillData(SkillConst.SKILL001);
     _skillList.push(skill);
+    skill = new SkillData(SkillConst.SKILL502);
+    _skillList.push(skill);
+
   }
 
   /**
