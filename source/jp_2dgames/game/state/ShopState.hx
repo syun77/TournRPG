@@ -455,6 +455,8 @@ class ShopState extends FlxSubState {
           Message.push2(Msg.RECOVER_HP_ALL, [_actor.name]);
       }
 
+      Snd.playSe("recover");
+
       // お金消費
       Global.useMoney(cost);
 
