@@ -385,6 +385,9 @@ class FieldMgr {
         _btnNextFloor.visible = false;
         _btnShop.visible = false;
     }
+
+    // プレイヤー情報をグローバルに反映する
+    Global.setPlayerParam(_actor.param);
   }
 
   static var count:Int = 1;
