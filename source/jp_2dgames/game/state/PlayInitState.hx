@@ -26,6 +26,10 @@ class PlayInitState extends FlxState {
     skills.push(skill);
     skill = new SkillData(SkillConst.SKILL506);
     skills.push(skill);
+    skill = new SkillData(SkillConst.SKILL507);
+    skills.push(skill);
+    skill = new SkillData(SkillConst.SKILL508);
+    skills.push(skill);
 
   }
 

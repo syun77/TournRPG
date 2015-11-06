@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.gui.MyButton2;
 import flixel.FlxState;
 import flixel.FlxCamera;
@@ -230,6 +231,19 @@ class BtlMgr {
             _change(State.Escape);
           case BtlLogicPlayer.BTL_END_WIN:
             // バトル勝利
+            // HP/MPの自動回復
+            var win_hp = SkillSlot.getBattleEndRecoveryHp();
+            var win_mp = SkillSlot.getBattleEndRecoveryMp();
+            if(win_hp > 0) {
+              ActorMgr.forEachAliveGroup(BtlGroup.Player, function(act:Actor) {
+                act.recoverHp(win_hp);
+              });
+            }
+            if(win_mp > 0) {
+              ActorMgr.forEachAliveGroup(BtlGroup.Player, function(act:Actor) {
+                act.recoverMp(win_mp);
+              });
+            }
             _change(State.BtlWin);
           case BtlLogicPlayer.BTL_END_LOSE:
             // バトル敗北

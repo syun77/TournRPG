@@ -1,5 +1,6 @@
 package jp_2dgames.game.skill;
 
+import jp_2dgames.game.gui.SkillUI;
 import jp_2dgames.game.actor.Actor;
 
 /**
@@ -97,6 +98,20 @@ class SkillSlot {
    **/
   public static function getTurnEndRecoveryMp():Int {
     return _instance._getTurnEndRecoveryMp();
+  }
+
+  /**
+   * バトル終了時の自動HP回復量の取得
+   **/
+  public static function getBattleEndRecoveryHp():Int {
+    return _instance._getBattleEndRecoveryHp();
+  }
+
+  /**
+   * バトル終了時の自動MP回復量の取得
+   **/
+  public static function getBattleEndRecoveryMp():Int {
+    return _instance._getBattleEndRecoveryMp();
   }
 
 
@@ -255,6 +270,36 @@ class SkillSlot {
       if(skill.type == SkillType.Auto) {
         var rec_mp = SkillUtil.getParam(skill.id, "rec_mp");
         val += rec_mp;
+      }
+    });
+
+    return val;
+  }
+
+  /**
+   * バトル終了時の自動HP回復量の取得
+   **/
+  public function _getBattleEndRecoveryHp():Int {
+    var val:Int = 0;
+    _forEach(function(skill:SkillData) {
+      if(skill.type == SkillType.Auto) {
+        var win_hp = SkillUtil.getParam(skill.id, "win_hp");
+        val += win_hp;
+      }
+    });
+
+    return val;
+  }
+
+  /**
+   * バトル終了時の自動MP回復量の取得
+   **/
+  public function _getBattleEndRecoveryMp():Int {
+    var val:Int = 0;
+    _forEach(function(skill:SkillData) {
+      if(skill.type == SkillType.Auto) {
+        var win_mp = SkillUtil.getParam(skill.id, "win_mp");
+        val += win_mp;
       }
     });
 
