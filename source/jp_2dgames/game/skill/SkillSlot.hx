@@ -1,10 +1,10 @@
 package jp_2dgames.game.skill;
 
+import jp_2dgames.game.actor.Actor;
+
 /**
  * スキルスロット
  **/
-import jp_2dgames.game.actor.Actor;
-import jp_2dgames.game.gui.SkillUI;
 class SkillSlot {
 
   // スキルスロットの最大数
@@ -83,6 +83,20 @@ class SkillSlot {
    **/
   public static function getRegist(attr:SkillAttr):Float {
     return _instance._getRegist(attr);
+  }
+
+  /**
+   * ターン終了時の自動HP回復量の取得
+   **/
+  public static function getTurnEndRecoveryHp():Int {
+    return _instance._getTurnEndRecoveryHp();
+  }
+
+  /**
+   * ターン終了時の自動MP回復量の取得
+   **/
+  public static function getTurnEndRecoveryMp():Int {
+    return _instance._getTurnEndRecoveryMp();
   }
 
 
@@ -215,5 +229,35 @@ class SkillSlot {
       return 0;
     }
     return ratio;
+  }
+
+  /**
+   * ターン終了時に回復するHP量の取得
+   **/
+  private function _getTurnEndRecoveryHp():Int {
+    var val:Int = 0;
+    _forEach(function(skill:SkillData) {
+      if(skill.type == SkillType.Auto) {
+        var rec_hp = SkillUtil.getParam(skill.id, "rec_hp");
+        val += rec_hp;
+      }
+    });
+
+    return val;
+  }
+
+  /**
+   * ターン終了時に回復するMP量の取得
+   **/
+  private function _getTurnEndRecoveryMp():Int {
+    var val:Int = 0;
+    _forEach(function(skill:SkillData) {
+      if(skill.type == SkillType.Auto) {
+        var rec_mp = SkillUtil.getParam(skill.id, "rec_mp");
+        val += rec_mp;
+      }
+    });
+
+    return val;
   }
 }

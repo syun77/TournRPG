@@ -20,7 +20,11 @@ class PlayInitState extends FlxState {
 
     // 初期スキルを設定
     var skills = Global.getSkillSlot();
-    var skill = new SkillData(SkillConst.SKILL505);
+    var skill = new SkillData(SkillConst.SKILL503);
+    skills.push(skill);
+    skill = new SkillData(SkillConst.SKILL006);
+    skills.push(skill);
+    skill = new SkillData(SkillConst.SKILL506);
     skills.push(skill);
 
   }

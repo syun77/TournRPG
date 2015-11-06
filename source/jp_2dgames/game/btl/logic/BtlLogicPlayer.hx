@@ -225,6 +225,35 @@ class BtlLogicPlayer {
   }
 
   /**
+   * MP回復
+   **/
+  private function _recoverMp(target:Actor, v:Int):Void {
+    target.recoverMp(v);
+    Message.push2(Msg.RECOVER_MP, [target.name, v]);
+    // SE再生
+    Snd.playSe("recover");
+
+    // 数値表示
+    var px:Float = 0;
+    var py:Float = 0;
+    if(target.group == BtlGroup.Player) {
+      px = BtlUI.getPlayerX(target.ID);
+      py = BtlUI.getPlayerY(target.ID);
+    }
+    else {
+      px = target.xcenter;
+      py = target.ycenter;
+    }
+    var p = ParticleDamage.start(px, py, v);
+    p.color = MyColor.NUM_RECOVER;
+    // スクロール有効・無効
+    var bScroll = (target.group == BtlGroup.Enemy);
+    if(bScroll == false) {
+      p.scrollFactor.set(0, 0);
+    }
+  }
+
+  /**
    * 更新・メイン・開始演出
    **/
   private function _updateMainBegin():Void {
@@ -351,6 +380,10 @@ class BtlLogicPlayer {
       case BtlLogic.HpRecover(val):
         // HP回復
         _recoverHp(target, val);
+
+      case BtlLogic.MpRecover(val):
+        // MP回復
+        _recoverMp(target, val);
 
       case BtlLogic.ChanceRoll(b):
         // 成功 or 失敗

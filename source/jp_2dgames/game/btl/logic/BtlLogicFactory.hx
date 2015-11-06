@@ -1,4 +1,5 @@
 package jp_2dgames.game.btl.logic;
+import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.btl.logic.BtlLogicData;
@@ -479,6 +480,51 @@ class BtlLogicFactory {
 
     var ret = new List<BtlLogicData>();
 
+    // スキル効果
+    _createTurnEndSkill(actor, ret);
+
+    // バッドステータスの生成
+    _createTurnEndBadstatus(actor, ret);
+
+    return ret;
+  }
+
+  /**
+   * ターン終了時のスキル効果
+   **/
+  private static function _createTurnEndSkill(actor:Actor, ret:List<BtlLogicData>):Void {
+    if(actor.group == BtlGroup.Enemy) {
+      // 敵には何も起こらない
+      return;
+    }
+
+    // ターン終了時のHP回復値を取得
+    var rec_hp = SkillSlot.getTurnEndRecoveryHp();
+    if(rec_hp > 0) {
+      var type = BtlLogic.HpRecover(rec_hp);
+      var eft = new BtlLogicData(actor.ID, actor.group, type);
+      // 自分自身が対象
+      eft.setTarget(actor.ID);
+      ret.add(eft);
+      actor.recoverHp(rec_hp);
+    }
+
+    // ターン終了時のMP回復値を取得
+    var rec_mp = SkillSlot.getTurnEndRecoveryMp();
+    if(rec_mp > 0) {
+      var type = BtlLogic.MpRecover(rec_mp);
+      var eft = new BtlLogicData(actor.ID, actor.group, type);
+      // 自分自身が対象
+      eft.setTarget(actor.ID);
+      ret.add(eft);
+      actor.recoverMp(rec_hp);
+    }
+  }
+
+  /**
+   * ターン終了時のバッドステータス効果・回復
+   **/
+  private static function _createTurnEndBadstatus(actor:Actor, ret:List<BtlLogicData>):Void {
     // 毒ダメージ
     if(actor.badstatus == BadStatus.Poison) {
       // TODO: 10ダメージ固定
@@ -502,7 +548,6 @@ class BtlLogicFactory {
       ret.add(eft);
     }
 
-    return ret;
   }
 
   /**

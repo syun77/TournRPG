@@ -50,5 +50,5 @@ class Msg {
   public static inline var GROW_VIT:Int       = 48; // 体力上昇
   public static inline var GROW_AGI:Int       = 49; // 素早さ上昇
   public static inline var GROW_MAG:Int       = 50; // 魔力上昇
-  public static inline var RECOVER_TP:Int     = 51; // TP回復
+  public static inline var RECOVER_MP:Int     = 51; // MP回復
 }
