@@ -24,6 +24,9 @@ class Params {
   public function new() {
   }
 
+  /**
+   * コピー
+   **/
   public function copy(p:Dynamic):Void {
     id    = p.id;
     lv    = p.lv;
@@ -41,5 +44,14 @@ class Params {
     buffAtk = p.buffAtk;
     buffDef = p.buffDef;
     buffSpd = p.buffSpd;
+  }
+
+  /**
+   * バフ・デバグを初期化する
+   **/
+  public function resetBuf():Void {
+    buffAtk = 0;
+    buffDef = 0;
+    buffSpd = 0;
   }
 }

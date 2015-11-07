@@ -284,6 +284,8 @@ class BtlMgr {
 
         // 次に進む
         var cbNext = function() {
+          // バフ・デバフを初期化
+          _player.param.resetBuf();
           // プレイヤーパラメータをグローバルに戻しておく
           Global.setPlayerParam(_player.param);
           _change(State.End);
