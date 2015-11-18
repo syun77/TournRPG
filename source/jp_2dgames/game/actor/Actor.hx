@@ -518,6 +518,14 @@ class Actor extends FlxSprite {
     return isDead();
   }
 
+  /**
+   * 最大HPの割合でダメージを与える
+   **/
+  public function damageRatio(v:Float):Bool {
+    var val = Std.int(hpmax * v);
+    return damage(val);
+  }
+
   public function damageMp(v:Int):Void {
     _param.mp -= v;
     clampMp();

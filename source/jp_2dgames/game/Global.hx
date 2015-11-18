@@ -78,6 +78,8 @@ class Global {
     _playerParam = new Params();
     var lv:Int = 1;
     PlayerInfo.setParam(_playerParam, lv);
+    // TODO:
+    _playerParam.food = 5;
 
     // スキル初期化
     _skillList = new Array<SkillData>();

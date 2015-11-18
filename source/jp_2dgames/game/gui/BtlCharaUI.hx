@@ -256,7 +256,6 @@ class BtlCharaUI extends FlxSpriteGroup {
    * ダメージ
    **/
   public function damage():Void {
-
     // 枠を赤くする
     _changeBgColor(MyColor.PANEL_DAMAGE);
   }

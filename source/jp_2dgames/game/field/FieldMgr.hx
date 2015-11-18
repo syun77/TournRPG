@@ -1,5 +1,7 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.particle.ParticleDamage;
+import jp_2dgames.game.particle.Particle;
 import jp_2dgames.lib.Snd;
 import flixel.FlxObject;
 import flixel.FlxCamera;
@@ -477,12 +479,53 @@ class FieldMgr {
   }
 
   /**
+   * 空腹ダメージ
+   * @return 死亡したらtrue
+   **/
+  private function _damageHunger():Bool {
+    var v = Std.int(_actor.hpmax * 0.2);
+//    FlxG.camera.shake(0.02, 0.35);
+    Message.push2(Msg.DAMAGE_PLAYER, [_actor.name, v]);
+    _charaUI.damage();
+    _charaUI.shake();
+//    var px = _charaUI.xcenter;
+//    var py = _charaUI.ycenter;
+    // パーティクル発生
+//    Particle.start(PType.Circle, px, py, FlxColor.RED, false);
+
+    // SE再生
+    Snd.playSe("hit");
+
+    // ダメージ数値
+//    var p = ParticleDamage.start(px, py, v);
+//    p.color = MyColor.NUM_DAMAGE;
+//    p.scrollFactor.set(0, 0);
+
+    // ダメージを与える
+    return _actor.damage(v);
+  }
+
+  /**
    * 更新・イベント
    **/
   private function _updateEvent():Void {
     _eventMgr.proc();
     if(_eventMgr.isEnd() == false) {
       return;
+    }
+
+    // 食糧を減らす
+    if(_actor.param.food > 0) {
+      _actor.param.food--;
+    }
+    else {
+      // 食糧がないのでダメージ (20%)
+      if(_damageHunger()) {
+        // 餓死
+        _resultCode = RET_GAMEOVER;
+        _state = State.End;
+        return;
+      }
     }
 
     switch(_eventMgr.resultCode) {
