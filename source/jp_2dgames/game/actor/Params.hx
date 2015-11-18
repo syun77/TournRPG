@@ -17,6 +17,7 @@ class Params {
   public var mag:Int   = 5;   // 魔力
   public var xp:Int    = 0;   // 経験値
   public var money:Int = 0;   // 所持金
+  public var food:Int  = 0;   // 満腹度
   public var buffAtk:Int = 0; // バフ・攻撃力 (マイナスはデバフ)
   public var buffDef:Int = 0; // バフ・守備力 (マイナスはデバフ)
   public var buffSpd:Int = 0; // バフ・命中率 (マイナスはデバフ)
@@ -40,6 +41,7 @@ class Params {
     mag   = p.mag;
     xp    = p.xp;
     money = p.money;
+    food  = p.food;
 
     buffAtk = p.buffAtk;
     buffDef = p.buffDef;
