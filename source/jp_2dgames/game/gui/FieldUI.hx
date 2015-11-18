@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.actor.Actor;
 import flixel.util.FlxDestroyUtil;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -23,8 +24,8 @@ class FieldUI extends FlxSpriteGroup {
   static var _instance:FieldUI = null;
 
   // 開く
-  public static function open(state:FlxState):Void {
-    _instance = new FieldUI();
+  public static function open(state:FlxState, actor:Actor):Void {
+    _instance = new FieldUI(actor);
     state.add(_instance);
   }
 
@@ -35,23 +36,35 @@ class FieldUI extends FlxSpriteGroup {
   }
 
   // ■メンバ変数
+  var _actor:Actor;
   var _txtFloor:FlxText;
   var _txtMoney:FlxText;
+  var _txtFood:FlxText;
 
   /**
    * コンストラクタ
    **/
-  public function new() {
+  public function new(actor:Actor) {
     super(BASE_X, BASE_Y);
+    _actor = actor;
 
+    // フロア数テキスト
     var px:Int = 0;
     var py:Int = 0;
     _txtFloor = _addText(px, py, '${Global.getFloor()}F');
 
+    // 所持金テキスト
     px += POS_DX;
     _txtMoney = new FlxText(px, py);
     _txtMoney.setBorderStyle(FlxText.BORDER_SHADOW);
     this.add(_txtMoney);
+
+    // 食糧テキスト
+    px += Std.int(POS_DX * 1.5);
+    _txtFood = new FlxText(px, py);
+    _txtFood.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
+    _txtFood.setBorderStyle(FlxText.BORDER_SHADOW);
+    this.add(_txtFood);
 
     var px2 = x;
     x -= 128;
@@ -80,5 +93,6 @@ class FieldUI extends FlxSpriteGroup {
     super.update();
 
     _txtMoney.text = '${Global.getMoney()}G';
+    _txtFood.text = '食糧: ${_actor.param.food}';
   }
 }

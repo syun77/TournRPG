@@ -198,7 +198,7 @@ class FieldMgr {
     _flxState.add(_charaUI);
 
     // フィールドUI
-    _fieldUI = new FieldUI();
+    _fieldUI = new FieldUI(_actor);
     _fieldUI.scrollFactor.set();
     _flxState.add(_fieldUI);
 
