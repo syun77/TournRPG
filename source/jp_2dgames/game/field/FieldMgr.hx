@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.gui.MyButton;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.lib.Snd;
@@ -30,11 +31,13 @@ import jp_2dgames.lib.CsvLoader;
  * 状態
  **/
 private enum State {
-  Main;      // メイン
-  Moving;    // 移動中
-  Event;     // イベント実行中
-  Shop;      // ショップ表示中
-  NextFloor; // 次のフロアに進む
+  Main;        // メイン
+  Moving;      // 移動中
+  Event;       // イベント実行中
+  Hunger;      // 空腹ダメージ
+  EventResult; // イベント実行結果
+  Shop;        // ショップ表示中
+  NextFloor;   // 次のフロアに進む
 
   End;       // 終了
 }
@@ -370,6 +373,12 @@ class FieldMgr {
       case State.Event:
         _updateEvent();
 
+      case State.Hunger:
+        _updateHunger();
+
+      case State.EventResult:
+        _updateEventResult();
+
       case State.Shop:
 
       case State.NextFloor:
@@ -484,22 +493,12 @@ class FieldMgr {
    **/
   private function _damageHunger():Bool {
     var v = Std.int(_actor.hpmax * 0.2);
-//    FlxG.camera.shake(0.02, 0.35);
     Message.push2(Msg.DAMAGE_PLAYER, [_actor.name, v]);
     _charaUI.damage();
     _charaUI.shake();
-//    var px = _charaUI.xcenter;
-//    var py = _charaUI.ycenter;
-    // パーティクル発生
-//    Particle.start(PType.Circle, px, py, FlxColor.RED, false);
 
     // SE再生
     Snd.playSe("hit");
-
-    // ダメージ数値
-//    var p = ParticleDamage.start(px, py, v);
-//    p.color = MyColor.NUM_DAMAGE;
-//    p.scrollFactor.set(0, 0);
 
     // ダメージを与える
     return _actor.damage(v);
@@ -517,17 +516,44 @@ class FieldMgr {
     // 食糧を減らす
     if(_actor.param.food > 0) {
       _actor.param.food--;
+      // イベント処理へ
+      _state = State.EventResult;
     }
     else {
       // 食糧がないのでダメージ (20%)
-      if(_damageHunger()) {
-        // 餓死
-        _resultCode = RET_GAMEOVER;
-        _state = State.End;
-        return;
-      }
+      _damageHunger();
+      _state = State.Hunger;
+      // 赤フラッシュ
+      FlxG.camera.flash(FlxColor.RED, 0.2, function() {
+        if(_actor.isDead()) {
+          // 餓死
+          var px = FlxG.width/2 - MyButton2.WIDTH/2;
+          var py = FlxG.height -128;
+          var btn = new MyButton2(px, py, "NEXT", function() {
+            // ゲームオーバー
+            _resultCode = RET_GAMEOVER;
+            _state = State.End;
+          });
+          _flxState.add(btn);
+        }
+        else {
+          // イベント処理へ
+          _state = State.EventResult;
+        }
+      });
     }
+  }
 
+  /**
+   * 更新・空腹ダメージ
+   **/
+  private function _updateHunger():Void {
+  }
+
+  /**
+   * 更新・イベント実行結果
+   **/
+  private function _updateEventResult():Void {
     switch(_eventMgr.resultCode) {
       case FieldEventMgr.RET_NONE:
         // 探索を続ける
