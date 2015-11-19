@@ -5,7 +5,7 @@ int,str,str
 3,<val1>の攻撃,white
 4,<val1>を倒した,white
 5,戦闘に勝利した,white
-6,戦闘に敗北した,red
+6,<val1>は力尽きた……,red
 7,<val1>を使った,green
 8,<val1>のHPが<val2>回復した,blue
 9,<val1>は逃げ出した,white

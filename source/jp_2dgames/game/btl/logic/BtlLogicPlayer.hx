@@ -434,7 +434,7 @@ class BtlLogicPlayer {
         }
         else {
           // 味方が全滅
-          Message.push2(Msg.BATTLE_LOSE);
+          Message.push2(Msg.DEAD, [actor.name]);
         }
         tWait = 0;
 

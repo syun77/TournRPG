@@ -492,7 +492,7 @@ class FieldMgr {
    * @return 死亡したらtrue
    **/
   private function _damageHunger():Bool {
-    var v = Std.int(_actor.hpmax * 0.2);
+    var v = Std.int(_actor.hpmax * 0.5);
     Message.push2(Msg.DAMAGE_PLAYER, [_actor.name, v]);
     _charaUI.damage();
     _charaUI.shake();
@@ -523,10 +523,17 @@ class FieldMgr {
       // 食糧がないのでダメージ (20%)
       _damageHunger();
       _state = State.Hunger;
-      // 赤フラッシュ
-      FlxG.camera.flash(FlxColor.RED, 0.2, function() {
+      if(_actor.isDead()) {
+        // 死亡したので赤フラッシュ
+        FlxG.camera.flash(FlxColor.RED, 0.2);
+        // プレイヤーアイコンを消しておく
+        _player.visible = false;
+      }
+      // 揺らす
+      FlxG.camera.shake(0.01, 0.5, function() {
         if(_actor.isDead()) {
           // 餓死
+          Message.push2(Msg.DEAD, [_actor.name]);
           var px = FlxG.width/2 - MyButton2.WIDTH/2;
           var py = FlxG.height -128;
           var btn = new MyButton2(px, py, "NEXT", function() {
