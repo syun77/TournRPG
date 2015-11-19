@@ -55,6 +55,8 @@ class Reg {
   public static inline var PATH_SHOP_EQUIP = "assets/images/ui/shop/weapon.png";
   // ・スキル
   public static inline var PATH_SHOP_SKILL = "assets/images/ui/shop/skill.png";
+  // ・食糧
+  public static inline var PATH_SHOP_FOOD = "assets/images/ui/shop/food.png";
   // ・カーソル
   public static inline var PATH_SHOP_CURSOR = "assets/images/ui/shop/cursor.png";
 
@@ -72,6 +74,13 @@ class Reg {
 
   // セーブデータ保存先
   public static inline var PATH_SAVE = "/Users/syun/Desktop/TournRPG/save.txt";
+
+  // 食糧の価格
+  public static inline var COST_FOOD:Int = 10;
+  // 食糧の名前
+  public static inline var FOOD_NAME:String = "食糧";
+  // 空腹ダメージ
+  public static inline var FOOD_DAMAGE:Float = 0.2;
 
   /**
    * 敵画像のパスを取得する

@@ -492,7 +492,7 @@ class FieldMgr {
    * @return 死亡したらtrue
    **/
   private function _damageHunger():Bool {
-    var v = Std.int(_actor.hpmax * 0.5);
+    var v = Std.int(_actor.hpmax * Reg.FOOD_DAMAGE);
     Message.push2(Msg.DAMAGE_PLAYER, [_actor.name, v]);
     _charaUI.damage();
     _charaUI.shake();

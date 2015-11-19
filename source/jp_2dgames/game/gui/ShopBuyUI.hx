@@ -25,6 +25,7 @@ class ShopBuyUI extends FlxSpriteGroup {
   public static inline var CATEGORY_ITEM:Int  = 0; // 消耗品
   public static inline var CATEGORY_EQUIP:Int = 1; // 装備品
   public static inline var CATEGORY_SKILL:Int = 2; // スキル
+  public static inline var CATEGORY_FOOD:Int  = 3; // 食糧
 
   // カテゴリの座標
   static inline var CATEGORY_X = InventoryUI.BTN_X + 16;
@@ -134,6 +135,8 @@ class ShopBuyUI extends FlxSpriteGroup {
         return shop.equipList.length;
       case CATEGORY_SKILL:
         return shop.skillList.length;
+      case CATEGORY_FOOD:
+        return shop.food;
     }
 
     return 0;
@@ -152,6 +155,8 @@ class ShopBuyUI extends FlxSpriteGroup {
         return ItemUtil.getName(shop.equipList[idx]);
       case CATEGORY_SKILL:
         return SkillUtil.getName(shop.skillList[idx].id);
+      case CATEGORY_FOOD:
+        return Reg.FOOD_NAME;
     }
 
     return "";
@@ -170,6 +175,8 @@ class ShopBuyUI extends FlxSpriteGroup {
         return ItemUtil.getDetail(shop.equipList[idx]);
       case CATEGORY_SKILL:
         return SkillUtil.getDetail2(shop.skillList[idx].id);
+      case CATEGORY_FOOD:
+        return Reg.FOOD_NAME;
     }
 
     return "";
@@ -188,24 +195,8 @@ class ShopBuyUI extends FlxSpriteGroup {
         return ItemUtil.getBuy(shop.equipList[idx]);
       case CATEGORY_SKILL:
         return SkillUtil.getBuy(shop.skillList[idx].id);
-    }
-
-    return 0;
-  }
-
-  /**
-   * アイテムの売却価格を取得する
-   **/
-  private function _getItemSell(idx:Int):Int {
-    var shop = Global.getShopData();
-
-    switch(_category) {
-      case CATEGORY_ITEM:
-        return ItemUtil.getSell(shop.itemList[idx]);
-      case CATEGORY_EQUIP:
-        return ItemUtil.getSell(shop.equipList[idx]);
-      case CATEGORY_SKILL:
-        return SkillUtil.getSell(shop.skillList[idx].id);
+      case CATEGORY_FOOD:
+        return Reg.COST_FOOD;
     }
 
     return 0;
@@ -303,7 +294,8 @@ class ShopBuyUI extends FlxSpriteGroup {
     var tbl = [
       CATEGORY_ITEM,  // 消耗品
       CATEGORY_EQUIP, // 装備品
-      CATEGORY_SKILL  // スキル
+      CATEGORY_SKILL, // スキル
+      CATEGORY_FOOD   // 食糧
     ];
 
     // アイコン画像
@@ -311,7 +303,8 @@ class ShopBuyUI extends FlxSpriteGroup {
       switch(type) {
         case CATEGORY_ITEM: return Reg.PATH_SHOP_ITEM;
         case CATEGORY_EQUIP: return Reg.PATH_SHOP_EQUIP;
-        default: return Reg.PATH_SHOP_SKILL;
+        case CATEGORY_SKILL: return Reg.PATH_SHOP_SKILL;
+        default: return Reg.PATH_SHOP_FOOD;
       }
     };
 
@@ -321,7 +314,8 @@ class ShopBuyUI extends FlxSpriteGroup {
       switch(type) {
         case CATEGORY_ITEM: return shop.isEmptyItem();
         case CATEGORY_EQUIP: return shop.isEmptyEquip();
-        default: return shop.isEmptySkill();
+        case CATEGORY_SKILL: return shop.isEmptySkill();
+        default: return shop.isEmptyFood();
       }
     }
 

@@ -30,6 +30,13 @@ class ShopData {
     return _skillList;
   }
 
+  // 食糧
+  var _food:Int = 0;
+  public var food(get, never):Int;
+  function get_food() {
+    return _food;
+  }
+
   public function isEmptyItem():Bool {
     return itemList.length == 0;
   }
@@ -38,6 +45,17 @@ class ShopData {
   }
   public function isEmptySkill():Bool {
     return skillList.length == 0;
+  }
+
+  public function isEmptyFood():Bool {
+    return _food == 0;
+  }
+
+  /**
+   * 食糧を減らす
+   **/
+  public function subFood():Void {
+    _food--;
   }
 
   /**
@@ -76,15 +94,19 @@ class ShopData {
     skill = new SkillData(SkillConst.SKILL502);
     _skillList.push(skill);
 
+    _food = 2;
+
   }
 
   /**
    * 外部から設定する
    **/
-  public function set(items:Array<ItemData>, equips:Array<ItemData>, skills:Array<SkillData>):Void {
+  public function set(items:Array<ItemData>, equips:Array<ItemData>, skills:Array<SkillData>, nFood:Int):Void {
     _itemList = items;
     _equipList = equips;
     _skillList = skills;
+
+    _food = nFood;
   }
 
 }

@@ -280,6 +280,17 @@ class ShopState extends FlxSubState {
         skillList.remove(skill);
         // 名前を取得
         name = SkillUtil.getName(skill.id);
+
+      case ShopBuyUI.CATEGORY_FOOD:
+        // ■食糧
+        // 食糧を増やす
+        _actor.param.food++;
+        // お金を減らす
+        money = Reg.COST_FOOD;
+        Global.useMoney(money);
+        // ショップから削除
+        shop.subFood();
+        name = Reg.FOOD_NAME;
     }
 
     // メッセージ表示

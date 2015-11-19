@@ -173,6 +173,7 @@ private class _Shop {
   public var itemList:Array<ItemData>;
   public var equipList:Array<ItemData>;
   public var skillList:Array<SkillData>;
+  public var food:Int;
 
   public function new() {
   }
@@ -182,6 +183,7 @@ private class _Shop {
     itemList = shop.itemList;
     equipList = shop.equipList;
     skillList = shop.skillList;
+    food      = shop.food;
   }
   // ロード
   public function load(data:Dynamic) {
@@ -203,8 +205,9 @@ private class _Shop {
       var s = new SkillData(skill.id);
       skills.push(s);
     }
+    var food = data.food;
 
-    Global.getShopData().set(items, equips, skills);
+    Global.getShopData().set(items, equips, skills, food);
   }
 }
 
