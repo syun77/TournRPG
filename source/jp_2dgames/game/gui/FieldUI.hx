@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import flixel.util.FlxColor;
 import jp_2dgames.game.actor.Actor;
 import flixel.util.FlxDestroyUtil;
 import flixel.tweens.FlxEase;
@@ -93,6 +94,11 @@ class FieldUI extends FlxSpriteGroup {
     super.update();
 
     _txtMoney.text = '${Global.getMoney()}G';
-    _txtFood.text = '食糧: ${_actor.param.food}';
+    var food = _actor.food;
+    _txtFood.text = '食糧: ${food}';
+    _txtFood.color = FlxColor.WHITE;
+    if(food <= 3) {
+      _txtFood.color = FlxColor.CRIMSON;
+    }
   }
 }

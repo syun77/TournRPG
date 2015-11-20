@@ -170,6 +170,11 @@ class Actor extends FlxSprite {
   private function get_xp() {
     return _param.xp;
   }
+  // 食糧
+  public var food(get, never):Int;
+  private function get_food() {
+    return _param.food;
+  }
   // パラメータを取得する
   public var param(get, never):Params;
   private function get_param() {
