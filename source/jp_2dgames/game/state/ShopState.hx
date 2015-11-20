@@ -290,7 +290,7 @@ class ShopState extends FlxSubState {
         Global.useMoney(money);
         // ショップから削除
         shop.subFood();
-        name = Reg.FOOD_NAME;
+        name = UIMsg.get(UIMsg.FOOD);
     }
 
     // メッセージ表示

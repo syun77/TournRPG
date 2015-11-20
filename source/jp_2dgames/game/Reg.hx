@@ -77,8 +77,6 @@ class Reg {
 
   // 食糧の価格
   public static inline var COST_FOOD:Int = 10;
-  // 食糧の名前
-  public static inline var FOOD_NAME:String = "食糧";
   // 空腹ダメージ
   public static inline var FOOD_DAMAGE:Float = 0.2;
 

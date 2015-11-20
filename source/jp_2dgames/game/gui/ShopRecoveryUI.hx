@@ -220,7 +220,7 @@ class ShopRecoveryUI extends FlxSpriteGroup {
   private function _getDetail(btnID:Int):Int {
     switch(btnID) {
       case BTN_ID_RECOVER: return UIMsg.MSG_REC_LITTLE;
-      case BTN_ID_RECOVER_FULL: return UIMsg.MSg_REC_FULL;
+      case BTN_ID_RECOVER_FULL: return UIMsg.MSG_REC_FULL;
       default: return 0;
     }
   }

@@ -33,7 +33,9 @@ class UIMsg {
   public static inline var SHOP_REC_LITTLE:Int = 25; // ショップ（回復→10%）
   public static inline var SHOP_REC_FULL:Int   = 26; // ショップ（回復→全回復）
   public static inline var MSG_REC_LITTLE:Int  = 27; // ショップメッセージ（回復→10%）
-  public static inline var MSg_REC_FULL:Int    = 28; // ショップメッセージ（回復→全回復）
+  public static inline var MSG_REC_FULL:Int    = 28; // ショップメッセージ（回復→全回復）
+  public static inline var FOOD:Int            = 29; // 食糧
+  public static inline var MSG_FOOD:Int        = 30; // 食糧の詳細説明
 
   private static var _csv:CsvLoader = null;
   /**
