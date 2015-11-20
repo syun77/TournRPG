@@ -201,7 +201,7 @@ private class _Shop {
     }
     var skills = new Array<SkillData>();
     for(idx in 0...data.skillList.length) {
-      var skill = data.skills[idx];
+      var skill = data.skillList[idx];
       var s = new SkillData(skill.id);
       skills.push(s);
     }
