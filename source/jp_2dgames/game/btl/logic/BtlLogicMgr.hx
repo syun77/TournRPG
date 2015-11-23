@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.ActorMgr;
@@ -151,11 +152,42 @@ class BtlLogicMgr {
         return;
       }
 
-      // 死亡した人がいる
-      var eft = BtlLogicFactory.createDead(actor2);
-      push(eft);
-      // 墓場送り
-      TempActorMgr.moveGrave(actor2);
+
+      var checkRevive = function() {
+        if(actor2.group != BtlGroup.Player) {
+          // 復活できない
+          return false;
+        }
+
+        // 復活スキルをチェック
+        var revive = SkillSlot.getReviveRecoveryHp();
+        if(revive > 0) {
+          // 復活した
+          var rec_hp = Std.int(actor2.hpmax * revive / 100);
+          if(rec_hp < 1) {
+            rec_hp = 1; // 最低1は回復する
+          }
+          actor2.recoverHp(rec_hp);
+          var type = BtlLogic.HpRecover(rec_hp);
+          var eft = new BtlLogicData(actor2.ID, actor2.group, type);
+          // 自分自身が対象
+          eft.setTarget(actor2.ID);
+          push(eft);
+          return true;
+        }
+
+        // 復活できない
+        return false;
+      }
+
+      if(checkRevive() == false) {
+        // 復活できないので死亡
+        var eft = BtlLogicFactory.createDead(actor2);
+        push(eft);
+        // そして墓場送り
+        TempActorMgr.moveGrave(actor2);
+      }
+
       idx--;
     }
   }

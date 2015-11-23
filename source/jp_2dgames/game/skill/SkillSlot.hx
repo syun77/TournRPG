@@ -114,6 +114,14 @@ class SkillSlot {
     return _instance._getBattleEndRecoveryMp();
   }
 
+  /**
+   * 死亡時の自動復活で回復するHPを取得する
+   * @return 復活できない場合は0
+   **/
+  public static function getReviveRecoveryHp():Int {
+    return _instance._getReviveRecoveryHp();
+  }
+
 
   // ================================================
   // ■以下インスタンス変数
@@ -304,5 +312,24 @@ class SkillSlot {
     });
 
     return val;
+  }
+
+  /**
+   * 自動復活で回復するHPの割合を取得する
+   **/
+  private function _getReviveRecoveryHp():Int {
+
+    var ret:Int = 0;
+
+    _forEach(function(skill:SkillData) {
+      if(skill.type == SkillType.Auto) {
+        var recoveryHp = SkillUtil.getParam(skill.id, "revive");
+        if(recoveryHp > 0) {
+          ret = recoveryHp;
+        }
+      }
+    });
+
+    return ret;
   }
 }

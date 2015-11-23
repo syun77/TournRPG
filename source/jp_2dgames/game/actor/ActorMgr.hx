@@ -139,4 +139,13 @@ class ActorMgr  {
   public static function requestEnemyAI():Void {
     _pool.requestEnemyAI();
   }
+
+  public static function dump():Void {
+    _pool.forEach(function(actor:Actor) {
+      if(actor.ID == -1) {
+        return;
+      }
+      trace("ID:", actor.ID, " hp:", actor.hp, " exists:", actor.exists);
+    });
+  }
 }
