@@ -19,18 +19,18 @@
     <orderEntry type="library" name="OpenFL" level="application" />
     <orderEntry type="library" name="Flixel Addons" level="application" />
     <orderEntry type="library" name="Flixel Engine" level="application" />
+    <orderEntry type="library" name="OpenFL" level="application" />
+    <orderEntry type="library" name="OpenFL" level="application" />
     <orderEntry type="module-library">
-      <library name="haxelib|/usr/lib/haxe/lib/openfl/3,3,2">
+      <library name="haxelib|openfl">
         <CLASSES>
-          <root url="file:///usr/lib/haxe/lib/openfl/3,3,2" />
+          <root url="/usr/lib/haxe/lib/openfl/3,3,2/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES>
-          <root url="file:///usr/lib/haxe/lib/openfl/3,3,2" />
+          <root url="/usr/lib/haxe/lib/openfl/3,3,2/" />
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="library" name="OpenFL" level="application" />
-    <orderEntry type="library" name="OpenFL" level="application" />
   </component>
 </module>

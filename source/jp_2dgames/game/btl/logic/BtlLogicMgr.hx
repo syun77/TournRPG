@@ -1,5 +1,7 @@
 package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.game.skill.SkillUtil;
+import jp_2dgames.game.gui.SkillUI;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
@@ -160,19 +162,29 @@ class BtlLogicMgr {
         }
 
         // 復活スキルをチェック
-        var revive = SkillSlot.getReviveRecoveryHp();
-        if(revive > 0) {
+        var skillID = SkillSlot.getReviveSkillID();
+        if(skillID > 0) {
           // 復活した
-          var rec_hp = Std.int(actor2.hpmax * revive / 100);
+          var rec_val = SkillUtil.getRevive(skillID);
+          var rec_hp = Std.int(actor2.hpmax * rec_val / 100);
           if(rec_hp < 1) {
             rec_hp = 1; // 最低1は回復する
           }
           actor2.recoverHp(rec_hp);
-          var type = BtlLogic.HpRecover(rec_hp);
-          var eft = new BtlLogicData(actor2.ID, actor2.group, type);
-          // 自分自身が対象
-          eft.setTarget(actor2.ID);
-          push(eft);
+          // 生き返りスキル発動
+          {
+            var type = BtlLogic.BeginSkill(skillID);
+            var eft = new BtlLogicData(actor2.ID, actor2.group, type);
+            push(eft);
+          }
+          // HP回復
+          {
+            var type = BtlLogic.HpRecover(rec_hp);
+            var eft = new BtlLogicData(actor2.ID, actor2.group, type);
+            // 自分自身が対象
+            eft.setTarget(actor2.ID);
+            push(eft);
+          }
           return true;
         }
 

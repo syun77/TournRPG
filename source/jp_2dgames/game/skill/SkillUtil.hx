@@ -194,6 +194,18 @@ class SkillUtil {
   }
 
   /**
+   * 自動復活時のHP回復率を取得する
+   **/
+  public static function getRevive(skillID:Int):Int {
+    if(isAuto(skillID) == false) {
+      // パッシブスキルではない
+      return 0;
+    }
+
+    return getParam(skillID, "revive");
+  }
+
+  /**
    * 文字列をスキル種別に変換
    **/
   public static function fromTypeString(str:String):SkillType {
