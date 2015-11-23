@@ -12,13 +12,6 @@ import jp_2dgames.game.save.Save;
  **/
 class FieldState extends FlxState {
 
-  // リザルトフラグ
-  var _retBattle:Int = 0;
-  public var retBattle(get, never):Int;
-  private function get_retBattle() {
-    return _retBattle;
-  }
-
   // フィールド管理
   var _fieldMgr:FieldMgr;
 
@@ -71,13 +64,6 @@ class FieldState extends FlxState {
 
     // デバッグ機能の更新
     _updateDebug();
-  }
-
-  /**
-   * バトル結果フラグの設定
-   **/
-  public function setBattleResult(ret:Int):Void {
-    _retBattle = ret;
   }
 
   private function _updateDebug():Void {

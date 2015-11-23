@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.btl.types.BtlEnd;
 import flixel.FlxG;
 import jp_2dgames.lib.CsvLoader;
 import jp_2dgames.lib.Input;
@@ -127,7 +128,9 @@ class TestBattleState extends FlxState {
     if(Input.press.A) {
       // バトル開始
       Global.setEnemyGroup(_nEnemyGroup);
-      openSubState(new BattleState());
+      openSubState(new BattleState(function(btlEnd:BtlEnd) {
+        // 特に何もしない
+      }));
     }
     else if(Input.press.B) {
       FlxG.switchState(new FieldState());

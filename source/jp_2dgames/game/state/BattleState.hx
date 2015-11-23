@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.btl.types.BtlEnd;
 import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import flixel.FlxSubState;
@@ -28,6 +29,17 @@ class BattleState extends FlxSubState {
 
   // 背景
   var _bg:BtlBg;
+
+  // バトル終了時のコールバック
+  var _cbBtlEnd:BtlEnd->Void;
+
+  /**
+   * コンストラクタ
+   **/
+  public function new(cbBtlEnd:BtlEnd->Void) {
+    super();
+    _cbBtlEnd = cbBtlEnd;
+  }
 
   /**
    * 生成
@@ -99,8 +111,7 @@ class BattleState extends FlxSubState {
       // 戦闘終了
       // バトル終了フラグを設定
       if(Global.isTestBattle() == false) {
-        var parent = cast(_parentState, FieldState);
-        parent.setBattleResult(_btlMgr.btlEnd);
+        _cbBtlEnd(_btlMgr.btlEnd);
       }
 
       // おしまい

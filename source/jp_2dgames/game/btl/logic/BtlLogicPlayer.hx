@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.game.btl.types.BtlEnd;
 import jp_2dgames.game.btl.logic.BtlLogicBegin;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.item.Inventory;
@@ -35,12 +36,6 @@ private enum State {
  * バトル演出の再生
  **/
 class BtlLogicPlayer {
-
-  // ■バトル終了条件の取得
-  public static inline var BTL_END_NONE:Int   = 0; // なし
-  public static inline var BTL_END_ESCAPE:Int = 1; // 逃走
-  public static inline var BTL_END_WIN:Int    = 2; // バトル勝利
-  public static inline var BTL_END_LOSE:Int   = 3; // バトル敗北
 
   // 演出情報
   var _data:BtlLogicData;
@@ -539,26 +534,25 @@ class BtlLogicPlayer {
   /**
    * バトル終了条件の取得
    **/
-  public function getBtlEnd():Int {
+  public function getBtlEnd():BtlEnd {
     switch(_data.type) {
       case BtlLogic.Escape:
         // 逃走成功
-        return BTL_END_ESCAPE;
+        return BtlEnd.Escape;
 
       case BtlLogic.BtlEnd(bWin):
         if(bWin) {
           // バトル勝利
-          return BTL_END_WIN;
+          return BtlEnd.Win;
         }
         else {
           // バトル敗北
-          return BTL_END_LOSE;
+          return BtlEnd.Lose;
         }
 
       default:
+        // 続行
+        return BtlEnd.None;
     }
-
-    // 続行
-    return BTL_END_NONE;
   }
 }

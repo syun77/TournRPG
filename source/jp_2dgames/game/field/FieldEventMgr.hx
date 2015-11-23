@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.btl.types.BtlEnd;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import jp_2dgames.lib.CsvLoader;
@@ -12,7 +13,6 @@ import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.skill.SkillUtil;
 import jp_2dgames.game.skill.SkillData;
 import jp_2dgames.game.skill.SkillConst;
-import jp_2dgames.game.btl.logic.BtlLogicPlayer;
 import jp_2dgames.game.state.FieldState;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.gui.Dialog;
@@ -158,8 +158,6 @@ class FieldEventMgr {
 
     _change(State.OpenDialog);
     Snd.playSe("roar");
-    // 戻り値初期化
-    _flxState.setBattleResult(BtlLogicPlayer.BTL_END_NONE);
 
     // ダイアログを開く
     Dialog.open(_flxState, Dialog.OK, 'モンスターに遭遇した！', null, function(btnID) {
@@ -179,7 +177,7 @@ class FieldEventMgr {
       FlxG.camera.fade(FlxColor.WHITE, 0.3, false, function() {
         // フェードしてからバトル開始
         FlxG.camera.fade(FlxColor.WHITE, 0.1, true, null, true);
-        _flxState.openSubState(new BattleState());
+        _flxState.openSubState(new BattleState(_cbBattleEnd));
       });
     });
   }
@@ -195,7 +193,6 @@ class FieldEventMgr {
       case State.OpenDialog:
 
       case State.Battle:
-        _procBattle();
 
       case State.Item:
         _procItem();
@@ -211,15 +208,12 @@ class FieldEventMgr {
   }
 
   /**
-   * バトル実行中
+   * バトル終了時のコールバック
    **/
-  private function _procBattle():Void {
+  private function _cbBattleEnd(btlEnd:BtlEnd):Void {
 
-    switch(_flxState.retBattle) {
-      case BtlLogicPlayer.BTL_END_NONE:
-        // バトル実行中
-
-      case BtlLogicPlayer.BTL_END_WIN:
+    switch(btlEnd) {
+      case BtlEnd.Win:
         // バトル勝利
         if(_foe != null) {
           // F.O.E.バトルの場合は消しておく
@@ -228,19 +222,19 @@ class FieldEventMgr {
         _bBtlEnd = true;
         _change(State.End);
 
-      case BtlLogicPlayer.BTL_END_LOSE:
+      case BtlEnd.Lose:
         // ゲームオーバー
         _resultCode = RET_GAMEOVER;
         _bBtlEnd = true;
         _change(State.End);
 
-      case BtlLogicPlayer.BTL_END_ESCAPE:
+      case BtlEnd.Escape:
         // 逃走
         _bBtlEnd = true;
         _change(State.End);
 
       default:
-        throw 'Error: 不正なバトル終了戻り値 ${_flxState.retBattle}';
+        throw 'Error: 不正なバトル終了戻り値 ${btlEnd}';
     }
   }
 
