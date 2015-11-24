@@ -2,7 +2,7 @@ package jp_2dgames.game.field;
 
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.types.BtlEndResult;
-import jp_2dgames.game.btl.types.BtlEnd;
+import jp_2dgames.game.btl.types.BtlEndType;
 import flixel.util.FlxColor;
 import flixel.FlxG;
 import jp_2dgames.lib.CsvLoader;
@@ -222,7 +222,7 @@ class FieldEventMgr {
     _actor.param.copy(btlEnd.param);
 
     switch(btlEnd.type) {
-      case BtlEnd.Win:
+      case BtlEndType.Win:
         // バトル勝利
         if(_foe != null) {
           // F.O.E.バトルの場合は消しておく
@@ -231,13 +231,13 @@ class FieldEventMgr {
         _bBtlEnd = true;
         _change(State.End);
 
-      case BtlEnd.Lose:
+      case BtlEndType.Lose:
         // ゲームオーバー
         _resultCode = RET_GAMEOVER;
         _bBtlEnd = true;
         _change(State.End);
 
-      case BtlEnd.Escape:
+      case BtlEndType.Escape:
         // 逃走
         _bBtlEnd = true;
         _change(State.End);

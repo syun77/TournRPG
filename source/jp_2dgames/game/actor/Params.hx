@@ -18,9 +18,12 @@ class Params {
   public var xp:Int    = 0;   // 経験値
   public var money:Int = 0;   // 所持金
   public var food:Int  = 0;   // 満腹度
+
+  // バトル開始時に初期化
   public var buffAtk:Int = 0; // バフ・攻撃力 (マイナスはデバフ)
   public var buffDef:Int = 0; // バフ・守備力 (マイナスはデバフ)
   public var buffSpd:Int = 0; // バフ・命中率 (マイナスはデバフ)
+  public var bAutoRevive:Bool = false; // 自動復活したかどうか
 
   public function new() {
   }
@@ -46,14 +49,16 @@ class Params {
     buffAtk = p.buffAtk;
     buffDef = p.buffDef;
     buffSpd = p.buffSpd;
+    bAutoRevive = p.bAutoRevive;
   }
 
   /**
-   * バフ・デバグを初期化する
+   * バトルのみ有効なパラメータを初期化
    **/
-  public function resetBuf():Void {
+  public function resetBattle():Void {
     buffAtk = 0;
     buffDef = 0;
     buffSpd = 0;
+    bAutoRevive = false;
   }
 }

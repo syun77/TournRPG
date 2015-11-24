@@ -1,6 +1,6 @@
 package jp_2dgames.game.btl.logic;
 
-import jp_2dgames.game.btl.types.BtlEnd;
+import jp_2dgames.game.btl.types.BtlEndType;
 import jp_2dgames.game.btl.logic.BtlLogicBegin;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.item.Inventory;
@@ -96,8 +96,8 @@ class BtlLogicPlayer {
    **/
   private function _endMain(tWait:Int):Void {
     _state = State.Wait;
+    _tWait = tWait;
     if(tWait > 0) {
-      _tWait = tWait;
       if(_data.bWaitQuick) {
         // 待ち時間短縮
         _tWait = Reg.TIMER_WAIT_SEQUENCE;
@@ -327,13 +327,22 @@ class BtlLogicPlayer {
     _endMain(tWait);
   }
 
+  private function _searchActorAnywhere(actorID:Int):Actor {
+    var ret = ActorMgr.search(actorID);
+    if(ret == null) {
+      // 見つからなかったので墓場から探す
+      ret = ActorMgr.searchGrave(actorID);
+    }
+    return ret;
+  }
+
   /**
    * 更新・メイン
    **/
   private function _updateMain():Void {
 
-    var actor = ActorMgr.search(_data.actorID);
-    var target = ActorMgr.search(_data.targetID);
+    var actor = _searchActorAnywhere(_data.actorID);
+    var target = _searchActorAnywhere(_data.targetID);
 
     // 停止時間
     var tWait = Reg.TIMER_WAIT;
@@ -401,6 +410,11 @@ class BtlLogicPlayer {
         target.addBuffAtk(atk);
         target.addBuffDef(def);
         target.addBuffSpd(spd);
+
+      case BtlLogic.AutoRevive:
+        // 自動復活
+        target.param.bAutoRevive = true; // 自動復活した
+        _tWait = 0;
 
       case BtlLogic.Escape:
         // 逃走実行
@@ -534,25 +548,25 @@ class BtlLogicPlayer {
   /**
    * バトル終了条件の取得
    **/
-  public function getBtlEnd():BtlEnd {
+  public function getBtlEnd():BtlEndType {
     switch(_data.type) {
       case BtlLogic.Escape:
         // 逃走成功
-        return BtlEnd.Escape;
+        return BtlEndType.Escape;
 
       case BtlLogic.BtlEnd(bWin):
         if(bWin) {
           // バトル勝利
-          return BtlEnd.Win;
+          return BtlEndType.Win;
         }
         else {
           // バトル敗北
-          return BtlEnd.Lose;
+          return BtlEndType.Lose;
         }
 
       default:
         // 続行
-        return BtlEnd.None;
+        return BtlEndType.None;
     }
   }
 }

@@ -469,8 +469,12 @@ class BtlLogicFactory {
   /**
    * バトル終了
    **/
-  public static function createBtlEnd(bWin:Bool):BtlLogicData {
-    return new BtlLogicData(0, BtlGroup.Both, BtlLogic.BtlEnd(bWin));
+  public static function createBtlEnd(actor:Actor, bWin:Bool):BtlLogicData {
+    var id:Int = 0;
+    if(actor != null) {
+      id = actor.ID;
+    }
+    return new BtlLogicData(id, BtlGroup.Both, BtlLogic.BtlEnd(bWin));
   }
 
   /**
@@ -570,5 +574,52 @@ class BtlLogicFactory {
     }
 
     return eft;
+  }
+
+  /**
+   * 自動復活スキル演出の生成
+   **/
+  public static function createAutoRevive(actor:Actor):List<BtlLogicData> {
+
+    var ret = new List<BtlLogicData>();
+
+    // 自動復活スキルのIDを取得する
+    var skillID = SkillSlot.getReviveSkillID();
+    if(skillID == 0) {
+      return ret;
+    }
+
+    var rec_val = SkillUtil.getRevive(skillID);
+    var rec_hp = Std.int(actor.hpmax * rec_val / 100);
+    if(rec_hp < 1) {
+      rec_hp = 1; // 最低1は回復する
+    }
+    actor.recoverHp(rec_hp);
+
+    // 生き返りスキル発動
+    {
+      var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.AutoRevive);
+      eft.setTarget(actor.ID);
+      ret.add(eft);
+    }
+    {
+      var type = BtlLogic.BeginSkill(skillID);
+      var eft = new BtlLogicData(actor.ID, actor.group, type);
+      ret.add(eft);
+
+      // 自動復活した
+      actor.param.bAutoRevive = true;
+    }
+
+    // HP回復
+    {
+      var type = BtlLogic.HpRecover(rec_hp);
+      var eft = new BtlLogicData(actor.ID, actor.group, type);
+      // 自分自身が対象
+      eft.setTarget(actor.ID);
+      ret.add(eft);
+    }
+
+    return ret;
   }
 }

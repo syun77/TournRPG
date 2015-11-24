@@ -1,7 +1,5 @@
 package jp_2dgames.game.btl.logic;
 
-import jp_2dgames.game.skill.SkillUtil;
-import jp_2dgames.game.gui.SkillUI;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
@@ -139,6 +137,32 @@ class BtlLogicMgr {
   }
 
   /**
+   * 復活できるかどうか
+   **/
+  private function _checkAutoRevive(actor:Actor):Bool {
+    if(actor.group != BtlGroup.Player) {
+      // 復活できない
+      return false;
+    }
+
+    // 自動復活済みかどうかをチェック
+    if(actor.param.bAutoRevive) {
+      // すでに復活したので復活できない
+      return false;
+    }
+
+    // 復活スキルをチェック
+    var skillID = SkillSlot.getReviveSkillID();
+    if(skillID == 0) {
+      // 復活スキルを持っていない
+      return false;
+    }
+
+    // 復活できる
+    return true;
+  }
+
+  /**
    * 死亡チェック
    **/
   private function _checkDead():Void {
@@ -154,45 +178,14 @@ class BtlLogicMgr {
         return;
       }
 
-
-      var checkRevive = function() {
-        if(actor2.group != BtlGroup.Player) {
-          // 復活できない
-          return false;
+      if(_checkAutoRevive(actor2)) {
+        // 自動復活できる
+        var eftList = BtlLogicFactory.createAutoRevive(actor2);
+        for(eft in eftList) {
+          push(eft);
         }
-
-        // 復活スキルをチェック
-        var skillID = SkillSlot.getReviveSkillID();
-        if(skillID > 0) {
-          // 復活した
-          var rec_val = SkillUtil.getRevive(skillID);
-          var rec_hp = Std.int(actor2.hpmax * rec_val / 100);
-          if(rec_hp < 1) {
-            rec_hp = 1; // 最低1は回復する
-          }
-          actor2.recoverHp(rec_hp);
-          // 生き返りスキル発動
-          {
-            var type = BtlLogic.BeginSkill(skillID);
-            var eft = new BtlLogicData(actor2.ID, actor2.group, type);
-            push(eft);
-          }
-          // HP回復
-          {
-            var type = BtlLogic.HpRecover(rec_hp);
-            var eft = new BtlLogicData(actor2.ID, actor2.group, type);
-            // 自分自身が対象
-            eft.setTarget(actor2.ID);
-            push(eft);
-          }
-          return true;
-        }
-
-        // 復活できない
-        return false;
       }
-
-      if(checkRevive() == false) {
+      else {
         // 復活できないので死亡
         var eft = BtlLogicFactory.createDead(actor2);
         push(eft);
@@ -204,6 +197,7 @@ class BtlLogicMgr {
     }
   }
 
+
   /**
    * バトル終了チェック
    * @return 戦闘が終了したらtrue
@@ -213,14 +207,18 @@ class BtlLogicMgr {
     // 全滅チェック
     if(TempActorMgr.countGroup(BtlGroup.Player) == 0) {
       // 味方が全滅
-      var eft = BtlLogicFactory.createBtlEnd(false);
+      // ランダムで味方を取得
+      var player = TempActorMgr.searchGraveRandom(BtlGroup.Player);
+      var eft = BtlLogicFactory.createBtlEnd(player, false);
       push(eft);
       // 終了
       return true;
     }
     else if(TempActorMgr.countGroup(BtlGroup.Enemy) == 0) {
       // 敵が全滅
-      var eft = BtlLogicFactory.createBtlEnd(true);
+      // ランダムで味方を取得
+      var player = TempActorMgr.random(BtlGroup.Player);
+      var eft = BtlLogicFactory.createBtlEnd(player, true);
       push(eft);
       // 終了
       return true;

@@ -8,7 +8,7 @@ import jp_2dgames.game.actor.Params;
 class BtlEndResult {
 
   // バトル終了事由
-  public var type:BtlEnd;
+  public var type:BtlEndType;
 
   // プレイヤーパラメータ
   public var param:Params;
@@ -17,7 +17,7 @@ class BtlEndResult {
    * コンストラクタ
    **/
   public function new() {
-    type = BtlEnd.None;
+    type = BtlEndType.None;
     param = new Params();
   }
 

@@ -173,6 +173,26 @@ class ActorPool {
   }
 
   /**
+   * 墓場からランダムに探す
+   **/
+  public function searchGraveRandom(group:BtlGroup):Actor {
+    var list = new Array<Actor>();
+    forEachGrave(function(actor:Actor) {
+      if(BtlGroupUtil.isSameFromID(actor.ID, group)) {
+        // グループが一致
+        list.push(actor);
+      }
+    });
+
+    if(list.length == 0) {
+      return null;
+    }
+
+    var idx = FlxRandom.intRanged(0, list.length - 1);
+    return list[idx];
+  }
+
+  /**
    * 指定のグループの生存数を取得する
    **/
   public function countGroup(group:BtlGroup):Int {

@@ -83,6 +83,13 @@ class TempActorMgr {
   }
 
   /**
+   * 死亡しているActorをランダムで探す
+   **/
+  public static function searchGraveRandom(group:BtlGroup):Actor {
+    return _pool.searchGraveRandom(group);
+  }
+
+  /**
    * 墓場に移動する
    **/
   public static function moveGrave(actor:Actor):Void {

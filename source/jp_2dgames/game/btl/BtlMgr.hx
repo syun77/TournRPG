@@ -1,7 +1,7 @@
 package jp_2dgames.game.btl;
 
 import jp_2dgames.game.btl.types.BtlEndResult;
-import jp_2dgames.game.btl.types.BtlEnd;
+import jp_2dgames.game.btl.types.BtlEndType;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.gui.MyButton2;
 import flixel.FlxState;
@@ -233,11 +233,11 @@ class BtlMgr {
         _btlEnd.type = _logicPlayer.getBtlEnd();
 
         switch(_btlEnd.type) {
-          case BtlEnd.Escape:
+          case BtlEndType.Escape:
             // 逃走した
             _change(State.Escape);
 
-          case BtlEnd.Win:
+          case BtlEndType.Win:
             // バトル勝利
             // HP/MPの自動回復
             var win_hp = SkillSlot.getBattleEndRecoveryHp();
@@ -253,7 +253,7 @@ class BtlMgr {
               });
             }
             _change(State.BtlWin);
-          case BtlEnd.Lose:
+          case BtlEndType.Lose:
             // バトル敗北
             _change(State.BtlLose);
           default:
@@ -292,12 +292,12 @@ class BtlMgr {
 
         // 次に進む
         var cbNext = function() {
-          // バフ・デバフを初期化
-          _player.param.resetBuf();
+          // バトル中のみ有効なパラメータを初期化
+          _player.param.resetBattle();
           _change(State.End);
         }
 
-        if(_btlEnd.type == BtlEnd.Escape) {
+        if(_btlEnd.type == BtlEndType.Escape) {
           // 逃走時はそのまま終わる
           cbNext();
           return;
