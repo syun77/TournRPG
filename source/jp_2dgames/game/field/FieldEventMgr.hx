@@ -1,5 +1,7 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.actor.Actor;
+import jp_2dgames.game.btl.types.BtlEndResult;
 import jp_2dgames.game.btl.types.BtlEnd;
 import flixel.util.FlxColor;
 import flixel.FlxG;
@@ -72,11 +74,15 @@ class FieldEventMgr {
   // F.O.E.
   var _foe:FieldFoe = null;
 
+  // 実行主体者
+  var _actor:Actor = null;
+
   /**
    * コンストラクタ
    **/
-  public function new(flxState:FieldState) {
+  public function new(flxState:FieldState, actor:Actor) {
     _flxState = flxState;
+    _actor = actor;
 
     // CSV読み込み
     _csvFieldItem  = new CsvLoader(Reg.PATH_CSV_FIELD_ITEM);
@@ -177,7 +183,7 @@ class FieldEventMgr {
       FlxG.camera.fade(FlxColor.WHITE, 0.3, false, function() {
         // フェードしてからバトル開始
         FlxG.camera.fade(FlxColor.WHITE, 0.1, true, null, true);
-        _flxState.openSubState(new BattleState(_cbBattleEnd));
+        _flxState.openSubState(new BattleState(_actor.param, _cbBattleEnd));
       });
     });
   }
@@ -210,9 +216,12 @@ class FieldEventMgr {
   /**
    * バトル終了時のコールバック
    **/
-  private function _cbBattleEnd(btlEnd:BtlEnd):Void {
+  private function _cbBattleEnd(btlEnd:BtlEndResult):Void {
 
-    switch(btlEnd) {
+    // プレイヤーパラメータ設定
+    _actor.param.copy(btlEnd.param);
+
+    switch(btlEnd.type) {
       case BtlEnd.Win:
         // バトル勝利
         if(_foe != null) {

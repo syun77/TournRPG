@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.game.btl.types.BtlEndResult;
 import jp_2dgames.game.btl.types.BtlEnd;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.gui.MyButton2;
@@ -69,9 +70,11 @@ class BtlMgr {
   var _result:BtlResult = null;
 
   // バトル終了理由
-  var _btlEnd:BtlEnd = BtlEnd.None;
-  public var btlEnd(get, never):BtlEnd;
+  var _btlEnd:BtlEndResult;
+  public var btlEnd(get, never):BtlEndResult;
   private function get_btlEnd() {
+    // プレイヤーのパラメータを返す
+    _btlEnd.setParam(_player.param);
     return _btlEnd;
   }
 
@@ -80,12 +83,12 @@ class BtlMgr {
   /**
    * コンストラクタ
    **/
-  public function new(flxState:FlxState) {
+  public function new(flxState:FlxState, param:Params) {
 
     _flxState = flxState;
 
     // プレイヤーの生成
-    _player = ActorMgr.recycle(BtlGroup.Player, Global.getPlayerParam());
+    _player = ActorMgr.recycle(BtlGroup.Player, param);
     _player.setName(Global.getPlayerName());
 
     // 敵の生成
@@ -95,6 +98,9 @@ class BtlMgr {
 
     _player.x = FlxG.width/2;
     _player.y = FlxG.height/2;
+
+    // バトル終了パラメータ
+    _btlEnd = new BtlEndResult();
 
     // ターン開始
     _change(State.TurnStart);
@@ -224,9 +230,9 @@ class BtlMgr {
         }
 
       case State.LogicEnd:
-        _btlEnd = _logicPlayer.getBtlEnd();
+        _btlEnd.type = _logicPlayer.getBtlEnd();
 
-        switch(_btlEnd) {
+        switch(_btlEnd.type) {
           case BtlEnd.Escape:
             // 逃走した
             _change(State.Escape);
@@ -288,12 +294,10 @@ class BtlMgr {
         var cbNext = function() {
           // バフ・デバフを初期化
           _player.param.resetBuf();
-          // プレイヤーパラメータをグローバルに戻しておく
-          Global.setPlayerParam(_player.param);
           _change(State.End);
         }
 
-        if(_btlEnd == BtlEnd.Escape) {
+        if(_btlEnd.type == BtlEnd.Escape) {
           // 逃走時はそのまま終わる
           cbNext();
           return;

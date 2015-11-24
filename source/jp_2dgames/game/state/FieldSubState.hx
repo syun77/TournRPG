@@ -217,9 +217,6 @@ class FieldSubState extends FlxSubState {
       ItemUtil.use(_actor, item, true);
       Inventory.delItem(uid);
 
-      // プレイヤーパラメータをグローバルに戻しておく
-      Global.setPlayerParam(_actor.param);
-
       // ステータス更新
       _updateStatusText();
 

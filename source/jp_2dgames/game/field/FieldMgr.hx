@@ -1,8 +1,5 @@
 package jp_2dgames.game.field;
 
-import jp_2dgames.game.gui.MyButton;
-import jp_2dgames.game.particle.ParticleDamage;
-import jp_2dgames.game.particle.Particle;
 import jp_2dgames.lib.Snd;
 import flixel.FlxObject;
 import flixel.FlxCamera;
@@ -39,6 +36,7 @@ private enum State {
   Shop;        // ショップ表示中
   NextFloor;   // 次のフロアに進む
 
+  Gameover;  // ゲームオーバー
   End;       // 終了
 }
 
@@ -195,7 +193,7 @@ class FieldMgr {
     _openNodes();
 
     // イベント管理
-    _eventMgr = new FieldEventMgr(_flxState);
+    _eventMgr = new FieldEventMgr(_flxState, _actor);
 
     // UI表示
     _charaUI = new BtlCharaUI(0, BtlUI.CHARA_Y, _actor);
@@ -383,6 +381,12 @@ class FieldMgr {
 
       case State.NextFloor:
 
+      case State.Gameover:
+        // グローバルに保存
+        Global.setPlayerParam(_actor.param);
+        // おしまい
+        _state = State.End;
+
       case State.End:
         // おしまい
     }
@@ -515,37 +519,37 @@ class FieldMgr {
       _actor.param.food--;
       // イベント処理へ
       _state = State.EventResult;
+      return;
     }
-    else {
-      // 食糧がないのでダメージ (20%)
-      _damageHunger();
-      _state = State.Hunger;
+
+    // 食糧がないのでダメージ (20%)
+    _damageHunger();
+    _state = State.Hunger;
+    if(_actor.isDead()) {
+      // 死亡したので赤フラッシュ
+      FlxG.camera.flash(FlxColor.RED, 0.2);
+      // プレイヤーアイコンを消しておく
+      _player.visible = false;
+    }
+    // 揺らす
+    FlxG.camera.shake(0.01, 0.5, function() {
       if(_actor.isDead()) {
-        // 死亡したので赤フラッシュ
-        FlxG.camera.flash(FlxColor.RED, 0.2);
-        // プレイヤーアイコンを消しておく
-        _player.visible = false;
+        // 餓死
+        Message.push2(Msg.DEAD, [_actor.name]);
+        var px = FlxG.width/2 - MyButton2.WIDTH/2;
+        var py = FlxG.height -128;
+        var btn = new MyButton2(px, py, "NEXT", function() {
+          // ゲームオーバー
+          _resultCode = RET_GAMEOVER;
+          _state = State.Gameover;
+        });
+        _flxState.add(btn);
       }
-      // 揺らす
-      FlxG.camera.shake(0.01, 0.5, function() {
-        if(_actor.isDead()) {
-          // 餓死
-          Message.push2(Msg.DEAD, [_actor.name]);
-          var px = FlxG.width/2 - MyButton2.WIDTH/2;
-          var py = FlxG.height -128;
-          var btn = new MyButton2(px, py, "NEXT", function() {
-            // ゲームオーバー
-            _resultCode = RET_GAMEOVER;
-            _state = State.End;
-          });
-          _flxState.add(btn);
-        }
-        else {
-          // イベント処理へ
-          _state = State.EventResult;
-        }
-      });
-    }
+      else {
+        // イベント処理へ
+        _state = State.EventResult;
+      }
+    });
   }
 
   /**
@@ -566,8 +570,6 @@ class FieldMgr {
         _openNodes();
 
         if(_eventMgr.isBtlEnd()) {
-          // バトル後のパラメータを反映
-          _actor.init(BtlGroup.Player, Global.getPlayerParam());
           // UI表示
           _appearUI();
           // ズーム演出開始
@@ -580,7 +582,7 @@ class FieldMgr {
       case FieldEventMgr.RET_GAMEOVER:
         // ゲームオーバー
         _resultCode = RET_GAMEOVER;
-        _state = State.End;
+        _state = State.Gameover;
 
       case FieldEventMgr.RET_GOAL:
         // ゴール
@@ -642,6 +644,8 @@ class FieldMgr {
     Snd.playSe("foot2");
     // フェード開始
     FlxG.camera.fade(FlxColor.BLACK, 1, false, function() {
+      // グローバルに保存
+      Global.setPlayerParam(_actor.param);
       _resultCode = RET_NEXTSTAGE;
       _state = State.End;
     });

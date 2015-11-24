@@ -1,6 +1,7 @@
 package jp_2dgames.game.state;
 
-import jp_2dgames.game.btl.types.BtlEnd;
+import jp_2dgames.game.actor.Params;
+import jp_2dgames.game.btl.types.BtlEndResult;
 import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import flixel.FlxSubState;
@@ -31,13 +32,17 @@ class BattleState extends FlxSubState {
   var _bg:BtlBg;
 
   // バトル終了時のコールバック
-  var _cbBtlEnd:BtlEnd->Void;
+  var _cbBtlEnd:BtlEndResult->Void;
+
+  // プレイヤーパラメータ
+  var _param:Params;
 
   /**
    * コンストラクタ
    **/
-  public function new(cbBtlEnd:BtlEnd->Void) {
+  public function new(param:Params, cbBtlEnd:BtlEndResult->Void) {
     super();
+    _param = param;
     _cbBtlEnd = cbBtlEnd;
   }
 
@@ -58,7 +63,7 @@ class BattleState extends FlxSubState {
     BtlUI.open(this);
 
     // バトル管理生成
-    _btlMgr = new BtlMgr(this);
+    _btlMgr = new BtlMgr(this, _param);
 
     Snd.playSe("enemy");
 
