@@ -10,8 +10,8 @@ import flixel.util.FlxRandom;
 class FieldNodeUtil {
 
   private static inline var REACHABLE_DISTANCE:Int = 80;
-  private static inline var LIMIT_Y:Int = 128;
-  private static inline var NEAR_DISTANCE:Int = 32;
+  private static inline var LIMIT_Y:Int = 144;
+  private static inline var NEAR_DISTANCE:Int = 28;
 
   // 配置できなかったときのリトライ回数
   private static inline var RETRY_COUNT:Int = 12;
