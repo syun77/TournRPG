@@ -97,7 +97,7 @@ class BtlCmdUI extends FlxSpriteGroup {
       // コストチェック
       btn.enabled = SkillUtil.checkCost(skill.id, actor);
       // スキル説明
-      btn.detail = SkillUtil.getDetail2(skill.id);
+      btn.detail = SkillUtil.getDetail2(skill.id, actor);
       _btnList.add(btn);
     }
 

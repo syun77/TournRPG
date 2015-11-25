@@ -122,6 +122,14 @@ class SkillSlot {
     return _instance._getReviveSkillID();
   }
 
+  public static function getCostSaveHp():Int {
+    return _instance._getCostSaveHp();
+  }
+
+  public static function getCostSaveMp():Int {
+    return _instance._getCostSaveMp();
+  }
+
 
   // ================================================
   // ■以下インスタンス変数
@@ -337,5 +345,35 @@ class SkillSlot {
     });
 
     return skillID;
+  }
+
+  /**
+   * スキル消費コスト(HP)を下げる値を取得
+   **/
+  private function _getCostSaveHp():Int {
+    var val = 0;
+
+    _forEach(function(skill:SkillData) {
+      if(skill.type == SkillType.Auto) {
+        val += SkillUtil.getCostSaveHp(skill.id);
+      }
+    });
+
+    return val;
+  }
+
+  /**
+   * スキル消費コスト(MP)を下げる値を取得
+   **/
+  private function _getCostSaveMp():Int {
+    var val = 0;
+
+    _forEach(function(skill:SkillData) {
+      if(skill.type == SkillType.Auto) {
+        val += SkillUtil.getCostSaveMp(skill.id);
+      }
+    });
+
+    return val;
   }
 }

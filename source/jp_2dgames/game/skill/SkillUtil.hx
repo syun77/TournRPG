@@ -1,5 +1,6 @@
 package jp_2dgames.game.skill;
 
+import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.skill.SkillRange;
@@ -136,19 +137,19 @@ class SkillUtil {
   /**
    * 詳細情報(消費コスト付き)を取得する
    **/
-  public static function getDetail2(skillID:Int):String {
+  public static function getDetail2(skillID:Int, actor:Actor):String {
     if(isNormal(skillID) == false) {
       // パッシブスキルはコスト表示なし
       return getDetail(skillID);
     }
 
     var detail = getDetail(skillID);
-    var hp = getCostHp(skillID);
+    var hp = getCostHp(skillID, actor);
     if(hp > 0) {
       return '${detail} (HP -${hp})';
     }
     else {
-      var mp = getCostMp(skillID);
+      var mp = getCostMp(skillID, actor);
       return '${detail} (TP -${mp})';
     }
   }
@@ -165,30 +166,63 @@ class SkillUtil {
   /**
    * スキルコスト(HP)を取得する
    **/
-  public static function getCostHp(skillID:Int):Int {
-    return getParam(skillID, "hp");
+  public static function getCostHp(skillID:Int, actor:Actor):Int {
+
+    var cost = getParam(skillID, "hp");
+    if(cost == 0) {
+      // HPコストなし
+      return 0;
+    }
+    if(actor == null) {
+      return cost;
+    }
+    if(actor.group == BtlGroup.Player) {
+      // コスト減少
+      cost -= SkillSlot.getCostSaveHp();
+      if(cost < 1) {
+        // 1以下にはならない
+        cost = 1;
+      }
+    }
+    return cost;
   }
 
   /**
    * スキルコスト(MP)を取得する
    **/
-  public static function getCostMp(skillID:Int):Int {
-    return getParam(skillID, "mp");
+  public static function getCostMp(skillID:Int, actor:Actor):Int {
+    var cost = getParam(skillID, "mp");
+    if(cost == 0) {
+      // MPコストなし
+      return 0;
+    }
+    if(actor == null) {
+      return cost;
+    }
+    if(actor.group == BtlGroup.Player) {
+      // コスト減少
+      cost -= SkillSlot.getCostSaveMp();
+      if(cost < 1) {
+        // 1以下にはならない
+        cost = 1;
+      }
+    }
+    return cost;
   }
 
   /**
-   * 指定のスキルを使える稼働かチェックする
+   * 指定のスキルを使えるかどうかチェックする
    * @return 使用可能であれば true
    **/
   public static function checkCost(skillID:Int, actor:Actor):Bool {
-    var hp = getCostHp(skillID);
+    var hp = getCostHp(skillID, actor);
     if(hp > 0) {
       // HPコスト
       return hp < actor.hp;
     }
     else {
       // MPコスト
-      var mp = getCostMp(skillID);
+      var mp = getCostMp(skillID, actor);
       return mp <= actor.mp;
     }
   }
@@ -203,6 +237,30 @@ class SkillUtil {
     }
 
     return getParam(skillID, "revive");
+  }
+
+  /**
+   * スキル消費コスト(HP)減少値を取得する
+   **/
+  public static function getCostSaveHp(skillID:Int):Int {
+    if(isAuto(skillID) == false) {
+      // パッシブスキルではない
+      return 0;
+    }
+
+    return getParam(skillID, "save_hp");
+  }
+
+  /**
+   * スキル消費コスト(MP)減少値を取得する
+   **/
+  public static function getCostSaveMp(skillID:Int):Int {
+    if(isAuto(skillID) == false) {
+      // パッシブスキルではない
+      return 0;
+    }
+
+    return getParam(skillID, "save_mp");
   }
 
   /**

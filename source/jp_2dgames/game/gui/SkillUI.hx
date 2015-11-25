@@ -1,4 +1,8 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.gui.InventoryUI;
+import jp_2dgames.game.item.Inventory;
+import jp_2dgames.game.gui.InventoryUI;
+import jp_2dgames.game.gui.InventoryUI;
 import flixel.util.FlxDestroyUtil;
 import flixel.ui.FlxButton;
 import flixel.text.FlxText;
@@ -46,6 +50,8 @@ class SkillUI extends FlxSpriteGroup {
   // アイテム詳細UI
   var _detailUI:DetailUI;
 
+  var _actor:Actor;
+
   /**
    * コンストラクタ
    * @param cbFunc スキル選択コールバック
@@ -56,6 +62,7 @@ class SkillUI extends FlxSpriteGroup {
   public function new(cbFunc:Int->Void, actor:Actor, mode:Int, bAnim:Bool) {
 
     _mode = mode;
+    _actor = actor;
 
     // 基準座標を設定
     {
@@ -95,9 +102,10 @@ class SkillUI extends FlxSpriteGroup {
 
     _btnList = new Array<MyButton2>();
 
-    var px = InventoryUI.BTN_X;
-    var py = InventoryUI.BTN_Y;
     for(btnID in 0...SkillSlot.count()) {
+      var px = InventoryUI.BTN_X + InventoryUI.BTN_DX * (btnID%3);
+      var py = InventoryUI.BTN_Y + InventoryUI.BTN_DY * Math.floor(btnID/3);
+
       var skill = SkillSlot.getSkill(btnID);
       var label = SkillUtil.getName(skill.id);
       var btn = new MyButton2(px, py, label, function() {
@@ -119,8 +127,6 @@ class SkillUI extends FlxSpriteGroup {
         var txt = UIUtil.createPriceText(px, py, label);
         this.add(txt);
       }
-
-      px += InventoryUI.BTN_DX;
     }
 
     // キャンセルボタン
@@ -176,7 +182,7 @@ class SkillUI extends FlxSpriteGroup {
           _detailUI.visible = true;
           // 表示情報を更新
           var skill = SkillSlot.getSkill(idx);
-          var detail = SkillUtil.getDetail2(skill.id);
+          var detail = SkillUtil.getDetail2(skill.id, _actor);
           _detailUI.setText(detail);
           break;
       }

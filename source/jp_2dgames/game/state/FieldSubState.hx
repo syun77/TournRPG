@@ -273,7 +273,7 @@ class FieldSubState extends FlxSubState {
 
       if(SkillSlot.isEmpty() == false) {
         // スキルUIを開く
-        SkillUI.open(this, _cbSkillView, null, SkillUI.MODE_VIEW, false);
+        SkillUI.open(this, _cbSkillView, _actor, SkillUI.MODE_VIEW, false);
       }
       else {
         // ボタンを再表示
@@ -290,7 +290,7 @@ class FieldSubState extends FlxSubState {
     var label = UIMsg.get(UIMsg.SKILL_VIEW);
     var btn = new MyButton2(px, py, label, function() {
       // スキルUIを開く
-      SkillUI.open(this, _cbSkillView, null, SkillUI.MODE_VIEW, true);
+      SkillUI.open(this, _cbSkillView, _actor, SkillUI.MODE_VIEW, true);
       // メニュー非表示
       _group.visible = false;
     });

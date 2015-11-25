@@ -174,7 +174,7 @@ class ShopBuyUI extends FlxSpriteGroup {
       case CATEGORY_EQUIP:
         return ItemUtil.getDetail(shop.equipList[idx]);
       case CATEGORY_SKILL:
-        return SkillUtil.getDetail2(shop.skillList[idx].id);
+        return SkillUtil.getDetail2(shop.skillList[idx].id, null);
       case CATEGORY_FOOD:
         return UIMsg.get(UIMsg.MSG_FOOD);
     }

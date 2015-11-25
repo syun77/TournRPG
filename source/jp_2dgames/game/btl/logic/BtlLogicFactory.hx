@@ -124,7 +124,7 @@ class BtlLogicFactory {
    * スキルコスト消費
    **/
   private static function _createSkillCost(skillID:Int, actor:Actor):BtlLogicData {
-    var hp = SkillUtil.getCostHp(skillID);
+    var hp = SkillUtil.getCostHp(skillID, actor);
     if(hp > 0) {
       // HP消費
       if(hp >= actor.hp) {
@@ -141,7 +141,7 @@ class BtlLogicFactory {
     }
     else {
       // MP消費
-      var mp = SkillUtil.getCostMp(skillID);
+      var mp = SkillUtil.getCostMp(skillID, actor);
       if(mp > actor.mp) {
         // 足りない
         return null;
@@ -160,7 +160,7 @@ class BtlLogicFactory {
    * スキルコスト足りないメッセージ
    **/
   private static function _createSkillCostNotEnough(skillID:Int, actor:Actor):BtlLogicData {
-    var hp = SkillUtil.getCostHp(skillID);
+    var hp = SkillUtil.getCostHp(skillID, actor);
     if(hp > 0) {
       // HP不足
       return new BtlLogicData(actor.ID, actor.group, BtlLogic.Message(Msg.NOT_ENOUGH_HP));
