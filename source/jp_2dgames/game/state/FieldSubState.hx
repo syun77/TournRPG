@@ -269,6 +269,8 @@ class FieldSubState extends FlxSubState {
         SkillSlot.delSkill(btnID, _actor);
         Message.push2(Msg.ITEM_DEL, [name]);
         Snd.playSe("del");
+        // ステータス更新
+        _updateStatusText();
       }
 
       if(SkillSlot.isEmpty() == false) {
