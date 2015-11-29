@@ -216,11 +216,11 @@ class ShopBuyUI extends FlxSpriteGroup {
     // コマンドボタンの配置
     _btnList = new Array<MyButton2>();
 
-    var px = InventoryUI.BTN_X;
-    var py = InventoryUI.BTN_Y;
-
     var length = _getItemLength();
     for(btnID in 0...length) {
+      var px = InventoryUI.BTN_X + InventoryUI.BTN_DX * (btnID%3);
+      var py = InventoryUI.BTN_Y + InventoryUI.BTN_DY * Math.floor(btnID/3);
+
       var label = _getItemName(btnID);
       var btn = new MyButton2(px, py, label, function() {
 
@@ -244,8 +244,6 @@ class ShopBuyUI extends FlxSpriteGroup {
         // 所持金が足りない
         btn.enabled = false;
       }
-
-      px += InventoryUI.BTN_DX;
     }
 
     // キャンセルボタン

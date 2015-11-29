@@ -93,6 +93,14 @@ class ShopData {
     _skillList.push(skill);
     skill = new SkillData(SkillConst.SKILL502);
     _skillList.push(skill);
+    skill = new SkillData(SkillConst.SKILL511);
+    _skillList.push(skill);
+    skill = new SkillData(SkillConst.SKILL512);
+    _skillList.push(skill);
+    skill = new SkillData(SkillConst.SKILL513);
+    _skillList.push(skill);
+    skill = new SkillData(SkillConst.SKILL514);
+    _skillList.push(skill);
 
     _food = 2;
 

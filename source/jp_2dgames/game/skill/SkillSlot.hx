@@ -1,6 +1,5 @@
 package jp_2dgames.game.skill;
 
-import jp_2dgames.game.gui.SkillUI;
 import jp_2dgames.game.actor.Actor;
 
 /**
@@ -205,22 +204,50 @@ class SkillSlot {
    * 自動ステータス上昇
    **/
   private function _autoStatusUp(skill:SkillData, actor:Actor):Void {
+
+    if(skill.type != SkillType.AutoStatusUp) {
+      // ステータス上昇スキルではない
+      return;
+    }
+
     var hp = SkillUtil.getParam(skill.id, "hp");
     var mp = SkillUtil.getParam(skill.id, "mp");
+    var str = SkillUtil.getParam(skill.id, "str");
+    var vit = SkillUtil.getParam(skill.id, "vit");
+    var agi = SkillUtil.getParam(skill.id, "agi");
+    var mag = SkillUtil.getParam(skill.id, "mag");
 
     actor.param.hpmax += hp;
     actor.param.mpmax += mp;
+    actor.param.str   += str;
+    actor.param.vit   += vit;
+    actor.param.agi   += agi;
+    actor.param.mag   += mag;
   }
 
   /**
    * 自動ステータス上昇の解除
    **/
   private function _delAutoStatusUp(skill:SkillData, actor:Actor):Void {
+
+    if(skill.type != SkillType.AutoStatusUp) {
+      // ステータス上昇スキルではない
+      return;
+    }
+
     var hp = SkillUtil.getParam(skill.id, "hp");
     var mp = SkillUtil.getParam(skill.id, "mp");
+    var str = SkillUtil.getParam(skill.id, "str");
+    var vit = SkillUtil.getParam(skill.id, "vit");
+    var agi = SkillUtil.getParam(skill.id, "agi");
+    var mag = SkillUtil.getParam(skill.id, "mag");
 
     actor.param.hpmax -= hp;
     actor.param.mpmax -= mp;
+    actor.param.str   -= str;
+    actor.param.vit   -= vit;
+    actor.param.agi   -= agi;
+    actor.param.mag   -= mag;
     actor.clampHp();
     actor.clampMp();
   }
