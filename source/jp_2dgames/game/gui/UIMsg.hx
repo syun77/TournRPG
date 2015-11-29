@@ -36,6 +36,9 @@ class UIMsg {
   public static inline var MSG_REC_FULL:Int    = 28; // ショップメッセージ（回復→全回復）
   public static inline var FOOD:Int            = 29; // 食糧
   public static inline var MSG_FOOD:Int        = 30; // 食糧の詳細説明
+  public static inline var MONSTER_APPEAR:Int  = 31; // モンスター出現
+  public static inline var ITEM_FOUND:Int      = 32; // アイテムを見つけた
+  public static inline var MONEY_FOUND:Int     = 33; // お金を拾った
 
   private static var _csv:CsvLoader = null;
   /**

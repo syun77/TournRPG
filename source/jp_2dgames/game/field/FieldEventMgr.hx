@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.types.BtlEndResult;
 import jp_2dgames.game.btl.types.BtlEndType;
@@ -166,7 +167,7 @@ class FieldEventMgr {
     Snd.playSe("roar");
 
     // ダイアログを開く
-    Dialog.open(_flxState, Dialog.OK, 'モンスターに遭遇した！', null, function(btnID) {
+    Dialog.open(_flxState, Dialog.OK, UIMsg.get(UIMsg.MONSTER_APPEAR), null, function(btnID) {
       // バトル開始
       _change(State.Battle);
 
@@ -253,35 +254,11 @@ class FieldEventMgr {
   private function _procItem():Void {
     _change(State.OpenDialog);
 
-    // スキル入手チェック
-    var msg:String = "";
-
-    // スキル入手
-    var getSkill = function() {
-      var skills = Global.getSkillSlot();
-      if(skills.length == 0) {
-        // スキルを持っていない
-        if(FlxRandom.chanceRoll(30)) {
-          var skillID = SkillConst.SKILL001 + FlxRandom.intRanged(0, 1);
-          var skill = new SkillData(skillID);
-          skills.push(skill);
-          var name = SkillUtil.getName(skillID);
-          msg = 'スキル「${name}」を覚えた';
-          return true;
-        }
-      }
-      // スキルを取得しなかった
-      return false;
-    };
-
-    if(getSkill() == false) {
-
-      var itemID = Generator.getItem(_csvFieldItem);
-      var item = new ItemData(itemID);
-      Inventory.push(item);
-      var name = ItemUtil.getName(item);
-      msg = '${name}を見つけた';
-    }
+    var itemID = Generator.getItem(_csvFieldItem);
+    var item = new ItemData(itemID);
+    Inventory.push(item);
+    var name = ItemUtil.getName(item);
+    var msg = UIMsg.get2(UIMsg.ITEM_FOUND, [name]);
 
     Snd.playSe("powerup2");
 
@@ -302,7 +279,8 @@ class FieldEventMgr {
     // SE再生
     Snd.playSe("coin");
 
-    Dialog.open(_flxState, Dialog.OK, '${money}G拾った', null, function(btnID:Int) {
+    var msg = UIMsg.get2(UIMsg.MONEY_FOUND, [money]);
+    Dialog.open(_flxState, Dialog.OK, msg, null, function(btnID:Int) {
 
       _change(State.End);
     });
