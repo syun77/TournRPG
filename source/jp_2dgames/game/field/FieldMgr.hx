@@ -30,9 +30,14 @@ import jp_2dgames.lib.CsvLoader;
 private enum State {
   Main;        // メイン
   Moving;      // 移動中
-  Event;       // イベント実行中
-  Hunger;      // 空腹ダメージ
+
+  HungerBegin; // 空腹ダメージ開始
+  HungerExec;  // 空腹ダメージ実行中
+
+  EventBegin;  // イベント開始
+  EventExec;   // イベント実行中
   EventResult; // イベント実行結果
+
   Shop;        // ショップ表示中
   NextFloor;   // 次のフロアに進む
 
@@ -368,11 +373,16 @@ class FieldMgr {
       case State.Moving:
         _updateMoving();
 
-      case State.Event:
-        _updateEvent();
+      case State.HungerBegin:
+        _updateHungerBegin();
 
-      case State.Hunger:
-        _updateHunger();
+      case State.HungerExec:
+
+      case State.EventBegin:
+        _updateEventBegin();
+
+      case State.EventExec:
+        _updateEventExec();
 
       case State.EventResult:
         _updateEventResult();
@@ -439,46 +449,40 @@ class FieldMgr {
     });
 
 
-    if(selNode != null) {
+    if(selNode == null) {
+      return;
+    }
 
-      // 選択しているノードがある
-      selNode.scale.set(1.5, 1.5);
+    // 選択しているノードがある
+    selNode.scale.set(1.5, 1.5);
 
-      if(FlxG.mouse.justPressed) {
+    if(FlxG.mouse.justPressed) {
 
-        // 移動先を選択した
-        Snd.playSe("menu");
-        // 元のノードは何もない状態にする
-        _nowNode.setEventType(FieldEvent.None);
+      // 移動先を選択した
+      Snd.playSe("menu");
+      // 元のノードは何もない状態にする
+      _nowNode.setEventType(FieldEvent.None);
 
-        selNode.scale.set(1, 1);
+      selNode.scale.set(1, 1);
 
-        // 経路をいったん消す
-        _lines.kill();
+      // 経路をいったん消す
+      _lines.kill();
 
-        // 選択したノードに向かって移動する
-        _state = State.Moving;
-        _player.moveTowardNode(selNode, function() {
-          // イベント実行
-          _state = State.Event;
+      // 選択したノードに向かって移動する
+      _state = State.Moving;
+      _player.moveTowardNode(selNode, function() {
 
-          // F.O.E.との接触チェック
-          var foe = FieldFoe.searchFromNodeID(selNode.ID);
-          if(foe != null) {
-            // F.O.E.とのバトル開始
-            _eventMgr.startBattle(foe);
-          }
-          else {
-            _eventMgr.start(selNode.evType);
-          }
-          // 開始ノードに設定
-          FieldNode.setStartNode(selNode);
-          _nowNode = selNode;
+        // 踏破した
+        _nowNode.setFoot(true);
 
-          // 踏破した
-          _nowNode.setFoot(true);
-        });
-      }
+        // 空腹チェック
+        _state = State.HungerBegin;
+
+        _nowNode = selNode;
+        return;
+
+
+      });
     }
   }
 
@@ -506,25 +510,54 @@ class FieldMgr {
   }
 
   /**
+   * 更新・イベント開始
+   **/
+  private function _updateEventBegin():Void {
+    // F.O.E.との接触チェック
+    var foe = FieldFoe.searchFromNodeID(_nowNode.ID);
+    if(foe != null) {
+      // F.O.E.とのバトル開始
+      _eventMgr.startBattle(foe);
+    }
+    else {
+      _eventMgr.start(_nowNode.evType);
+    }
+    // 開始ノードに設定
+    FieldNode.setStartNode(_nowNode);
+
+    // イベント実行
+    _state = State.EventExec;
+  }
+
+  /**
    * 更新・イベント
    **/
-  private function _updateEvent():Void {
+  private function _updateEventExec():Void {
     _eventMgr.proc();
     if(_eventMgr.isEnd() == false) {
       return;
     }
 
+    // イベント処理へ
+    _state = State.EventResult;
+  }
+
+  /**
+   * 更新・空腹ダメージ
+   **/
+  private function _updateHungerBegin():Void {
     // 食糧を減らす
     if(_actor.param.food > 0) {
       _actor.param.food--;
       // イベント処理へ
-      _state = State.EventResult;
+      _state = State.EventBegin;
       return;
     }
 
+    // 空腹ダメージ実行
+    _state = State.HungerExec;
     // 食糧がないのでダメージ (20%)
     _damageHunger();
-    _state = State.Hunger;
     if(_actor.isDead()) {
       // 死亡したので赤フラッシュ
       FlxG.camera.flash(FlxColor.RED, 0.2);
@@ -546,16 +579,10 @@ class FieldMgr {
         _flxState.add(btn);
       }
       else {
-        // イベント処理へ
-        _state = State.EventResult;
+        // 死亡していないのでイベント処理へ
+        _state = State.EventBegin;
       }
     });
-  }
-
-  /**
-   * 更新・空腹ダメージ
-   **/
-  private function _updateHunger():Void {
   }
 
   /**
