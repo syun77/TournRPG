@@ -65,14 +65,18 @@ class BtlTargetUI extends FlxSpriteGroup {
 
       case BtlRange.Group:
         // グループ
-        var actor = ActorMgr.forEachAliveFirstIf(function(actor:Actor) {
-          if(group == actor.group) {
-            return true;
+
+        // 最も下の座標にいるactorを取得する
+        var py:Float = 0;
+        var actor = null;
+        ActorMgr.forEachAliveGroup(group, function(act:Actor) {
+          if(act.bottom > py) {
+            py = act.bottom;
+            actor = act;
           }
-          return false;
         });
+
         var px = FlxG.width/2 - MyButton2.WIDTH/2;
-        var py = actor.bottom;
         var name = UIMsg.get(UIMsg.CMD_ENEMY_ALL);
         var btn = new MyButton2(px, py, name, function() {
           _click(cbFunc, actor.ID);
