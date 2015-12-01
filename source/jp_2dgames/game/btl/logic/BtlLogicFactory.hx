@@ -1,4 +1,5 @@
 package jp_2dgames.game.btl.logic;
+import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
@@ -204,6 +205,13 @@ class BtlLogicFactory {
             }
             // 演出データを追加
             ret.add(eft);
+            // 死亡チェック
+            for(eft in checkDeadAndCreate()) {
+              ret.add(eft);
+            }
+            if(target.isDead()) {
+              break;
+            }
           }
         }
         else {
@@ -221,6 +229,10 @@ class BtlLogicFactory {
                 var val = Calc.damageSkill(skillID, actor, act);
                 var eft = _createDamage(actor, act, val);
                 ret.add(eft);
+                // 死亡チェック
+                for(eft in checkDeadAndCreate()) {
+                  ret.add(eft);
+                }
               });
 
             default:
@@ -456,7 +468,71 @@ class BtlLogicFactory {
       // 失敗
       return new BtlLogicData(actor.ID, actor.group, BtlLogic.Message(Msg.ESCAPE_FAILED));
     }
+  }
 
+  /**
+   * 死亡チェック＋死亡演出作成
+   **/
+  public static function checkDeadAndCreate():List<BtlLogicData> {
+
+    var ret = new List<BtlLogicData>();
+
+    // 死亡チェック
+    var idx = ActorMgr.MAX;
+    while(idx > 0) {
+
+      // 死亡している人を探す
+      var actor = TempActorMgr.searchDead();
+      if(actor == null) {
+        // 死亡している人はいないのでおしまい
+        break;
+      }
+
+      if(_checkAutoRevive(actor)) {
+        // 自動復活できる
+        var eftList = BtlLogicFactory.createAutoRevive(actor);
+        for(eft in eftList) {
+          ret.push(eft);
+        }
+      }
+      else {
+        // 復活できないので死亡
+        var eft = BtlLogicFactory.createDead(actor);
+        ret.push(eft);
+        // そして墓場送り
+        TempActorMgr.moveGrave(actor);
+      }
+
+      idx--;
+    }
+
+    return ret;
+  }
+
+  /**
+   * 復活できるかどうか
+   **/
+  private static function _checkAutoRevive(actor:Actor):Bool {
+    if(actor.group != BtlGroup.Player) {
+      // 復活できない
+      return false;
+    }
+
+    // 自動復活済みかどうかをチェック
+    if(actor.param.bAutoRevive) {
+      // すでに復活したので復活できない
+      return false;
+    }
+
+    // 復活スキルをチェック
+    var skillID = SkillSlot.getReviveSkillID();
+    if(skillID == 0) {
+      // 復活スキルを持っていない
+      return false;
+    }
+
+    // 復活できる
+    return true;
   }
 
   /**

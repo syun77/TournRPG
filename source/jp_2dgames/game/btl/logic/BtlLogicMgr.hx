@@ -98,7 +98,10 @@ class BtlLogicMgr {
       }
 
       // 死亡チェック
-      _checkDead();
+      var ret = BtlLogicFactory.checkDeadAndCreate();
+      for(eft in ret) {
+        push(eft);
+      }
 
       // バトル終了チェック
       bEnd = _checkBattleEnd();
@@ -117,7 +120,10 @@ class BtlLogicMgr {
         }
 
         // 死亡チェック
-        _checkDead();
+        var ret = BtlLogicFactory.checkDeadAndCreate();
+        for(eft in ret) {
+          push(eft);
+        }
 
         // バトル終了チェック
         if(_checkBattleEnd()) {
@@ -135,68 +141,6 @@ class BtlLogicMgr {
   public function new() {
     _pool = new List<BtlLogicData>();
   }
-
-  /**
-   * 復活できるかどうか
-   **/
-  private function _checkAutoRevive(actor:Actor):Bool {
-    if(actor.group != BtlGroup.Player) {
-      // 復活できない
-      return false;
-    }
-
-    // 自動復活済みかどうかをチェック
-    if(actor.param.bAutoRevive) {
-      // すでに復活したので復活できない
-      return false;
-    }
-
-    // 復活スキルをチェック
-    var skillID = SkillSlot.getReviveSkillID();
-    if(skillID == 0) {
-      // 復活スキルを持っていない
-      return false;
-    }
-
-    // 復活できる
-    return true;
-  }
-
-  /**
-   * 死亡チェック
-   **/
-  private function _checkDead():Void {
-
-    // 死亡チェック
-    var idx = ActorMgr.MAX;
-    while(idx > 0) {
-
-      // 死亡している人を探す
-      var actor2 = TempActorMgr.searchDead();
-      if(actor2 == null) {
-        // 死亡している人はいないのでおしまい
-        return;
-      }
-
-      if(_checkAutoRevive(actor2)) {
-        // 自動復活できる
-        var eftList = BtlLogicFactory.createAutoRevive(actor2);
-        for(eft in eftList) {
-          push(eft);
-        }
-      }
-      else {
-        // 復活できないので死亡
-        var eft = BtlLogicFactory.createDead(actor2);
-        push(eft);
-        // そして墓場送り
-        TempActorMgr.moveGrave(actor2);
-      }
-
-      idx--;
-    }
-  }
-
 
   /**
    * バトル終了チェック

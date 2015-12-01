@@ -10,3 +10,5 @@ int,str,str,int,int,str,str,int,int,int,int,str,int,int,int,int,int,int,int,int,
 8,目つぶし,ATK_BST,,5,ENEMY_ONE,AT_BLIND,1,1,,,blind,60,,,,,,,450,225,相手を暗闇状態にする
 9,サイレント,ATK_BST,,5,ENEMY_ONE,AT_CLOSE,1,1,,,close,60,,,,,,,500,250,相手のスキルを封印する
 10,パワーダウン,BUFF,,7,ENEMY_ALL,,,,,,,,,,,-1,,,550,275,敵全体の攻撃力を下げる
+11,旋風斬り,ATK_PHY,15,,ENEMY_ALL,AT_PHY,1,1,110,130,,,,,,,,,200,100,敵全体を攻撃する
+12,三段攻撃,ATK_PHY,15,,ENEMY_ONE,AT_PHY,3,3,35,130,,,,,,,,,150,75,敵1体に3回攻撃をする
