@@ -171,14 +171,13 @@ class Calc {
     switch(type) {
       case SkillType.AtkPhyscal:
         // 物理攻撃
-        if(checkHit(act, target) == false) {
-          // 外れ
-          return MISS_DAMAGE;
-        }
-
         // 威力
         var power = SkillUtil.getParam(skillID, "pow") * 0.2;
         val = damage(act, target, Std.int(power));
+        if(val == MISS_DAMAGE) {
+          // 外れ
+          return MISS_DAMAGE;
+        }
 
       case SkillType.AtkMagical:
         // 魔法攻撃
