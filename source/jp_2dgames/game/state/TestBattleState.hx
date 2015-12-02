@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.btl.BtlMgr.BtlMgrParam;
 import jp_2dgames.game.btl.types.BtlEndResult;
 import flixel.FlxG;
 import jp_2dgames.lib.CsvLoader;
@@ -127,8 +128,10 @@ class TestBattleState extends FlxState {
 
     if(Input.press.A) {
       // バトル開始
-      Global.setEnemyGroup(_nEnemyGroup);
-      openSubState(new BattleState(Global.getPlayerParam(), function(param:BtlEndResult) {
+      var param = new BtlMgrParam();
+      param.param = Global.getPlayerParam();
+      param.enemyGroupID = _nEnemyGroup;
+      openSubState(new BattleState(param, function(param:BtlEndResult) {
         // 特に何もしない
       }));
     }

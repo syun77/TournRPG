@@ -21,6 +21,16 @@ import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.lib.Input;
 import flixel.FlxG;
 
+class BtlMgrParam {
+  public var param:Params;     // プレイヤーパラメータ
+  public var enemyGroupID:Int; // 敵グループID
+
+  public function new() {
+    param = null;
+    enemyGroupID = 0;
+  }
+}
+
 /**
  * 状態
  **/
@@ -83,16 +93,16 @@ class BtlMgr {
   /**
    * コンストラクタ
    **/
-  public function new(flxState:FlxState, param:Params) {
+  public function new(flxState:FlxState, param:BtlMgrParam) {
 
     _flxState = flxState;
 
     // プレイヤーの生成
-    _player = ActorMgr.recycle(BtlGroup.Player, param);
+    _player = ActorMgr.recycle(BtlGroup.Player, param.param);
     _player.setName(Global.getPlayerName());
 
     // 敵の生成
-    BtlUtil.createEnemyGroup(Global.getEnemyGroup());
+    BtlUtil.createEnemyGroup(param.enemyGroupID);
 
     BtlUI.setPlayerID(0, _player.ID);
 

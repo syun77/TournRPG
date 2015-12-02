@@ -18,7 +18,6 @@ class Global {
   static var _bLoad:Bool = false;
   static var _playerParam:Params = null;
   static var _playerName:String = "プレイヤー";
-  static var _enemyGroup:Int = 0;
   static var _itemList:Array<ItemData> = null;
   static var _money:Int = 0;
   static var _floor:Int = 0;
@@ -41,9 +40,6 @@ class Global {
 
     // インベントリの初期化
     _initInventory();
-
-    // 敵グループ番号初期化
-    _enemyGroup = 1;
 
     // 所持金を初期化
     _money = 0;
@@ -105,15 +101,6 @@ class Global {
   // スキルスロットの設定
   public static function setSkillSlot(slot:Array<SkillData>):Void {
     _skillList = slot;
-  }
-
-  // 敵グループ番号の取得
-  public static function getEnemyGroup():Int {
-    return _enemyGroup;
-  }
-  // 敵グループ番号の設定
-  public static function setEnemyGroup(val:Int):Void {
-    _enemyGroup = val;
   }
 
   // インベントリの初期化

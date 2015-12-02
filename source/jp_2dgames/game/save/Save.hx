@@ -23,13 +23,11 @@ private class _Global {
   }
   // セーブ
   public function save() {
-    enemyGroup = Global.getEnemyGroup();
     money      = Global.getMoney();
     floor      = Global.getFloor();
   }
   // ロード
   public function load(data:Dynamic) {
-    Global.setEnemyGroup(data.enemyGroup);
     Global.setMoney(data.money);
     Global.setFloor(data.floor);
   }

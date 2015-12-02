@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.btl.BtlMgr.BtlMgrParam;
 import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.types.BtlEndResult;
@@ -180,11 +181,14 @@ class FieldEventMgr {
         // 通常バトル
         nBtl = Generator.getEnemyGroup(_csvEnemyGroup);
       }
-      Global.setEnemyGroup(nBtl);
       FlxG.camera.fade(FlxColor.WHITE, 0.3, false, function() {
         // フェードしてからバトル開始
         FlxG.camera.fade(FlxColor.WHITE, 0.1, true, null, true);
-        _flxState.openSubState(new BattleState(_actor.param, _cbBattleEnd));
+        // バトルパラメータ生成
+        var param = new BtlMgrParam();
+        param.param = _actor.param;
+        param.enemyGroupID = nBtl;
+        _flxState.openSubState(new BattleState(param, _cbBattleEnd));
       });
     });
   }

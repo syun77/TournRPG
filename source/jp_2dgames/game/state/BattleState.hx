@@ -34,13 +34,13 @@ class BattleState extends FlxSubState {
   // バトル終了時のコールバック
   var _cbBtlEnd:BtlEndResult->Void;
 
-  // プレイヤーパラメータ
-  var _param:Params;
+  // バトル開始パラメータ
+  var _param:BtlMgrParam;
 
   /**
    * コンストラクタ
    **/
-  public function new(param:Params, cbBtlEnd:BtlEndResult->Void) {
+  public function new(param:BtlMgrParam, cbBtlEnd:BtlEndResult->Void) {
     super();
     _param = param;
     _cbBtlEnd = cbBtlEnd;
