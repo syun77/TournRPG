@@ -1,0 +1,3 @@
+id,money,food,item1,item2,item3,item4,item5,skill1,skill2,skill3,skill4,skill5
+int,int,int,int,int,int,int,int,int,int,int,int,int
+1,50,12,100,101,102,103,104,1,2,3,4,5

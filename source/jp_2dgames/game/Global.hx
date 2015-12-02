@@ -4,7 +4,6 @@ import jp_2dgames.game.shop.ShopData;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.skill.SkillData;
 import jp_2dgames.game.item.Inventory;
-import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.actor.Params;
 import jp_2dgames.game.actor.PlayerInfo;
@@ -14,7 +13,6 @@ import jp_2dgames.game.actor.PlayerInfo;
  **/
 class Global {
   static inline var STAGE_FIRST:Int = 1;
-  static inline var MONEY_FIRST:Int = 100;
 
   // ■スタティック変数
   static var _bLoad:Bool = false;
@@ -48,7 +46,7 @@ class Global {
     _enemyGroup = 1;
 
     // 所持金を初期化
-    _money = MONEY_FIRST;
+    _money = 0;
 
     // フロア番号を初期化
     _floor = 1;
@@ -123,11 +121,6 @@ class Global {
     _itemList = new Array<ItemData>();
 
     Inventory.create(_itemList);
-
-    // 初期アイテム
-    for(i in 0...8) {
-      Inventory.push(new ItemData(ItemConst.POTION01+i));
-    }
   }
 
   // アイテムリストを設定

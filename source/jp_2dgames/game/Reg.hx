@@ -63,6 +63,7 @@ class Reg {
   // CSV
   public static inline var PATH_CSV_MESSAGE         = "assets/data/csv/message.csv";
   public static inline var PATH_CSV_PLAYER          = "assets/data/csv/player.csv";
+  public static inline var PATH_CSV_PLAYER_INIT     = "assets/data/csv/player_init.csv";
   public static inline var PATH_CSV_ENEMY           = "assets/data/csv/enemy.csv";
   public static inline var PATH_CSV_ENEMY_GROUP     = "assets/data/csv/enemy_group.csv";
   public static inline var PATH_CSV_ITEM_CONSUMABLE = "assets/data/csv/item_consumable.csv";
