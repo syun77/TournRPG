@@ -48,6 +48,11 @@ class ViewController: NSViewController {
         exec("/bin/bash", AI)
     }
     
+    // ログのクリア
+    @IBAction func clear(sender: AnyObject) {
+        txtLog.string = "";
+    }
+    
     // コンバート実行
     func exec(sh: String, _ tool: String) {
         let task:NSTask = NSTask()
