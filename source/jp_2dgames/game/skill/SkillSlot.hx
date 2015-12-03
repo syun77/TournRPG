@@ -8,7 +8,7 @@ import jp_2dgames.game.actor.Actor;
 class SkillSlot {
 
   // スキルスロットの最大数
-  private static inline var LIMIT_FIRST:Int = 3;
+  private static inline var LIMIT_FIRST:Int = 5;
 
   // ■static変数
   // シングルトン
@@ -27,6 +27,13 @@ class SkillSlot {
    **/
   public static function destroy():Void {
     _instance = null;
+  }
+
+  /**
+   * スキル所持の限界かどうか
+   **/
+  public static function isLimit():Bool {
+    return count() >= LIMIT_FIRST;
   }
 
   /**
@@ -61,6 +68,11 @@ class SkillSlot {
    * スキルを追加
    **/
   public static function addSkill(skill:SkillData, actor:Actor):Void {
+    if(isLimit()) {
+      // 限界に達している
+      return;
+    }
+
     return _instance._addSkill(skill, actor);
   }
 

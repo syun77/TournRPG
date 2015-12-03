@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.skill.SkillSlot;
 import flixel.util.FlxDestroyUtil;
 import flixel.FlxSprite;
 import flixel.text.FlxText;
@@ -244,6 +245,12 @@ class ShopBuyUI extends FlxSpriteGroup {
         // 所持金が足りない
         btn.enabled = false;
       }
+      if(_category == CATEGORY_SKILL) {
+        if(SkillSlot.isLimit()) {
+          // スキルが最大に達しているので、スキルは買えない
+          btn.enabled = false;
+        }
+      }
     }
 
     // キャンセルボタン
@@ -319,6 +326,7 @@ class ShopBuyUI extends FlxSpriteGroup {
 
     // ボタン生成
     for(type in tbl) {
+      // カテゴリボタンを押した
       var func = function() {
         // いったん全部消す
         for(obj in members) {
@@ -326,6 +334,12 @@ class ShopBuyUI extends FlxSpriteGroup {
           obj = FlxDestroyUtil.destroy(obj);
         }
         _category = type;
+        if(type == CATEGORY_SKILL) {
+          if(SkillSlot.isLimit()) {
+            // スキルが買えないので警告メッセージ表示
+            Message.push2(Msg.SKILL_CANT_BUY);
+          }
+        }
         _displayButton(cbFunc, actor, false);
       }
       var btn = new MyButton(px, py, "", func);

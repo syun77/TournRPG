@@ -51,4 +51,5 @@ class Msg {
   public static inline var GROW_AGI:Int       = 49; // 素早さ上昇
   public static inline var GROW_MAG:Int       = 50; // 魔力上昇
   public static inline var RECOVER_MP:Int     = 51; // MP回復
+  public static inline var SKILL_CANT_BUY:Int = 52; // スキルが最大数に達しているので買えない
 }
