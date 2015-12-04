@@ -1,7 +1,10 @@
 package jp_2dgames.game.shop;
+import flixel.util.FlxRandom;
+import jp_2dgames.lib.CsvLoader;
+import jp_2dgames.game.item.ItemUtil;
+import jp_2dgames.game.util.Generator;
 import jp_2dgames.game.skill.SkillConst;
 import jp_2dgames.game.skill.SkillData;
-import jp_2dgames.game.item.ItemConst;
 import jp_2dgames.game.item.ItemData;
 
 /**
@@ -80,29 +83,52 @@ class ShopData {
   public function testdata():Void {
 
     init();
-    // TODO: 仮データ追加
-    var item = new ItemData(ItemConst.POTION01);
-    _itemList.push(item);
 
-    item = new ItemData(ItemConst.WEAPON01);
-    _equipList.push(item);
-    item = new ItemData(ItemConst.WEAPON02);
-    _equipList.push(item);
+    // CSV読み込み
+    var csvItem = new CsvLoader(Reg.PATH_CSV_FIELD_ITEM);
+    var csvSkill = new CsvLoader(Reg.PATH_CSV_FIELD_SKILL);
 
-    var skill = new SkillData(SkillConst.SKILL001);
-    _skillList.push(skill);
-    skill = new SkillData(SkillConst.SKILL502);
-    _skillList.push(skill);
-    skill = new SkillData(SkillConst.SKILL511);
-    _skillList.push(skill);
-    skill = new SkillData(SkillConst.SKILL512);
-    _skillList.push(skill);
-    skill = new SkillData(SkillConst.SKILL513);
-    _skillList.push(skill);
-    skill = new SkillData(SkillConst.SKILL514);
-    _skillList.push(skill);
+    // アイテム
+    {
+      var cnt = FlxRandom.intRanged(3, 6);
+      var ret = Generator.getItemFromCategory(csvItem, IType.Potion, cnt);
+      for(itemid in ret) {
+        var item = new ItemData(itemid);
+        _itemList.push(item);
+      }
+    }
 
-    _food = 2;
+    // 武器
+    {
+      var cnt = FlxRandom.intRanged(0, 3);
+      var ret = Generator.getItemFromCategory(csvItem, IType.Weapon, cnt);
+      for(itemid in ret) {
+        var item = new ItemData(itemid);
+        _equipList.push(item);
+      }
+    }
+    // 防具
+    {
+      var cnt = FlxRandom.intRanged(0, 3);
+      var ret = Generator.getItemFromCategory(csvItem, IType.Armor, cnt);
+      for(itemid in ret) {
+        var item = new ItemData(itemid);
+        _equipList.push(item);
+      }
+    }
+
+    // スキル
+    {
+      var cnt = FlxRandom.intRanged(1, 3);
+      for(i in 0...cnt) {
+        var skillID = Generator.getItem(csvSkill);
+        var skill = new SkillData(skillID);
+        _skillList.push(skill);
+      }
+    }
+
+    // 食糧
+    _food = FlxRandom.intRanged(3, 5);
 
   }
 
