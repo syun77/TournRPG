@@ -187,73 +187,9 @@ class BtlLogicFactory {
 
     switch(type) {
       case SkillType.AtkPhyscal, SkillType.AtkMagical:
-        // 攻撃回数を取得
-        var min = SkillUtil.getParam(skillID, "min");
-        var max = SkillUtil.getParam(skillID, "max");
-        var cnt = FlxRandom.intRanged(min, max);
+        // 物理・魔法
+        _createSkillPhysicsAndMagic(actor, target, range, skillID, ret);
 
-        // ダメージ計算
-        if(cnt > 1) {
-          // 連続攻撃
-          for(i in 0...cnt) {
-            var val = Calc.damageSkill(skillID, actor, target);
-            var eft = _createDamage(actor, target, val, true);
-            eft.bWaitQuick = true;
-            if(i == cnt-1) {
-              // 攻撃終了
-              eft.bWaitQuick = false;
-            }
-            // 演出データを追加
-            ret.add(eft);
-            // 死亡チェック
-            for(eft in checkDeadAndCreate()) {
-              ret.add(eft);
-            }
-            if(target.isDead()) {
-              break;
-            }
-          }
-        }
-        else {
-          // 1回攻撃
-          switch(range) {
-            case BtlRange.One:
-              // 単体ダメージ
-              {
-                var val = Calc.damageSkill(skillID, actor, target);
-                var eft = _createDamage(actor, target, val);
-                ret.add(eft);
-              }
-              if(target.isDead() == false) {
-
-                // 死亡していなければバステチェック
-                if(SkillUtil.getBadstatus(skillID) != BadStatus.None) {
-                  // 単体
-                  var eft = _createBadstatus(actor, skillID, target, false);
-                  if(eft != null) {
-                    // 演出データを追加
-                    ret.add(eft);
-                  }
-                }
-              }
-
-            case BtlRange.Group:
-              // グループ
-              TempActorMgr.forEachAliveGroup(target.group, function(act:Actor) {
-                var val = Calc.damageSkill(skillID, actor, act);
-                var eft = _createDamage(actor, act, val);
-                ret.add(eft);
-                // 死亡チェック
-                for(eft in checkDeadAndCreate()) {
-                  ret.add(eft);
-                }
-              });
-
-            default:
-              // TODO: 未実装
-              throw 'Not implements range(${range})';
-          }
-        }
       case SkillType.AtkBadstatus:
         // バステ攻撃
         switch(range) {
@@ -329,6 +265,83 @@ class BtlLogicFactory {
     }
 
     return ret;
+  }
+
+  /**
+   * スキル演出　物理・魔法の生成
+   **/
+  private static function _createSkillPhysicsAndMagic(actor:Actor, target:Actor, range:BtlRange, skillID:Int, ret:List<BtlLogicData>):Void {
+
+    // 攻撃回数を取得
+    var min = SkillUtil.getParam(skillID, "min");
+    var max = SkillUtil.getParam(skillID, "max");
+    var cnt = FlxRandom.intRanged(min, max);
+
+    // ダメージ演出作成関数
+    var fnDamage = function(target2:Actor, idx:Int):Bool {
+
+      // ダメージ処理
+      var val = Calc.damageSkill(skillID, actor, target2);
+      var eft = _createDamage(actor, target2, val, true);
+      eft.bWaitQuick = true;
+      if(idx == -1 || idx == cnt-1) {
+        // 攻撃終了
+        eft.bWaitQuick = false;
+      }
+      // 演出データを追加
+      ret.add(eft);
+      // 死亡チェック
+      for(eft in checkDeadAndCreate()) {
+        ret.add(eft);
+      }
+      if(target2.isDead()) {
+        // 死亡
+        return true;
+      }
+      else if(val > 0) {
+        // 死亡していないのでバステチェック
+        if(SkillUtil.getBadstatus(skillID) != BadStatus.None) {
+          // 単体
+          var eft = _createBadstatus(actor, skillID, target2, false);
+          if(eft != null) {
+            // 演出データを追加
+            ret.add(eft);
+          }
+        }
+      }
+
+      return false;
+    }
+
+    // ダメージ計算
+    if(cnt > 1) {
+      // 連続攻撃
+      for(i in 0...cnt) {
+        if(fnDamage(target, i)) {
+          // 死亡
+          break;
+        }
+      }
+    }
+    else {
+      // 1回攻撃
+      switch(range) {
+        case BtlRange.One:
+          // 単体ダメージ
+          fnDamage(target, -1);
+
+        case BtlRange.Group:
+          // グループ
+          TempActorMgr.forEachAliveGroup(target.group, function(act:Actor) {
+            fnDamage(act, -1);
+          });
+
+        default:
+          // TODO: 未実装
+          throw 'Not implements range(${range})';
+      }
+    }
+
   }
 
   /**
