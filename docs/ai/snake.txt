@@ -1,0 +1,6 @@
+// ランダム選択
+SEL_RND()
+// 通常攻撃
+//ACT_ATTACK()
+// かみつき
+ACT_SKILL(SKILL001)

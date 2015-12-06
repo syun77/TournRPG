@@ -1,7 +1,0 @@
-// ログを有効化
-//LOG(2)
-// ランダム選択
-SEL_RND()
-// 通常攻撃
-ACT_ATTACK()
-//ACT_SKILL(SKILL001)

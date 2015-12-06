@@ -1,6 +1,7 @@
 package jp_2dgames.game.skill;
 
-import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
+import jp_2dgames.game.actor.BadStatusUtil;
+import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.skill.SkillRange;
@@ -301,6 +302,23 @@ class SkillUtil {
     }
 
     return fromAttributeString(str);
+  }
+
+  /**
+   * 付着するバッドステータスを取得する
+   **/
+  public static function getBadstatus(skillID:Int):BadStatus {
+    var str = getParamString(skillID, "bst");
+    return BadStatusUtil.fromString2(str);
+  }
+
+  /**
+   * バッドステータスの付着率を取得する
+   * @param 付着する確率 0〜100%
+   **/
+  public static function getBadstatusHit(skill:Int):Int {
+    var ratio = getParam(skill, "bst_hit");
+    return ratio;
   }
 
   /**

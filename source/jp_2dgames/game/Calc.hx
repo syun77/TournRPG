@@ -58,6 +58,14 @@ class Calc {
     return false;
   }
 
+  /**
+   * バッドステータス付着判定
+   **/
+  public static function checkHitBadstatus(act:Actor, target:Actor, skillID:Int):Bool {
+    var ratio = SkillUtil.getBadstatusHit(skillID);
+    return FlxRandom.chanceRoll(ratio);
+  }
+
   private static function _clamp(val:Float):Int {
 
     var ret:Float = val;

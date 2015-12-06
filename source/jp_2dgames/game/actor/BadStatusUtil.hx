@@ -48,6 +48,22 @@ class BadStatusUtil {
         return BadStatus.None;
     }
   }
+  public static function fromString2(str:String):BadStatus {
+    switch(str) {
+      case 'None':      return BadStatus.None;
+      case 'Dead':      return BadStatus.Dead;
+      case 'Poison':    return BadStatus.Poison;
+      case 'Confusion': return BadStatus.Confusion;
+      case 'Close':     return BadStatus.Close;
+      case 'Paralyze':  return BadStatus.Paralyze;
+      case 'Sleep':     return BadStatus.Sleep;
+      case 'Blind':     return BadStatus.Blind;
+      case 'Curse':     return BadStatus.Curse;
+      case 'Weak':      return BadStatus.Weak;
+      default:
+        return BadStatus.None;
+    }
+  }
 
   /**
    * バッドステータスが付着するかどうか

@@ -218,10 +218,24 @@ class BtlLogicFactory {
           // 1回攻撃
           switch(range) {
             case BtlRange.One:
-              // 単体
-              var val = Calc.damageSkill(skillID, actor, target);
-              var eft = _createDamage(actor, target, val);
-              ret.add(eft);
+              // 単体ダメージ
+              {
+                var val = Calc.damageSkill(skillID, actor, target);
+                var eft = _createDamage(actor, target, val);
+                ret.add(eft);
+              }
+              if(target.isDead() == false) {
+
+                // 死亡していなければバステチェック
+                if(SkillUtil.getBadstatus(skillID) != BadStatus.None) {
+                  // 単体
+                  var eft = _createBadstatus(actor, skillID, target, false);
+                  if(eft != null) {
+                    // 演出データを追加
+                    ret.add(eft);
+                  }
+                }
+              }
 
             case BtlRange.Group:
               // グループ
@@ -245,14 +259,14 @@ class BtlLogicFactory {
         switch(range) {
           case BtlRange.One:
             // 単体
-            var eft = _createBadstatus(actor, skillID, target);
+            var eft = _createBadstatus(actor, skillID, target, true);
             // 演出データを追加
             ret.add(eft);
 
           case BtlRange.Group:
             // グループ
             TempActorMgr.forEachAliveGroup(target.group, function(act:Actor) {
-              var eft = _createBadstatus(actor, skillID, act);
+              var eft = _createBadstatus(actor, skillID, act, true);
               // 演出データを追加
               ret.add(eft);
             });
@@ -342,11 +356,22 @@ class BtlLogicFactory {
   /**
    * バットステータス付着
    **/
-  private static function _createBadstatus(actor:Actor, skillID:Int, target:Actor):BtlLogicData {
+  private static function _createBadstatus(actor:Actor, skillID:Int, target:Actor, bMissEft:Bool):BtlLogicData {
+
     var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
     eft.setTarget(target.ID);
-    var attr = SkillUtil.toAttribute(skillID);
-    var bst  = BadStatusUtil.fromSkillAttribute(attr);
+    // 付着判定
+    if(Calc.checkHitBadstatus(actor, target, skillID) == false) {
+      // 失敗
+      eft.type = BtlLogic.ChanceRoll(false);
+      if(bMissEft == false) {
+        // 失敗したら演出なし
+        return null;
+      }
+      return eft;
+    }
+
+    var bst = SkillUtil.getBadstatus(skillID);
     eft.type = BtlLogic.Badstatus(bst);
     eft.bWaitQuick = true;
 
