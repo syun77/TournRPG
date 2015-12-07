@@ -113,6 +113,12 @@ class ShopRecoveryUI extends FlxSpriteGroup {
       var txt = UIUtil.createPriceText(px, py, label);
       this.add(txt);
 
+      // コストチェック
+      if(cost > Global.getMoney()) {
+        // お金が足りない
+        btn.enabled = false;
+      }
+
       px += InventoryUI.BTN_DX;
     }
 
