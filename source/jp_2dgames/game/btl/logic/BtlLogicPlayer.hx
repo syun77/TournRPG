@@ -133,6 +133,18 @@ class BtlLogicPlayer {
   }
 
   /**
+   * バッドステータス付着
+   **/
+  private function _adhereBadstatus(target:Actor):Void {
+    if(target.group == BtlGroup.Player) {
+      BtlUI.badstatus();
+    }
+    else {
+      target.startAnimColor(MyColor.ASE_BLUE);
+    }
+  }
+
+  /**
    * ダメージ演出
    **/
   private function _damage(target:Actor, v:Int, bRandom:Bool):Void {
@@ -402,6 +414,8 @@ class BtlLogicPlayer {
         else {
           // 付着
           target.adhereBadStatus(bst);
+          // 揺らす
+          _adhereBadstatus(target);
           BadStatusUtil.pushMessage(bst, target.name);
         }
 

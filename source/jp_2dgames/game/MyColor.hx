@@ -73,6 +73,7 @@ class MyColor {
   public static inline var PANEL_NON_ACTIVE = FlxColor.BLACK;
   public static inline var PANEL_ACTIVE = FlxColor.AQUAMARINE;
   public static inline var PANEL_DAMAGE = FlxColor.SALMON;
+  public static inline var PANEL_BADSTATUS = ASE_PURPLE;
 
   // ■敵の色
   public static inline var ENEMY_NON_ACTIVE:Int = FlxColor.CHARCOAL;

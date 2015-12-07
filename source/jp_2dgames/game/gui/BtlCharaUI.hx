@@ -261,6 +261,13 @@ class BtlCharaUI extends FlxSpriteGroup {
   }
 
   /**
+   * バッドステータス演出
+   **/
+  public function badstatus():Void {
+    _changeBgColor(MyColor.PANEL_BADSTATUS);
+  }
+
+  /**
    * ミス
    **/
   public function miss():Void {

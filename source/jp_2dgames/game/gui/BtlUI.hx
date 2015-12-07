@@ -64,6 +64,10 @@ class BtlUI extends FlxSpriteGroup {
   public static function damage():Void {
     _instance._damage();
   }
+  // バッドステータス
+  public static function badstatus():Void {
+    _instance._badstatus();
+  }
   // アクティブ
   public static function setActivePlayer(actorID:Int, b:Bool):Void {
     _instance._setActivePlayer(actorID, b);
@@ -180,6 +184,15 @@ class BtlUI extends FlxSpriteGroup {
   private function _damage():Void {
     for(ui in _charaUIList) {
       ui.damage();
+    }
+  }
+
+  /**
+   * バッドステータス
+   **/
+  private function _badstatus():Void {
+    for(ui in _charaUIList) {
+      ui.badstatus();
     }
   }
 
