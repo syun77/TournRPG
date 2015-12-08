@@ -1,6 +1,14 @@
+// ログ有効
+LOG(2)
+
 // ランダム選択
 SEL_RND()
-// 通常攻撃
-//ACT_ATTACK()
-// かみつき
-ACT_SKILL(SKILL001)
+
+if(LOT(50)) {
+	// 通常攻撃
+	ACT_ATTACK()
+}
+else {
+	// かみつき
+	ACT_SKILL(SKILL001)
+}

@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import flixel.util.FlxRandom;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.btl.types.BtlCmd;
 import jp_2dgames.game.btl.BtlGroupUtil;
@@ -50,6 +51,7 @@ class ActorAI {
       "ACT_ATTACK" => _ACT_ATTACK,
       "ACT_SKILL"  => _ACT_SKILL,
       "SEL_RND"    => _SEL_RND,
+      "LOT"        => _LOT,
       "LOG"        => _LOG,
     ];
 
@@ -122,6 +124,27 @@ class ActorAI {
     }
 
     _target = AITarget.Random;
+
+    return AdvScript.RET_CONTINUE;
+  }
+
+  /**
+   * 抽選
+   **/
+  private function _LOT(param:Array<String>):Int {
+    var p0 = _script.popStack();
+    if(_bLog) {
+      trace('[AI] Lottory (${p0})');
+    }
+
+    if(FlxRandom.chanceRoll(p0)) {
+      // 成功
+      _script.pushStack(1);
+    }
+    else {
+      // 失敗
+      _script.pushStack(0);
+    }
 
     return AdvScript.RET_CONTINUE;
   }

@@ -3,6 +3,7 @@ ACT_ATTACK,   ACT_ATTACK,
 ACT_SKILL,    ACT_SKILL,  id
 ACT_ESCAPE,   ACT_ESCAPE,
 SEL_RND,      SEL_RND,
+LOT,          LOT,        ratio
 LOG,          LOG,        level
 //draw_bg,    DRB,        id, effectId=0
 //erase_bg,   ERB,        effectId=0
