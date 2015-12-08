@@ -63,6 +63,9 @@ class AdvScript {
   public function pushStack(v:Int):Void {
     _stack.push(v);
   }
+  public function pushStackBool(b:Bool):Void {
+    _stack.push(if(b) 1 else 0);
+  }
 
   /**
    * コンストラクタ

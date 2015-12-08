@@ -1,9 +1,10 @@
 //関数名,     命令コード, 引数リスト, ...
 ACT_ATTACK,   ACT_ATTACK,
-ACT_SKILL,    ACT_SKILL,  id
+ACT_SKILL,    ACT_SKILL,  skillID
+CHK_SKILL,    CHK_SKILL,  skillID
 ACT_ESCAPE,   ACT_ESCAPE,
 SEL_RND,      SEL_RND,
-LOT,          LOT,        ratio
+CHK_LOT,      CHK_LOT,    ratio
 LOG,          LOG,        level
 //draw_bg,    DRB,        id, effectId=0
 //erase_bg,   ERB,        effectId=0

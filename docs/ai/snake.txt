@@ -1,14 +1,23 @@
+// ================================
+// ヘビのAI
+// ================================
 // ログ有効
-LOG(2)
+LOG(1)
 
 // ランダム選択
 SEL_RND()
 
-if(LOT(50)) {
+if(CHK_LOT(50)) {
 	// 通常攻撃
 	ACT_ATTACK()
 }
 else {
-	// かみつき
-	ACT_SKILL(SKILL001)
+	if(CHK_SKILL(SKILL001)) {
+		// かみつき
+		ACT_SKILL(SKILL001)
+	}
+	else {
+		// 通常攻撃
+		ACT_ATTACK()
+	}
 }

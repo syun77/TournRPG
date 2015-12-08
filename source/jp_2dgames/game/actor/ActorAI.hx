@@ -1,4 +1,5 @@
 package jp_2dgames.game.actor;
+import jp_2dgames.game.skill.SkillUtil;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.btl.types.BtlCmd;
@@ -50,8 +51,9 @@ class ActorAI {
     var tbl = [
       "ACT_ATTACK" => _ACT_ATTACK,
       "ACT_SKILL"  => _ACT_SKILL,
+      "CHK_SKILL"  => _CHK_SKILL,
       "SEL_RND"    => _SEL_RND,
-      "LOT"        => _LOT,
+      "CHK_LOT"    => _CHK_LOT,
       "LOG"        => _LOG,
     ];
 
@@ -98,19 +100,34 @@ class ActorAI {
    * スキル発動
    **/
   private function _ACT_SKILL(param:Array<String>):Int {
-    var p0 = _script.popStack();
-
-    var skillID = p0;
+    var skillID = _script.popStack();
     if(_bLog) {
       trace('[AI] Action Skill(${skillID})');
     }
 
+    // TODO: ランダムで攻撃
     switch(_target) {
       case AITarget.Random:
         var group = BtlGroupUtil.getAgaint(_actor.group);
         var target = ActorMgr.random(group);
         _cmd = BtlCmd.Skill(skillID, BtlRange.One, target.ID);
     }
+
+    return AdvScript.RET_CONTINUE;
+  }
+
+  /**
+   * スキルを使用できるかどうか
+   **/
+  private function _CHK_SKILL(param:Array<String>):Int {
+    var skillID = _script.popStack();
+    var bAvailable = SkillUtil.checkCost(skillID, _actor);
+    if(_bLog) {
+      trace('[AI] Check Skill(${skillID} -> ${bAvailable}');
+    }
+
+    // 判定フラグを設定
+    _script.pushStackBool(bAvailable);
 
     return AdvScript.RET_CONTINUE;
   }
@@ -131,20 +148,15 @@ class ActorAI {
   /**
    * 抽選
    **/
-  private function _LOT(param:Array<String>):Int {
+  private function _CHK_LOT(param:Array<String>):Int {
     var p0 = _script.popStack();
+    var bSuccess = FlxRandom.chanceRoll(p0);
     if(_bLog) {
-      trace('[AI] Lottory (${p0})');
+      trace('[AI] Check Lottory (${p0}) -> ${bSuccess}');
     }
 
-    if(FlxRandom.chanceRoll(p0)) {
-      // 成功
-      _script.pushStack(1);
-    }
-    else {
-      // 失敗
-      _script.pushStack(0);
-    }
+    // 判定フラグを設定
+    _script.pushStackBool(bSuccess);
 
     return AdvScript.RET_CONTINUE;
   }
