@@ -503,8 +503,8 @@ class Actor extends FlxSprite {
     x = xstart;
     y = ystart;
 
-    _bstIcon.x = xcenter;
-    _bstIcon.y = ycenter;
+    _bstIcon.x = xcenter - HPBAR_WIDTH/2;
+    _bstIcon.y = bottom + 12;
 
     _hpBar.x = xcenter - HPBAR_WIDTH/2;
     _hpBar.y = y + height + 4;
