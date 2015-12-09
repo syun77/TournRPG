@@ -385,11 +385,15 @@ class BtlLogicFactory {
     }
 
     var bst = SkillUtil.getBadstatus(skillID);
-    eft.type = BtlLogic.Badstatus(bst);
+    // バステ威力値
+    var v = SkillUtil.getBadstatusPower(skillID);
+    var val = Calc.powerBadstatus(actor, target, bst, v);
+
+    eft.type = BtlLogic.Badstatus(bst, val);
     eft.bWaitQuick = true;
 
     // バステ付着
-    target.adhereBadStatus(bst);
+    target.adhereBadStatus(bst, val);
 
     return eft;
   }
@@ -645,8 +649,7 @@ class BtlLogicFactory {
   private static function _createTurnEndBadstatus(actor:Actor, ret:List<BtlLogicData>):Void {
     // 毒ダメージ
     if(actor.badstatus == BadStatus.Poison) {
-      // TODO: 10ダメージ固定
-      var val = 10;
+      var val = Calc.damagePoison(actor);
       var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
       // 自分自身が対象
       eft.setTarget(actor.ID);
@@ -662,7 +665,7 @@ class BtlLogicFactory {
       var eft = new BtlLogicData(actor.ID, actor.group, BtlLogic.None);
       // 自分自身が対象
       eft.setTarget(actor.ID);
-      eft.type = BtlLogic.Badstatus(BadStatus.None);
+      eft.type = BtlLogic.Badstatus(BadStatus.None, 0);
       ret.add(eft);
     }
 

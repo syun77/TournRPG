@@ -289,7 +289,7 @@ class DebugActor extends FlxSubState {
         if(val < 0) {
           next = BadStatusUtil.prev(bst);
         }
-        _actor.adhereBadStatus(next, true);
+        _actor.adhereBadStatus(next, 20, true);
       case ITEM_STR:
         _actor.param.str += val;
       case ITEM_VIT:

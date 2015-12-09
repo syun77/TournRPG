@@ -1,7 +1,6 @@
 package jp_2dgames.game.actor;
 
 import flixel.util.FlxColorUtil;
-import flixel.util.FlxSpriteUtil;
 import jp_2dgames.game.gui.BtlCharaUI;
 import jp_2dgames.game.gui.HpBar;
 import jp_2dgames.game.gui.BadStatusUI;
@@ -191,6 +190,12 @@ class Actor extends FlxSprite {
   public var badstatusTurn(get, never):Int;
   private function get_badstatusTurn() {
     return _badstatusTurn;
+  }
+  // バッドステータスの威力値
+  private var _badstatusVal:Int = 0;
+  public var badstatusVal(get, never):Int;
+  private function get_badstatusVal() {
+    return _badstatusVal;
   }
   // バフ
   public var buffAtk(get, never):Int;
@@ -422,13 +427,15 @@ class Actor extends FlxSprite {
   /**
    * バステ付着
    * @param bst    付着するバッドステータス
+   * @param val    バッドステータスの威力値
    * @param bForce 強制付着フラグ
    * @return 付着したらtrue
    **/
-  public function adhereBadStatus(bst:BadStatus, bForce:Bool=false):Bool {
+  public function adhereBadStatus(bst:BadStatus, val:Int, bForce:Bool=false):Bool {
     if(bForce || BadStatusUtil.isAdhere(badstatus, bst)) {
       // 付着できる
       _badstatus = bst;
+      _badstatusVal = val;
       // 付着開始ターン数
       _badstatusTurn = 0;
       if(group == BtlGroup.Enemy) {

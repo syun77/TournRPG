@@ -1,9 +1,9 @@
 package jp_2dgames.game.actor;
 
-import jp_2dgames.game.gui.BtlCharaUI;
 import jp_2dgames.game.btl.types.BtlCmd;
 import jp_2dgames.game.skill.SkillAttr;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;
+
 enum BadStatus {
   None;      // 何もなし
   Dead;      // 死亡

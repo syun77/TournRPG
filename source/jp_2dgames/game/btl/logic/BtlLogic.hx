@@ -29,9 +29,9 @@ enum BtlLogic {
   HpRecover(val:Int);           // HP回復
   MpRecover(val:Int);           // MP回復
   ChanceRoll(b:Bool);           // 成功 or 失敗
-  Badstatus(bst:BadStatus);     // バッドステータス
-  Buff(atk:Int, def:Int, spd:Int); // バフ
-  AutoRevive;                      // 自動復活
+  Badstatus(bst:BadStatus, val:Int); // バッドステータス
+  Buff(atk:Int, def:Int, spd:Int);   // バフ
+  AutoRevive;                        // 自動復活
 
 
   Escape; // 逃走

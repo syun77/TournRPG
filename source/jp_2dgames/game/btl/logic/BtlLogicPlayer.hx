@@ -405,7 +405,7 @@ class BtlLogicPlayer {
         // 成功 or 失敗
         _chanceRool(b);
 
-      case BtlLogic.Badstatus(bst):
+      case BtlLogic.Badstatus(bst, val):
         // バステ付着
         if(bst == BadStatus.None) {
           // 回復
@@ -413,7 +413,7 @@ class BtlLogicPlayer {
         }
         else {
           // 付着
-          target.adhereBadStatus(bst);
+          target.adhereBadStatus(bst, val);
           // 揺らす
           _adhereBadstatus(target);
           BadStatusUtil.pushMessage(bst, target.name);

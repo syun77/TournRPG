@@ -314,11 +314,19 @@ class SkillUtil {
 
   /**
    * バッドステータスの付着率を取得する
-   * @param 付着する確率 0〜100%
+   * @return 付着する確率 0〜100%
    **/
   public static function getBadstatusHit(skill:Int):Int {
     var ratio = getParam(skill, "bst_hit");
     return ratio;
+  }
+
+  /**
+   * バッドステータスの威力値を取得する
+   **/
+  public static function getBadstatusPower(skill:Int):Int {
+    var val = getParam(skill, "bst_pow");
+    return val;
   }
 
   /**

@@ -217,7 +217,7 @@ class Calc {
           power *= regist;
         }
 
-        // 真係数
+        // 魔力係数
         var mag_rate = Math.pow(1.02, mag1 - mag2);
         // 威力係数
         var power_rate = Math.pow(1.015, atk - mag2 - def);
@@ -232,6 +232,38 @@ class Calc {
     }
 
     return _clamp(val);
+  }
+
+  /**
+   * 毒ダメージを計算する
+   **/
+  public static function damagePoison(target:Actor):Int {
+    var ret = Std.int(target.badstatusVal * FlxRandom.floatRanged(0.9, 1.1));
+    if(ret <= 0) {
+      ret = FlxRandom.intRanged(1, 3);
+    }
+
+    return ret;
+  }
+
+  /**
+   * バッドステータスの威力値を計算する
+   **/
+  public static function powerBadstatus(act:Actor, target:Actor, bst:BadStatus, val:Int):Int {
+
+    // 基本ダメージ
+    var base = 5;
+
+    // スキル係数
+    // 攻撃側の魔力
+    var mag1 = act.mag;
+    // 対象側の魔力
+    var mag2 = target.mag;
+    // 魔力係数
+    var mag_rate = Math.pow(1.02, mag1 - mag2);
+
+    var val = base + val * mag_rate;
+    return Std.int(val);
   }
 
   /**
