@@ -36,18 +36,24 @@ class Calc {
 
     // 基本命中率
     var base:Float = 93.7;
-    var rnd:Float  = base;
+
+    // 速度係数
+    var ratio = Math.pow(1.02, act.agi - target.agi);
+    var rnd = base * ratio;
+
     if(act.badstatus == BadStatus.Blind) {
       // 攻撃側が暗闇状態なので命中率低下
       rnd = base - 50;
     }
 
     if(rnd < 1) {
-      rnd = 1;
+      rnd = 1; // 1%を下回ることはない
     }
     if(rnd > 99) {
-      rnd = 99;
+      rnd = 99; // 99%を超えることはない
     }
+
+    trace("check hit:", rnd);
 
     if(FlxRandom.chanceRoll(rnd)) {
       // 命中した
