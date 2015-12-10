@@ -305,6 +305,14 @@ class SkillUtil {
   }
 
   /**
+   * スキルの基本命中率を取得する
+   **/
+  public static function getBaseHit(skillID:Int):Int {
+    var hit = getParam(skillID, "hit");
+    return hit;
+  }
+
+  /**
    * 付着するバッドステータスを取得する
    **/
   public static function getBadstatus(skillID:Int):BadStatus {

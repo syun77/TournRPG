@@ -114,11 +114,18 @@ class BtlLogicFactory {
 
     // 対象を取得
     var target = TempActorMgr.search(targetID);
-    // ダメージ計算
-    var val = Calc.damage(actor, target);
-    var eft = _createDamage(actor, target, val, false);
-
-    return eft;
+    // 命中判定
+    if(Calc.checkHit(actor, target) == false) {
+      // 外れ
+      var eft = _createDamage(actor, target, Calc.MISS_DAMAGE, false);
+      return eft;
+    }
+    else {
+      // ダメージ計算
+      var val = Calc.damage(actor, target);
+      var eft = _createDamage(actor, target, val, false);
+      return eft;
+    }
   }
 
   /**
@@ -279,6 +286,15 @@ class BtlLogicFactory {
 
     // ダメージ演出作成関数
     var fnDamage = function(target2:Actor, idx:Int):Bool {
+
+      // 命中判定
+      var hit = SkillUtil.getBaseHit(skillID);
+      if(Calc.checkHit(actor, target2, hit) == false) {
+        // 外れた
+        var eft = _createDamage(actor, target2, Calc.MISS_DAMAGE, true);
+        ret.add(eft);
+        return false;
+      }
 
       // ダメージ処理
       var val = Calc.damageSkill(skillID, actor, target2);
