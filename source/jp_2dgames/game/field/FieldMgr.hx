@@ -1,5 +1,6 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.field.FieldEffectUtil.FieldEffect;
 import jp_2dgames.lib.Snd;
 import flixel.FlxObject;
 import flixel.FlxCamera;
@@ -166,6 +167,9 @@ class FieldMgr {
         }
         node.setEventType(FieldEvent.Shop);
 
+        // TODO: ダメージゾーンを仮設定
+        node.setEffectType(FieldEffect.Damage);
+
         // ショップ情報の初期化
         Global.getShopData().testdata();
       }
@@ -245,6 +249,9 @@ class FieldMgr {
       _btnNextFloor.label.color = MyColor.BTN_SHOP_LABEL;
       flxState.add(_btnNextFloor);
     }
+
+    // パーティクル管理生成
+    FieldParticle.create(_flxState);
 
     // ショップボタン
     {

@@ -1,5 +1,7 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.field.FieldParticle;
+import jp_2dgames.game.field.FieldEffectUtil.FieldEffect;
 import flixel.util.FlxRandom;
 import jp_2dgames.lib.MyMath;
 import flixel.text.FlxText;
@@ -51,9 +53,9 @@ class FieldNode extends FlxSprite {
   /**
    * 追加
    **/
-  public static function add(X:Float, Y:Float, evType:FieldEvent):FieldNode {
+  public static function add(X:Float, Y:Float, evType:FieldEvent, eftType:FieldEffect):FieldNode {
     var node:FieldNode = _parent.recycle();
-    node.init(X, Y, evType);
+    node.init(X, Y, evType, eftType);
     return node;
   }
 
@@ -215,6 +217,13 @@ class FieldNode extends FlxSprite {
     return _evType;
   }
 
+  // 地形効果
+  private var _eftType:FieldEffect;
+  public var eftType(get, never):FieldEffect;
+  private function get_eftType() {
+    return _eftType;
+  }
+
   /**
    * イベントを設定
    **/
@@ -229,6 +238,13 @@ class FieldNode extends FlxSprite {
     }
 
     _evType = ev;
+  }
+
+  /**
+   * 地形効果を設定
+   **/
+  public function setEffectType(eft:FieldEffect):Void {
+    _eftType = eft;
   }
 
   /**
@@ -413,7 +429,7 @@ class FieldNode extends FlxSprite {
   /**
    * 初期化
    **/
-  public function init(X:Float, Y:Float, evType:FieldEvent) {
+  public function init(X:Float, Y:Float, evType:FieldEvent, eftType:FieldEffect) {
     x = X;
     y = Y;
 
@@ -422,6 +438,9 @@ class FieldNode extends FlxSprite {
 
     // イベント種別を設定する
     setEventType(evType);
+
+    // 地形効果を設定する
+    setEffectType(eftType);
 
     _bFoot    = false;
     reachable = false;
@@ -487,6 +506,19 @@ class FieldNode extends FlxSprite {
       var deg = _tAnim % 180;
       _txtDetail.alpha = 0.3 + (0.7 * MyMath.sinEx(deg));
     }
+
+    // 地形効果演出
+    switch(eftType) {
+      case FieldEffect.None:
+        // 何もしない
+      case FieldEffect.Damage:
+        if(_tAnim%12 == 0) {
+          var px = xcenter;
+          var py = y + height;
+          FieldParticle.start(FieldParticleType.Spiral, px, py, MyColor.ASE_PURPLE);
+        }
+    }
+
   }
 }
 

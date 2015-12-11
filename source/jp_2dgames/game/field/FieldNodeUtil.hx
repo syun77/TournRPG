@@ -1,4 +1,5 @@
 package jp_2dgames.game.field;
+import jp_2dgames.game.field.FieldEffectUtil.FieldEffect;
 import flixel.util.FlxAngle;
 import flixel.util.FlxMath;
 import flixel.FlxG;
@@ -23,7 +24,7 @@ class FieldNodeUtil {
   public static function create():FieldNode {
 
     // スタート地点
-    var nodeStart = FieldNode.add(FlxG.width/2, FlxG.height-60, FieldEvent.None);
+    var nodeStart = FieldNode.add(FlxG.width/2, FlxG.height-60, FieldEvent.None, FieldEffect.None);
     nodeStart.setStartFlag(true);
 
     var tmpNode = _createWay(nodeStart);
@@ -157,7 +158,7 @@ class FieldNodeUtil {
       }
 
       // ランダム配置可能
-      node = FieldNode.add(px, py, FieldEvent.None);
+      node = FieldNode.add(px, py, FieldEvent.None, FieldEffect.None);
       break;
     }
 

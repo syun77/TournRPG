@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.field.FieldParticle;
 import flixel.FlxG;
 import flixel.FlxState;
 import jp_2dgames.game.field.FieldFoe;
@@ -31,6 +32,7 @@ class FieldState extends FlxState {
   override public function destroy():Void {
     super.destroy();
 
+    FieldParticle.terminate();
     FieldNode.destroyParent();
     FieldFoe.destroyParent();
   }

@@ -1,5 +1,6 @@
 package jp_2dgames.game.save;
 
+import jp_2dgames.game.field.FieldEffectUtil;
 import jp_2dgames.game.shop.ShopData;
 import jp_2dgames.game.skill.SkillData;
 import jp_2dgames.game.field.TmpFieldFoe;
@@ -78,6 +79,7 @@ private class _Node {
   public var x:Float;
   public var y:Float;
   public var ev:String;
+  public var eft:String;
   public var bStart:Bool;
   public var bFoot:Bool;
   public var bOpened:Bool;
@@ -101,6 +103,7 @@ private class _Field {
       n.x = node.x;
       n.y = node.y;
       n.ev = FieldEventUtil.toString(node.evType);
+      n.eft = FieldEffectUtil.toString(node.eftType);
       n.bStart = node.isStartFlag();
       n.bFoot = node.bFoot;
       n.bOpened = node.bOpened;
@@ -118,10 +121,11 @@ private class _Field {
       var x:Float      = node.x;
       var y:Float      = node.y;
       var ev:String    = node.ev;
+      var eft:String   = node.eft;
       var bStart:Bool  = node.bStart;
       var bFoot:Bool   = node.bFoot;
       var bOpened:Bool = node.bOpened;
-      TmpFieldNode.add(x, y, ev, bStart, bFoot, bOpened);
+      TmpFieldNode.add(x, y, ev, eft, bStart, bFoot, bOpened);
     }
   }
 }
