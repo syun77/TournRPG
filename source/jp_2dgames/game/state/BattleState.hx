@@ -13,7 +13,7 @@ import jp_2dgames.game.actor.TempActorMgr;
 import jp_2dgames.game.btl.BtlBg;
 import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.game.btl.BtlMgr;
-import jp_2dgames.game.gui.BtlUI;
+import jp_2dgames.game.gui.BtlPlayerUI;
 import jp_2dgames.game.btl.logic.BtlLogicMgr;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.particle.Particle;
@@ -60,7 +60,7 @@ class BattleState extends FlxSubState {
     ActorMgr.create(this);
 
     // UI登録
-    BtlUI.open(this);
+    BtlPlayerUI.open(this);
 
     // バトル管理生成
     _btlMgr = new BtlMgr(this, _param);
@@ -95,7 +95,7 @@ class BattleState extends FlxSubState {
     Particle.terminate();
     BtlLogicMgr.destroy();
     ActorMgr.destroy();
-    BtlUI.close(this);
+    BtlPlayerUI.close(this);
     TempActorMgr.destroy();
     Message.destroyInstance(this);
 

@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.game.field.FieldEffectUtil;
 import jp_2dgames.game.btl.types.BtlEndResult;
 import jp_2dgames.game.btl.types.BtlEndType;
 import jp_2dgames.game.skill.SkillSlot;
@@ -11,7 +12,7 @@ import jp_2dgames.game.btl.logic.BtlLogicMgr;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.btl.logic.BtlLogicPlayer;
 import jp_2dgames.game.item.Inventory;
-import jp_2dgames.game.gui.BtlUI;
+import jp_2dgames.game.gui.BtlPlayerUI;
 import jp_2dgames.game.gui.BtlCmdUI;
 import jp_2dgames.game.btl.types.BtlCmd;
 import jp_2dgames.game.actor.Params;
@@ -21,13 +22,18 @@ import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.lib.Input;
 import flixel.FlxG;
 
+/**
+ * バトル起動パラメータ
+ **/
 class BtlMgrParam {
-  public var param:Params;     // プレイヤーパラメータ
-  public var enemyGroupID:Int; // 敵グループID
+  public var param:Params;       // プレイヤーパラメータ
+  public var enemyGroupID:Int;   // 敵グループID
+  public var effect:FieldEffect; // 地形効果
 
   public function new() {
     param = null;
     enemyGroupID = 0;
+    effect = FieldEffect.None;
   }
 }
 
@@ -104,7 +110,7 @@ class BtlMgr {
     // 敵の生成
     BtlUtil.createEnemyGroup(param.enemyGroupID);
 
-    BtlUI.setPlayerID(0, _player.ID);
+    BtlPlayerUI.setPlayerID(0, _player.ID);
 
     _player.x = FlxG.width/2;
     _player.y = FlxG.height/2;

@@ -14,9 +14,6 @@ import jp_2dgames.game.state.BattleState;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.ItemData;
-import jp_2dgames.game.skill.SkillUtil;
-import jp_2dgames.game.skill.SkillData;
-import jp_2dgames.game.skill.SkillConst;
 import jp_2dgames.game.state.FieldState;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.gui.Dialog;
@@ -119,10 +116,10 @@ class FieldEventMgr {
   /**
    * イベント開始
    **/
-  public function start(ev:FieldEvent):Void {
+  public function start(node:FieldNode):Void {
 
     // 初期化
-    _init(ev);
+    _init(node.evType);
 
     switch(_evType) {
       case FieldEvent.Goal:
@@ -132,7 +129,7 @@ class FieldEventMgr {
 
       case FieldEvent.Enemy:
         // バトル
-        startBattle(null);
+        startBattle(node, null);
 
       case FieldEvent.Item:
         // アイテム
@@ -156,9 +153,10 @@ class FieldEventMgr {
 
   /**
    * バトル開始
+   * @param node 地形ノード情報
    * @param foe F.O.E.とのバトルの場合
    **/
-  public function startBattle(foe:FieldFoe=null):Void {
+  public function startBattle(node:FieldNode, foe:FieldFoe=null):Void {
 
     // 初期化
     _init(FieldEvent.Enemy);
@@ -188,6 +186,7 @@ class FieldEventMgr {
         var param = new BtlMgrParam();
         param.param = _actor.param;
         param.enemyGroupID = nBtl;
+        param.effect = node.eftType;
         _flxState.openSubState(new BattleState(param, _cbBattleEnd));
       });
     });

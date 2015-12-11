@@ -15,7 +15,7 @@ import jp_2dgames.game.actor.BadStatusUtil;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.btl.logic.BtlLogicData;
 import jp_2dgames.game.btl.logic.BtlLogic.BtlLogicUtil;
-import jp_2dgames.game.gui.BtlUI;
+import jp_2dgames.game.gui.BtlPlayerUI;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.particle.ParticleDamage;
 import jp_2dgames.game.particle.Particle;
@@ -117,7 +117,7 @@ class BtlLogicPlayer {
       // 失敗
       if(target.group == BtlGroup.Player) {
         // プレイヤー
-        BtlUI.missPlayer(target.ID);
+        BtlPlayerUI.missPlayer(target.ID);
       }
       else {
         // 敵
@@ -137,7 +137,7 @@ class BtlLogicPlayer {
    **/
   private function _adhereBadstatus(target:Actor):Void {
     if(target.group == BtlGroup.Player) {
-      BtlUI.badstatus();
+      BtlPlayerUI.badstatus();
     }
     else {
       target.startAnimColor(MyColor.ASE_BLUE);
@@ -159,14 +159,14 @@ class BtlLogicPlayer {
       Message.push2(Msg.DAMAGE_PLAYER, [target.name, v]);
 
       // UI全体を揺らす
-      BtlUI.shake();
+      BtlPlayerUI.shake();
 
       // ダメージ演出
-      BtlUI.damage();
+      BtlPlayerUI.damage();
 
       // パーティクルの座標取得
-      px = BtlUI.getPlayerX(target.ID);
-      py = BtlUI.getPlayerY(target.ID);
+      px = BtlPlayerUI.getPlayerX(target.ID);
+      py = BtlPlayerUI.getPlayerY(target.ID);
 
     }
     else {
@@ -215,8 +215,8 @@ class BtlLogicPlayer {
     var px:Float = 0;
     var py:Float = 0;
     if(target.group == BtlGroup.Player) {
-      px = BtlUI.getPlayerX(target.ID);
-      py = BtlUI.getPlayerY(target.ID);
+      px = BtlPlayerUI.getPlayerX(target.ID);
+      py = BtlPlayerUI.getPlayerY(target.ID);
     }
     else {
       px = target.xcenter;
@@ -244,8 +244,8 @@ class BtlLogicPlayer {
     var px:Float = 0;
     var py:Float = 0;
     if(target.group == BtlGroup.Player) {
-      px = BtlUI.getPlayerX(target.ID);
-      py = BtlUI.getPlayerY(target.ID);
+      px = BtlPlayerUI.getPlayerX(target.ID);
+      py = BtlPlayerUI.getPlayerY(target.ID);
     }
     else {
       px = target.xcenter;
@@ -314,7 +314,7 @@ class BtlLogicPlayer {
     switch(_data.group) {
       case BtlGroup.Player:
         // プレイヤー
-        BtlUI.setActivePlayer(_data.actorID, true);
+        BtlPlayerUI.setActivePlayer(_data.actorID, true);
       case BtlGroup.Enemy:
         // 敵
         ActorMgr.forEachAliveGroup(BtlGroup.Enemy, function(act:Actor) {
@@ -539,7 +539,7 @@ class BtlLogicPlayer {
     switch(_data.group) {
       case BtlGroup.Player:
         // プレイヤー
-        BtlUI.setActivePlayer(_data.actorID, false);
+        BtlPlayerUI.setActivePlayer(_data.actorID, false);
       case BtlGroup.Enemy:
         // 敵
         // 色を戻す

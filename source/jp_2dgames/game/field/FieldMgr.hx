@@ -10,7 +10,7 @@ import jp_2dgames.game.state.ShopState;
 import flixel.util.FlxColor;
 import flixel.util.FlxSpriteUtil;
 import flixel.FlxSprite;
-import jp_2dgames.game.gui.BtlUI;
+import jp_2dgames.game.gui.BtlPlayerUI;
 import jp_2dgames.game.gui.BtlCharaUI;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.Actor;
@@ -205,7 +205,7 @@ class FieldMgr {
     _eventMgr = new FieldEventMgr(_flxState, _actor);
 
     // UI表示
-    _charaUI = new BtlCharaUI(0, BtlUI.CHARA_Y, _actor);
+    _charaUI = new BtlCharaUI(0, BtlPlayerUI.CHARA_Y, _actor);
     _charaUI.scrollFactor.set();
     _flxState.add(_charaUI);
 
@@ -315,7 +315,7 @@ class FieldMgr {
 
     // キャラUI
     {
-      var py = BtlUI.CHARA_Y;
+      var py = BtlPlayerUI.CHARA_Y;
       _charaUI.y = -48;
       FlxTween.tween(_charaUI, {y:py}, 0.5, {ease:FlxEase.expoOut});
     }
@@ -524,10 +524,10 @@ class FieldMgr {
     var foe = FieldFoe.searchFromNodeID(_nowNode.ID);
     if(foe != null) {
       // F.O.E.とのバトル開始
-      _eventMgr.startBattle(foe);
+      _eventMgr.startBattle(_nowNode, foe);
     }
     else {
-      _eventMgr.start(_nowNode.evType);
+      _eventMgr.start(_nowNode);
     }
     // 開始ノードに設定
     FieldNode.setStartNode(_nowNode);

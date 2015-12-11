@@ -2,7 +2,7 @@ package jp_2dgames.game.btl.logic;
 
 import flixel.util.FlxColor;
 import jp_2dgames.lib.Snd;
-import jp_2dgames.game.gui.BtlUI;
+import jp_2dgames.game.gui.BtlPlayerUI;
 import jp_2dgames.game.particle.Particle;
 import jp_2dgames.game.btl.BtlGroupUtil.BtlGroup;
 import jp_2dgames.game.actor.Actor;
@@ -39,8 +39,8 @@ class BtlLogicBeginUtil {
       Particle.start(PType.Hit, px, py, MyColor.ASE_YELLOW, true);
     }
     else {
-      var px = BtlUI.getCenterX(target.ID);
-      var py = BtlUI.getCenterY(target.ID);
+      var px = BtlPlayerUI.getCenterX(target.ID);
+      var py = BtlPlayerUI.getCenterY(target.ID);
       Particle.start(PType.Hit, px, py, MyColor.ASE_YELLOW, false);
     }
     Snd.playSe("hit2");
@@ -57,8 +57,8 @@ class BtlLogicBeginUtil {
       target.startAnimColor(FlxColor.RED);
     }
     else {
-      var px = BtlUI.getCenterX(target.ID);
-      var py = BtlUI.getCenterY(target.ID);
+      var px = BtlPlayerUI.getCenterX(target.ID);
+      var py = BtlPlayerUI.getCenterY(target.ID);
       Particle.start(PType.Blade, px, py, FlxColor.RED, false);
     }
     Snd.playSe("powerup");
@@ -75,7 +75,7 @@ class BtlLogicBeginUtil {
       target.shake(0.25);
     }
     else {
-      BtlUI.shake();
+      BtlPlayerUI.shake();
     }
     Snd.playSe("powerdown");
   }

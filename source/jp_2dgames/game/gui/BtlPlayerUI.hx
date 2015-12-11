@@ -10,17 +10,17 @@ import flixel.group.FlxSpriteGroup;
 /**
  * バトルUI
  **/
-class BtlUI extends FlxSpriteGroup {
+class BtlPlayerUI extends FlxSpriteGroup {
 
   // ■定数
   public static inline var CHARA_Y:Int = 16;
 
   // ■スタティック
-  static var _instance:BtlUI = null;
+  static var _instance:BtlPlayerUI = null;
 
   // 開く
   public static function open(state:FlxState):Void {
-    _instance = new BtlUI();
+    _instance = new BtlPlayerUI();
     state.add(_instance);
   }
 
