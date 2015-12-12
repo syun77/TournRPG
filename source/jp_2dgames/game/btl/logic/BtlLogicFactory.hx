@@ -1,4 +1,6 @@
 package jp_2dgames.game.btl.logic;
+import jp_2dgames.game.field.FieldEffectUtil.FieldEffect;
+import haxe.macro.Expr.Field;
 import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.item.ItemUtil;
@@ -624,6 +626,14 @@ class BtlLogicFactory {
     // バッドステータスの生成
     _createTurnEndBadstatus(actor, ret);
 
+    if(actor.isDead()) {
+      // 死んでいたら処理しない
+      return ret;
+    }
+
+    // 地形効果発動
+    _createTurnEndFieldEffect(actor, ret);
+
     return ret;
   }
 
@@ -684,7 +694,27 @@ class BtlLogicFactory {
       eft.type = BtlLogic.Badstatus(BadStatus.None, 0);
       ret.add(eft);
     }
+  }
 
+  /**
+   * ターン終了時の地形効果
+   **/
+  private static function _createTurnEndFieldEffect(actor:Actor, ret:List<BtlLogicData>):Void {
+
+    switch(BtlField.getEffect()) {
+      case FieldEffect.None:
+        // 何もなし
+      case FieldEffect.Damage:
+        // ターン経過でダメージ (5%)
+        var val = Std.int(actor.hpmax * 0.05);
+        var type = BtlLogic.HpDamage(val, false);
+        var eft = new BtlLogicData(actor.ID, actor.group, type);
+        // 自分自身が対象
+        eft.setTarget(actor.ID);
+        eft.bWaitQuick = true;
+        actor.damage(val);
+        ret.add(eft);
+    }
   }
 
   /**

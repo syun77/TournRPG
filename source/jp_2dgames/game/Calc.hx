@@ -276,6 +276,11 @@ class Calc {
    * バステ回復チェック
    **/
   public static function cureBadstatus(actor:Actor):Bool {
+    if(actor.isDead()) {
+      // 死んでたらなにもしない
+      return false;
+    }
+
     var base = BadStatusUtil.getCureBaseRatio(actor.badstatus);
     if(base == 0) {
       // 回復しない
