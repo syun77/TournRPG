@@ -146,6 +146,17 @@ class FieldMgr {
       // 開始地点を踏破済みにしておく
       _nowNode.setFoot(true);
 
+      // TODO: F.O.E.をひとまず出してみる
+      {
+        var node = FieldNode.random(FieldEvent.None);
+        if(node != null) {
+          FieldFoe.add(node.ID, 6);
+          // TODO: ダメージゾーンを仮設定
+          node.setEffectType(FieldEffect.Damage);
+
+        }
+      }
+
       // TODO: ショップをひとまず配置
       #if !debug
       {
@@ -167,21 +178,10 @@ class FieldMgr {
         }
         node.setEventType(FieldEvent.Shop);
 
-        // TODO: ダメージゾーンを仮設定
-        node.setEffectType(FieldEffect.Damage);
-
         // ショップ情報の初期化
         Global.getShopData().testdata();
       }
       #end
-
-      // TODO: F.O.E.をひとまず出してみる
-      {
-        var node = FieldNode.random(FieldEvent.None);
-        if(node != null) {
-          FieldFoe.add(node.ID, 6);
-        }
-      }
     }
 
     // 経路描画

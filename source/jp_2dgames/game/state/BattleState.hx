@@ -1,6 +1,6 @@
 package jp_2dgames.game.state;
 
-import jp_2dgames.game.actor.Params;
+import jp_2dgames.game.gui.BtlInfoUI;
 import jp_2dgames.game.btl.types.BtlEndResult;
 import flixel.util.FlxColor;
 import flixel.FlxCamera;
@@ -95,6 +95,7 @@ class BattleState extends FlxSubState {
     Particle.terminate();
     BtlLogicMgr.destroy();
     ActorMgr.destroy();
+    BtlInfoUI.terminate(this);
     BtlPlayerUI.close(this);
     TempActorMgr.destroy();
     Message.destroyInstance(this);

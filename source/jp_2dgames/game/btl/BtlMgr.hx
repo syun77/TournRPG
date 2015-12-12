@@ -1,5 +1,7 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.game.gui.BtlInfoUI;
+import jp_2dgames.game.gui.BtlCharaUI;
 import jp_2dgames.game.field.FieldEffectUtil;
 import jp_2dgames.game.btl.types.BtlEndResult;
 import jp_2dgames.game.btl.types.BtlEndType;
@@ -110,6 +112,11 @@ class BtlMgr {
     // 敵の生成
     BtlUtil.createEnemyGroup(param.enemyGroupID);
 
+    // バトル情報Ui
+    BtlInfoUI.create(_flxState);
+    BtlInfoUI.setEffect(param.effect);
+
+    // プレイヤーUI
     BtlPlayerUI.setPlayerID(0, _player.ID);
 
     _player.x = FlxG.width/2;
