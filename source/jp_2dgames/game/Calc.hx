@@ -240,6 +240,20 @@ class Calc {
   }
 
   /**
+   * 地形効果によるダメージ量を計算する
+   **/
+  public static function damageFieldEffect(target:Actor, turn:Int):Int {
+    var base = 0.05; // 5%
+    // 1ターンごとに2%増える
+    var ratio = base + 0.02 * turn;
+    if(ratio > 0.25) {
+      ratio = 0.25;
+    }
+
+    return Std.int(target.hpmax * ratio);
+  }
+
+  /**
    * バッドステータスの威力値を計算する
    **/
   public static function powerBadstatus(act:Actor, target:Actor, bst:BadStatus, val:Int):Int {

@@ -705,8 +705,8 @@ class BtlLogicFactory {
       case FieldEffect.None:
         // 何もなし
       case FieldEffect.Damage:
-        // ターン経過でダメージ (5%)
-        var val = Std.int(actor.hpmax * 0.05);
+        // ターン経過でダメージ
+        var val = Calc.damageFieldEffect(actor, BtlGlobal.getTurn());
         var type = BtlLogic.HpDamage(val, false);
         var eft = new BtlLogicData(actor.ID, actor.group, type);
         // 自分自身が対象
