@@ -288,6 +288,7 @@ class BtlMgr {
         ActorMgr.forEachAlive(function(act:Actor) {
           act.turnEnd();
         });
+        BtlGlobal.nextTurn();
         _change(State.TurnStart);
 
       case State.BtlWin:

@@ -701,7 +701,7 @@ class BtlLogicFactory {
    **/
   private static function _createTurnEndFieldEffect(actor:Actor, ret:List<BtlLogicData>):Void {
 
-    switch(BtlField.getEffect()) {
+    switch(BtlGlobal.getFieldEffect()) {
       case FieldEffect.None:
         // 何もなし
       case FieldEffect.Damage:

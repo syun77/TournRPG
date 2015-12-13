@@ -1,6 +1,6 @@
 package jp_2dgames.game.state;
 
-import jp_2dgames.game.btl.BtlField;
+import jp_2dgames.game.btl.BtlGlobal;
 import jp_2dgames.game.gui.BtlInfoUI;
 import jp_2dgames.game.btl.types.BtlEndResult;
 import flixel.util.FlxColor;
@@ -58,7 +58,7 @@ class BattleState extends FlxSubState {
     this.add(bg);
 
     // 地形情報
-    BtlField.create(_param.effect);
+    BtlGlobal.init(_param.effect);
 
     // キャラクター管理生成
     ActorMgr.create(this);
@@ -95,7 +95,6 @@ class BattleState extends FlxSubState {
 
     super.destroy();
 
-    BtlField.destroy();
     ParticleDamage.terminate();
     Particle.terminate();
     BtlLogicMgr.destroy();
