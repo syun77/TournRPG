@@ -12,6 +12,7 @@ class BtlGlobal {
    **/
   public static function init(eft:FieldEffect):Void {
     _eft = eft;
+    _turn = 0;
   }
 
   // 経過ターン数
