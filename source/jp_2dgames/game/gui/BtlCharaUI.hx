@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import flash.display.BlendMode;
 import flixel.util.FlxColor;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColorUtil;
@@ -84,8 +85,8 @@ class BtlCharaUI extends FlxSpriteGroup {
   public static inline var BAR_HPMP_HEIGHT = 2;
 
   // バステアイコン
-  public static inline var BST_X = 0;
-  public static inline var BST_Y = HEIGHT;
+  public static inline var BST_X = WIDTH + 4;
+  public static inline var BST_Y = 0;
 
 
   // ■メンバ変数
@@ -98,8 +99,6 @@ class BtlCharaUI extends FlxSpriteGroup {
   // ダメージ時の揺れ
   var _tShake:Float = 0;
 
-  // 変化させた枠の色
-  var _bgColor:Int = MyColor.PANEL_NON_ACTIVE;
   // 変化させた枠の色のタイマー
   var _tBgColor:Int = 0;
 
@@ -133,6 +132,9 @@ class BtlCharaUI extends FlxSpriteGroup {
   var _txtMp:FlxText;
   // MPゲージ
   var _barMp:StatusBar;
+
+  // 上に重ねるエフェクト
+  var _effect:FlxSprite;
 
   // 表示するActorのID
   var _actorID:Int = 0;
@@ -227,6 +229,12 @@ class BtlCharaUI extends FlxSpriteGroup {
     _txtMp.alignment = "right";
     this.add(_txtMp);
 
+    // エフェクト
+    _effect = new FlxSprite();
+    _effect.makeGraphic(WIDTH, HEIGHT, FlxColor.WHITE);
+    _effect.visible = false;
+    this.add(_effect);
+
     // バステアイコン
     _icon = new BadStatusUI(BST_X, BST_Y);
     _icon.set(BadStatus.None);
@@ -249,7 +257,7 @@ class BtlCharaUI extends FlxSpriteGroup {
    **/
   private function _changeBgColor(c:Int):Void {
     _tBgColor = TIMER_BG_COLOR;
-    _bgColor = c;
+    _effect.color = c;
   }
 
   /**
@@ -384,10 +392,11 @@ class BtlCharaUI extends FlxSpriteGroup {
   private function _updateBgColor():Void {
     if(_tBgColor > 0) {
       _tBgColor--;
-      _bg.color = _bgColor;
-//      _bg.color = FlxColorUtil.interpolateColor(_bgColor, MyColor.PANEL_NON_ACTIVE, TIMER_BG_COLOR, (TIMER_BG_COLOR - _tBgColor));
+      var alpha = _tBgColor / TIMER_BG_COLOR;
+      _effect.alpha = alpha;
+      _effect.visible = true;
       if(_tBgColor == 0) {
-        _bg.color = MyColor.PANEL_NON_ACTIVE;
+        _effect.visible = false;
       }
     }
   }
