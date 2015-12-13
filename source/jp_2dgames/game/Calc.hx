@@ -243,10 +243,11 @@ class Calc {
    * 地形効果によるダメージ量を計算する
    **/
   public static function damageFieldEffect(target:Actor, turn:Int):Int {
-    var base = 0.05; // 5%
+    var base = 0.1; // 10%
     // 1ターンごとに2%増える
     var ratio = base + 0.02 * turn;
     if(ratio > 0.25) {
+      // 25%以上は増えない
       ratio = 0.25;
     }
 
