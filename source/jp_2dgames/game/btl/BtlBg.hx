@@ -6,6 +6,10 @@ import flixel.FlxSprite;
  * バトル背景
  **/
 class BtlBg extends FlxSprite {
+
+  /**
+   * コンストラクタ
+   **/
   public function new() {
     super();
     loadGraphic(Reg.getBackImagePath(1), false, 0, 0, true);
@@ -15,5 +19,6 @@ class BtlBg extends FlxSprite {
 
     scale.set(1.3, 1.3);
   }
+
 
 }

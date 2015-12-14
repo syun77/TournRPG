@@ -118,6 +118,9 @@ class BtlMgr {
     // プレイヤーUI
     BtlPlayerUI.setPlayerID(0, _player.ID);
 
+    // バトル地形
+    _flxState.add(new BtlField());
+
     _player.x = FlxG.width/2;
     _player.y = FlxG.height/2;
 

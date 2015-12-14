@@ -508,6 +508,7 @@ class FieldNode extends FlxSprite {
     }
 
     // 地形効果演出
+    var col = FieldEffectUtil.toColor(eftType);
     switch(eftType) {
       case FieldEffect.None:
         // 何もしない
@@ -515,7 +516,7 @@ class FieldNode extends FlxSprite {
         if(_tAnim%12 == 0) {
           var px = xcenter;
           var py = y + height;
-          FieldParticle.start(FieldParticleType.Spiral, px, py, MyColor.ASE_PURPLE);
+          FieldParticle.start(FieldParticleType.Spiral, px, py, col);
         }
     }
 

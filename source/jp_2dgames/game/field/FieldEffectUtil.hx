@@ -29,4 +29,16 @@ class FieldEffectUtil {
         return FieldEffect.None;
     }
   }
+
+  /**
+   * 色に変換する
+   **/
+  public static function toColor(type:FieldEffect):Int {
+    switch(type) {
+      case FieldEffect.None:
+        return MyColor.ASE_WHITE;
+      case FieldEffect.Damage:
+        return MyColor.ASE_PURPLE;
+    }
+  }
 }

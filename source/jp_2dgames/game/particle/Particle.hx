@@ -1,5 +1,6 @@
 package jp_2dgames.game.particle;
 
+import flixel.FlxG;
 import flixel.util.FlxRandom;
 import jp_2dgames.lib.MyMath;
 import flixel.FlxState;
@@ -20,6 +21,7 @@ enum PType {
   Ring3;   // リング3(逆再生)
   Hit;     // ヒット
   Blade;   // 斬る
+  Bubble;  // ふわふわする玉
 }
 
 /**
@@ -94,6 +96,15 @@ class Particle extends FlxSprite {
           p.init(type, t, px, py, 90, spd, bScroll);
           p.color = color;
         }
+
+      case PType.Bubble:
+        // ふわふわする玉
+        var p:Particle = parent.recycle();
+        var px = FlxRandom.intRanged(32, FlxG.width-32);
+        var py = FlxG.height;
+        var spd = FlxRandom.floatRanged(50, 200);
+        p.init(type, 1, px, py, 90, spd, bScroll);
+        p.color = color;
     }
   }
 
@@ -105,8 +116,12 @@ class Particle extends FlxSprite {
   private var _tStart:Int;
   // 拡張パラメータ
   private var _val:Float;
+  // 拡張パラメータ2
+  private var _val2:Float;
   // 最初のX座標
-  private var _xprev:Float;
+  private var _xstart:Float;
+  // 最初のY座標
+  private var _ystart:Float;
 
   /**
 	 * コンストラクタ
@@ -124,12 +139,10 @@ class Particle extends FlxSprite {
     animation.add('${PType.Circle2}', [0], 1);
     animation.add('${PType.Hit}', [2], 1);
     animation.add('${PType.Blade}', [3], 1);
+    animation.add('${PType.Bubble}', [0], 1);
 
     // 中心を基準に描画
     offset.set(width / 2, height / 2);
-
-    // 加算ブレンド
-    blend = BlendMode.ADD;
 
     // 非表示
     kill();
@@ -144,7 +157,12 @@ class Particle extends FlxSprite {
     _timer = timer;
     _tStart = timer;
     _val = 0;
-    _xprev = X;
+    _val2 = 0;
+    _xstart = X;
+    _ystart = Y;
+
+    // 加算ブレンド
+    blend = BlendMode.ADD;
 
     // 座標と速度を設定
     x = X;
@@ -172,6 +190,13 @@ class Particle extends FlxSprite {
         scale.set(0.5, 0.5);
         acceleration.y = -FlxRandom.intRanged(100, 200);
         angle = 90;
+      case PType.Bubble:
+        // 通常の半透明
+        blend = BlendMode.ALPHA;
+        var sc = FlxRandom.floatRanged(0.1, 0.3);
+        scale.set(sc, sc);
+        _val = FlxRandom.float() * 3.14*2;
+        _val2 = 16 + FlxRandom.intRanged(16, 80);
     }
 
     if(bScroll) {
@@ -217,7 +242,7 @@ class Particle extends FlxSprite {
           _val -= 3.14*2;
         }
 
-        x = _xprev + 16 * Math.sin(_val);
+        x = _xstart + 16 * Math.sin(_val);
         velocity.y *= 0.95;
         scale.x *= 0.97;
         scale.y *= 0.97;
@@ -232,6 +257,12 @@ class Particle extends FlxSprite {
         scale.y *= 0.9;
         scale.x *= 0.97;
         alpha = _timer / _tStart;
+      case PType.Bubble:
+        _val += 0.03;
+        x = _xstart + _val2 * Math.sin(_val);
+        if(y < 0) {
+          _timer = 0;
+        }
     }
 
     if(_timer < 1) {
