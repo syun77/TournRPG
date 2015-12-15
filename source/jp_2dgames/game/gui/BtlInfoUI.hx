@@ -4,7 +4,7 @@ import flixel.FlxSprite;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import jp_2dgames.game.btl.BtlGlobal;
-import jp_2dgames.game.field.FieldEffectUtil.FieldEffect;
+import jp_2dgames.game.field.FieldEffectUtil;
 import flixel.text.FlxText;
 import flixel.util.FlxDestroyUtil;
 import flixel.FlxState;
@@ -90,7 +90,9 @@ class BtlInfoUI extends FlxSpriteGroup {
   }
 
   public function _setEffect(eft:FieldEffect):Void {
-    _txtEffect.text = '地形効果: ${eft}';
+    var title = UIMsg.get(UIMsg.FIELD_EFFECT);
+    var msg = FieldEffectUtil.toMsg(eft);
+    _txtEffect.text = title + msg;
   }
 
   /**

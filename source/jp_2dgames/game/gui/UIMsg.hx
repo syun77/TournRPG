@@ -39,6 +39,9 @@ class UIMsg {
   public static inline var MONSTER_APPEAR:Int  = 31; // モンスター出現
   public static inline var ITEM_FOUND:Int      = 32; // アイテムを見つけた
   public static inline var MONEY_FOUND:Int     = 33; // お金を拾った
+  public static inline var FIELD_EFFECT:Int    = 34; // 地形効果
+  public static inline var FIELD_DAMAGE:Int    = 35; // 地形効果：ダメージ
+  public static inline var FIELD_POISON:Int    = 36; // 地形効果：毒
 
   private static var _csv:CsvLoader = null;
   /**

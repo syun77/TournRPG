@@ -3,6 +3,7 @@ package jp_2dgames.game.field;
 /**
  * フィールドで発生する効果
  **/
+import jp_2dgames.game.gui.UIMsg;
 enum FieldEffect {
   None;   // 特になし
   Damage; // ターン経過でダメージ
@@ -40,5 +41,22 @@ class FieldEffectUtil {
       case FieldEffect.Damage:
         return MyColor.ASE_PURPLE;
     }
+  }
+
+  /**
+   * メッセージに変換する
+   **/
+  public static function toMsg(type:FieldEffect):String {
+    var id:Int = 0;
+    switch(type) {
+      case FieldEffect.None:
+        return "";
+      case FieldEffect.Damage:
+        id = UIMsg.FIELD_DAMAGE;
+//      case FieldEffect.Poison:
+//        id = UIMsg.FIELD_POISON;
+    }
+
+    return UIMsg.get(id);
   }
 }
