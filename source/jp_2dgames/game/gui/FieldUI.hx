@@ -37,10 +37,13 @@ class FieldUI extends FlxSpriteGroup {
   }
 
   // ■メンバ変数
+  // テキスト
   var _actor:Actor;
   var _txtFloor:FlxText;
   var _txtMoney:FlxText;
   var _txtFood:FlxText;
+
+  var _tAnim:Int = 0; // アニメタイマー
 
   /**
    * コンストラクタ
@@ -55,17 +58,26 @@ class FieldUI extends FlxSpriteGroup {
     _txtFloor = _addText(px, py, '${Global.getFloor()}F');
 
     // 所持金テキスト
-    px += POS_DX;
+    px += Std.int(POS_DX*1.5);
     _txtMoney = new FlxText(px, py);
     _txtMoney.setBorderStyle(FlxText.BORDER_SHADOW);
     this.add(_txtMoney);
 
+    // 所持金アイコン
+    var money = new FlxSprite(px-24, py-10, Reg.PATH_FIELD_MONEY);
+    money.scale.set(0.5, 0.5);
+    this.add(money);
+
     // 食糧テキスト
-    px += Std.int(POS_DX * 1.5);
+    px += Std.int(POS_DX * 1.75);
     _txtFood = new FlxText(px, py);
-    _txtFood.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     _txtFood.setBorderStyle(FlxText.BORDER_SHADOW);
     this.add(_txtFood);
+
+    // 食糧アイコン
+    var food = new FlxSprite(px-24, py-11, Reg.PATH_FIELD_FOOD);
+    food.scale.set(0.75, 0.75);
+    this.add(food);
 
     var px2 = x;
     x -= 128;
@@ -93,11 +105,13 @@ class FieldUI extends FlxSpriteGroup {
   override public function update():Void {
     super.update();
 
+    _tAnim++;
+
     _txtMoney.text = '${Global.getMoney()}G';
     var food = _actor.food;
-    _txtFood.text = '食糧: ${food}';
+    _txtFood.text = 'x ${food}';
     _txtFood.color = FlxColor.WHITE;
-    if(food <= 3) {
+    if(food <= 3 && _tAnim%32 < 16) {
       _txtFood.color = FlxColor.CRIMSON;
     }
   }

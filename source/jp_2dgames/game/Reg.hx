@@ -46,6 +46,10 @@ class Reg {
   public static inline var PATH_FIELD_FOE_ICON = "assets/images/field/foe.png";
   // フィールドのノード
   public static inline var PATH_FIELD_NODE = "assets/images/field/node.png";
+  // フィールドでの食糧アイコン
+  public static inline var PATH_FIELD_FOOD = "assets/images/field/food.png";
+  // フィールドでの所持金アイコン
+  public static inline var PATH_FIELD_MONEY = "assets/images/field/money.png";
   // メニューの背景
   public static inline var PATH_MENU_BG = "assets/images/ui/menu_bg.png";
   // ショップ
