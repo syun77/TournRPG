@@ -19,12 +19,12 @@ class BtlInfoUI extends FlxSpriteGroup {
   static inline var BASE_X:Int = 8;
   static inline var BASE_Y:Int = 52;
 
-  // 地形効果
-  static inline var TXT_EFFECT_X:Int = 0;
-  static inline var TXT_EFFECT_Y:Int = 0;
   // 経過ターン数
-  static inline var TXT_TURN_X:Int = TXT_EFFECT_X + 80;
-  static inline var TXT_TURN_Y:Int = TXT_EFFECT_Y;
+  static inline var TXT_TURN_X:Int = 0;
+  static inline var TXT_TURN_Y:Int = 0;
+  // 地形効果
+  static inline var TXT_EFFECT_X:Int = TXT_TURN_X + 80;
+  static inline var TXT_EFFECT_Y:Int = TXT_TURN_Y;
 
   // ■スタティック
   static var _instance:BtlInfoUI = null;
@@ -57,16 +57,15 @@ class BtlInfoUI extends FlxSpriteGroup {
   public function new() {
     super(BASE_X, BASE_Y);
 
+    // 経過ターン数
+    _txtTurn = _addText(TXT_TURN_X, TXT_TURN_Y, "");
+    _txtTurn.setBorderStyle(FlxText.BORDER_SHADOW);
+
     // 地形効果
-    _txtEffect = _addText(0, 0, "");
+    _txtEffect = new FlxText(TXT_EFFECT_X, TXT_EFFECT_Y);
     _txtEffect.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
     _txtEffect.setBorderStyle(FlxText.BORDER_SHADOW);
-
-    // 経過ターン数
-    _txtTurn = new FlxText(TXT_TURN_X, TXT_TURN_Y);
-    _txtTurn.setFormat(Reg.PATH_FONT, Reg.FONT_SIZE_S);
-    _txtTurn.setBorderStyle(FlxText.BORDER_SHADOW);
-    this.add(_txtTurn);
+    this.add(_txtEffect);
 
     scrollFactor.set();
 
@@ -75,6 +74,9 @@ class BtlInfoUI extends FlxSpriteGroup {
     FlxTween.tween(this, {x:px2}, 0.5, {ease:FlxEase.expoOut});
   }
 
+  /**
+   * テキスト追加
+   **/
   private function _addText(px:Float, py:Float, text:String):FlxText {
     var txt = new FlxText(px, py);
     txt.text = text;
@@ -89,10 +91,15 @@ class BtlInfoUI extends FlxSpriteGroup {
     return txt;
   }
 
+  /**
+   * 地形効果のテキストを設定
+   **/
   public function _setEffect(eft:FieldEffect):Void {
     var title = UIMsg.get(UIMsg.FIELD_EFFECT);
     var msg = FieldEffectUtil.toMsg(eft);
-    _txtEffect.text = title + msg;
+    if(msg != "") {
+      _txtEffect.text = title + msg;
+    }
   }
 
   /**
@@ -101,7 +108,8 @@ class BtlInfoUI extends FlxSpriteGroup {
   override public function update():Void {
     super.update();
 
+    // ターン数更新
     var turn:Int = BtlGlobal.getTurn() + 1;
-    _txtTurn.text = '${turn}Turn';
+    _txtTurn.text = '${turn} Turn';
   }
 }
