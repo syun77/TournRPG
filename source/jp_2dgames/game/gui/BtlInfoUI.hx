@@ -1,5 +1,8 @@
 package jp_2dgames.game.gui;
 
+import flixel.util.FlxAngle;
+import flixel.util.FlxColor;
+import flixel.util.FlxColorUtil;
 import flixel.FlxSprite;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
@@ -23,7 +26,7 @@ class BtlInfoUI extends FlxSpriteGroup {
   static inline var TXT_TURN_X:Int = 0;
   static inline var TXT_TURN_Y:Int = 0;
   // 地形効果
-  static inline var TXT_EFFECT_X:Int = TXT_TURN_X + 80;
+  static inline var TXT_EFFECT_X:Int = TXT_TURN_X + 64;
   static inline var TXT_EFFECT_Y:Int = TXT_TURN_Y;
 
   // ■スタティック
@@ -50,6 +53,7 @@ class BtlInfoUI extends FlxSpriteGroup {
   // ■メンバ変数
   var _txtEffect:FlxText; // 地形効果
   var _txtTurn:FlxText;   // 経過ターン数
+  var _tAnim:Int; // アニメタイマー
 
   /**
    * コンストラクタ
@@ -68,6 +72,7 @@ class BtlInfoUI extends FlxSpriteGroup {
     this.add(_txtEffect);
 
     scrollFactor.set();
+    _tAnim = 0;
 
     var px2 = x;
     x -= 128;
@@ -107,6 +112,15 @@ class BtlInfoUI extends FlxSpriteGroup {
    **/
   override public function update():Void {
     super.update();
+
+    // アニメタイマー更新
+    _tAnim++;
+    {
+      var t:Int = _tAnim * 4;
+      var step = Std.int(255 * (0.5 + 0.5 * Math.sin(t * FlxAngle.TO_RAD)));
+      var color = FlxColorUtil.interpolateColor(FlxColor.WHITE, FlxColor.SALMON, 255, step);
+      _txtEffect.color = color;
+    }
 
     // ターン数更新
     var turn:Int = BtlGlobal.getTurn() + 1;
