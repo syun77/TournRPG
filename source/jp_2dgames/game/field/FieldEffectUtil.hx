@@ -7,6 +7,7 @@ import jp_2dgames.game.gui.UIMsg;
 enum FieldEffect {
   None;   // 特になし
   Damage; // ターン経過でダメージ
+  Poison; // 毒付着
 }
 
 class FieldEffectUtil {
@@ -25,6 +26,7 @@ class FieldEffectUtil {
     switch(str) {
       case 'None':   return FieldEffect.None;
       case 'Damage': return FieldEffect.Damage;
+      case 'Poison': return FieldEffect.Poison;
       default:
         throw 'Invalid FieldType type: ${str}';
         return FieldEffect.None;
@@ -39,6 +41,8 @@ class FieldEffectUtil {
       case FieldEffect.None:
         return MyColor.ASE_WHITE;
       case FieldEffect.Damage:
+        return MyColor.ASE_RED;
+      case FieldEffect.Poison:
         return MyColor.ASE_PURPLE;
     }
   }
@@ -53,8 +57,8 @@ class FieldEffectUtil {
         return "";
       case FieldEffect.Damage:
         id = UIMsg.FIELD_DAMAGE;
-//      case FieldEffect.Poison:
-//        id = UIMsg.FIELD_POISON;
+      case FieldEffect.Poison:
+        id = UIMsg.FIELD_POISON;
     }
 
     return UIMsg.get(id);

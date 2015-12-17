@@ -151,8 +151,8 @@ class FieldMgr {
         var node = FieldNode.random(FieldEvent.None);
         if(node != null) {
           FieldFoe.add(node.ID, 6);
-          // TODO: ダメージゾーンを仮設定
-          node.setEffectType(FieldEffect.Damage);
+          // TODO: 毒ゾーンを仮設定
+          node.setEffectType(FieldEffect.Poison);
 
         }
       }

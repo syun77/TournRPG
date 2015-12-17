@@ -714,6 +714,19 @@ class BtlLogicFactory {
         eft.bWaitQuick = true;
         actor.damage(val);
         ret.add(eft);
+      case FieldEffect.Poison:
+        // 毒
+        // 5%ダメージ
+        var val = Calc.damageFieldEffect(actor, BtlGlobal.getTurn());
+        if(actor.adhereBadStatus(BadStatus.Poison, val)) {
+          // 付着成功
+          var type = BtlLogic.Badstatus(BadStatus.Poison, val);
+          var eft = new BtlLogicData(actor.ID, actor.group, type);
+          // 自分自身が対象
+          eft.setTarget(actor.ID);
+          eft.bWaitQuick = true;
+          ret.add(eft);
+        }
     }
   }
 

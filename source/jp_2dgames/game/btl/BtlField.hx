@@ -35,7 +35,7 @@ class BtlField extends FlxSpriteGroup {
       switch(BtlGlobal.getFieldEffect()) {
         case FieldEffect.None:
           // 何もしない
-        case FieldEffect.Damage:
+        case FieldEffect.Damage, FieldEffect.Poison:
           Particle.start(PType.Bubble, x, y, color, false);
       }
     }

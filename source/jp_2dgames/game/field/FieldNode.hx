@@ -512,7 +512,7 @@ class FieldNode extends FlxSprite {
     switch(eftType) {
       case FieldEffect.None:
         // 何もしない
-      case FieldEffect.Damage:
+      case FieldEffect.Damage, FieldEffect.Poison:
         if(_tAnim%12 == 0) {
           var px = xcenter;
           var py = y + height;
