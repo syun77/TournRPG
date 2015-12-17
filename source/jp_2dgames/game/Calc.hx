@@ -44,9 +44,14 @@ class Calc {
     var ratio = Math.pow(1.02, act.agi - target.agi);
     var rnd = base * ratio;
 
+    if(target.badstatus == BadStatus.Blind) {
+      // 相手が盲目ならば必中
+      return true;
+    }
+
     if(act.badstatus == BadStatus.Blind) {
       // 攻撃側が暗闇状態なので命中率低下
-      rnd = base - 50;
+      rnd = base / 2;
     }
 
     if(rnd < 1) {

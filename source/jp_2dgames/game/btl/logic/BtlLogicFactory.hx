@@ -715,7 +715,10 @@ class BtlLogicFactory {
         actor.damage(val);
         ret.add(eft);
       case FieldEffect.Poison:
-        // 毒
+        // 3ターンごとに毒発生
+        if(BtlGlobal.getTurn()%3 != 1) {
+          return;
+        }
         // 5%ダメージ
         var val = Calc.damageFieldEffect(actor, BtlGlobal.getTurn());
         if(actor.adhereBadStatus(BadStatus.Poison, val)) {
