@@ -12,9 +12,6 @@ if(CHK_LOT(50)) {
 	ACT_ATTACK()
 }
 else {
-	
-	ACT_SKILL(SKILL008)
-	/*
 	if(CHK_SKILL(SKILL001)) {
 		// かみつき
 		ACT_SKILL(SKILL001)
@@ -23,5 +20,4 @@ else {
 		// 通常攻撃
 		ACT_ATTACK()
 	}
-	*/
 }
