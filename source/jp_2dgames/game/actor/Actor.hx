@@ -84,10 +84,9 @@ class Actor extends FlxSprite {
   }
 
   // 名前
-  var _name:String;
   public var name(get, never):String;
   private function get_name() {
-    return _name;
+    return _param.name;
   }
   var _param:Params;
   // レベル
@@ -375,7 +374,6 @@ class Actor extends FlxSprite {
   public function copy(actor:Actor):Void {
     _idx = actor._idx;
     _cmd = actor.cmd;
-    _name = actor.name;
     init(actor.group, actor.param, false);
     _badstatus = actor.badstatus;
     _badstatusVal = actor.badstatusVal;
@@ -478,7 +476,7 @@ class Actor extends FlxSprite {
     EnemyInfo.setParam(_param, id);
 
     // 名前を設定
-    _name = EnemyInfo.getString(id, "name");
+    _param.name = EnemyInfo.getString(id, "name");
 
     // 表示する
     visible = true;
@@ -492,7 +490,7 @@ class Actor extends FlxSprite {
   }
 
   public function setName(str:String):Void {
-    _name = str;
+    _param.name = str;
   }
 
   /**

@@ -84,7 +84,7 @@ class BtlPlayerUI extends FlxSpriteGroup {
 
     _charaUIList = new Array<BtlCharaUI>();
 
-    for(i in 0...1) {
+    for(i in 0...Global.getPartyCount()) {
       var px = FlxG.width/3 * i;
       var ui = new BtlCharaUI(px, CHARA_Y);
       _charaUIList.push(ui);

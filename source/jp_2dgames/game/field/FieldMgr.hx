@@ -195,7 +195,6 @@ class FieldMgr {
     // Actor情報を生成
     _actor = new Actor(0);
     _actor.init(BtlGroup.Player, Global.getPlayerParam());
-    _actor.setName(Global.getPlayerName());
 
     // 移動可能な経路を表示
     _lines = new LineMgr(_flxState, LINE_MAX, MyColor.ASE_LIME);

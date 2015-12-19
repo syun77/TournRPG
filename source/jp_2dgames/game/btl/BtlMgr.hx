@@ -1,18 +1,17 @@
 package jp_2dgames.game.btl;
 
+import flixel.FlxCamera;
+import flixel.FlxG;
+import flixel.FlxState;
 import jp_2dgames.game.gui.BtlInfoUI;
 import jp_2dgames.game.field.FieldEffectUtil;
 import jp_2dgames.game.btl.types.BtlEndResult;
 import jp_2dgames.game.btl.types.BtlEndType;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.gui.MyButton2;
-import flixel.FlxState;
-import flixel.FlxCamera;
-import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.btl.logic.BtlLogicMgr;
 import jp_2dgames.game.btl.types.BtlRange;
 import jp_2dgames.game.btl.logic.BtlLogicPlayer;
-import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.gui.BtlPlayerUI;
 import jp_2dgames.game.gui.BtlCmdUI;
 import jp_2dgames.game.btl.types.BtlCmd;
@@ -21,7 +20,6 @@ import jp_2dgames.game.actor.ActorMgr;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.BtlGroupUtil;
 import jp_2dgames.lib.Input;
-import flixel.FlxG;
 
 /**
  * バトル起動パラメータ
@@ -73,6 +71,7 @@ class BtlMgr {
   // 敵出現の最大数
   public static var ENEMY_APPEAR_MAX:Int = 5;
 
+  var _players:List<Actor>;
   var _player:Actor;
 
   var _state:State = State.None;
@@ -90,8 +89,10 @@ class BtlMgr {
   var _btlEnd:BtlEndResult;
   public var btlEnd(get, never):BtlEndResult;
   private function get_btlEnd() {
-    // プレイヤーのパラメータを返す
-    _btlEnd.setParam(_player.param);
+    for(player in _players) {
+      // プレイヤーのパラメータを返す
+      _btlEnd.setParam(player.param);
+    }
     return _btlEnd;
   }
 
@@ -104,9 +105,6 @@ class BtlMgr {
 
     _flxState = flxState;
 
-    // プレイヤーの生成
-    _player = ActorMgr.recycle(BtlGroup.Player, param.param);
-    _player.setName(Global.getPlayerName());
 
     // 敵の生成
     BtlUtil.createEnemyGroup(param.enemyGroupID);
@@ -115,14 +113,21 @@ class BtlMgr {
     BtlInfoUI.create(_flxState);
     BtlInfoUI.setEffect(param.effect);
 
-    // プレイヤーUI
-    BtlPlayerUI.setPlayerID(0, _player.ID);
+    {
+      // プレイヤーの生成
+      var player = ActorMgr.recycle(BtlGroup.Player, param.param);
+      _createPlayer(0, player);
+      _player = player;
+    }
+    {
+      var param = Global.getNpcParam(0);
+      var player = ActorMgr.recycle(BtlGroup.Player, param);
+      _createPlayer(1, player);
+    }
 
     // バトル地形
     _flxState.add(new BtlField());
 
-    _player.x = FlxG.width/2;
-    _player.y = FlxG.height/2;
 
     // バトル終了パラメータ
     _btlEnd = new BtlEndResult();
@@ -132,6 +137,14 @@ class BtlMgr {
 
     FlxG.watch.add(this, "_state");
     FlxG.watch.add(this, "_statePrev");
+  }
+
+  private function _createPlayer(idx:Int, player:Actor):Void {
+    // プレイヤーUI
+    BtlPlayerUI.setPlayerID(idx, player.ID);
+
+    player.x = FlxG.width/2;
+    player.y = FlxG.height/2;
   }
 
   private function _change(s:State):Void {
@@ -150,21 +163,6 @@ class BtlMgr {
       var target = ActorMgr.random(group);
 
       cmd = BtlCmd.Attack(BtlRange.One, target.ID);
-    }
-    else if(Input.press.B) {
-      var item = Inventory.getItem(0);
-      cmd = BtlCmd.Item(item, null, 0);
-    }
-    else if(Input.press.X) {
-      var item = Inventory.getItem(0);
-      cmd = BtlCmd.Item(item, null, 0);
-    }
-    else if(Input.press.Y) {
-      var item = Inventory.getItem(0);
-      cmd = BtlCmd.Item(item, null, 0);
-    }
-    else if(FlxG.keys.justPressed.B) {
-      cmd = BtlCmd.Escape(true);
     }
 
     if(cmd != BtlCmd.None) {

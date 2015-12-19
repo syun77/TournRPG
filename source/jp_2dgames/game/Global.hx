@@ -18,6 +18,7 @@ class Global {
   static var _bLoad:Bool = false;
   static var _playerParam:Params = null;
   static var _playerName:String = "プレイヤー";
+  static var _npcParam:Params = null;
   static var _itemList:Array<ItemData> = null;
   static var _money:Int = 0;
   static var _floor:Int = 0;
@@ -72,8 +73,12 @@ class Global {
     _playerParam = new Params();
     var lv:Int = 1;
     PlayerInfo.setParam(_playerParam, lv);
-    // TODO:
-    _playerParam.food = 10;
+    _playerParam.name = _playerName;
+
+    // TODO: NPCパラメータ設定
+    _npcParam = new Params();
+    PlayerInfo.setParam(_npcParam, lv);
+    _npcParam.name = "仲間";
 
     // スキル初期化
     _skillList = new Array<SkillData>();
@@ -91,6 +96,20 @@ class Global {
   // プレイヤー名の取得
   public static function getPlayerName():String {
     return _playerName;
+  }
+  // NPCパラメータの取得
+  public static function getNpcParam(idx:Int):Params {
+    return _npcParam;
+  }
+
+  // パーティの人数を取得する
+  public static function getPartyCount():Int {
+    var cnt:Int = 1;
+    if(_npcParam.exists) {
+      cnt++;
+    }
+
+    return cnt;
   }
 
   // スキルスロットの取得

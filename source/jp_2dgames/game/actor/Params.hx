@@ -5,6 +5,8 @@ package jp_2dgames.game.actor;
  **/
 class Params {
 
+  public var exists:Bool = false; // 生存フラグ
+  public var name:String = "";    // 名前
   public var id:Int    = 1;   // ID
   public var lv:Int    = 1;   // レベル
   public var hp:Int    = 100; // HP
@@ -32,6 +34,8 @@ class Params {
    * コピー
    **/
   public function copy(p:Dynamic):Void {
+    exists= p.exists;
+    name  = p.name;
     id    = p.id;
     lv    = p.lv;
     hp    = p.hp;

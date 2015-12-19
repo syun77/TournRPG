@@ -25,11 +25,12 @@ class PlayerInfo {
   }
 
   /**
-   * パラメータ設定
+   * 初期パラメータ設定
    * @parma param 設定先パラメータ
    * @param lv    レベル
    **/
   public static function setParam(param:Params, lv:Int):Void {
+    param.exists= true;
     param.id    = 0;
     param.lv    = lv;
     param.hp    = get(lv, "hp");
