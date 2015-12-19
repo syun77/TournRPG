@@ -61,8 +61,8 @@ class BtlPlayerUI extends FlxSpriteGroup {
     _instance._shake();
   }
   // ダメージ
-  public static function damage():Void {
-    _instance._damage();
+  public static function damage(actorID:Int):Void {
+    _instance._damage(actorID);
   }
   // バッドステータス
   public static function badstatus():Void {
@@ -181,9 +181,12 @@ class BtlPlayerUI extends FlxSpriteGroup {
   /**
    * ダメージ
    **/
-  private function _damage():Void {
+  private function _damage(actorID:Int):Void {
     for(ui in _charaUIList) {
-      ui.damage();
+      if(ui.actorID == actorID) {
+        // 一致するUIだけ変化させる
+        ui.damage();
+      }
     }
   }
 

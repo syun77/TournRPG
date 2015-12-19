@@ -162,7 +162,7 @@ class BtlLogicPlayer {
       BtlPlayerUI.shake();
 
       // ダメージ演出
-      BtlPlayerUI.damage();
+      BtlPlayerUI.damage(target.ID);
 
       // パーティクルの座標取得
       px = BtlPlayerUI.getPlayerX(target.ID);
