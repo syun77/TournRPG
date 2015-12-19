@@ -1,5 +1,7 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.gui.message.Msg;
+import jp_2dgames.game.gui.message.Message;
 import jp_2dgames.game.btl.types.BtlCmd;
 import jp_2dgames.game.skill.SkillAttr;
 import jp_2dgames.game.actor.BadStatusUtil.BadStatus;

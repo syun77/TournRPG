@@ -1,5 +1,8 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.message.UIMsg;
+import jp_2dgames.game.gui.message.Msg;
+import jp_2dgames.game.gui.message.Message;
 import jp_2dgames.game.gui.BtlCharaUI;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.gui.ShopRecoveryUI;
@@ -11,7 +14,6 @@ import flixel.group.FlxSpriteGroup;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import jp_2dgames.game.gui.FieldUI;
-import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.gui.InventoryUI;
 import jp_2dgames.game.gui.MyButton2;
 import jp_2dgames.game.gui.ShopBuyUI;

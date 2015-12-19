@@ -1,4 +1,4 @@
-package jp_2dgames.game.gui;
+package jp_2dgames.game.gui.message;
 
 import jp_2dgames.lib.CsvLoader;
 

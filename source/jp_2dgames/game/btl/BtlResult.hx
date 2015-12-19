@@ -1,12 +1,14 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.game.gui.message.UIMsg;
+import jp_2dgames.game.gui.message.Msg;
+import jp_2dgames.game.gui.message.Message;
 import jp_2dgames.lib.Snd;
 import flixel.FlxState;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.lib.Input;
 import jp_2dgames.game.gui.InventoryUI;
-import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.gui.Dialog;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.btl.BtlGroupUtil;

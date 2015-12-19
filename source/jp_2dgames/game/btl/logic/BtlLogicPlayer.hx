@@ -1,5 +1,7 @@
 package jp_2dgames.game.btl.logic;
 
+import jp_2dgames.game.gui.message.Msg;
+import jp_2dgames.game.gui.message.Message;
 import jp_2dgames.game.btl.types.BtlEndType;
 import jp_2dgames.game.btl.logic.BtlLogicBegin;
 import jp_2dgames.lib.Snd;

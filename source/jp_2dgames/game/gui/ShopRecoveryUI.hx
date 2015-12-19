@@ -1,5 +1,5 @@
 package jp_2dgames.game.gui;
-import jp_2dgames.game.gui.UIMsg;
+import jp_2dgames.game.gui.message.UIMsg;
 import flixel.ui.FlxButton;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;

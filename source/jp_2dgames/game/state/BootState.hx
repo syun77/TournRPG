@@ -1,11 +1,11 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.message.UIMsg;
 import jp_2dgames.game.skill.SkillUtil;
 import jp_2dgames.game.actor.EnemyInfo;
 import jp_2dgames.game.actor.PlayerInfo;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.lib.SprFont;
-import jp_2dgames.game.gui.UIMsg;
 import flixel.FlxG;
 import flixel.FlxState;
 

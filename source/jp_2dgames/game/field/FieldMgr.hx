@@ -1,5 +1,8 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.gui.message.UIMsg;
+import jp_2dgames.game.gui.message.Msg;
+import jp_2dgames.game.gui.message.Message;
 import jp_2dgames.game.field.FieldEffectUtil.FieldEffect;
 import jp_2dgames.lib.Snd;
 import flixel.FlxObject;
@@ -19,7 +22,6 @@ import flixel.tweens.FlxTween;
 import flixel.FlxG;
 import flixel.util.FlxPoint;
 import jp_2dgames.game.gui.InventoryUI;
-import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.util.LineMgr;
 import jp_2dgames.game.state.FieldSubState;
 import jp_2dgames.game.state.FieldState;

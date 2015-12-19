@@ -1,9 +1,10 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.gui.message.UIMsg;
+
 /**
  * フィールドで発生する効果
  **/
-import jp_2dgames.game.gui.UIMsg;
 enum FieldEffect {
   None;   // 特になし
   Damage; // ターン経過でダメージ

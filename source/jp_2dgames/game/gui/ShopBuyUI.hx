@@ -1,5 +1,8 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.gui.message.UIMsg;
+import jp_2dgames.game.gui.message.Msg;
+import jp_2dgames.game.gui.message.Message;
 import jp_2dgames.game.skill.SkillSlot;
 import flixel.util.FlxDestroyUtil;
 import flixel.FlxSprite;

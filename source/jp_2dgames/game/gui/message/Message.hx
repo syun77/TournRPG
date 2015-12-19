@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.gui.message;
 
 import flixel.util.FlxDestroyUtil;
 import flixel.FlxState;

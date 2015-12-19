@@ -1,5 +1,7 @@
 package jp_2dgames.game.item;
 
+import jp_2dgames.game.gui.message.Msg;
+import jp_2dgames.game.gui.message.Message;
 import jp_2dgames.lib.Snd;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.lib.CsvLoader;

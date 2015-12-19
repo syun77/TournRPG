@@ -1,5 +1,6 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.message.Message;
 import jp_2dgames.game.btl.BtlGlobal;
 import jp_2dgames.game.gui.BtlInfoUI;
 import jp_2dgames.game.btl.types.BtlEndResult;

@@ -1,4 +1,5 @@
 package jp_2dgames.game.gui;
+import jp_2dgames.game.gui.message.UIMsg;
 import jp_2dgames.game.gui.InventoryUI;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.gui.InventoryUI;

@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.gui.message.UIMsg;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColor;
 import flixel.util.FlxColorUtil;

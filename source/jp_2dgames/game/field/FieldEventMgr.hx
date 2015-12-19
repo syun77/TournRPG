@@ -1,7 +1,7 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.gui.message.UIMsg;
 import jp_2dgames.game.btl.BtlMgr.BtlMgrParam;
-import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.actor.Actor;
 import jp_2dgames.game.btl.types.BtlEndResult;
 import jp_2dgames.game.btl.types.BtlEndType;

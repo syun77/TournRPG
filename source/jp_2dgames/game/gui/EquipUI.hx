@@ -1,5 +1,6 @@
 package jp_2dgames.game.gui;
 
+import jp_2dgames.game.gui.message.UIMsg;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.item.Inventory;
 import jp_2dgames.game.item.ItemData;

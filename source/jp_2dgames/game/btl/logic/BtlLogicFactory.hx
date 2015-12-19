@@ -1,4 +1,5 @@
 package jp_2dgames.game.btl.logic;
+import jp_2dgames.game.gui.message.Msg;
 import jp_2dgames.game.field.FieldEffectUtil.FieldEffect;
 import haxe.macro.Expr.Field;
 import jp_2dgames.game.actor.ActorMgr;

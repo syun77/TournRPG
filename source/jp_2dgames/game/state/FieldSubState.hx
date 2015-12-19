@@ -1,5 +1,8 @@
 package jp_2dgames.game.state;
 
+import jp_2dgames.game.gui.message.UIMsg;
+import jp_2dgames.game.gui.message.Msg;
+import jp_2dgames.game.gui.message.Message;
 import flixel.text.FlxText;
 import jp_2dgames.game.skill.SkillUtil;
 import jp_2dgames.game.gui.Dialog;
@@ -16,7 +19,6 @@ import flixel.group.FlxSpriteGroup;
 import flixel.tweens.FlxEase;
 import flixel.tweens.FlxTween;
 import jp_2dgames.game.item.Inventory;
-import jp_2dgames.game.gui.UIMsg;
 import jp_2dgames.game.item.ItemData;
 import jp_2dgames.game.item.ItemUtil;
 import jp_2dgames.game.gui.InventoryUI;

@@ -1,4 +1,4 @@
-package jp_2dgames.game;
+package jp_2dgames.game.gui.message;
 class Msg {
   public static inline var DAMAGE_PLAYER:Int  = 1;  // プレイヤーへのダメージ
   public static inline var DAMAGE_ENEMY:Int   = 2;  // 敵へのダメージ
