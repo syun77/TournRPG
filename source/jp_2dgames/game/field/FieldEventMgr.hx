@@ -223,7 +223,7 @@ class FieldEventMgr {
   private function _cbBattleEnd(btlEnd:BtlEndResult):Void {
 
     // プレイヤーパラメータ設定
-    _actor.param.copy(btlEnd.param);
+    _actor.param.copy(btlEnd.getParamPlayer());
 
     switch(btlEnd.type) {
       case BtlEndType.Win:

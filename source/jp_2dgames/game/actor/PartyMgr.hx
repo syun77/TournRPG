@@ -6,14 +6,14 @@ package jp_2dgames.game.actor;
 class PartyMgr {
 
   // パーティの最大数
-  static inline var PARTY_MAX:Int = 3;
+  public static inline var PARTY_MAX:Int = 3;
 
   // プレイヤーのインデックスは「0」
   public static inline var PLAYER_IDX:Int = 0;
   // NPCは「1」から開始
-  static inline var NPC_IDX_START:Int = 1;
+  public static inline var NPC_IDX_START:Int = 1;
   // NPCは2人まで
-  static inline var NPC_MAX:Int = 2;
+  public static inline var NPC_MAX:Int = 2;
 
   // ■static 変数
   // シングルトン
@@ -104,7 +104,7 @@ class PartyMgr {
    * インデックス指定でパラメータを取得する
    **/
   private function _getParamFromIdx(idx:Int):Params {
-    if(idx < 0 || idx <= PARTY_MAX) {
+    if(idx < 0 || PARTY_MAX <= idx) {
       return null;
     }
 

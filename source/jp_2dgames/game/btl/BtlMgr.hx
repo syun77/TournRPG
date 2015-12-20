@@ -87,11 +87,16 @@ class BtlMgr {
   var _btlEnd:BtlEndResult;
   public var btlEnd(get, never):BtlEndResult;
   private function get_btlEnd() {
-    for(i in 0...PartyMgr.countExists()) {
-      var param = PartyMgr.getParamFromIdx(i);
-      // プレイヤーのパラメータを返す
-      _btlEnd.setParam(param);
-    }
+    var npcIdx:Int = 0;
+    ActorMgr.forEachAliveGroup(BtlGroup.Player, function(actor:Actor) {
+      if(actor.isPlayer()) {
+        _btlEnd.setParamPlayer(actor.param);
+      }
+      else {
+        _btlEnd.setParamNpc(npcIdx, actor.param);
+        npcIdx++;
+      }
+    });
 
     return _btlEnd;
   }
