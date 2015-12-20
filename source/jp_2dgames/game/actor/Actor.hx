@@ -83,6 +83,15 @@ class Actor extends FlxSprite {
     return _group;
   }
 
+  // プレイヤーかどうか
+  var _bPlayer:Bool = false;
+  public function isPlayer():Bool {
+    return _bPlayer;
+  }
+  public function setPlayer(b:Bool):Void {
+    _bPlayer = b;
+  }
+
   // 名前
   public var name(get, never):String;
   private function get_name() {
@@ -398,6 +407,7 @@ class Actor extends FlxSprite {
       _hpBar.revive();
     }
 
+    _bPlayer = false;
     color = FlxColor.WHITE;
     _tAnimColor = 0;
     _animColor  = FlxColor.WHITE;

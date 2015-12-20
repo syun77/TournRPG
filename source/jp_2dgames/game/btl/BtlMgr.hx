@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.game.actor.PartyMgr;
 import flixel.FlxCamera;
 import flixel.FlxG;
 import flixel.FlxState;
@@ -71,9 +72,6 @@ class BtlMgr {
   // 敵出現の最大数
   public static var ENEMY_APPEAR_MAX:Int = 5;
 
-  var _players:List<Actor>;
-  var _player:Actor;
-
   var _state:State = State.None;
   var _statePrev:State = State.None;
 
@@ -89,10 +87,12 @@ class BtlMgr {
   var _btlEnd:BtlEndResult;
   public var btlEnd(get, never):BtlEndResult;
   private function get_btlEnd() {
-    for(player in _players) {
+    for(i in 0...PartyMgr.countExists()) {
+      var param = PartyMgr.getParamFromIdx(i);
       // プレイヤーのパラメータを返す
-      _btlEnd.setParam(player.param);
+      _btlEnd.setParam(param);
     }
+
     return _btlEnd;
   }
 
@@ -113,16 +113,14 @@ class BtlMgr {
     BtlInfoUI.create(_flxState);
     BtlInfoUI.setEffect(param.effect);
 
-    {
-      // プレイヤーの生成
-      var player = ActorMgr.recycle(BtlGroup.Player, param.param);
-      _createPlayer(0, player);
-      _player = player;
-    }
-    {
-      var param = Global.getNpcParam(0);
-      var player = ActorMgr.recycle(BtlGroup.Player, param);
-      _createPlayer(1, player);
+    // プレイヤーの生成
+    for(i in 0...PartyMgr.countExists()) {
+      var actor = ActorMgr.recycle(BtlGroup.Player, param.param);
+      _createPlayer(i, actor);
+      if(i == PartyMgr.PLAYER_IDX) {
+        // 主人公
+        actor.setPlayer(true);
+      }
     }
 
     // バトル地形
@@ -159,7 +157,7 @@ class BtlMgr {
     var cmd:BtlCmd = BtlCmd.None;
     if(Input.press.A && FlxG.mouse.justPressed == false) {
       // TODO: 相手グループをランダム攻撃
-      var group = BtlGroupUtil.getAgaint(_player.group);
+      var group = BtlGroup.Enemy;
       var target = ActorMgr.random(group);
 
       cmd = BtlCmd.Attack(BtlRange.One, target.ID);
@@ -167,7 +165,8 @@ class BtlMgr {
 
     if(cmd != BtlCmd.None) {
       // コマンド実行
-      _cbCommand(_player, cmd);
+      var player = ActorMgr.getPlayer();
+      _cbCommand(player, cmd);
     }
   }
 
@@ -215,7 +214,8 @@ class BtlMgr {
 
       case State.TurnStart:
         // ターン開始
-        _btlCmdUI = new BtlCmdUI(_flxState, _player, _cbCommand);
+        var player = ActorMgr.getPlayer();
+        _btlCmdUI = new BtlCmdUI(_flxState, player, _cbCommand);
         _flxState.add(_btlCmdUI);
         _change(State.InputCommand);
 
@@ -317,7 +317,10 @@ class BtlMgr {
         // 次に進む
         var cbNext = function() {
           // バトル中のみ有効なパラメータを初期化
-          _player.param.resetBattle();
+          var player = ActorMgr.getPlayer();
+          if(player != null) {
+            player.param.resetBattle();
+          }
           _change(State.End);
         }
 

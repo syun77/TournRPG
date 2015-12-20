@@ -140,6 +140,18 @@ class ActorMgr  {
     _pool.requestEnemyAI();
   }
 
+  /**
+   * プレイヤーを取得する
+   **/
+  public static function getPlayer():Actor {
+    return forEachAliveFirstIf(function(actor:Actor) {
+      return actor.isPlayer();
+    });
+  }
+
+  /**
+   * デバッグ出力
+   **/
   public static function dump():Void {
     _pool.forEach(function(actor:Actor) {
       if(actor.ID == -1) {

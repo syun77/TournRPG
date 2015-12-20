@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.actor.PartyMgr;
 import jp_2dgames.game.shop.ShopData;
 import jp_2dgames.game.skill.SkillSlot;
 import jp_2dgames.game.skill.SkillData;
@@ -16,9 +17,7 @@ class Global {
 
   // ■スタティック変数
   static var _bLoad:Bool = false;
-  static var _playerParam:Params = null;
   static var _playerName:String = "プレイヤー";
-  static var _npcParam:Params = null;
   static var _itemList:Array<ItemData> = null;
   static var _money:Int = 0;
   static var _floor:Int = 0;
@@ -69,16 +68,24 @@ class Global {
   // プレイヤー情報の初期化
   private static function _initPlayer():Void {
 
+    // パーティ生成
+    PartyMgr.create();
+
     // パラメータ生成
-    _playerParam = new Params();
-    var lv:Int = 1;
-    PlayerInfo.setParam(_playerParam, lv);
-    _playerParam.name = _playerName;
+    {
+      var p = PartyMgr.getPlayerParam();
+      var lv:Int = 1;
+      PlayerInfo.setParam(p, lv);
+      p.name = _playerName;
+    }
 
     // TODO: NPCパラメータ設定
-    _npcParam = new Params();
-    PlayerInfo.setParam(_npcParam, lv);
-    _npcParam.name = "仲間";
+    {
+      var p = PartyMgr.getEmptyNpc();
+      var lv:Int = 1;
+      PlayerInfo.setParam(p, lv);
+      p.name = "仲間";
+    }
 
     // スキル初期化
     _skillList = new Array<SkillData>();
@@ -87,11 +94,12 @@ class Global {
 
   // プレイヤー情報の取得
   public static function getPlayerParam():Params {
-    return _playerParam;
+    return PartyMgr.getPlayerParam();
   }
   // プレイヤーパラメータの設定
   public static function setPlayerParam(param:Params):Void {
-    _playerParam.copy(param);
+    var p = getPlayerParam();
+    p.copy(param);
   }
   // プレイヤー名の取得
   public static function getPlayerName():String {
@@ -99,17 +107,12 @@ class Global {
   }
   // NPCパラメータの取得
   public static function getNpcParam(idx:Int):Params {
-    return _npcParam;
+    return PartyMgr.getNpcParam(idx);
   }
 
   // パーティの人数を取得する
   public static function getPartyCount():Int {
-    var cnt:Int = 1;
-    if(_npcParam.exists) {
-      cnt++;
-    }
-
-    return cnt;
+    return PartyMgr.countExists();
   }
 
   // スキルスロットの取得
