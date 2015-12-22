@@ -51,7 +51,7 @@ class FieldSubState extends FlxSubState {
   var _btnSkill:MyButton2;
 
   // キャラUI
-  var _ui:BtlCharaUI;
+  var _ui:FlxSpriteGroup;
 
   // ステータス
   var _txtStr:FlxText;
@@ -65,7 +65,7 @@ class FieldSubState extends FlxSubState {
   /**
    * コンストラクタ
    **/
-  public function new(actor:Actor, ui:BtlCharaUI, cbClose:Void->Void) {
+  public function new(actor:Actor, ui:FlxSpriteGroup, cbClose:Void->Void) {
     super();
     _actor   = actor;
     _ui      = ui;

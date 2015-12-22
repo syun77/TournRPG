@@ -48,7 +48,7 @@ class ShopState extends FlxSubState {
   var _fieldUI:FieldUI;
 
   // キャラUI
-  var _charaUI:BtlCharaUI;
+  var _charaUI:FlxSpriteGroup;
 
   // アイテム購入ボタン
   var _btnItemBuy:MyButton2;
@@ -68,7 +68,7 @@ class ShopState extends FlxSubState {
   /**
    * コンストラクタ
    **/
-  public function new(cbClose:Void->Void, fieldUI:FieldUI, charaUI:BtlCharaUI, actor:Actor) {
+  public function new(cbClose:Void->Void, fieldUI:FieldUI, charaUI:FlxSpriteGroup, actor:Actor) {
     super();
 
     _cbClose = cbClose;

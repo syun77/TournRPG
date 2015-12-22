@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.actor.PartyActorMgr;
 import jp_2dgames.game.actor.PartyMgr;
 import jp_2dgames.game.shop.ShopData;
 import jp_2dgames.game.skill.SkillSlot;
@@ -17,6 +18,7 @@ class Global {
 
   // ■スタティック変数
   static var _bLoad:Bool = false;
+  static var _party:PartyMgr = null;
   static var _playerName:String = "プレイヤー";
   static var _itemList:Array<ItemData> = null;
   static var _money:Int = 0;
@@ -69,11 +71,11 @@ class Global {
   private static function _initPlayer():Void {
 
     // パーティ生成
-    PartyMgr.create();
+    _party = new PartyMgr();
 
     // パラメータ生成
     {
-      var p = PartyMgr.getPlayerParam();
+      var p = _party.getPlayerParam();
       var lv:Int = 1;
       PlayerInfo.setParam(p, lv);
       p.name = _playerName;
@@ -81,7 +83,7 @@ class Global {
 
     // TODO: NPCパラメータ設定
     {
-      var p = PartyMgr.getEmptyNpc();
+      var p = _party.getEmptyNpc();
       var lv:Int = 1;
       PlayerInfo.setParam(p, lv);
       p.name = "仲間";
@@ -94,7 +96,7 @@ class Global {
 
   // プレイヤー情報の取得
   public static function getPlayerParam():Params {
-    return PartyMgr.getPlayerParam();
+    return _party.getPlayerParam();
   }
   // プレイヤーパラメータの設定
   public static function setPlayerParam(param:Params):Void {
@@ -107,12 +109,17 @@ class Global {
   }
   // NPCパラメータの取得
   public static function getNpcParam(idx:Int):Params {
-    return PartyMgr.getNpcParam(idx);
+    return _party.getNpcParam(idx);
   }
 
   // パーティの人数を取得する
   public static function getPartyCount():Int {
-    return PartyMgr.countExists();
+    return _party.countExists();
+  }
+
+  // パーティ管理の情報をコピーする
+  public static function copyFromParty(party:PartyActorMgr):Void {
+    _party.copyFromActor(party);
   }
 
   // スキルスロットの取得

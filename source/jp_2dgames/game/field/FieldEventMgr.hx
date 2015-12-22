@@ -1,5 +1,7 @@
 package jp_2dgames.game.field;
 
+import jp_2dgames.game.actor.PartyActorMgr;
+import jp_2dgames.game.actor.PartyMgr;
 import jp_2dgames.game.gui.message.UIMsg;
 import jp_2dgames.game.btl.BtlMgr.BtlMgrParam;
 import jp_2dgames.game.actor.Actor;
@@ -73,15 +75,15 @@ class FieldEventMgr {
   // F.O.E.
   var _foe:FieldFoe = null;
 
-  // 実行主体者
-  var _actor:Actor = null;
+  // パーティ情報
+  var _party:PartyActorMgr = null;
 
   /**
    * コンストラクタ
    **/
-  public function new(flxState:FieldState, actor:Actor) {
+  public function new(flxState:FieldState, party:PartyActorMgr) {
     _flxState = flxState;
-    _actor = actor;
+    _party = party;
 
     // CSV読み込み
     _csvFieldItem  = new CsvLoader(Reg.PATH_CSV_FIELD_ITEM);
@@ -184,7 +186,7 @@ class FieldEventMgr {
         FlxG.camera.fade(FlxColor.WHITE, 0.1, true, null, true);
         // バトルパラメータ生成
         var param = new BtlMgrParam();
-        param.param = _actor.param;
+        param.party.copyFromActor(_party);
         param.enemyGroupID = nBtl;
         param.effect = node.eftType;
         _flxState.openSubState(new BattleState(param, _cbBattleEnd));
@@ -222,8 +224,8 @@ class FieldEventMgr {
    **/
   private function _cbBattleEnd(btlEnd:BtlEndResult):Void {
 
-    // プレイヤーパラメータ設定
-    _actor.param.copy(btlEnd.getParamPlayer());
+    // パーティパラメータコピー
+    _party.copyFromParam(btlEnd.party);
 
     switch(btlEnd.type) {
       case BtlEndType.Win:

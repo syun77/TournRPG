@@ -129,7 +129,7 @@ class TestBattleState extends FlxState {
     if(Input.press.A) {
       // バトル開始
       var param = new BtlMgrParam();
-      param.param = Global.getPlayerParam();
+      param.party.getPlayerParam().copy(Global.getPlayerParam());
       param.enemyGroupID = _nEnemyGroup;
       openSubState(new BattleState(param, function(param:BtlEndResult) {
         // 特に何もしない

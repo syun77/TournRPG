@@ -116,6 +116,7 @@ class Message extends FlxGroup {
     state.remove(instance);
     instance = FlxDestroyUtil.destroy(instance);
     instance = _instancePrev;
+    _instancePrev = null;
   }
   public static function createInstancePush(csv:CsvLoader, state:FlxState):Void {
     // 現在のインスタンスをテンポラリに移動

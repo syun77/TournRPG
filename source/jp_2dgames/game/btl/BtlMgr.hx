@@ -26,15 +26,16 @@ import jp_2dgames.lib.Input;
  * バトル起動パラメータ
  **/
 class BtlMgrParam {
-  public var param:Params;       // プレイヤーパラメータ
+  public var party:PartyMgr;     // パーティ情報
   public var enemyGroupID:Int;   // 敵グループID
   public var effect:FieldEffect; // 地形効果
 
   public function new() {
-    param = null;
+    party = new PartyMgr();
     enemyGroupID = 0;
     effect = FieldEffect.None;
   }
+
 }
 
 /**
@@ -90,10 +91,10 @@ class BtlMgr {
     var npcIdx:Int = 0;
     ActorMgr.forEachAliveGroup(BtlGroup.Player, function(actor:Actor) {
       if(actor.isPlayer()) {
-        _btlEnd.setParamPlayer(actor.param);
+        _btlEnd.party.getPlayerParam().copy(actor.param);
       }
       else {
-        _btlEnd.setParamNpc(npcIdx, actor.param);
+        _btlEnd.party.getNpcParam(npcIdx).copy(actor.param);
         npcIdx++;
       }
     });
@@ -119,8 +120,16 @@ class BtlMgr {
     BtlInfoUI.setEffect(param.effect);
 
     // プレイヤーの生成
-    for(i in 0...PartyMgr.countExists()) {
-      var actor = ActorMgr.recycle(BtlGroup.Player, param.param);
+    var party = param.party;
+    for(i in 0...party.countExists()) {
+      var p:Params = null;
+      if(i == PartyMgr.PLAYER_IDX) {
+        p = party.getPlayerParam();
+      }
+      else {
+        p = party.getNpcParam(i - PartyMgr.NPC_IDX_START);
+      }
+      var actor = ActorMgr.recycle(BtlGroup.Player, p);
       _createPlayer(i, actor);
       if(i == PartyMgr.PLAYER_IDX) {
         // 主人公

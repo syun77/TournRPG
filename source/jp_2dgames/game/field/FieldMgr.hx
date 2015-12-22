@@ -1,5 +1,8 @@
 package jp_2dgames.game.field;
 
+import flixel.group.FlxSpriteGroup;
+import jp_2dgames.game.actor.PartyActorMgr;
+import jp_2dgames.game.actor.PartyMgr;
 import jp_2dgames.game.gui.message.UIMsg;
 import jp_2dgames.game.gui.message.Msg;
 import jp_2dgames.game.gui.message.Message;
@@ -88,11 +91,11 @@ class FieldMgr {
   // ショップボタン
   var _btnShop:MyButton2;
 
-  // Actor情報
-  var _actor:Actor;
+  // パーティ情報
+  var _party:PartyActorMgr;
 
   // キャラUI
-  var _charaUI:BtlCharaUI;
+  var _charaUI:FlxSpriteGroup;
 
   // フィールドUI
   var _fieldUI:FieldUI;
@@ -195,25 +198,41 @@ class FieldMgr {
     _flxState.add(_player);
 
     // Actor情報を生成
-    _actor = new Actor(0);
-    _actor.init(BtlGroup.Player, Global.getPlayerParam());
+    _party = new PartyActorMgr();
+    _party.createPlayer(Global.getPlayerParam());
+    for(i in 0...PartyMgr.NPC_MAX) {
+      var npc = Global.getNpcParam(i);
+      if(npc != null) {
+        _party.createNpc(i, npc);
+      }
+    }
+    trace("Party.countExits: ", _party.countExists());
 
     // 移動可能な経路を表示
     _lines = new LineMgr(_flxState, LINE_MAX, MyColor.ASE_LIME);
     _openNodes();
 
     // イベント管理
-    _eventMgr = new FieldEventMgr(_flxState, _actor);
+    _eventMgr = new FieldEventMgr(_flxState, _party);
 
     // UI表示
-    _charaUI = new BtlCharaUI(0, BtlPlayerUI.CHARA_Y, _actor);
+    _charaUI = new FlxSpriteGroup();
+    for(i in 0..._party.countExists()) {
+      var actor = _party.getActorFromIdx(i);
+      var ui = new BtlCharaUI(i, 0, actor);
+      ui.x = BtlCharaUI.WIDTH * i;
+      _charaUI.add(ui);
+    }
     _charaUI.scrollFactor.set();
     _flxState.add(_charaUI);
 
     // フィールドUI
-    _fieldUI = new FieldUI(_actor);
-    _fieldUI.scrollFactor.set();
-    _flxState.add(_fieldUI);
+    {
+      var player = _party.getPlayer();
+      _fieldUI = new FieldUI(player);
+      _fieldUI.scrollFactor.set();
+      _flxState.add(_fieldUI);
+    }
 
     // メッセージ
     var csv = new CsvLoader(Reg.PATH_CSV_MESSAGE);
@@ -227,7 +246,8 @@ class FieldMgr {
         _hideUI();
         // プレイヤーフォーカス
         FlxG.camera.follow(_player, FlxCamera.STYLE_LOCKON, null, 10);
-        _flxState.openSubState(new FieldSubState(_actor, _charaUI, function() {
+        var player = _party.getPlayer();
+        _flxState.openSubState(new FieldSubState(player, _charaUI, function() {
           // サブメニューを閉じたときに呼び出す関数
           _appearUI();
           var obj = new FlxObject(FlxG.width/2, FlxG.height/2);
@@ -263,7 +283,8 @@ class FieldMgr {
         // プレイヤーフォーカス
         FlxG.camera.follow(_player, FlxCamera.STYLE_LOCKON, null, 10);
         // ショップを表示
-        _flxState.openSubState(new ShopState(_cbShopEnd, _fieldUI, _charaUI, _actor));
+        var player = _party.getPlayer();
+        _flxState.openSubState(new ShopState(_cbShopEnd, _fieldUI, _charaUI, player));
         _state = State.Shop;
       });
       _btnShop.color = MyColor.BTN_SHOP;
@@ -401,7 +422,7 @@ class FieldMgr {
 
       case State.Gameover:
         // グローバルに保存
-        Global.setPlayerParam(_actor.param);
+        Global.copyFromParty(_party);
         // おしまい
         _state = State.End;
 
@@ -505,16 +526,18 @@ class FieldMgr {
    * @return 死亡したらtrue
    **/
   private function _damageHunger():Bool {
-    var v = Std.int(_actor.hpmax * Reg.FOOD_DAMAGE);
-    Message.push2(Msg.DAMAGE_PLAYER, [_actor.name, v]);
-    _charaUI.damage();
-    _charaUI.shake();
+    var player = _party.getPlayer();
+    var v = Std.int(player.hpmax * Reg.FOOD_DAMAGE);
+    Message.push2(Msg.DAMAGE_PLAYER, [player.name, v]);
+    var ui = cast(_charaUI.members[0], BtlCharaUI);
+    ui.damage();
+    ui.shake();
 
     // SE再生
     Snd.playSe("hit");
 
     // ダメージを与える
-    return _actor.damage(v);
+    return player.damage(v);
   }
 
   /**
@@ -555,8 +578,9 @@ class FieldMgr {
    **/
   private function _updateHungerBegin():Void {
     // 食糧を減らす
-    if(_actor.param.food > 0) {
-      _actor.param.food--;
+    var player = _party.getPlayer();
+    if(player.param.food > 0) {
+      player.param.food--;
       // イベント処理へ
       _state = State.EventBegin;
       return;
@@ -566,7 +590,7 @@ class FieldMgr {
     _state = State.HungerExec;
     // 食糧がないのでダメージ (20%)
     _damageHunger();
-    if(_actor.isDead()) {
+    if(player.isDead()) {
       // 死亡したので赤フラッシュ
       FlxG.camera.flash(FlxColor.RED, 0.2);
       // プレイヤーアイコンを消しておく
@@ -574,9 +598,9 @@ class FieldMgr {
     }
     // 揺らす
     FlxG.camera.shake(0.01, 0.5, function() {
-      if(_actor.isDead()) {
+      if(player.isDead()) {
         // 餓死
-        Message.push2(Msg.DEAD, [_actor.name]);
+        Message.push2(Msg.DEAD, [player.name]);
         var px = FlxG.width/2 - MyButton2.WIDTH/2;
         var py = FlxG.height -128;
         var btn = new MyButton2(px, py, "NEXT", function() {
@@ -680,7 +704,7 @@ class FieldMgr {
     // フェード開始
     FlxG.camera.fade(FlxColor.BLACK, 1, false, function() {
       // グローバルに保存
-      Global.setPlayerParam(_actor.param);
+      Global.copyFromParty(_party);
       _resultCode = RET_NEXTSTAGE;
       _state = State.End;
     });
