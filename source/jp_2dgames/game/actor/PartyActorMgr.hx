@@ -40,8 +40,8 @@ class PartyActorMgr {
    * PartyMgrからコピーする
    **/
   public function copyFromParam(src:PartyMgr):Void {
-    for(i in 0...src.countExists()) {
-      _actorList[i].init(BtlGroup.Player, src.getNpcParam(i));
+    for(i in 0...PartyMgr.PARTY_MAX) {
+      _actorList[i].init(BtlGroup.Player, src.getParamFromIdx(i));
     }
   }
 
