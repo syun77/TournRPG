@@ -206,7 +206,6 @@ class FieldMgr {
         _party.createNpc(i, npc);
       }
     }
-    trace("Party.countExits: ", _party.countExists());
 
     // 移動可能な経路を表示
     _lines = new LineMgr(_flxState, LINE_MAX, MyColor.ASE_LIME);

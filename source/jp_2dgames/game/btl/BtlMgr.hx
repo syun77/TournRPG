@@ -1,5 +1,6 @@
 package jp_2dgames.game.btl;
 
+import jp_2dgames.game.gui.BtlCharaUI;
 import jp_2dgames.game.actor.PartyMgr;
 import flixel.FlxCamera;
 import flixel.FlxG;
@@ -193,6 +194,18 @@ class BtlMgr {
 
     // コマンド設定
     actor.setCommand(cmd);
+
+    // TODO: NPCのコマンド設定
+    ActorMgr.forEachAliveGroup(BtlGroup.Player, function(act:Actor) {
+      if(act.isPlayer()) {
+        // プレイヤーは設定不要
+        return;
+      }
+      // TODO: ひとまず攻撃
+      var targetID = ActorMgr.random(BtlGroup.Enemy).ID;
+      var cmd2 = BtlCmd.Attack(BtlRange.One, targetID);
+      act.setCommand(cmd2);
+    });
 
     // 敵のAIを設定
     ActorMgr.requestEnemyAI();

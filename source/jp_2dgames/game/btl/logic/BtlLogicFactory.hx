@@ -33,21 +33,7 @@ class BtlLogicFactory {
     switch(actor.cmd) {
       case BtlCmd.Attack(range, targetID):
         // 攻撃演出の作成
-        // 開始
-        {
-          var type = BtlLogic.BeginEffect(BtlLogicBegin.Attack);
-          var d = new BtlLogicData(actor.ID, actor.group, type);
-          d.setTarget(targetID);
-          ret.add(d);
-        }
-        ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.BeginAttack));
-
-        // 攻撃
-        var eft = _createAttack(actor, range, targetID);
-        ret.add(eft);
-
-        // 終了
-        ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.EndAction));
+        _createAttack(actor, range, targetID, ret);
 
       case BtlCmd.Skill(skillID, range, targetID):
         // スキル演出の作成
@@ -111,9 +97,59 @@ class BtlLogicFactory {
   }
 
   /**
+   * 何もしない
+   **/
+  private static function _createNone(actor:Actor):BtlLogicData {
+    var type = BtlLogic.Message2(Msg.ACTION_STANDBY, [actor.name]);
+    var eft = new BtlLogicData(actor.ID, actor.group, type);
+    return eft;
+  }
+
+  /**
+   * 攻撃絵出の作成
+   **/
+  private static function _createAttack(actor:Actor, range:BtlRange, targetID:Int, ret:List<BtlLogicData>):Void {
+
+    // 対象の存在チェック
+    {
+      var target = TempActorMgr.search(targetID);
+      if(target == null) {
+        // 対象がすでに死んでいる
+        var grp = BtlGroupUtil.getAgaint(actor.group);
+        target = TempActorMgr.random(grp);
+        if(target == null) {
+          // 何もしない
+          ret.add(_createNone(actor));
+          return;
+        }
+        else {
+          // 対象のIDを変更
+          targetID = target.ID;
+        }
+      }
+    }
+
+    // 開始
+    {
+      var type = BtlLogic.BeginEffect(BtlLogicBegin.Attack);
+      var d = new BtlLogicData(actor.ID, actor.group, type);
+      d.setTarget(targetID);
+      ret.add(d);
+    }
+    ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.BeginAttack));
+
+    // 攻撃実行
+    var eft = _createAttackExec(actor, range, targetID);
+    ret.add(eft);
+
+    // 終了
+    ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.EndAction));
+  }
+
+  /**
    * 通常攻撃
    **/
-  private static function _createAttack(actor:Actor, range:BtlRange, targetID:Int):BtlLogicData {
+  private static function _createAttackExec(actor:Actor, range:BtlRange, targetID:Int):BtlLogicData {
 
     // 対象を取得
     var target = TempActorMgr.search(targetID);
