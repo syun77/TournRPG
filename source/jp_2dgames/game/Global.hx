@@ -87,6 +87,7 @@ class Global {
       var lv:Int = 1;
       PlayerInfo.setParam(p, lv);
       p.name = "仲間";
+      p.id   = 1;
     }
 
     // スキル初期化

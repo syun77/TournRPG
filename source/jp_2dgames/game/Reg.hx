@@ -101,6 +101,14 @@ class Reg {
   }
 
   /**
+   * NPCのスクリプトのパスを取得する
+   **/
+  public static function getNpcScriptPath(id:Int):String {
+    var name = TextUtil.fillZero(id, 3);
+    return 'assets/data/ai/npc${name}.csv';
+  }
+
+  /**
    * 背景画像のパスを取得
    **/
   public static function getBackImagePath(id:Int):String {

@@ -195,16 +195,14 @@ class BtlMgr {
     // コマンド設定
     actor.setCommand(cmd);
 
-    // TODO: NPCのコマンド設定
+    // NPCのコマンド設定
     ActorMgr.forEachAliveGroup(BtlGroup.Player, function(act:Actor) {
       if(act.isPlayer()) {
         // プレイヤーは設定不要
         return;
       }
-      // TODO: ひとまず攻撃
-      var targetID = ActorMgr.random(BtlGroup.Enemy).ID;
-      var cmd2 = BtlCmd.Attack(BtlRange.One, targetID);
-      act.setCommand(cmd2);
+      // AI実行
+      act.requestAI();
     });
 
     // 敵のAIを設定

@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.lib.TextUtil;
 import flixel.util.FlxColorUtil;
 import jp_2dgames.game.gui.BtlCharaUI;
 import jp_2dgames.game.gui.HpBar;
@@ -406,6 +407,15 @@ class Actor extends FlxSprite {
       }
       _hpBar.revive();
     }
+    else {
+      // プレイヤーの場合の処理
+      if(bCreate) {
+        if(param.id > 0 && isPlayer() == false) {
+          // NPCの初期化
+          _initNpc();
+        }
+      }
+    }
 
     _bPlayer = false;
     color = FlxColor.WHITE;
@@ -467,6 +477,19 @@ class Actor extends FlxSprite {
       // バステアイコン非表示
       _bstIcon.set(BadStatus.None);
     }
+  }
+
+  /**
+   * NPCの初期化処理
+   **/
+  private function _initNpc():Void {
+
+    // ID取得
+    var id = _param.id;
+
+    // AIスクリプト読み込み
+    var script = Reg.getNpcScriptPath(id);
+    _ai = new ActorAI(this, script);
   }
 
   /**
