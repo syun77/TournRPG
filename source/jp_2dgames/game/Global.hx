@@ -84,10 +84,8 @@ class Global {
     // TODO: NPCパラメータ設定
     {
       var p = _party.getEmptyNpc();
-      var lv:Int = 1;
-      PlayerInfo.setParam(p, lv);
-      p.name = "仲間";
-      p.id   = 1;
+      p.exists = true;
+      p.id = 1;
     }
 
     // スキル初期化

@@ -3,9 +3,10 @@ package jp_2dgames.game.actor;
 import jp_2dgames.lib.CsvLoader;
 
 /**
- * 敵情報
+ * NPC情報
  **/
-class EnemyInfo {
+class NpcInfo {
+
   static var _csv:CsvLoader = null;
 
   /**
@@ -13,7 +14,7 @@ class EnemyInfo {
    **/
   public static function load():Void {
     if(_csv == null) {
-      _csv = new CsvLoader(Reg.PATH_CSV_ENEMY);
+      _csv = new CsvLoader(Reg.PATH_CSV_PLAYER_NPC);
     }
   }
 
@@ -29,10 +30,11 @@ class EnemyInfo {
     param.lv = 1;
     param.hp = get(id, "hp");
     param.hpmax = param.hp;
-    param.str   = get(id, "str");
-    param.vit   = get(id, "vit");
-    param.agi   = get(id, "agi");
-    param.xp    = get(id, "xp");
-    param.money = get(id, "money");
+    param.str = get(id, "str");
+    param.vit = get(id, "vit");
+    param.agi = get(id, "agi");
+  }
+
+  public function new() {
   }
 }

@@ -487,6 +487,9 @@ class Actor extends FlxSprite {
     // ID取得
     var id = _param.id;
 
+    // パラメータ設定
+    NpcInfo.setParam(_param, id);
+
     // AIスクリプト読み込み
     var script = Reg.getNpcScriptPath(id);
     _ai = new ActorAI(this, script);
@@ -507,9 +510,6 @@ class Actor extends FlxSprite {
 
     // パラメータ設定
     EnemyInfo.setParam(_param, id);
-
-    // 名前を設定
-    _param.name = EnemyInfo.getString(id, "name");
 
     // 表示する
     visible = true;
