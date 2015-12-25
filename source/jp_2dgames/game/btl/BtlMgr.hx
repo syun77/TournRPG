@@ -1,6 +1,5 @@
 package jp_2dgames.game.btl;
 
-import jp_2dgames.game.gui.BtlCharaUI;
 import jp_2dgames.game.actor.PartyMgr;
 import flixel.FlxCamera;
 import flixel.FlxG;

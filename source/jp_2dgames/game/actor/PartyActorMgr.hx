@@ -41,7 +41,8 @@ class PartyActorMgr {
    **/
   public function copyFromParam(src:PartyMgr):Void {
     for(i in 0...PartyMgr.PARTY_MAX) {
-      _actorList[i].init(BtlGroup.Player, src.getParamFromIdx(i));
+      var param = src.getParamFromIdx(i);
+      _actorList[i].init(BtlGroup.Player, src.getParamFromIdx(i), false);
     }
   }
 

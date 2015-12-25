@@ -115,6 +115,10 @@ class BattleState extends FlxSubState {
   override public function update():Void {
     super.update();
 
+    if(active == false) {
+      return;
+    }
+
     // バトル更新
     _btlMgr.proc();
 
