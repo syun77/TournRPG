@@ -116,9 +116,24 @@ class Global {
     return _party.countExists();
   }
 
+  // パーティ情報を取得する
+  public static function getParty():PartyMgr {
+    return _party;
+  }
+
+  // パーティ情報をコピーする
+  public static function copyFromParty(party:PartyMgr):Void {
+    _party.copy(party);
+  }
+
   // パーティ管理の情報をコピーする
-  public static function copyFromParty(party:PartyActorMgr):Void {
+  public static function copyFromPartyActor(party:PartyActorMgr):Void {
     _party.copyFromActor(party);
+  }
+
+  // インデックス指定でパラメータを取得
+  public static function getParamFromIdx(idx:Int):Params {
+    return _party.getParamFromIdx(idx);
   }
 
   // スキルスロットの取得

@@ -1,5 +1,6 @@
 package jp_2dgames.game.save;
 
+import jp_2dgames.game.actor.PartyMgr;
 import jp_2dgames.game.field.FieldEffectUtil;
 import jp_2dgames.game.shop.ShopData;
 import jp_2dgames.game.skill.SkillData;
@@ -34,20 +35,28 @@ private class _Global {
   }
 }
 
-// プレイヤー
-private class _Player {
-  public var params:Params;
+// パーティ情報
+private class _Party {
+  public var array:Array<Params>;
   public function new() {
+    array = new Array<Params>();
+    for(i in 0...PartyMgr.PARTY_MAX) {
+      array.push(new Params());
+    }
   }
   // セーブ
   public function save() {
-    params = Global.getPlayerParam();
+    for(i in 0...PartyMgr.PARTY_MAX) {
+      var p = Global.getParamFromIdx(i);
+      array[i].copy(p);
+    }
   }
   // ロード
   public function load(data:Dynamic) {
-    var prms = new Params();
-    prms.copy(data.params);
-    Global.setPlayerParam(prms);
+    for(idx in 0...data.array.length) {
+      var param = data.array[idx];
+      Global.getParamFromIdx(idx).copy(param);
+    }
   }
 }
 
@@ -218,7 +227,7 @@ private class _Shop {
  **/
 private class SaveData {
   public var global:_Global;
-  public var player:_Player;
+  public var party:_Party;
   public var inventory:_Inventory;
   public var field:_Field;
   public var foe:_FoeInfo;
@@ -226,7 +235,7 @@ private class SaveData {
 
   public function new() {
     global = new _Global();
-    player = new _Player();
+    party = new _Party();
     inventory = new _Inventory();
     field = new _Field();
     foe = new _FoeInfo();
@@ -236,7 +245,7 @@ private class SaveData {
   // セーブ
   public function save() {
     global.save();
-    player.save();
+    party.save();
     inventory.save();
     field.save();
     foe.save();
@@ -246,7 +255,7 @@ private class SaveData {
   // ロード
   public function load(data:Dynamic) {
     global.load(data.global);
-    player.load(data.player);
+    party.load(data.player);
     inventory.load(data.inventory);
     field.load(data.field);
     foe.load(data.foe);

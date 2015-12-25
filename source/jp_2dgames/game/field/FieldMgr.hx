@@ -421,7 +421,7 @@ class FieldMgr {
 
       case State.Gameover:
         // グローバルに保存
-        Global.copyFromParty(_party);
+        Global.copyFromPartyActor(_party);
         // おしまい
         _state = State.End;
 
@@ -703,7 +703,7 @@ class FieldMgr {
     // フェード開始
     FlxG.camera.fade(FlxColor.BLACK, 1, false, function() {
       // グローバルに保存
-      Global.copyFromParty(_party);
+      Global.copyFromPartyActor(_party);
       _resultCode = RET_NEXTSTAGE;
       _state = State.End;
     });
