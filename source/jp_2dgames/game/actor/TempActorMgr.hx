@@ -1,5 +1,6 @@
 package jp_2dgames.game.actor;
 
+import jp_2dgames.game.btl.BtlGlobal;
 import flixel.util.FlxRandom;
 import jp_2dgames.game.btl.BtlGroupUtil;
 import flixel.group.FlxTypedGroup;
@@ -108,5 +109,50 @@ class TempActorMgr {
    **/
   public static function countGroup(group:BtlGroup):Int {
     return _pool.countGroup(group);
+  }
+
+  /**
+   * プレイヤーが死亡しているかどうか
+   **/
+  public static function isDeadPlayer():Bool {
+    var isDead:Bool = true;
+    forEachAliveGroup(BtlGroup.Player, function(actor:Actor) {
+      if(actor.isPlayer()) {
+        // 生きている
+        isDead = false;
+      }
+    });
+
+    return isDead;
+  }
+
+  /**
+   * プレイヤーを探す
+   **/
+  public static function searchPlayer():Actor {
+
+    // 生存者から探す
+    var player:Actor = null;
+    forEachAliveGroup(BtlGroup.Player, function(actor:Actor) {
+      if(actor.isPlayer()) {
+        player = actor;
+      }
+    });
+    if(player != null) {
+      return player;
+    }
+
+    // 墓場から探す
+    forEachGrave(function(actor:Actor) {
+      if(actor.isPlayer()) {
+        player = actor;
+      }
+    });
+    if(player != null) {
+      return player;
+    }
+
+    throw "Error: Not found player.";
+    return null;
   }
 }

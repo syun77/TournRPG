@@ -131,10 +131,6 @@ class BtlMgr {
       }
       var actor = ActorMgr.recycle(BtlGroup.Player, p);
       _createPlayer(i, actor);
-      if(i == PartyMgr.PLAYER_IDX) {
-        // 主人公
-        actor.setPlayer(true);
-      }
     }
 
     // バトル地形

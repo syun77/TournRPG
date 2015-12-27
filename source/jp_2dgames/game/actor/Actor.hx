@@ -85,12 +85,14 @@ class Actor extends FlxSprite {
   }
 
   // プレイヤーかどうか
-  var _bPlayer:Bool = false;
   public function isPlayer():Bool {
-    return _bPlayer;
-  }
-  public function setPlayer(b:Bool):Void {
-    _bPlayer = b;
+    if(group == BtlGroup.Player) {
+      if(param.id == PartyMgr.PLAYER_IDX) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   // 名前
@@ -417,7 +419,6 @@ class Actor extends FlxSprite {
       }
     }
 
-    _bPlayer = false;
     color = FlxColor.WHITE;
     _tAnimColor = 0;
     _animColor  = FlxColor.WHITE;

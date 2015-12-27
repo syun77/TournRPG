@@ -148,11 +148,10 @@ class BtlLogicMgr {
    **/
   private function _checkBattleEnd():Bool {
 
-    // 全滅チェック
-    if(TempActorMgr.countGroup(BtlGroup.Player) == 0) {
-      // 味方が全滅
+    if(TempActorMgr.isDeadPlayer()) {
+      // プレイヤー死亡
       // ランダムで味方を取得
-      var player = TempActorMgr.searchGraveRandom(BtlGroup.Player);
+      var player = TempActorMgr.searchPlayer();
       var eft = BtlLogicFactory.createBtlEnd(player, false);
       push(eft);
       // 終了
