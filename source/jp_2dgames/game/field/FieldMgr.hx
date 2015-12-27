@@ -62,7 +62,7 @@ class FieldMgr {
   public static inline var RET_GAMEOVER:Int  = 2;
 
   // 点線の最大数
-  static inline var LINE_MAX:Int = 8;
+  static inline var LINE_COUNT_MAX:Int = 8;
 
   // 状態
   var _state:State = State.Main;
@@ -208,7 +208,7 @@ class FieldMgr {
     }
 
     // 移動可能な経路を表示
-    _lines = new LineMgr(_flxState, LINE_MAX, MyColor.ASE_LIME);
+    _lines = new LineMgr(_flxState, LINE_COUNT_MAX, MyColor.ASE_LIME);
     _openNodes();
 
     // イベント管理
