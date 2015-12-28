@@ -89,11 +89,19 @@ class BtlMgr {
   public var btlEnd(get, never):BtlEndResult;
   private function get_btlEnd() {
     var npcIdx:Int = 0;
+    // 生存者から探す
     ActorMgr.forEachAliveGroup(BtlGroup.Player, function(actor:Actor) {
       if(actor.isPlayer()) {
         _btlEnd.party.getPlayerParam().copy(actor.param);
       }
       else {
+        _btlEnd.party.getNpcParam(npcIdx).copy(actor.param);
+        npcIdx++;
+      }
+    });
+    // 墓場から探す
+    ActorMgr.forEachGrave(function(actor:Actor) {
+      if(actor.group == BtlGroup.Player) {
         _btlEnd.party.getNpcParam(npcIdx).copy(actor.param);
         npcIdx++;
       }
