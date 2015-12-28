@@ -130,6 +130,7 @@ class BtlMgr {
         p = party.getNpcParam(i - PartyMgr.NPC_IDX_START);
       }
       var actor = ActorMgr.recycle(BtlGroup.Player, p);
+      actor.copyParam(p);
       _createPlayer(i, actor);
     }
 

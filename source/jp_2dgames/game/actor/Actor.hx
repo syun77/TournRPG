@@ -393,6 +393,13 @@ class Actor extends FlxSprite {
   }
 
   /**
+   * パラメータのみコピーする
+   **/
+  public function copyParam(p:Params):Void {
+    param.copy(p);
+  }
+
+  /**
    * 初期化
    **/
   public function init(group:BtlGroup, params:Params, bCreate:Bool=true):Void {
