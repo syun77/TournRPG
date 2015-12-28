@@ -1,5 +1,4 @@
 package jp_2dgames.game.gui;
-import flash.display.BlendMode;
 import flixel.util.FlxColor;
 import flixel.util.FlxAngle;
 import flixel.util.FlxColorUtil;
@@ -85,8 +84,8 @@ class BtlCharaUI extends FlxSpriteGroup {
   public static inline var BAR_HPMP_HEIGHT = 2;
 
   // バステアイコン
-  public static inline var BST_X = WIDTH + 4;
-  public static inline var BST_Y = 0;
+  public static inline var BST_X = 2;//WIDTH + 4;
+  public static inline var BST_Y = 2;
 
 
   // ■メンバ変数
