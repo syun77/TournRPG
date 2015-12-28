@@ -26,9 +26,10 @@ class NpcInfo {
   }
 
   public static function setParam(param:Params, id:Int):Void {
-    param.name = getString(id, "name");
-    param.lv = 1;
-    param.hp = get(id, "hp");
+    param.id    = id;
+    param.name  = getString(id, "name");
+    param.lv    = 1;
+    param.hp    = get(id, "hp");
     param.hpmax = param.hp;
     param.str = get(id, "str");
     param.vit = get(id, "vit");

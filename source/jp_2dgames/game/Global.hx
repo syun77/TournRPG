@@ -1,5 +1,6 @@
 package jp_2dgames.game;
 
+import jp_2dgames.game.actor.NpcInfo;
 import jp_2dgames.game.actor.PartyActorMgr;
 import jp_2dgames.game.actor.PartyMgr;
 import jp_2dgames.game.shop.ShopData;
@@ -85,7 +86,7 @@ class Global {
     {
       var p = _party.getEmptyNpc();
       p.exists = true;
-      p.id = 1;
+      NpcInfo.setParam(p, 1);
     }
 
     // スキル初期化

@@ -204,6 +204,7 @@ class FieldMgr {
       var npc = Global.getNpcParam(i);
       if(npc != null) {
         _party.createNpc(i, npc);
+        _party.getNpc(i).copyParam(npc);
       }
     }
 
