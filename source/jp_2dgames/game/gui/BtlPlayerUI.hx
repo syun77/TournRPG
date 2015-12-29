@@ -35,8 +35,8 @@ class BtlPlayerUI extends FlxSpriteGroup {
    * @param idx     パーティ番号
    * @param actorID ActorID
    **/
-  public static function setPlayerID(idx:Int, actorID:Int):Void {
-    _instance._setPlayerID(idx, actorID);
+  public static function setPlayerID(idx:Int, actorID:Int):BtlCharaUI {
+    return _instance._setPlayerID(idx, actorID);
   }
 
   // MISS
@@ -99,8 +99,9 @@ class BtlPlayerUI extends FlxSpriteGroup {
    * @param idx     パーティ番号
    * @param actorID ActorID
    **/
-  private function _setPlayerID(idx:Int, actorID:Int):Void {
+  private function _setPlayerID(idx:Int, actorID:Int):BtlCharaUI {
     _charaUIList[idx].setActorID(actorID);
+    return _charaUIList[idx];
   }
 
   /**

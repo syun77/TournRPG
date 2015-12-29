@@ -158,10 +158,12 @@ class BtlMgr {
 
   private function _createPlayer(idx:Int, player:Actor):Void {
     // プレイヤーUI
-    BtlPlayerUI.setPlayerID(idx, player.ID);
+    var ui = BtlPlayerUI.setPlayerID(idx, player.ID);
 
     player.x = FlxG.width/2;
     player.y = FlxG.height/2;
+    player.x_ui = ui.x;
+    player.y_ui = ui.y;
   }
 
   private function _change(s:State):Void {

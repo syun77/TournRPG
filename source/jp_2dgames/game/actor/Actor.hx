@@ -240,6 +240,10 @@ class Actor extends FlxSprite {
   private function get_ycenter() {
     return y + origin.y;
   }
+  // UIの座標を取得する
+  public var x_ui(default, default):Float;
+  public var y_ui(default, default):Float;
+
   // 一番上の座標を取得する
   public var top(get, never):Float;
   private function get_top() {

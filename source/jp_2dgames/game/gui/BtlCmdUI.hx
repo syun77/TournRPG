@@ -199,22 +199,23 @@ class BtlCmdUI extends FlxSpriteGroup {
     var range = SkillUtil.toRange(skill.id);
 
     // 自分自身が対象かどうかチェック
-    var bSelf = false;
+    var bPlayer = false;
     switch(range) {
       case SkillRange.Self, SkillRange.FriendOne, SkillRange.FriendAll:
         // 自分自身
-        bSelf = true;
+        bPlayer = true;
 
       default:
         // 敵が対象
-        bSelf = false;
+        bPlayer = false;
     }
 
-    if(bSelf) {
+    if(bPlayer) {
       // 自分自身
       // バトル用の範囲
-      var btlRange = SkillUtil.rangeToBtlRange(range);
-      cbFunc(actor, BtlCmd.Skill(skill.id, btlRange, actor.ID));
+//      var btlRange = SkillUtil.rangeToBtlRange(range);
+//      cbFunc(actor, BtlCmd.Skill(skill.id, btlRange, actor.ID));
+      _skillTargetPlayer(actor, cbFunc, skill);
     }
     else {
       // 敵が対象
@@ -224,6 +225,34 @@ class BtlCmdUI extends FlxSpriteGroup {
     visible = false;
   }
 
+  /**
+   * 対象選択 (味方)
+   **/
+  private function _skillTargetPlayer(actor:Actor, cbFunc:Actor->BtlCmd->Void, skill:SkillData):Void {
+
+    // 対象グループ取得
+    var group = actor.group;
+    // 攻撃対象範囲
+    var range = SkillUtil.toRange(skill.id);
+
+    // バトル用の範囲
+    var btlRange = SkillUtil.rangeToBtlRange(range);
+
+    BtlTargetUI.open(_state, function(targetID) {
+      if(targetID == BtlTargetUI.CMD_CANCEL) {
+        // キャンセルした
+        _display();
+        visible = true;
+        return;
+      }
+      // スキル使用
+      cbFunc(actor, BtlCmd.Skill(skill.id, btlRange, targetID));
+    }, group, btlRange);
+  }
+
+  /**
+   * 対象選択 (敵)
+   **/
   private function _skillTargetEnemy(actor:Actor, cbFunc:Actor->BtlCmd->Void, skill:SkillData):Void {
 
     // 対象グループ取得

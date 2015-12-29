@@ -56,11 +56,7 @@ class BtlTargetUI extends FlxSpriteGroup {
       case BtlRange.One:
         // 単体
         ActorMgr.forEachAliveGroup(group, function(actor:Actor) {
-          var px = actor.xcenter - MyButton2.WIDTH/2;
-          var py = actor.bottom;
-          var btn = new MyButton2(px, py, actor.name, function() {
-            _click(cbFunc, actor.ID);
-          });
+          var btn = _addButtonTargetOne(cbFunc, group, actor);
           btnList.push(btn);
         });
 
@@ -106,6 +102,26 @@ class BtlTargetUI extends FlxSpriteGroup {
       btn.scrollFactor.set(0, 0);
       this.add(btn);
     }
+  }
+
+  /**
+   * ボタン作成（単体）
+   **/
+  private function _addButtonTargetOne(cbFunc:Int->Void, group:BtlGroup, actor:Actor):MyButton2 {
+
+    var px = actor.xcenter - MyButton2.WIDTH/2;
+    var py = actor.bottom;
+    if(group == BtlGroup.Player) {
+      px = actor.x_ui;
+      py = actor.y_ui;
+      py += 320;
+    }
+
+    var btn = new MyButton2(px, py, actor.name, function() {
+      _click(cbFunc, actor.ID);
+    });
+
+    return btn;
   }
 
   /**
