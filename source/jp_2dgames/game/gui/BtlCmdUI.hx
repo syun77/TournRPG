@@ -84,9 +84,11 @@ class BtlCmdUI extends FlxSpriteGroup {
       _attack(actor, cbFunc);
     }));
 
-    //  スキル
-    for(idx in 0...SkillSlot.count()) {
-      var skill = SkillSlot.getSkill(idx);
+    // スキルリスト
+    var skillList = SkillUtil.getSkillList(actor);
+
+    // スキル
+    for(skill in skillList) {
       if(SkillUtil.isNormal(skill.id) == false) {
         // パッシブスキルは選べない
         continue;
@@ -102,23 +104,25 @@ class BtlCmdUI extends FlxSpriteGroup {
       _btnList.add(btn);
     }
 
-    // アイテム
-    var lblItem = UIMsg.get(UIMsg.CMD_ITEM);
-    var btnItem = new MyButton2(0, 0, lblItem, function() {
-      // インベントリ表示
-      _displayInventoryUI(actor);
-    });
-    if(Inventory.isEmpty()) {
-      // アイテムがないので選べない
-      btnItem.enabled = false;
-    }
-    _btnList.add(btnItem);
+    if(actor.isPlayer()) {
+      // アイテム
+      var lblItem = UIMsg.get(UIMsg.CMD_ITEM);
+      var btnItem = new MyButton2(0, 0, lblItem, function() {
+        // インベントリ表示
+        _displayInventoryUI(actor);
+      });
+      if(Inventory.isEmpty()) {
+        // アイテムがないので選べない
+        btnItem.enabled = false;
+      }
+      _btnList.add(btnItem);
 
-    // 逃走
-    var lblEscape = UIMsg.get(UIMsg.CMD_ESCAPE);
-    _btnList.add(new MyButton2(0, 0, lblEscape, function() {
-      cbFunc(actor, BtlCmd.Escape(true));
-    }));
+      // 逃走
+      var lblEscape = UIMsg.get(UIMsg.CMD_ESCAPE);
+      _btnList.add(new MyButton2(0, 0, lblEscape, function() {
+        cbFunc(actor, BtlCmd.Escape(true));
+      }));
+    }
 
     // ボタンの登録と座標の調整
     var px = BTN_X;

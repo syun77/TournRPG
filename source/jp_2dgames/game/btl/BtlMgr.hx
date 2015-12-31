@@ -45,7 +45,9 @@ private enum State {
   None;         // なし
 
   TurnStart;    // ターン開始
-  InputCommand; // コマンド入力待ち
+  InputCmdNext; // コマンド入力チェック
+  InputCmdWait; // コマンド入力待ち
+  InputCmdEnd;  // コマンド入力終了
 
   LogicCreate;  // 演出作成
   LogicBegin;   // 演出開始
@@ -111,6 +113,9 @@ class BtlMgr {
   }
 
   private var _flxState:FlxState;
+
+  // 現在コマンド入力中のキャラ番号
+  private var _commandIdx:Int = 0;
 
   /**
    * コンストラクタ
@@ -201,26 +206,13 @@ class BtlMgr {
     // コマンド設定
     actor.setCommand(cmd);
 
-    // NPCのコマンド設定
-    ActorMgr.forEachAliveGroup(BtlGroup.Player, function(act:Actor) {
-      if(act.isPlayer()) {
-        // プレイヤーは設定不要
-        return;
-      }
-      // AI実行
-      act.requestAI();
-    });
-
-    // 敵のAIを設定
-    ActorMgr.requestEnemyAI();
-
     // バトルUI消去
     _flxState.remove(_btlCmdUI);
     _btlCmdUI.vanish(_flxState);
     _btlCmdUI = null;
 
-    // 演出リストの作成開始
-    _change(State.LogicCreate);
+    // 次のコマンドチェック
+    _change(State.InputCmdNext);
   }
 
   /**
@@ -235,6 +227,61 @@ class BtlMgr {
   }
 
   /**
+   * 更新・次のコマンドチェック
+   **/
+  private function _procInputCmdNext():Bool {
+    _commandIdx++;
+    if(_commandIdx == 0) {
+      // プレイヤー
+      var player = ActorMgr.getPlayer();
+      _btlCmdUI = new BtlCmdUI(_flxState, player, _cbCommand);
+      _flxState.add(_btlCmdUI);
+
+      // コマンド入力待ちする
+      return true;
+    }
+    else {
+      // NPC
+      var idx = _commandIdx;
+      var npc = ActorMgr.getNpc(idx);
+      if(npc == null) {
+        // コマンド入力終了
+        return false;
+      }
+      else {
+        _btlCmdUI = new BtlCmdUI(_flxState, npc, _cbCommand);
+        _flxState.add(_btlCmdUI);
+
+        // コマンド入力待ちする
+        return true;
+      }
+    }
+
+  }
+
+  /**
+   * 更新・コマンド入力終了
+   **/
+  private function _procInputCmdEnd():Void {
+
+    // NPCのコマンド設定
+    ActorMgr.forEachAliveGroup(BtlGroup.Player, function(act:Actor) {
+      if(act.isPlayer()) {
+        // プレイヤーは設定不要
+        return;
+      }
+      // AI実行
+      act.requestAI();
+    });
+
+    // 敵のAIを設定
+    ActorMgr.requestEnemyAI();
+
+    // 演出リストの作成開始
+    _change(State.LogicCreate);
+  }
+
+  /**
    * 更新
    **/
   public function proc():Void {
@@ -245,18 +292,32 @@ class BtlMgr {
 
       case State.TurnStart:
         // ターン開始
-        var player = ActorMgr.getPlayer();
-        _btlCmdUI = new BtlCmdUI(_flxState, player, _cbCommand);
-        _flxState.add(_btlCmdUI);
-        _change(State.InputCommand);
+        // コマンド入力チェックへ
+        _commandIdx = -1;
+        _change(State.InputCmdNext);
 
-      case State.InputCommand:
+      case State.InputCmdNext:
+        // コマンド入力チェック
+        if(_procInputCmdNext()) {
+          // まだ入力がある
+          _change(State.InputCmdWait);
+        }
+        else {
+          // 入力終了
+          _change(State.InputCmdEnd);
+        }
+
+      case State.InputCmdWait:
         // コマンド入力待ち
         // カメラズームを戻す
         var d = FlxCamera.defaultZoom - FlxG.camera.zoom;
         FlxG.camera.zoom += (d * 0.1);
         // デバッグ用入力チェック
         _debugProcInputCommand();
+
+      case State.InputCmdEnd:
+        // コマンド入力終了
+        _procInputCmdEnd();
 
       case State.LogicCreate:
         // ロジック生成

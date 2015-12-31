@@ -372,4 +372,28 @@ class SkillUtil {
         return BtlRange.All;
     }
   }
+
+  /**
+   * スキルリストを取得する
+   **/
+  public static function getSkillList(actor:Actor):List<SkillData> {
+
+    // スキルリスト
+    var skillList = new List<SkillData>();
+    if(actor.isPlayer()) {
+      // プレイヤー
+      for(idx in 0...SkillSlot.count()) {
+        var skill = SkillSlot.getSkill(idx);
+        skillList.add(skill);
+      }
+    }
+    else {
+      // NPC
+      // TODO: NPC情報テーブルから取得する
+      var skill = new SkillData(SkillConst.SKILL001);
+      skillList.add(skill);
+    }
+
+    return skillList;
+  }
 }

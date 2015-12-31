@@ -20,6 +20,7 @@ class Params {
   public var xp:Int    = 0;   // 経験値
   public var money:Int = 0;   // 所持金
   public var food:Int  = 0;   // 満腹度
+  public var npcIdx:Int= -1;  // NPC番号
 
   // バトル開始時に初期化
   public var buffAtk:Int = 0; // バフ・攻撃力 (マイナスはデバフ)

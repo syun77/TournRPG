@@ -92,6 +92,19 @@ class Actor extends FlxSprite {
       }
     }
 
+    // NPCもしくは敵
+    return false;
+  }
+
+  // NPCかどうか
+  public function isNpc(idx:Int):Bool {
+    if(group == BtlGroup.Player) {
+      if(param.id == idx) {
+        return true;
+      }
+    }
+
+    // プレイヤーもしくは敵
     return false;
   }
 

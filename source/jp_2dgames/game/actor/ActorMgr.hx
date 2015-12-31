@@ -150,6 +150,15 @@ class ActorMgr  {
   }
 
   /**
+   * NPCを取得する
+   **/
+  public static function getNpc(idx:Int):Actor {
+    return forEachAliveFirstIf(function(actor:Actor) {
+      return actor.isNpc(idx);
+    });
+  }
+
+  /**
    * デバッグ出力
    **/
   public static function dump():Void {

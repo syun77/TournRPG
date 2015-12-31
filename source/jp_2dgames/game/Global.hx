@@ -86,6 +86,7 @@ class Global {
     {
       var p = _party.getEmptyNpc();
       p.exists = true;
+      p.npcIdx = 0;
       NpcInfo.setParam(p, 1);
     }
 
