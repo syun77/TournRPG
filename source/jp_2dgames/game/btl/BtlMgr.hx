@@ -264,6 +264,7 @@ class BtlMgr {
    **/
   private function _procInputCmdEnd():Void {
 
+    /*
     // NPCのコマンド設定
     ActorMgr.forEachAliveGroup(BtlGroup.Player, function(act:Actor) {
       if(act.isPlayer()) {
@@ -273,6 +274,7 @@ class BtlMgr {
       // AI実行
       act.requestAI();
     });
+    */
 
     // 敵のAIを設定
     ActorMgr.requestEnemyAI();

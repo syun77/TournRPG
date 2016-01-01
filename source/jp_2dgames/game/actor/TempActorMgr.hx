@@ -49,6 +49,14 @@ class TempActorMgr {
   }
 
   /**
+   * 指定したIDに一致するインスタンスを取得
+   * 見つからなかった場合は同一グループからランダムで探す
+   **/
+  public static function searchRandom(id:Int):Actor {
+    return _pool.searchRandom(id);
+  }
+
+  /**
    * 生存しているActorのリストを取得
    **/
   public static function getAlive():Array<Actor> {

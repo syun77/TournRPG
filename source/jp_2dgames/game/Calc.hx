@@ -40,6 +40,11 @@ class Calc {
       base = 93.7;
     }
 
+    if(target == null) {
+      trace("act.name: ", act.name);
+      throw "target is null.";
+    }
+
     // 速度係数
     var ratio = Math.pow(1.02, act.agi - target.agi);
     var rnd = base * ratio;

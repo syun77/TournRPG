@@ -106,28 +106,34 @@ class BtlLogicFactory {
   }
 
   /**
+   * 目標Actorの取得
+   * 取得できなかったらランダム
+   * ランダムでも取得できなかったら何もしない
+   **/
+  private static function _getTargetRandom(actor:Actor, targetID:Int, ret:List<BtlLogicData>):Actor {
+    var target = TempActorMgr.searchRandom(targetID);
+    if(target != null) {
+      return target;
+    }
+
+    // 何もしない
+    ret.add(_createNone(actor));
+    return null;
+  }
+
+  /**
    * 攻撃絵出の作成
    **/
   private static function _createAttack(actor:Actor, range:BtlRange, targetID:Int, ret:List<BtlLogicData>):Void {
 
     // 対象の存在チェック
-    {
-      var target = TempActorMgr.search(targetID);
-      if(target == null) {
-        // 対象がすでに死んでいる
-        var grp = BtlGroupUtil.getAgaint(actor.group);
-        target = TempActorMgr.random(grp);
-        if(target == null) {
-          // 何もしない
-          ret.add(_createNone(actor));
-          return;
-        }
-        else {
-          // 対象のIDを変更
-          targetID = target.ID;
-        }
-      }
+    var target = _getTargetRandom(actor, targetID, ret);
+    if(target == null) {
+      // 存在しない
+      return;
     }
+    // 対象のIDを変更
+    targetID = target.ID;
 
     // 開始
     {
@@ -139,8 +145,7 @@ class BtlLogicFactory {
     ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.BeginAttack));
 
     // 攻撃実行
-    var eft = _createAttackExec(actor, range, targetID);
-    ret.add(eft);
+    _createAttackExec(actor, range, targetID, ret);
 
     // 終了
     ret.add(new BtlLogicData(actor.ID, actor.group, BtlLogic.EndAction));
@@ -149,21 +154,28 @@ class BtlLogicFactory {
   /**
    * 通常攻撃
    **/
-  private static function _createAttackExec(actor:Actor, range:BtlRange, targetID:Int):BtlLogicData {
+  private static function _createAttackExec(actor:Actor, range:BtlRange, targetID:Int, ret:List<BtlLogicData>):Void {
 
-    // 対象を取得
-    var target = TempActorMgr.search(targetID);
+    // 対象の存在チェック
+    var target = _getTargetRandom(actor, targetID, ret);
+    if(target == null) {
+      // 存在しない
+      return;
+    }
+    // 対象のIDを変更
+    targetID = target.ID;
+
     // 命中判定
     if(Calc.checkHit(actor, target) == false) {
       // 外れ
       var eft = _createDamage(actor, target, Calc.MISS_DAMAGE, false);
-      return eft;
+      ret.add(eft);
     }
     else {
       // ダメージ計算
       var val = Calc.damage(actor, target);
       var eft = _createDamage(actor, target, val, false);
-      return eft;
+      ret.add(eft);
     }
   }
 
@@ -228,8 +240,14 @@ class BtlLogicFactory {
     // スキル種別を取得
     var type = SkillUtil.toType(skillID);
 
-    // 対象を取得
-    var target = TempActorMgr.search(targetID);
+    // 対象の存在チェック
+    var target = _getTargetRandom(actor, targetID, ret);
+    if(target == null) {
+      // 存在しない
+      return ret;
+    }
+    // 対象のIDを変更
+    targetID = target.ID;
 
     switch(type) {
       case SkillType.AtkPhyscal, SkillType.AtkMagical:

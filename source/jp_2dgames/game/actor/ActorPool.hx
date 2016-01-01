@@ -60,6 +60,28 @@ class ActorPool {
   }
 
   /**
+   * 指定したIDに一致するインスタンスを探す
+   * 見つからなかった場合同一グループからランダムで探す
+   **/
+  public function searchRandom(id:Int):Actor {
+    var ret = search(id);
+    if(ret != null) {
+      // 見つけたのでそのまま返す
+      return ret;
+    }
+
+    // 死んでいるので墓場から探す
+    var actor = searchGrave(id);
+    if(actor == null) {
+      // あり得ない
+      throw 'どこにも存在しないActorID=${id}';
+    }
+
+    var group = actor.group;
+    return random(group);
+  }
+
+  /**
    * 生存しているActorのリストを取得
    **/
   public function getAlive():Array<Actor> {
@@ -210,6 +232,15 @@ class ActorPool {
   public function requestEnemyAI():Void {
     forEachAliveGroup(BtlGroup.Enemy, function(actor:Actor) {
       actor.requestAI();
+    });
+  }
+
+  /**
+   * 生存しているActorの情報をデバッグ出力する
+   **/
+  public function dumpAlive():Void {
+    forEachAlive(function(actor:Actor) {
+      trace('[${actor.ID}] ${actor.name} ${actor.group}, ${actor.param.id}');
     });
   }
 }
