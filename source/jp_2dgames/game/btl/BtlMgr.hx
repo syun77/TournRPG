@@ -161,6 +161,9 @@ class BtlMgr {
     FlxG.watch.add(this, "_statePrev");
   }
 
+  /**
+   * プレイヤー生成
+   **/
   private function _createPlayer(idx:Int, player:Actor):Void {
     // プレイヤーUI
     var ui = BtlPlayerUI.setPlayerID(idx, player.ID);
@@ -171,6 +174,9 @@ class BtlMgr {
     player.y_ui = ui.y;
   }
 
+  /**
+   * 状態遷移
+   **/
   private function _change(s:State):Void {
     _statePrev = _state;
     _state = s;
@@ -227,6 +233,15 @@ class BtlMgr {
   }
 
   /**
+   * 更新・ターン開始
+   **/
+  private function _procTurnStart():Void {
+    // コマンド入力チェックへ
+    _commandIdx = -1;
+    _change(State.InputCmdNext);
+  }
+
+  /**
    * 更新・次のコマンドチェック
    **/
   private function _procInputCmdNext():Bool {
@@ -264,23 +279,93 @@ class BtlMgr {
    **/
   private function _procInputCmdEnd():Void {
 
-    /*
-    // NPCのコマンド設定
-    ActorMgr.forEachAliveGroup(BtlGroup.Player, function(act:Actor) {
-      if(act.isPlayer()) {
-        // プレイヤーは設定不要
-        return;
-      }
-      // AI実行
-      act.requestAI();
-    });
-    */
-
     // 敵のAIを設定
     ActorMgr.requestEnemyAI();
 
     // 演出リストの作成開始
     _change(State.LogicCreate);
+  }
+
+  /**
+   * 更新・演出開始
+   **/
+  private function _procLogicBegin():Void {
+    var logic = BtlLogicMgr.pop();
+    if(logic == null) {
+      // 再生する演出がなくなったのでおしまい
+      _change(State.TurnEnd);
+    }
+    else {
+      // 演出再生
+      _logicPlayer = new BtlLogicPlayer(logic);
+      _logicPlayer.start();
+      _change(State.LogicMain);
+    }
+  }
+
+  /**
+   * 更新・演出終了
+   **/
+  private function _procLogicEnd():Void {
+    _btlEnd.type = _logicPlayer.getBtlEnd();
+
+    switch(_btlEnd.type) {
+      case BtlEndType.Escape:
+        // 逃走した
+        _change(State.Escape);
+
+      case BtlEndType.Win:
+        // バトル勝利
+        // HP/MPの自動回復
+        var win_hp = SkillSlot.getBattleEndRecoveryHp();
+        var win_mp = SkillSlot.getBattleEndRecoveryMp();
+        if(win_hp > 0) {
+          ActorMgr.forEachAliveGroup(BtlGroup.Player, function(act:Actor) {
+            act.recoverHp(win_hp);
+          });
+        }
+        if(win_mp > 0) {
+          ActorMgr.forEachAliveGroup(BtlGroup.Player, function(act:Actor) {
+            act.recoverMp(win_mp);
+          });
+        }
+        _change(State.BtlWin);
+      case BtlEndType.Lose:
+        // バトル敗北
+        _change(State.BtlLose);
+      default:
+        // 演出開始に戻る
+        _change(State.LogicBegin);
+    }
+  }
+
+  /**
+   * 更新・リザルト待機
+   **/
+  public function _procResultWait():Void {
+    // 次に進む
+    var cbNext = function() {
+      // バトル中のみ有効なパラメータを初期化
+      var player = ActorMgr.getPlayer();
+      if(player != null) {
+        player.param.resetBattle();
+      }
+      _change(State.End);
+    }
+
+    if(_btlEnd.type == BtlEndType.Escape) {
+      // 逃走時はそのまま終わる
+      cbNext();
+      return;
+    }
+
+    var px = FlxG.width/2 - MyButton2.WIDTH/2;
+    var py = FlxG.height -128;
+    var btn = new MyButton2(px, py, "NEXT", cbNext);
+    _flxState.add(btn);
+
+    _change(State.EndWait);
+
   }
 
   /**
@@ -294,9 +379,7 @@ class BtlMgr {
 
       case State.TurnStart:
         // ターン開始
-        // コマンド入力チェックへ
-        _commandIdx = -1;
-        _change(State.InputCmdNext);
+        _procTurnStart();
 
       case State.InputCmdNext:
         // コマンド入力チェック
@@ -326,17 +409,8 @@ class BtlMgr {
         _createLogic();
 
       case State.LogicBegin:
-        var logic = BtlLogicMgr.pop();
-        if(logic == null) {
-          // 再生する演出がなくなったのでおしまい
-          _change(State.TurnEnd);
-        }
-        else {
-          // 演出再生
-          _logicPlayer = new BtlLogicPlayer(logic);
-          _logicPlayer.start();
-          _change(State.LogicMain);
-        }
+        // 演出開始
+        _procLogicBegin();
 
       case State.LogicMain:
         // 演出実行
@@ -347,36 +421,9 @@ class BtlMgr {
         }
 
       case State.LogicEnd:
-        _btlEnd.type = _logicPlayer.getBtlEnd();
+        // 演出終了チェック
+        _procLogicEnd();
 
-        switch(_btlEnd.type) {
-          case BtlEndType.Escape:
-            // 逃走した
-            _change(State.Escape);
-
-          case BtlEndType.Win:
-            // バトル勝利
-            // HP/MPの自動回復
-            var win_hp = SkillSlot.getBattleEndRecoveryHp();
-            var win_mp = SkillSlot.getBattleEndRecoveryMp();
-            if(win_hp > 0) {
-              ActorMgr.forEachAliveGroup(BtlGroup.Player, function(act:Actor) {
-                act.recoverHp(win_hp);
-              });
-            }
-            if(win_mp > 0) {
-              ActorMgr.forEachAliveGroup(BtlGroup.Player, function(act:Actor) {
-                act.recoverMp(win_mp);
-              });
-            }
-            _change(State.BtlWin);
-          case BtlEndType.Lose:
-            // バトル敗北
-            _change(State.BtlLose);
-          default:
-            // 演出開始に戻る
-            _change(State.LogicBegin);
-        }
 
       case State.TurnEnd:
         // ターン終了
@@ -389,8 +436,10 @@ class BtlMgr {
       case State.BtlWin:
         // アイテム獲得
         _change(State.Result);
+
       case State.BtlLose:
         _change(State.ResultWait);
+
       case State.Escape:
         _change(State.ResultWait);
 
@@ -408,29 +457,8 @@ class BtlMgr {
 
       case State.ResultWait:
 
-        // 次に進む
-        var cbNext = function() {
-          // バトル中のみ有効なパラメータを初期化
-          var player = ActorMgr.getPlayer();
-          if(player != null) {
-            player.param.resetBattle();
-          }
-          _change(State.End);
-        }
-
-        if(_btlEnd.type == BtlEndType.Escape) {
-          // 逃走時はそのまま終わる
-          cbNext();
-          return;
-        }
-
-        var px = FlxG.width/2 - MyButton2.WIDTH/2;
-        var py = FlxG.height -128;
-        var btn = new MyButton2(px, py, "NEXT", cbNext);
-        _flxState.add(btn);
-
-        _change(State.EndWait);
-
+        // リザルト待機
+        _procResultWait();
 
       case State.EndWait:
         // 終了待ち
